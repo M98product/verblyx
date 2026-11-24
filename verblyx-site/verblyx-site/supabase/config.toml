@@ -1,0 +1,3 @@
+# Configuration utilisée par `npx supabase functions deploy`
+[functions.ai]
+verify_jwt = true

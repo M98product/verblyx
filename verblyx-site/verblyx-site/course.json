@@ -1,0 +1,458 @@
+{
+  "version": 1,
+  "method": ["Comprendre", "Analyser", "S'entraîner", "Maîtriser"],
+  "levels": [
+    {
+      "id": "A1", "name": "Débutant", "lang": "fr",
+      "desc": "Les bases : se présenter, comprendre des phrases simples, le vocabulaire du quotidien.",
+      "units": [
+        { "id": "a1u1", "title": "Les bases", "lessons": [
+          ["Les salutations", "Saluer et dire au revoir selon le moment de la journée.", "Hello, good morning, goodbye, how are you?"],
+          ["Se présenter", "Dire son prénom, son âge et son pays.", "My name is…, I'm from…, I'm 25"],
+          ["Les pronoms personnels", "Utiliser I, you, he, she, it, we, they.", "subject pronouns"],
+          ["Le verbe to be", "Conjuguer be au présent, à la forme négative et interrogative.", "am / is / are, isn't, aren't"],
+          ["Les nombres", "Compter de 0 à 100 et dire son âge.", "numbers 0–100, -teen / -ty"],
+          ["Les premières phrases", "Combiner be, and et but pour faire de vraies phrases.", "this is…, and, but"]
+        ]},
+        { "id": "a1u2", "title": "La vie quotidienne", "lessons": [
+          ["La famille", "Présenter les membres de sa famille.", "family words, my / your / his / her"],
+          ["Les métiers", "Dire ce que l'on fait dans la vie.", "jobs, a / an"],
+          ["Les objets", "Nommer et montrer des objets.", "this / that / these / those, plural -s"],
+          ["Les couleurs", "Décrire la couleur des choses.", "colours, adjective before the noun"],
+          ["Les habitudes", "Parler de ce que l'on fait tous les jours.", "present simple with I / you / we / they"],
+          ["Les phrases courantes", "Être poli au quotidien.", "please, thank you, sorry, can I…?"]
+        ]},
+        { "id": "a1u3", "title": "Mon temps", "lessons": [
+          ["Les jours et les mois", "Dire les jours, les mois et la date.", "days, months, on / in"],
+          ["L'heure", "Demander et donner l'heure.", "What time is it? It's half past six"],
+          ["Ma routine", "Raconter sa journée avec he / she.", "present simple third person -s"],
+          ["La fréquence", "Dire à quelle fréquence on fait les choses.", "always, usually, sometimes, never"],
+          ["Poser des questions", "Poser des questions au présent simple.", "do / does questions"],
+          ["La négation", "Dire ce que l'on ne fait pas.", "don't / doesn't"]
+        ]},
+        { "id": "a1u4", "title": "Chez moi et en ville", "lessons": [
+          ["La maison", "Décrire son logement.", "rooms, there is / there are"],
+          ["Où sont les choses ?", "Situer les objets.", "in, on, under, next to, between"],
+          ["Les lieux en ville", "Nommer les lieux d'une ville.", "bank, station, supermarket…"],
+          ["Demander son chemin", "Comprendre et donner une direction.", "imperative: turn left, go straight on"],
+          ["Les transports", "Dire comment on se déplace.", "by bus, on foot, take the train"],
+          ["Ce que je possède", "Parler de ce que l'on a.", "have / has got"]
+        ]},
+        { "id": "a1u5", "title": "Manger et acheter", "lessons": [
+          ["La nourriture", "Nommer les aliments courants.", "food words, countable / uncountable"],
+          ["Some et any", "Parler de quantités simples.", "some / any"],
+          ["Au café", "Commander poliment.", "I'd like…, Can I have…?"],
+          ["Les prix", "Demander et comprendre un prix.", "How much is it? It's £4.50"],
+          ["Les vêtements", "Acheter des vêtements.", "clothes, sizes, Can I try it on?"],
+          ["Ce que je sais faire", "Parler de ses capacités.", "can / can't"]
+        ]},
+        { "id": "a1u6", "title": "Moi et les autres", "lessons": [
+          ["Décrire une personne", "Décrire le physique et le caractère.", "adjectives, be / have"],
+          ["Mes goûts", "Dire ce que l'on aime ou non.", "like / love / hate + -ing"],
+          ["Mes émotions", "Exprimer ce que l'on ressent.", "I'm tired / happy / worried"],
+          ["En ce moment", "Dire ce que l'on est en train de faire.", "present continuous"],
+          ["Habitude ou maintenant ?", "Choisir entre présent simple et continu.", "present simple vs continuous"],
+          ["Mon premier message", "Écrire un petit message amical.", "short message, linking words"]
+        ]}
+      ]
+    },
+    {
+      "id": "A2", "name": "Élémentaire", "lang": "fr",
+      "desc": "Parler de ses habitudes, de son passé et de ses projets, comprendre des conversations simples.",
+      "units": [
+        { "id": "a2u1", "title": "Le passé", "lessons": [
+          ["Was et were", "Parler du passé avec be.", "was / were"],
+          ["Les verbes réguliers au passé", "Raconter des actions passées.", "past simple -ed"],
+          ["Les verbes irréguliers", "Utiliser les irréguliers les plus courants.", "went, had, saw, made…"],
+          ["Questions au passé", "Poser des questions et répondre au passé.", "did / didn't"],
+          ["Mon week-end", "Raconter son week-end.", "past simple narrative, time words"]
+        ]},
+        { "id": "a2u2", "title": "Projets et futur", "lessons": [
+          ["Going to", "Parler de ses projets.", "be going to"],
+          ["Will", "Faire des prédictions et décider sur le moment.", "will / won't"],
+          ["Les rendez-vous", "Parler de ce qui est déjà prévu.", "present continuous for the future"],
+          ["Inviter", "Inviter, accepter et refuser.", "Would you like to…? I'd love to"],
+          ["Les expressions du futur", "Situer dans le futur.", "next week, tomorrow, in two days"]
+        ]},
+        { "id": "a2u3", "title": "Comparer", "lessons": [
+          ["Les comparatifs", "Comparer deux choses.", "bigger than, more expensive than"],
+          ["Les superlatifs", "Dire ce qui est le plus.", "the biggest, the most beautiful"],
+          ["Autant que", "Exprimer l'égalité.", "as … as, not as … as"],
+          ["Trop et assez", "Dire que c'est trop ou pas assez.", "too / enough"],
+          ["Comparer des villes", "Comparer deux lieux.", "comparatives in context"]
+        ]},
+        { "id": "a2u4", "title": "Voyager", "lessons": [
+          ["À l'aéroport", "Se débrouiller à l'aéroport.", "check-in, boarding pass, gate"],
+          ["À l'hôtel", "Réserver et demander un service.", "booking, Could I…?"],
+          ["Les obligations", "Dire ce qu'il faut faire.", "must / have to / don't have to"],
+          ["Les conseils", "Donner un conseil simple.", "should / shouldn't"],
+          ["Un problème en voyage", "Expliquer un problème et demander de l'aide.", "lost luggage, I need…"]
+        ]},
+        { "id": "a2u5", "title": "Mes expériences", "lessons": [
+          ["Ever et never", "Parler de ses expériences de vie.", "present perfect: Have you ever…?"],
+          ["Les participes passés", "Former le present perfect.", "past participles"],
+          ["Already, yet, just", "Dire ce qui est fait ou pas encore.", "already / yet / just"],
+          ["Passé ou expérience ?", "Choisir entre prétérit et present perfect.", "present perfect vs past simple"],
+          ["Raconter une expérience", "Raconter un souvenir marquant.", "experience narrative"]
+        ]},
+        { "id": "a2u6", "title": "Santé et services", "lessons": [
+          ["Le corps et la santé", "Dire où on a mal.", "body, I have a headache"],
+          ["Chez le médecin", "Comprendre un conseil médical.", "need to, should"],
+          ["Au téléphone", "Passer un appel simple.", "Can I speak to…? I'll call back"],
+          ["Beaucoup et peu", "Exprimer des quantités.", "much / many / a lot of / a few"],
+          ["Un e-mail simple", "Écrire un e-mail court et clair.", "email phrases"]
+        ]}
+      ]
+    },
+    {
+      "id": "B1", "name": "Intermédiaire", "lang": "fr",
+      "desc": "Comprendre des textes courants, raconter, donner son avis et tenir une conversation.",
+      "units": [
+        { "id": "b1u1", "title": "Raconter une histoire", "lessons": [
+          ["Le past continuous", "Décrire une action en cours dans le passé.", "was / were + -ing"],
+          ["Deux actions au passé", "Combiner past simple et continuous.", "when / while"],
+          ["Les connecteurs de récit", "Enchaîner les étapes d'une histoire.", "first, then, after that, finally"],
+          ["Used to", "Parler d'habitudes passées.", "used to / didn't use to"],
+          ["Raconter un souvenir", "Raconter un souvenir de façon vivante.", "storytelling"]
+        ]},
+        { "id": "b1u2", "title": "Durée et parcours", "lessons": [
+          ["For et since", "Exprimer une durée qui continue.", "present perfect + for / since"],
+          ["Le present perfect continuous", "Insister sur une activité qui dure.", "have been + -ing"],
+          ["How long…?", "Poser des questions sur la durée.", "How long have you…?"],
+          ["Been ou gone ?", "Distinguer been et gone.", "been / gone"],
+          ["Mon parcours", "Présenter son parcours personnel.", "life story"]
+        ]},
+        { "id": "b1u3", "title": "Les conditions", "lessons": [
+          ["Le premier conditionnel", "Parler de conséquences réelles.", "if + present, will"],
+          ["Le deuxième conditionnel", "Imaginer une situation irréelle.", "if + past, would"],
+          ["Unless et as long as", "Nuancer une condition.", "unless / as long as / in case"],
+          ["Les souhaits", "Exprimer un souhait sur le présent.", "I wish + past"],
+          ["Si j'étais toi…", "Donner un conseil hypothétique.", "If I were you…"]
+        ]},
+        { "id": "b1u4", "title": "Donner son avis", "lessons": [
+          ["Exprimer une opinion", "Donner son avis clairement.", "I think, in my opinion, I believe"],
+          ["Accord et désaccord", "Être d'accord ou non, poliment.", "I agree, I'm not sure that…"],
+          ["Les connecteurs logiques", "Relier des idées opposées.", "however, although, because of"],
+          ["Les propositions relatives", "Préciser de qui ou de quoi on parle.", "who / which / that / where"],
+          ["Un avis argumenté", "Écrire un court avis structuré.", "short opinion text"]
+        ]},
+        { "id": "b1u5", "title": "Le monde du travail", "lessons": [
+          ["Le vocabulaire du travail", "Parler de son métier et de ses tâches.", "work vocabulary"],
+          ["La voix passive", "Mettre l'accent sur l'action.", "passive: is made / was built"],
+          ["Les e-mails professionnels", "Écrire un e-mail de travail.", "formal email phrases"],
+          ["La déduction", "Faire une supposition logique.", "must / might / can't"],
+          ["L'entretien d'embauche", "Répondre aux questions classiques.", "interview language"]
+        ]},
+        { "id": "b1u6", "title": "Médias et culture", "lessons": [
+          ["Le discours indirect", "Rapporter ce que quelqu'un a dit.", "said / told + backshift"],
+          ["Les questions indirectes", "Poser une question avec politesse.", "Could you tell me where…?"],
+          ["Gérondif ou infinitif", "Choisir entre -ing et to.", "enjoy doing, decide to do"],
+          ["Les phrasal verbs courants", "Comprendre les phrasal verbs du quotidien.", "find out, give up, look for"],
+          ["Résumer un article", "Résumer l'essentiel d'un texte.", "summarising"]
+        ]}
+      ]
+    },
+    {
+      "id": "B2", "name": "Intermédiaire avancé", "lang": "mix",
+      "desc": "Comprendre des contenus complexes, argumenter, débattre et communiquer avec fluidité.",
+      "units": [
+        { "id": "b2u1", "title": "Le passé en profondeur", "lessons": [
+          ["Le past perfect", "Exprimer l'antériorité dans le passé.", "had + past participle"],
+          ["Le past perfect continuous", "Insister sur une durée avant un moment passé.", "had been + -ing"],
+          ["Les temps du récit", "Combiner les temps narratifs.", "narrative tenses"],
+          ["Would pour le passé", "Évoquer des habitudes passées.", "would vs used to"],
+          ["Un récit structuré", "Écrire un récit clair et vivant.", "narrative writing"]
+        ]},
+        { "id": "b2u2", "title": "Hypothèses et regrets", "lessons": [
+          ["Le troisième conditionnel", "Imaginer un passé différent.", "if + past perfect, would have"],
+          ["Les conditionnels mixtes", "Relier passé et présent hypothétiques.", "mixed conditionals"],
+          ["Wish et if only", "Exprimer des regrets.", "wish + past perfect"],
+          ["I'd rather, it's time", "Exprimer une préférence ou une urgence.", "I'd rather you…, it's time we…"],
+          ["Les reproches", "Exprimer un reproche ou un regret.", "should have / shouldn't have"]
+        ]},
+        { "id": "b2u3", "title": "Argumenter", "lessons": [
+          ["Structurer un argument", "Organiser ses idées.", "firstly, moreover, consequently"],
+          ["Concession et contraste", "Nuancer en opposant les idées.", "despite, whereas, even though"],
+          ["Nuancer son opinion", "Parler avec prudence.", "hedging: it seems, arguably"],
+          ["Les phrases d'insistance", "Mettre une idée en valeur.", "cleft sentences: What I mean is…"],
+          ["Débattre poliment", "Défendre un point de vue avec tact.", "debate phrases"]
+        ]},
+        { "id": "b2u4", "title": "Structures avancées", "lessons": [
+          ["Le passif avancé", "Rapporter des faits avec distance.", "it is said that, he is believed to"],
+          ["Faire faire", "Dire que l'on fait faire quelque chose.", "have / get something done"],
+          ["Les relatives non essentielles", "Ajouter une information en plus.", "non-defining relative clauses"],
+          ["Les propositions participiales", "Condenser ses phrases.", "Having finished…, Walking home…"],
+          ["L'inversion après une négation", "Découvrir une structure d'insistance.", "Never have I…, Not only…"]
+        ]},
+        { "id": "b2u5", "title": "Vocabulaire riche", "lessons": [
+          ["Les collocations", "Associer les bons mots ensemble.", "make a decision, heavy rain"],
+          ["Les phrasal verbs avancés", "Maîtriser des phrasal verbs plus rares.", "put off, come across, bring up"],
+          ["Préfixes et suffixes", "Comprendre la formation des mots.", "un-, mis-, -ness, -able"],
+          ["Les faux amis", "Éviter les pièges du français.", "actually, eventually, sensible"],
+          ["Les expressions idiomatiques", "Comprendre des expressions courantes.", "piece of cake, break the ice"]
+        ]},
+        { "id": "b2u6", "title": "Communication fluide", "lessons": [
+          ["Les verbes rapporteurs", "Rapporter avec précision.", "suggest, deny, admit, refuse"],
+          ["Le futur continu et antérieur", "Se projeter avec précision.", "will be doing, will have done"],
+          ["Les mots de liaison à l'oral", "Parler avec naturel.", "well, actually, anyway"],
+          ["Interrompre et reprendre", "Gérer une conversation.", "Sorry to interrupt, as I was saying"],
+          ["Présenter un projet", "Faire une courte présentation.", "presentation phrases"]
+        ]}
+      ]
+    },
+    {
+      "id": "C1", "name": "Avancé", "lang": "en",
+      "desc": "Comprendre des textes longs, maîtriser les nuances, s'exprimer avec spontanéité.",
+      "units": [
+        { "id": "c1u1", "title": "Style et registre", "lessons": [
+          ["Formel ou informel", "Adapter son registre.", "formal vs informal register"],
+          ["La nominalisation", "Écrire de façon plus soutenue.", "nominalisation"],
+          ["Le langage académique", "Utiliser le vocabulaire académique.", "academic vocabulary"],
+          ["Rédiger un rapport", "Structurer un rapport.", "report writing"],
+          ["Éviter les répétitions", "Varier son expression.", "substitution, synonyms"]
+        ]},
+        { "id": "c1u2", "title": "Nuances", "lessons": [
+          ["Les modaux au passé", "Exprimer la probabilité dans le passé.", "must have, might have, can't have"],
+          ["Intensifier et atténuer", "Doser l'intensité d'un propos.", "utterly, fairly, somewhat"],
+          ["Euphémismes et litote", "Dire les choses avec tact.", "understatement"],
+          ["Exprimer l'incertitude", "Montrer son degré de certitude.", "bound to, likely to, there's a chance"],
+          ["Ton et attitude", "Repérer le ton d'un auteur.", "attitude markers"]
+        ]},
+        { "id": "c1u3", "title": "Structures expertes", "lessons": [
+          ["L'inversion stylistique", "Utiliser l'inversion à l'écrit.", "Rarely, Hardly … when, No sooner"],
+          ["Le subjonctif", "Formuler une recommandation formelle.", "I suggest that he be"],
+          ["Ellipse et substitution", "Alléger ses phrases.", "so, do so, one"],
+          ["L'insistance", "Mettre l'accent avec do / did.", "emphatic do, it is … that"],
+          ["L'ordre des mots", "Placer adjectifs et adverbes avec finesse.", "adjective and adverb order"]
+        ]},
+        { "id": "c1u4", "title": "Lire des textes longs", "lessons": [
+          ["L'idée principale", "Repérer l'argument central.", "main idea"],
+          ["Inférer le sens", "Comprendre l'implicite.", "inference"],
+          ["Le langage figuré", "Comprendre métaphores et images.", "figurative language"],
+          ["Paraphraser", "Reformuler avec ses propres mots.", "paraphrasing"],
+          ["Synthétiser", "Croiser plusieurs sources.", "synthesis"]
+        ]},
+        { "id": "c1u5", "title": "Anglais professionnel", "lessons": [
+          ["Négocier", "Mener une négociation.", "negotiation language"],
+          ["Animer une réunion", "Conduire une réunion efficace.", "meeting language"],
+          ["Rédiger une proposition", "Écrire une proposition convaincante.", "proposal writing"],
+          ["Un retour diplomatique", "Formuler une critique avec tact.", "diplomatic feedback"],
+          ["Convaincre", "Présenter une idée de façon persuasive.", "persuasion, pitching"]
+        ]},
+        { "id": "c1u6", "title": "Spontanéité", "lessons": [
+          ["Idiomes avancés", "Comprendre des expressions imagées.", "advanced idioms"],
+          ["Phrasal verbs nuancés", "Choisir le phrasal verb exact.", "nuanced phrasal verbs"],
+          ["Réagir avec naturel", "Répondre du tac au tac.", "natural responses"],
+          ["Humour et ironie", "Comprendre l'humour.", "humour, irony"],
+          ["Débat improvisé", "Argumenter sans préparation.", "spontaneous debate"]
+        ]}
+      ]
+    },
+    {
+      "id": "C2", "name": "Maîtrise", "lang": "en",
+      "desc": "Tout comprendre, saisir les subtilités et s'exprimer avec précision et naturel.",
+      "units": [
+        { "id": "c2u1", "title": "Précision lexicale", "lessons": [
+          ["Les quasi-synonymes", "Choisir le mot juste.", "near-synonyms"],
+          ["Les collocations rares", "Écrire comme un natif.", "advanced collocations"],
+          ["Connotations", "Saisir la charge d'un mot.", "connotation, register"],
+          ["Le vocabulaire abstrait", "Manier des idées abstraites.", "abstract vocabulary"],
+          ["La concision", "Dire plus avec moins de mots.", "concise writing"]
+        ]},
+        { "id": "c2u2", "title": "Subtilités grammaticales", "lessons": [
+          ["Les articles : cas difficiles", "Maîtriser a, the et l'absence d'article.", "articles"],
+          ["Temps et aspect", "Saisir les nuances des temps.", "tense and aspect"],
+          ["Les modaux rares", "Utiliser les modaux avec finesse.", "needn't have, dare, shall"],
+          ["Emphase avancée", "Combiner inversion et emphase.", "advanced emphasis"],
+          ["Structures littéraires", "Reconnaître les tournures littéraires.", "literary structures"]
+        ]},
+        { "id": "c2u3", "title": "Culture et implicite", "lessons": [
+          ["Références culturelles", "Comprendre les allusions.", "cultural references"],
+          ["Les sous-entendus", "Lire entre les lignes.", "implicature"],
+          ["Ironie et sarcasme", "Repérer l'ironie.", "irony, sarcasm"],
+          ["Les variétés d'anglais", "Reconnaître anglais britannique, américain et autres.", "varieties of English"],
+          ["Argot et langue familière", "Comprendre le registre familier.", "slang"]
+        ]},
+        { "id": "c2u4", "title": "Analyser des textes", "lessons": [
+          ["La critique littéraire", "Analyser un extrait.", "literary analysis"],
+          ["La rhétorique", "Repérer les procédés rhétoriques.", "rhetorical devices"],
+          ["Biais et point de vue", "Identifier un biais.", "bias, stance"],
+          ["Textes juridiques et techniques", "Comprendre un texte spécialisé.", "legal and technical English"],
+          ["Le commentaire de texte", "Rédiger un commentaire.", "text commentary"]
+        ]},
+        { "id": "c2u5", "title": "Expression experte", "lessons": [
+          ["L'essai argumentatif", "Écrire un essai abouti.", "argumentative essay"],
+          ["Le discours public", "Prendre la parole avec impact.", "public speaking"],
+          ["L'écriture créative", "Écrire un texte créatif.", "creative writing"],
+          ["Réécrire pour un public", "Adapter un texte à son lecteur.", "rewriting for an audience"],
+          ["Médiation et traduction", "Transmettre un message d'une langue à l'autre.", "mediation, translation"]
+        ]},
+        { "id": "c2u6", "title": "Maîtrise globale", "lessons": [
+          ["Compréhension rapide", "Suivre un anglais rapide et naturel.", "fast natural speech"],
+          ["Discussion de haut niveau", "Échanger sur des sujets exigeants.", "high-level discussion"],
+          ["Nuances d'opinion", "Exprimer un avis très nuancé.", "nuanced opinion"],
+          ["Les pièges finaux", "Éviter les dernières erreurs.", "advanced error correction"],
+          ["Vers l'examen final", "Se préparer à l'examen C2.", "exam strategies"]
+        ]}
+      ]
+    }
+  ],
+  "content": {
+    "a1u1l1": {
+      "goal": "Saluer quelqu'un et dire au revoir selon le moment de la journée.",
+      "understand": {
+        "text": "Hello veut dire bonjour, à tout moment. Hi est plus familier. Le matin on dit Good morning, le soir Good evening. Pour partir : Goodbye ou Bye.",
+        "examples": [["Hello!", "Bonjour !"], ["Good morning, Sarah.", "Bonjour, Sarah. (le matin)"], ["How are you?", "Comment vas-tu ?"], ["I'm fine, thank you.", "Je vais bien, merci."], ["Goodbye! See you tomorrow.", "Au revoir ! À demain."]]
+      },
+      "analyze": {
+        "sentence": "How are you?",
+        "parts": [["How", "comment"], ["are", "es / êtes (verbe be)"], ["you", "tu / vous"]],
+        "tip": "you veut dire tu ET vous : l'anglais n'a qu'un seul mot.",
+        "words": [["hello", "bonjour"], ["goodbye", "au revoir"], ["morning", "matin"], ["evening", "soir"], ["thank you", "merci"], ["fine", "bien"]]
+      },
+      "practice": [
+        { "type": "match", "pairs": [["hello", "bonjour"], ["goodbye", "au revoir"], ["thank you", "merci"], ["morning", "matin"]], "skill": "vocabulary" },
+        { "type": "mcq", "q": "Il est 9 h du matin. Que dis-tu ?", "options": ["Good morning", "Good evening", "Goodbye"], "answer": "Good morning", "explain": "Good morning s'utilise le matin, jusqu'à midi environ.", "skill": "vocabulary" },
+        { "type": "tr_en_fr", "q": "How are you?", "answer": "Comment vas-tu", "extra": ["Où", "es"], "explain": "How = comment, are you = vas-tu.", "skill": "questions" },
+        { "type": "listen", "q": "Good evening", "extra": ["morning", "night"], "skill": "vocabulary" },
+        { "type": "fill", "q": "I'm fine, thank ___.", "answer": "you", "explain": "On dit toujours thank you (merci).", "skill": "vocabulary" },
+        { "type": "order", "answer": "Nice to meet you", "extra": ["are"], "hint": "Enchanté(e)", "skill": "word_order" }
+      ],
+      "master": [
+        { "type": "tr_fr_en", "q": "Bonsoir, comment vas-tu ?", "answer": "Good evening how are you", "extra": ["morning", "is"], "explain": "Bonsoir = Good evening, comment vas-tu = how are you.", "skill": "questions" },
+        { "type": "mcq", "q": "Ton ami part. Que dis-tu ?", "options": ["Goodbye!", "Hello!", "Good morning!"], "answer": "Goodbye!", "explain": "Goodbye (ou Bye) sert à dire au revoir.", "skill": "vocabulary" },
+        { "type": "talk", "q": "How are you today?", "sample": "I'm fine, thank you!", "need": ["I"], "skill": "be_have" }
+      ]
+    },
+    "a1u1l2": {
+      "goal": "Dire son prénom, son âge et son pays, et poser ces questions.",
+      "understand": {
+        "text": "Pour ton prénom : My name is… ou I'm… (I'm = I am). Pour ton pays : I'm from… Pour ton âge, on utilise « être » : I'm 25 = j'ai 25 ans.",
+        "examples": [["My name is Léa.", "Je m'appelle Léa."], ["I'm from Belgium.", "Je viens de Belgique."], ["I'm 30.", "J'ai 30 ans."], ["What's your name?", "Comment t'appelles-tu ?"], ["Where are you from?", "D'où viens-tu ?"]]
+      },
+      "analyze": {
+        "sentence": "I'm from Canada.",
+        "parts": [["I'm", "je suis (I am)"], ["from", "de (l'origine)"], ["Canada", "le pays, sans article"]],
+        "tip": "Pour l'âge, l'anglais dit « je suis 20 » : I'm 20 = j'ai 20 ans.",
+        "words": [["name", "nom, prénom"], ["from", "de (origine)"], ["country", "pays"], ["city", "ville"], ["nice", "agréable"], ["age", "âge"]]
+      },
+      "practice": [
+        { "type": "mcq", "q": "Comment dit-on « J'ai 20 ans » ?", "options": ["I'm 20.", "I have 20.", "I have 20 years."], "answer": "I'm 20.", "explain": "Pour l'âge, on utilise be : I'm 20.", "skill": "be_have" },
+        { "type": "fill", "q": "My ___ is Tom.", "answer": "name", "explain": "My name is… = Je m'appelle…", "skill": "vocabulary" },
+        { "type": "order", "answer": "Where are you from", "extra": ["is"], "hint": "D'où viens-tu ?", "skill": "questions" },
+        { "type": "tr_fr_en", "q": "Je viens de France.", "answer": "I'm from France", "accept": ["I am from France"], "extra": ["in", "is"], "explain": "Venir d'un pays = be from.", "skill": "be_have" },
+        { "type": "listen", "q": "What's your name", "extra": ["you"], "skill": "questions" },
+        { "type": "read", "passage": "Hi! I'm Carlos. I'm 24 and I'm from Mexico. I live in Paris now.", "q": "Where is Carlos from?", "options": ["Mexico", "Paris", "Spain"], "answer": "Mexico", "explain": "I'm from Mexico : il vient du Mexique, mais il vit à Paris.", "skill": "reading" }
+      ],
+      "master": [
+        { "type": "tr_en_fr", "q": "My name is Anna.", "answer": "Je m'appelle Anna", "extra": ["suis", "Mon"], "explain": "My name is = je m'appelle.", "skill": "vocabulary" },
+        { "type": "speak", "q": "Nice to meet you, I'm from France.", "skill": "vocabulary" },
+        { "type": "build", "q": "Présente-toi en une phrase : ton prénom et ton pays.", "need": ["from"], "sample": "My name is Léa and I'm from France.", "skill": "be_have" }
+      ]
+    },
+    "a1u1l3": {
+      "goal": "Utiliser les pronoms sujets I, you, he, she, it, we, they.",
+      "understand": {
+        "text": "I = je, you = tu ou vous, he = il (un homme), she = elle (une femme), it = il ou elle pour une chose ou un animal, we = nous, they = ils ou elles. I prend toujours une majuscule.",
+        "examples": [["She is my sister.", "C'est ma sœur."], ["He is a doctor.", "Il est médecin."], ["It is a cat.", "C'est un chat."], ["We are friends.", "Nous sommes amis."], ["They are here.", "Ils sont ici."]]
+      },
+      "analyze": {
+        "sentence": "It is a big table.",
+        "parts": [["It", "il / elle (une chose)"], ["is", "est"], ["a big table", "une grande table"]],
+        "tip": "it remplace une chose ou un animal, jamais une personne.",
+        "words": [["I", "je"], ["you", "tu, vous"], ["he", "il"], ["she", "elle"], ["we", "nous"], ["they", "ils, elles"]]
+      },
+      "practice": [
+        { "type": "match", "pairs": [["I", "je"], ["she", "elle"], ["we", "nous"], ["they", "ils / elles"]], "skill": "pronouns" },
+        { "type": "mcq", "q": "Remplace « the car » :", "options": ["it", "he", "she"], "answer": "it", "explain": "Une voiture est une chose : on utilise it.", "skill": "pronouns" },
+        { "type": "mcq", "q": "Remplace « Paul and Marie » :", "options": ["they", "we", "he"], "answer": "they", "explain": "Plusieurs personnes (sans toi) = they.", "skill": "pronouns" },
+        { "type": "fill", "q": "Tom is my brother. ___ is 12.", "answer": "He", "explain": "Tom est un garçon : he.", "skill": "pronouns" },
+        { "type": "tr_fr_en", "q": "Nous sommes amis.", "answer": "We are friends", "accept": ["We're friends"], "extra": ["They", "is"], "explain": "Nous = we, sommes = are.", "skill": "pronouns" },
+        { "type": "listen", "q": "She is my sister", "extra": ["he"], "skill": "pronouns" }
+      ],
+      "master": [
+        { "type": "fill", "q": "Look at the dog! ___ is cute.", "answer": "It", "explain": "Pour un animal, on utilise it.", "skill": "pronouns" },
+        { "type": "order", "answer": "They are from Italy", "extra": ["is"], "hint": "Ils viennent d'Italie.", "skill": "word_order" },
+        { "type": "tr_en_fr", "q": "He is a teacher.", "answer": "Il est professeur", "extra": ["Elle", "un"], "explain": "En français, on ne met pas d'article devant un métier après « être ».", "skill": "pronouns" }
+      ]
+    },
+    "a1u1l4": {
+      "goal": "Conjuguer le verbe be au présent, à la forme négative et interrogative.",
+      "understand": {
+        "text": "Be (être) a trois formes : I am, he / she / it is, you / we / they are. À l'oral on contracte : I'm, she's, we're. Négation : on ajoute not (isn't, aren't). Question : on met le verbe en premier (Are you ready?).",
+        "examples": [["I'm happy.", "Je suis content."], ["She isn't at home.", "Elle n'est pas à la maison."], ["Are you ready?", "Es-tu prêt ?"], ["They're students.", "Ce sont des étudiants."], ["Is it cold?", "Est-ce qu'il fait froid ?"]]
+      },
+      "analyze": {
+        "sentence": "Is she your teacher?",
+        "parts": [["Is", "le verbe be, placé en premier"], ["she", "elle"], ["your teacher", "ton professeur"]],
+        "tip": "Pour une question avec be, on met simplement le verbe avant le sujet.",
+        "words": [["happy", "content"], ["tired", "fatigué"], ["ready", "prêt"], ["hungry", "qui a faim"], ["at home", "à la maison"], ["student", "étudiant"]]
+      },
+      "practice": [
+        { "type": "mcq", "q": "We ___ friends.", "options": ["are", "is", "am"], "answer": "are", "explain": "Avec we, you et they : are.", "skill": "be_have" },
+        { "type": "fill", "q": "I ___ tired.", "answer": "am", "accept": ["'m"], "explain": "Avec I : am.", "skill": "be_have" },
+        { "type": "mcq", "q": "Comment dit-on « Elle n'est pas là » ?", "options": ["She isn't here.", "She not here.", "She doesn't here."], "answer": "She isn't here.", "explain": "La négation de is est is not (isn't).", "skill": "be_have" },
+        { "type": "order", "answer": "Are you ready", "extra": ["is"], "hint": "Es-tu prêt ?", "skill": "questions" },
+        { "type": "tr_en_fr", "q": "I'm hungry.", "answer": "J'ai faim", "extra": ["suis", "Je"], "explain": "En anglais on « est affamé » : I'm hungry = j'ai faim.", "skill": "be_have" },
+        { "type": "listen", "q": "They are at home", "extra": ["is"], "skill": "be_have" }
+      ],
+      "master": [
+        { "type": "fill", "q": "___ he French?", "answer": "Is", "explain": "Question avec he : Is he… ?", "skill": "be_have" },
+        { "type": "tr_fr_en", "q": "Nous ne sommes pas prêts.", "answer": "We aren't ready", "accept": ["We are not ready", "We're not ready"], "extra": ["isn't", "They"], "explain": "Négation avec we : aren't.", "skill": "be_have" },
+        { "type": "speak", "q": "I'm not tired, I'm happy.", "skill": "be_have" }
+      ]
+    },
+    "a1u1l5": {
+      "goal": "Compter de 0 à 100 et dire son âge.",
+      "understand": {
+        "text": "one, two, three… ten. De 13 à 19 on ajoute -teen (thirteen, fifteen). Les dizaines finissent par -ty : twenty (20), thirty (30), forty (40). 21 = twenty-one. 100 = one hundred.",
+        "examples": [["I'm twenty-five.", "J'ai vingt-cinq ans."], ["I have two brothers.", "J'ai deux frères."], ["It's fifteen euros.", "C'est quinze euros."], ["Room thirty-two, please.", "Chambre trente-deux, s'il vous plaît."], ["How old are you?", "Quel âge as-tu ?"]]
+      },
+      "analyze": {
+        "sentence": "She is forty-three.",
+        "parts": [["She is", "elle a (l'âge avec be)"], ["forty", "quarante"], ["three", "trois, relié par un tiret"]],
+        "tip": "thirteen (13) et thirty (30) se ressemblent : dans -teen, on appuie sur la fin.",
+        "words": [["one", "un"], ["two", "deux"], ["ten", "dix"], ["twelve", "douze"], ["twenty", "vingt"], ["hundred", "cent"]]
+      },
+      "practice": [
+        { "type": "match", "pairs": [["three", "trois"], ["eight", "huit"], ["twelve", "douze"], ["twenty", "vingt"]], "skill": "vocabulary" },
+        { "type": "mcq", "q": "Comment écrit-on 40 ?", "options": ["forty", "fourty", "fourteen"], "answer": "forty", "explain": "four (4) mais forty (40), sans u.", "skill": "spelling" },
+        { "type": "mcq", "q": "15 =", "options": ["fifteen", "fifty", "five"], "answer": "fifteen", "explain": "De 13 à 19 : -teen. fifty = 50.", "skill": "vocabulary" },
+        { "type": "listen", "q": "I have two brothers", "extra": ["three"], "skill": "vocabulary" },
+        { "type": "fill", "q": "How ___ are you? I'm 19.", "answer": "old", "explain": "Pour demander l'âge : How old are you?", "skill": "questions" },
+        { "type": "tr_fr_en", "q": "J'ai trente ans.", "answer": "I'm thirty", "accept": ["I am thirty"], "extra": ["thirteen", "have"], "explain": "L'âge se dit avec be : I'm thirty.", "skill": "be_have" }
+      ],
+      "master": [
+        { "type": "mcq", "q": "Quelle est la bonne écriture de 21 ?", "options": ["twenty-one", "one-twenty", "twenty and one"], "answer": "twenty-one", "explain": "Dizaine + unité avec un tiret : twenty-one.", "skill": "spelling" },
+        { "type": "tr_en_fr", "q": "It's fifty euros.", "answer": "C'est cinquante euros", "extra": ["quinze", "Il"], "explain": "fifty = 50, fifteen = 15.", "skill": "vocabulary" },
+        { "type": "talk", "q": "How old are you?", "sample": "I'm 28.", "need": ["I"], "skill": "be_have" }
+      ]
+    },
+    "a1u1l6": {
+      "goal": "Combiner tout ce que tu as appris pour faire de vraies phrases.",
+      "understand": {
+        "text": "Une phrase simple : sujet + be + information. Pour relier deux idées, utilise and (et) ou but (mais). Pour présenter quelqu'un : This is… (voici).",
+        "examples": [["Hi, I'm Tom and I'm a student.", "Salut, je suis Tom et je suis étudiant."], ["She's from Spain but she lives in London.", "Elle vient d'Espagne mais elle vit à Londres."], ["We're tired but happy.", "Nous sommes fatigués mais contents."], ["This is my friend Max.", "Voici mon ami Max."], ["Are you from here?", "Tu es d'ici ?"]]
+      },
+      "analyze": {
+        "sentence": "This is my friend Max.",
+        "parts": [["This is", "voici / c'est"], ["my", "mon"], ["friend", "ami"], ["Max", "le prénom"]],
+        "tip": "This is… sert à présenter quelqu'un : This is my mum = Voici ma mère.",
+        "words": [["and", "et"], ["but", "mais"], ["friend", "ami"], ["this", "ceci, voici"], ["here", "ici"], ["live", "vivre, habiter"]]
+      },
+      "practice": [
+        { "type": "order", "answer": "This is my friend Max", "extra": ["are"], "hint": "Voici mon ami Max.", "skill": "word_order" },
+        { "type": "mcq", "q": "I'm tired ___ happy.", "options": ["but", "from", "is"], "answer": "but", "explain": "but (mais) relie deux idées qui s'opposent.", "skill": "vocabulary" },
+        { "type": "fill", "q": "She's from Spain ___ she lives in London.", "answer": "but", "explain": "Elle vient d'Espagne MAIS vit à Londres.", "skill": "vocabulary" },
+        { "type": "read", "passage": "Hello! This is my friend Sam. He is 22 and he is from Dublin. He is a student but he works in a café.", "q": "What does Sam do?", "options": ["He's a student and works in a café", "He's a teacher", "He lives in London"], "answer": "He's a student and works in a café", "explain": "He is a student but he works in a café.", "skill": "reading" },
+        { "type": "tr_fr_en", "q": "Voici ma sœur.", "answer": "This is my sister", "extra": ["He", "are"], "explain": "Voici = This is.", "skill": "vocabulary" },
+        { "type": "listen", "q": "We are tired but happy", "extra": ["and"], "skill": "vocabulary" }
+      ],
+      "master": [
+        { "type": "tr_en_fr", "q": "Are you from here?", "answer": "Tu es d'ici", "accept": ["Es-tu d'ici"], "extra": ["où", "vient"], "explain": "from here = d'ici.", "skill": "questions" },
+        { "type": "build", "q": "Écris deux phrases pour te présenter : ton prénom, ton âge et ta ville.", "need": ["I"], "sample": "Hi, I'm Léa. I'm 25 and I'm from Lyon.", "skill": "be_have" },
+        { "type": "speak", "q": "Hello, this is my friend Max.", "skill": "vocabulary" }
+      ]
+    }
+  }
+}
