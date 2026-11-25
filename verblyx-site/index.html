@@ -245,7 +245,7 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 14px; line-heigh
   body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
   .mtop { display: flex; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; align-items: center; justify-content: space-between; gap: 10px; padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); background: rgba(26, 28, 35, .94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
   .main { padding: 20px max(16px, env(safe-area-inset-right, 0px)) 104px max(16px, env(safe-area-inset-left, 0px)); }
-  .tabbar { display: grid; grid-template-columns: repeat(6, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 6px env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); background: rgba(26, 28, 35, .96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
+  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 6px env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); background: rgba(26, 28, 35, .96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
   .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0 8px; border: 0; background: none; color: var(--muted); font: 600 11px var(--f-body); cursor: pointer; }
   .tab .ico { width: 24px; height: 24px; }
   .tab.is-active { color: var(--primary-text); }
@@ -795,6 +795,35 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .pseudo-state { flex: none; font: 700 12.5px var(--f-body); white-space: nowrap; }
 .pseudo-state.ok { color: var(--success); } .pseudo-state.bad { color: var(--danger); } .pseudo-state.wait { color: var(--muted); }
 .lb2-list .lb2-row.rk-1 .lb2-rank { color: #FFC94A; } .lb2-list .lb2-row.rk-2 .lb2-rank { color: #C9CED6; } .lb2-list .lb2-row.rk-3 .lb2-rank { color: #E09A5C; }
+.coach-dock { position: sticky; bottom: 0; display: flex; flex-direction: column; gap: 8px; z-index: 5; margin: 0 -8px; padding: 10px 8px 16px; background: var(--bg); box-shadow: 0 -22px 18px -4px var(--bg); }
+.coach-dock .composer { position: static; }
+@media (max-width: 719px) { .coach-dock { bottom: calc(56px + env(safe-area-inset-bottom, 0px)); padding-bottom: 14px; } .coach-dock .qcm-bar { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .coach-dock .qcm-bar::-webkit-scrollbar { display: none; } .coach-dock .qcm-bar .chip-btn { flex: none; } }
+.qcm-bar { display: flex; gap: 6px; flex-wrap: wrap; }
+.qcm-bar .chip-btn { background: var(--surface); box-shadow: 0 8px 20px -12px rgba(0, 0, 0, .8); }
+.qcm-bar .chip-btn:hover:not(:disabled) { border-color: var(--primary); color: var(--fg); }
+.qcm-bar .chip-btn:disabled { opacity: .5; cursor: default; }
+.msg.ai.has-quiz { max-width: none; width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.ai-row:has(.has-quiz) { max-width: 100%; width: 100%; align-items: flex-start; }
+.quiz { display: flex; flex-direction: column; gap: 10px; }
+.quiz-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.quiz-head b { display: inline-flex; align-items: center; gap: 6px; font: 800 15px var(--f-display); color: var(--primary-text); }
+.quiz-head .ico { width: 16px; height: 16px; }
+.qz { padding: 12px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.qz.ok { border-color: rgba(0, 214, 181, .45); } .qz.ko { border-color: rgba(255, 107, 129, .4); }
+.qz-q { font-weight: 600; }
+.qz-q .num { color: var(--muted); margin-right: 2px; }
+.qz-q .blank { min-width: 54px; }
+.qz-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.qz-opt { min-height: 38px; padding: 6px 14px; border-radius: 11px; border: 1.5px solid var(--line-2); background: var(--surface); color: var(--fg); font: 600 14px var(--f-body); cursor: pointer; transition: border-color .15s, background-color .15s, transform .1s; }
+.qz-opt:hover:not(:disabled) { border-color: var(--primary); background: var(--primary-soft); }
+.qz-opt:active:not(:disabled) { transform: scale(.97); }
+.qz-opt:disabled { cursor: default; }
+.qz-opt.is-right { border-color: var(--success); background: var(--success-soft); color: var(--success); }
+.qz-opt.is-wrong { border-color: var(--danger); background: var(--danger-soft); color: #FFB1BE; }
+.qz-opt.is-off { opacity: .45; }
+.qz-ex { font-size: 13.5px; color: var(--fg-2); }
+.quiz-end { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; padding-top: 4px; }
+.quiz-end b { font: 800 16px var(--f-display); }
 .xp-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 9px; border-radius: 999px; background: rgba(0, 214, 181, .13); border: 1px solid rgba(0, 214, 181, .35); color: var(--success); font: 800 12.5px var(--f-body); white-space: nowrap; }
 .xp-chip .ico { width: 13px; height: 13px; }
 .goal-bonus { border-color: rgba(0, 214, 181, .45); background: radial-gradient(240px 120px at 100% 0%, rgba(0, 214, 181, .14), transparent 70%), var(--surface); }
@@ -1630,7 +1659,8 @@ function allowed(view) {
   if (view === "session" && !S.session) return "dashboard";
   if (view === "settings") { S.settingsOpen = true; return "dashboard"; }
   if (view === "admin") return S.isAdmin ? "admin" : "dashboard";
-  if (!["dashboard", "review", "coach", "shop", "profile", "session", "competition"].includes(view)) return "dashboard";
+  if (view === "review") return "coach";
+  if (!["dashboard", "coach", "shop", "profile", "session", "competition"].includes(view)) return "dashboard";
   return view;
 }
 function go(view, opts = {}) {
@@ -1766,7 +1796,7 @@ function render() {
   if (showLevel && S.levelPop.fresh) { S.levelPop.fresh = false; setTimeout(() => { giftFx(); const r = document.querySelector(".lv-ring"); if (r) vxAnim(r, [{ transform: "scale(.4) rotate(-20deg)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: .6 }, { transform: "none" }], { duration: 700, easing: "ease-out" }); }, 80); }
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
-  if (v === "coach") { const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" }); }
+  if (v === "coach" && (fresh || S.chatScroll)) { S.chatScroll = false; const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" }); }
   if (v === "dashboard" && fresh) { setTimeout(scrollToCurrent, 0); setTimeout(prefetchNext, 400); }
 }
 // Vex parle : le texte s'écrit pendant qu'il bouge la bouche
@@ -2644,7 +2674,7 @@ async function finishSession() {
 }
 
 /* ---------- Espace élève ---------- */
-const NAV = [["dashboard", "Accueil", "i-home"], ["review", "Révision", "i-cards"], ["coach", "Prof IA", "i-chat"], ["competition", "Compétition", "i-trophy"], ["shop", "Boutique", "i-bag"], ["profile", "Profil", "i-user"]];
+const NAV = [["dashboard", "Accueil", "i-home"], ["coach", "Prof IA", "i-chat"], ["competition", "Compétition", "i-trophy"], ["shop", "Boutique", "i-bag"], ["profile", "Profil", "i-user"]];
 function walletChips() {
   const p = S.profile; refreshHearts();
   const n = liveStreak(), t = heartTimer(), full = p.hearts >= HEART_MAX;
@@ -3842,24 +3872,76 @@ function resultView(ses) {
 }
 
 /* ---------- Professeur IA ---------- */
-const SUGGESTIONS = ["Quelle est la différence entre « since » et « for » ?", "Corrige-moi : Yesterday I have went to the office.", "Fais-moi pratiquer mes difficultés avec un mini-exercice.", "Comment dire « j'ai hâte de te voir » naturellement ?"];
+const SUGGESTIONS = ["Quelle est la différence entre « since » et « for » ?", "Corrige-moi : Yesterday I have went to the office.", "Donne-moi un QCM sur le present perfect", "Comment dire « j'ai hâte de te voir » naturellement ?"];
+const QCM_KINDS = [["quick", "⚡ QCM rapide"], ["weak", "🎯 Sur mes erreurs"], ["vocab", "📚 Vocabulaire"]];
+// Un QCM : 3 à 6 questions, une seule bonne réponse chacune
+function cleanQuiz(o) {
+  if (!o || typeof o !== "object") return null;
+  const qs = (Array.isArray(o.questions) ? o.questions : []).map((q) => {
+    const options = (Array.isArray(q && q.options) ? q.options : []).map((x) => String(x).trim()).filter(Boolean).slice(0, 4);
+    const answer = String((q && q.answer) || "").trim();
+    if (!q || !q.q || !answer || options.length < 2) return null;
+    if (!options.includes(answer)) options.splice(Math.floor(Math.random() * (options.length + 1)), 0, answer);
+    return { q: String(q.q), options: shuffle([...new Set(options)]).slice(0, 4).concat([]), answer, explain: String(q.explain || "") };
+  }).filter((q) => q && q.options.includes(q.answer)).slice(0, 6);
+  return qs.length ? { title: String(o.title || "QCM"), questions: qs, picks: [] } : null;
+}
+// Le prof peut glisser un QCM dans sa réponse, entre ```qcm et ```
+function splitQuiz(text) {
+  const m = String(text || "").match(/```(?:qcm|json)?\s*(\{[\s\S]*?"questions"[\s\S]*?\})\s*```/);
+  if (!m) return { text, quiz: null };
+  let quiz = null; try { quiz = cleanQuiz(JSON.parse(m[1])); } catch {}
+  return { text: String(text).replace(m[0], "").trim(), quiz };
+}
+const streamView = (t) => { const i = String(t).search(/```/); return i < 0 ? rich(t) : rich(t.slice(0, i)) + `<span class="row small muted" style="gap:8px;margin-top:6px"><span class="spinner"></span> Vex prépare ton QCM…</span>`; };
+function quizCard(m, mi) {
+  const z = m.quiz, picks = z.picks || [], n = z.questions.length, answered = picks.filter((x) => x != null).length;
+  const score = z.questions.reduce((s, q, i) => s + (picks[i] === q.answer ? 1 : 0), 0);
+  return `<div class="quiz">
+    <div class="quiz-head"><b>${icon("i-spark")}${esc(z.title)}</b><span class="small muted num">${answered}/${n}</span></div>
+    ${z.questions.map((q, qi) => { const pk = picks[qi], done = pk != null; return `<div class="qz ${done ? (pk === q.answer ? "ok" : "ko") : ""}">
+      <p class="qz-q"><span class="num">${qi + 1}.</span> ${blanked(q.q, done ? q.answer : "")}</p>
+      <div class="qz-opts">${q.options.map((o) => `<button class="qz-opt ${done ? (o === q.answer ? "is-right" : o === pk ? "is-wrong" : "is-off") : ""}" data-act="qz" data-m="${mi}" data-q="${qi}" data-v="${esc(o)}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>
+      ${done ? `<p class="qz-ex">${pk === q.answer ? "✅ Exact !" : `❌ La bonne réponse : <b>${esc(q.answer)}</b>.`} ${esc(q.explain)}</p>` : ""}
+    </div>`; }).join("")}
+    ${answered === n ? `<div class="quiz-end"><b>${score === n ? "🏆 Parfait" : score >= n / 2 ? "👏 Bien joué" : "💪 Continue"} : ${score}/${n}</b><div class="row" style="gap:6px">${QCM_KINDS.map(([k, t]) => `<button class="chip-btn sm" data-act="qcm" data-v="${k}">${t}</button>`).join("")}</div></div>` : ""}
+  </div>`;
+}
 function viewCoach() {
-  const u = S.ui, p = S.profile;
+  const u = S.ui, p = S.profile, busy = u.streaming != null;
   return `
   <header class="page-head enter"><div class="stack"><h1 class="h1">Professeur IA</h1><p class="muted">Vex connaît ton niveau (${esc(p.cefr_level)}) et tes difficultés.</p></div>${S.chat.length ? `<button class="btn btn-ghost" data-act="chat-clear">Nouvelle conversation</button>` : ""}</header>
   ${!S.sample ? notice("Vex n'est pas disponible pour le moment. Recharge la page.", "warn") : ""}
   <div class="chat">
-    ${S.chat.length === 0 ? `${ask("talk", `Salut ${p.first_name || ""} ! Pose-moi une question, ou écris-moi en anglais : je te corrige.`)}
+    ${S.chat.length === 0 ? `${ask("talk", `Salut ${p.first_name || ""} ! Pose-moi une question, écris-moi en anglais pour que je te corrige, ou lance un QCM.`)}
       <div class="grid-2">${SUGGESTIONS.map((s) => `<button class="suggest" data-act="chat-sug" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>` : ""}
-    ${S.chat.map((m) => m.role === "user" ? `<div class="msg me">${rich(m.content)}</div>` : `<div class="ai-row">${vx("st_wink", 36)}<div class="msg ai">${rich(m.content)}</div></div>`).join("")}
-    ${u.streaming != null ? `<div class="ai-row">${vx(u.streaming ? "st_wink" : "st_hmm", 36, "talking-vx")}<div class="msg ai" id="stream">${u.streaming ? rich(u.streaming) : '<span class="row small muted" style="gap:8px"><span class="spinner"></span> Vex réfléchit…</span>'}</div></div>` : ""}
+    ${S.chat.map((m, mi) => m.role === "user" ? `<div class="msg me">${rich(m.content)}</div>` : `<div class="ai-row">${vx("st_wink", 36)}<div class="msg ai ${m.quiz ? "has-quiz" : ""}">${m.text != null ? (m.text ? `<div>${rich(m.text)}</div>` : "") : rich(m.content)}${m.quiz ? quizCard(m, mi) : ""}</div></div>`).join("")}
+    ${busy ? `<div class="ai-row">${vx(u.streaming ? "st_wink" : "st_hmm", 36, "talking-vx")}<div class="msg ai" id="stream">${u.streaming ? streamView(u.streaming) : `<span class="row small muted" style="gap:8px"><span class="spinner"></span> ${u.quizBusy ? "Vex prépare ton QCM…" : "Vex réfléchit…"}</span>`}</div></div>` : ""}
     ${notice(u.chatError)}
     <div id="chat-end"></div>
   </div>
-  <form class="composer" data-form="chat">
-    <input id="coachInput" placeholder="Écris ta question ou une phrase en anglais…" autocomplete="off" value="${esc(u.chatDraft || "")}" ${S.sample ? "" : "disabled"} aria-label="Message pour Vex">
-    <button class="btn btn-primary" style="height:44px;padding:0 16px" aria-label="Envoyer" ${u.streaming != null || !S.sample ? "disabled" : ""}>${icon("i-send")}</button>
-  </form>`;
+  <div class="coach-dock">
+    <div class="qcm-bar">${QCM_KINDS.map(([k, t]) => `<button class="chip-btn sm" data-act="qcm" data-v="${k}" ${busy || !S.sample ? "disabled" : ""}>${t}</button>`).join("")}</div>
+    <form class="composer" data-form="chat">
+      <input id="coachInput" placeholder="Écris ta question ou une phrase en anglais…" autocomplete="off" value="${esc(u.chatDraft || "")}" ${S.sample ? "" : "disabled"} aria-label="Message pour Vex">
+      <button class="btn btn-primary" style="height:44px;padding:0 16px" aria-label="Envoyer" ${busy || !S.sample ? "disabled" : ""}>${icon("i-send")}</button>
+    </form>
+  </div>`;
+}
+const saveChat = () => { try { sessionStorage.setItem("verblyx:chat", JSON.stringify(S.chat.slice(-30))); } catch {} };
+// Ce que l'IA « voit » de la conversation (un QCM est résumé en une ligne)
+const chatTurns = () => S.chat.slice(-12).map((m) => ({ role: m.role, content: m.quiz ? `${m.text || ""}\n[QCM « ${m.quiz.title} » : ${m.quiz.questions.map((q) => q.q).join(" | ")}]`.trim() : m.content }));
+function coachRules(p) {
+  return `Tu es Vex, le professeur d'anglais personnel de ${p.first_name || "l'élève"} sur Verblyx.
+Niveau CECRL : ${p.cefr_level}. Objectifs : ${p.goals.map((g) => GOALS_FR[g] || g).join(", ") || "général"}.
+Difficultés connues : ${[...weakSkills().map(skillLabel), ...p.difficulties].join(", ") || "aucune identifiée"}.
+Règles :
+- Va droit au but : 2 à 6 phrases, 120 mots maximum. Explications en français, exemples en anglais du niveau ${p.cefr_level}.
+- Si l'élève écrit en anglais, corrige d'abord ses erreurs (❌ … → ✅ … + règle en une ligne), puis réponds.
+- Si l'élève demande un QCM, un quiz, un test ou des exercices : écris UNE phrase d'introduction, puis un bloc qui commence par \`\`\`qcm et finit par \`\`\`, contenant uniquement ce JSON : {"title":"titre court","questions":[{"q":"phrase avec ___ ou question courte","options":["a","b","c"],"answer":"a","explain":"pourquoi, en une phrase en français"}]} — 5 questions, 3 options chacune, une seule bonne réponse.
+- Pas de titres Markdown ; tu peux utiliser **gras** et des listes avec "- ". Ton chaleureux et motivant.
+- Tu ne parles que d'apprentissage de l'anglais.
+Les messages suivants sont la conversation avec l'élève.`;
 }
 async function sendChat(text) {
   const t = String(text || "").trim();
@@ -3868,37 +3950,47 @@ async function sendChat(text) {
   if (u.streaming != null && Date.now() - (u.streamAt || 0) < 100000) return;
   u.streamAt = Date.now();
   S.chat.push({ role: "user", content: t.slice(0, 2000) }); SFX.play("tap");
-  u.chatDraft = ""; u.chatError = ""; u.streaming = ""; render();
-  const p = S.profile;
-  const rules =
-`Tu es Verblyx, le professeur d'anglais personnel de ${p.first_name || "l'élève"}.
-Niveau CECRL : ${p.cefr_level}. Objectifs : ${p.goals.map((g) => GOALS_FR[g] || g).join(", ") || "général"}.
-Difficultés connues : ${[...weakSkills().map(skillLabel), ...p.difficulties].join(", ") || "aucune identifiée"}.
-Règles :
-- Tu expliques en français, avec des exemples en anglais adaptés au niveau ${p.cefr_level}.
-- Si l'élève écrit en anglais, corrige d'abord ses erreurs (format : ❌ … → ✅ … + règle courte), puis réponds.
-- Si l'élève veut pratiquer, propose un mini-exercice ciblé sur ses difficultés et attends sa réponse.
-- Réponses courtes et structurées (moins de 180 mots), ton chaleureux et motivant. Pas de titres Markdown ; tu peux utiliser **gras** et des listes avec "- ".
-- Tu ne parles que d'apprentissage de l'anglais.
-Les messages suivants sont la conversation avec l'élève.`;
-  const turns = [{ role: "user", content: rules }, ...S.chat.slice(-12)];
+  u.chatDraft = ""; u.chatError = ""; u.streaming = ""; S.chatScroll = true; render();
+  const turns = [{ role: "user", content: coachRules(S.profile) }, ...chatTurns()];
   try {
     const { text: reply } = await S.sample(turns, { modelTier: "quick", cache: false, onText: ({ text }) => {
-      u.streaming = text; const av = document.querySelector(".talking-vx"); if (av && !av.classList.contains("talking")) { av.classList.add("talking"); vxSetMood(av, "wave"); } const el = document.getElementById("stream"); if (el) el.innerHTML = rich(text);
+      u.streaming = text; const av = document.querySelector(".talking-vx"); if (av && !av.classList.contains("talking")) { av.classList.add("talking"); vxSetMood(av, "wave"); } const el = document.getElementById("stream"); if (el) el.innerHTML = streamView(text);
       const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" });
     } });
-    S.chat.push({ role: "assistant", content: reply });
+    const { text: rest, quiz } = splitQuiz(reply);
+    S.chat.push(quiz ? { role: "assistant", content: reply, text: rest, quiz } : { role: "assistant", content: reply });
     SFX.play("pop");
   } catch (e) {
     if (e && e.text) S.chat.push({ role: "assistant", content: e.text + "\n\n(réponse interrompue)" });
     u.chatError = aiError(e);
   }
-  u.streaming = null;
-  try { sessionStorage.setItem("verblyx:chat", JSON.stringify(S.chat.slice(-30))); } catch {}
-  render();
+  u.streaming = null; S.chatScroll = true;
+  saveChat(); render();
   const inp = document.getElementById("coachInput"); if (inp) inp.focus();
 }
-
+// QCM en un clic (réponse JSON directe, plus rapide que la discussion)
+async function quickQuiz(kind) {
+  const u = S.ui, p = S.profile;
+  if (!S.sample || (u.streaming != null && Date.now() - (u.streamAt || 0) < 100000)) return;
+  const label = (QCM_KINDS.find((k) => k[0] === kind) || QCM_KINDS[0])[1];
+  const weak = [...weakSkills().map(skillLabel), ...p.difficulties];
+  const topic = kind === "weak" ? (weak.length ? `les notions où l'élève fait des erreurs : ${weak.slice(0, 3).join(", ")}` : "les pièges les plus fréquents à ce niveau")
+    : kind === "vocab" ? `le vocabulaire utile du niveau ${p.cefr_level}${p.goals.length ? " (thèmes : " + p.goals.map((g) => GOALS_FR[g] || g).join(", ") + ")" : ""} : sens des mots, traductions, mots qui vont ensemble`
+    : "un mélange de grammaire et de vocabulaire du niveau";
+  S.chat.push({ role: "user", content: label }); SFX.play("tap");
+  u.streamAt = Date.now(); u.streaming = ""; u.quizBusy = true; u.chatError = ""; S.chatScroll = true; render();
+  try {
+    const raw = await S.sample.json(`Crée un QCM d'anglais pour un élève francophone de niveau ${p.cefr_level}. Thème : ${topic}.
+5 questions variées et différentes de d'habitude. Chaque question : une phrase avec ___ ou une question courte, 3 options plausibles, UNE seule bonne réponse certaine, une explication d'une phrase en français.
+Réponds UNIQUEMENT avec ce JSON : {"title":"titre court en français","questions":[{"q":"...","options":["...","...","..."],"answer":"...","explain":"..."}]}`, { modelTier: "quick" });
+    const quiz = cleanQuiz(raw);
+    if (!quiz) throw { message: "Le QCM reçu était incomplet. Réessaie." };
+    S.chat.push({ role: "assistant", content: `QCM : ${quiz.title}`, text: "À toi de jouer ! Clique sur la bonne réponse.", quiz });
+    SFX.play("pop");
+  } catch (e) { u.chatError = aiError(e) || "Le QCM n'a pas pu être créé. Réessaie."; }
+  u.streaming = null; u.quizBusy = false; S.chatScroll = true;
+  saveChat(); render();
+}
 
 /* ---------- Vocabulaire ---------- */
 function viewVocab() {
@@ -4080,9 +4172,18 @@ $app.addEventListener("click", (ev) => {
     case "say": say(v, el.dataset.slow === "1"); break;
     case "sheet": u.sheet = true; render(); break;
     case "sheet-close": u.sheet = false; render(); break;
-    case "ses-quit": { if (genCtl) genCtl.abort(); clearInterval(genTimer); const back = S.session && S.session.kind === "review" || (S.session && S.session.kind === "focus") ? "review" : "dashboard"; S.session = null; go(back); break; }
+    case "ses-quit": { if (genCtl) genCtl.abort(); clearInterval(genTimer); const back = S.session && S.session.kind === "focus" ? "coach" : "dashboard"; S.session = null; go(back); break; }
     case "retry-open": { const st = S.session && S.session.st; if (st) openStep(st); break; }
     case "chat-sug": sendChat(v); break;
+    case "qcm": quickQuiz(v); break;
+    case "qz": {
+      const m = S.chat[Number(el.dataset.m)], qi = Number(el.dataset.q); if (!m || !m.quiz || m.quiz.picks[qi] != null) break;
+      const q = m.quiz.questions[qi]; m.quiz.picks[qi] = v; const ok = v === q.answer;
+      SFX.play(ok ? "correct" : "wrong");
+      saveChat(); render();
+      if (m.quiz.picks.filter((x) => x != null).length === m.quiz.questions.length) { SFX.play("fanfare"); S.chatScroll = true; setTimeout(() => { const e = document.getElementById("chat-end"); if (e) e.scrollIntoView({ block: "end", behavior: "smooth" }); }, 50); }
+      break;
+    }
     case "chat-clear": S.chat = []; try { sessionStorage.removeItem("verblyx:chat"); } catch {} u.chatError = ""; render(); break;
     case "vf": u.filter = v; render(); break;
     case "vt": if (S.vocab[v]) { S.vocab[v].learned = !S.vocab[v].learned; SFX.play(S.vocab[v].learned ? "select" : "unselect"); render(); S.store.saveVocab(S.vocab).catch(() => { S.saveError = "Le vocabulaire n'a pas pu être enregistré. Vérifie ta connexion."; render(); }); } break;
