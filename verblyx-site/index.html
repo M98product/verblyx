@@ -2943,7 +2943,7 @@ function viewSession() {
     <main class="flow-body" style="align-items:center;text-align:center;justify-content:center">${vx("think", 160, "lead")}
       <h1 class="h2">${esc(ses.title)}</h1><p class="muted" id="gen-msg">Vex prépare ta séance…</p><p class="small muted num" id="gen-t">0 s</p>
       <div class="stack" style="width:100%;max-width:420px;gap:10px"><div class="skel" style="height:14px"></div><div class="skel" style="height:14px;width:80%"></div><div class="skel" style="height:14px;width:60%"></div></div>
-      <p class="small muted">La première fois, une leçon prend environ 30 secondes à préparer. Ensuite, elle est instantanée.</p>
+      <p class="small muted">La première fois, une leçon prend quelques secondes à préparer. Ensuite, elle est instantanée pour tout le monde.</p>
     </main></div>`;
   if (ses.error) return `<div class="flow"><div class="flow-top"><button class="icon-btn" data-act="ses-quit" aria-label="Fermer">${icon("i-close")}</button>${progress(0)}</div>
     <main class="flow-body" style="align-items:center;text-align:center">${vx("sad", 140, "lead")}<h1 class="h2">Séance indisponible</h1><p class="muted">${esc(ses.error)}</p>
