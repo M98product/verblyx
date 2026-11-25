@@ -1600,6 +1600,57 @@ body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-
 .lock-info b { color: var(--fg); font-size: 15px; }
 .lock-info .row { gap: 8px; margin-top: 6px; flex-wrap: wrap; }
 .li-ic { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: rgba(0, 214, 181, .12); color: #5CF3DA; }
+
+/* ---------- Verblyx Plus : carte de la boutique et fenêtre ---------- */
+.pl-card { border-radius: 24px; background: var(--surface); border: 1px solid var(--line-2); overflow: hidden; scroll-margin-top: 24px; }
+.pl-main { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+.pl-intro { padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.pl-badges { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pl-logo { font: 800 12px var(--f-body); letter-spacing: .16em; color: var(--fg-2); }
+.pl-logo b { font-weight: 800; color: #00D6B5; }
+.pl-soon { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 7px; font: 700 11px var(--f-body); letter-spacing: .04em; text-transform: uppercase; color: #FFD08A; background: rgba(255, 196, 92, .1); border: 1px solid rgba(255, 196, 92, .28); }
+.pl-title { font: 800 26px/1.2 var(--f-display); letter-spacing: -.02em; margin: 0; }
+.pl-lead { margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.55; max-width: 460px; }
+.pl-cmp { margin-top: 6px; border-radius: 14px; border: 1px solid var(--line); overflow: hidden; }
+.pl-row { display: grid; grid-template-columns: minmax(0, 1fr) 74px 74px; align-items: center; gap: 8px; padding: 9px 14px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--fg-2); }
+.pl-row:first-child { border-top: 0; }
+.pl-row > span:not(:first-child) { display: flex; justify-content: center; text-align: center; }
+.pl-head { background: var(--surface-2); font: 700 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-top: 8px; padding-bottom: 8px; }
+.pl-head .pl-col-plus { color: #00D6B5; }
+.pl-row .pl-col-plus { background: rgba(0, 214, 181, .06); margin: -9px 0; padding: 9px 0; align-self: stretch; align-items: center; }
+.pl-head .pl-col-plus { margin: -8px 0; padding: 8px 0; }
+.pl-yes { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: rgba(0, 214, 181, .16); color: #00D6B5; }
+.pl-no { color: var(--faint); }
+.pl-row b { color: var(--fg); font-size: 14px; }
+.pl-price { padding: 26px; display: flex; flex-direction: column; gap: 12px; background: var(--surface-2); border-left: 1px solid var(--line); justify-content: flex-start; padding-top: 30px; }
+.pl-ph { font: 700 11.5px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 2px; }
+.pl-seg { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); }
+.pl-seg button { height: 38px; border: 0; border-radius: 10px; background: none; color: var(--muted); font: 600 14px var(--f-body); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s, color .15s; }
+.pl-seg button.is-on { background: var(--surface-3); color: var(--fg); box-shadow: 0 2px 8px -2px rgba(0, 0, 0, .5); }
+.pl-seg em { font-style: normal; font: 700 11px var(--f-body); padding: 2px 6px; border-radius: 6px; color: #03261F; background: #00D6B5; }
+.pl-amount { display: flex; align-items: baseline; gap: 6px; margin-top: 6px; }
+.pl-amount b { font: 800 48px/1 var(--f-display); letter-spacing: -.03em; }
+.pl-amount span { font: 600 15px var(--f-body); color: var(--muted); }
+.pl-bill { margin: -4px 0 4px; font-size: 13px; color: var(--muted); min-height: 18px; }
+.pl-cta:disabled { opacity: 1; background: var(--surface-3); color: var(--fg-2); box-shadow: none; cursor: not-allowed; }
+.pl-note { margin: 0; font-size: 12.5px; color: var(--faint); text-align: center; line-height: 1.45; }
+@media (max-width: 900px) { .pl-main { grid-template-columns: 1fr; } .pl-price { border-left: 0; border-top: 1px solid var(--line); } }
+@media (max-width: 719px) { .pl-intro { padding: 20px 16px 16px; } .pl-price { padding: 20px 16px; } .pl-title { font-size: 22px; } .pl-row { grid-template-columns: minmax(0, 1fr) 58px 58px; padding: 9px 12px; font-size: 13px; } .pl-amount b { font-size: 42px; } }
+.pl-mpanel { max-width: 440px; gap: 12px; padding: 26px 24px 22px; text-align: left; }
+.pl-mclose { position: absolute; top: 12px; right: 12px; }
+.pl-mtop { display: flex; align-items: center; gap: 12px; }
+.pl-mlock { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 15px; background: rgba(0, 214, 181, .12); color: #00D6B5; }
+.pl-mtitle { font: 800 24px/1.2 var(--f-display); letter-spacing: -.02em; margin: 4px 0 0; }
+.pl-mtext { margin: 0; color: var(--fg-2); font-size: 15px; line-height: 1.55; }
+.pl-mlist { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); }
+.pl-mlist span { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.pl-mlist .pic { color: #00D6B5; }
+.pl-mlist span.is-cur { color: var(--fg); font-weight: 600; }
+.pl-mprice { margin: 0; font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pl-mprice b { color: var(--fg); }
+.pl-mbtns { display: flex; gap: 8px; flex-wrap: wrap; }
+.pl-mbtns .btn { flex: 1 1 160px; }
+@media (max-width: 719px) { .pl-modal { align-items: end; padding: 0; } .pl-modal .pl-mpanel { max-width: none; border-radius: 22px 22px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -2326,6 +2377,7 @@ function render() {
   const keepEls = [".set-main", ".set-panel"].map((s) => { const e = document.querySelector(s); return e ? e.scrollTop : 0; });
   const keepFaq = [...document.querySelectorAll(".faq details")].map((d) => d.open);
   if (S.doc) { html += docModal(); S.docAnim = false; }
+  if (S.plusModal && !S.doc) { html += plusModal(); S.plusAnim = false; }
   const showGift = S.giftPop && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
   if (showGift) html += giftModal();
   const showLevel = S.levelPop && !showGift && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
@@ -3599,29 +3651,65 @@ const PLUS_FEAT = {
 const plusLocked = (f) => PLUS.lockFocus && !S.isPlus && !!PLUS_FEAT[f];
 const plusTip = (f) => `${PLUS_FEAT[f][0]} · Verblyx Plus. ${PLUS_FEAT[f][1]} Bientôt disponible.`;
 const euro = (n) => n.toFixed(2).replace(".", ",") + " €";
-function plusCard() {
+const PLUS_COMPARE = [
+  ["Leçons, parcours et certifications", true, true],
+  ["Échanges par jour avec Vex", "80", String(PLUS.msgs)],
+  ["Corrections, traduction et vocabulaire", true, true],
+  ["Conversation vocale avec Vex", false, true],
+  ["Simulations de situations réelles", false, true],
+  ["Espace concentration et ambiances", false, true],
+  ["Suivi détaillé de tes progrès", false, true],
+];
+function plusPrice() {
   const yearly = S.ui.plusPlan !== "month";
-  const perMonth = yearly ? PLUS.yearly / 12 : PLUS.monthly;
-  const save = Math.round((1 - PLUS.yearly / (PLUS.monthly * 12)) * 100);
-  const perks = [
-    ["chat", `${PLUS.msgs} échanges par jour avec Vex`, "Au lieu de 80 : discute, corrige et pratique sans compter."],
-    ["focus", "Espace concentration complet", "Minuteur Pomodoro, ambiances sonores et objectifs de session."],
-    ["wave", "Conversation vocale et simulations", "Parle avec Vex à l'oral et entraîne-toi en situation réelle."],
-    ["chart", "Suivi détaillé de tes progrès", "Tes points à améliorer et des exercices ciblés en continu."],
-  ];
-  return `<section class="plus-card enter-2" aria-labelledby="plus-title">
-    <div class="plus-head">
-      <div><span class="plus-brand">VERBLYX <b>PLUS</b></span><h2 class="plus-title" id="plus-title">Vex sans limites, à ton rythme</h2></div>
-      <span class="plus-soon">Bientôt disponible</span>
+  return { yearly, per: yearly ? PLUS.yearly / 12 : PLUS.monthly, save: Math.round((1 - PLUS.yearly / (PLUS.monthly * 12)) * 100) };
+}
+function plusPricing() {
+  const { yearly, per, save } = plusPrice();
+  return `<div class="pl-price">
+      <p class="pl-ph">Choisis ta formule</p>
+      <div class="pl-seg" role="radiogroup" aria-label="Formule">
+        <button role="radio" aria-checked="${!yearly}" class="${!yearly ? "is-on" : ""}" data-act="plus-plan" data-v="month">Mensuel</button>
+        <button role="radio" aria-checked="${yearly}" class="${yearly ? "is-on" : ""}" data-act="plus-plan" data-v="year">Annuel <em>−${save} %</em></button>
+      </div>
+      <div class="pl-amount"><b class="num">${euro(per).replace(" €", "")}</b><span>€ / mois</span></div>
+      <p class="pl-bill">${yearly ? `Facturé ${euro(PLUS.yearly)} par an, soit ${euro(PLUS.monthly * 12 - PLUS.yearly)} d'économie` : "Sans engagement, résiliable à tout moment"}</p>
+      <button class="btn btn-primary btn-lg btn-block pl-cta" ${PLUS.available ? `data-act="plus-buy"` : "disabled"}>${PLUS.available ? "Passer à Plus" : "Bientôt disponible"}</button>
+      <p class="pl-note">${PLUS.available ? "Paiement sécurisé." : "Le paiement n'est pas encore ouvert : rien ne t'est facturé pour le moment."}</p>
+    </div>`;
+}
+const cmpCell = (v) => v === true ? `<span class="pl-yes" aria-label="Inclus">${pic("check", 16)}</span>` : v === false ? `<span class="pl-no" aria-label="Non inclus">—</span>` : `<b class="num">${esc(v)}</b>`;
+function plusCard() {
+  return `<section class="pl-card enter-3" id="plus" aria-labelledby="plus-title">
+    <div class="pl-main">
+      <div class="pl-intro">
+        <div class="pl-badges"><span class="pl-logo">VERBLYX <b>PLUS</b></span><span class="pl-soon">Bientôt disponible</span></div>
+        <h2 class="pl-title" id="plus-title">Va plus loin avec Vex</h2>
+        <p class="pl-lead">Plus d'échanges avec ton professeur, l'oral, les mises en situation et un espace pour rester concentré.</p>
+        <div class="pl-cmp" role="table" aria-label="Comparatif Gratuit et Plus">
+          <div class="pl-row pl-head" role="row"><span role="columnheader"></span><span role="columnheader">Gratuit</span><span role="columnheader" class="pl-col-plus">Plus</span></div>
+          ${PLUS_COMPARE.map(([t, f, pl]) => `<div class="pl-row" role="row"><span role="cell">${esc(t)}</span><span role="cell">${cmpCell(f)}</span><span role="cell" class="pl-col-plus">${cmpCell(pl)}</span></div>`).join("")}
+        </div>
+      </div>
+      ${plusPricing()}
     </div>
-    <ul class="plus-perks">${perks.map(([ic, t, d]) => `<li><span class="plus-ic">${pic(ic, 18)}</span><div><b>${t}</b><span>${d}</span></div></li>`).join("")}</ul>
-    <div class="plus-plans" role="radiogroup" aria-label="Formule">
-      <button role="radio" aria-checked="${yearly}" class="plus-plan ${yearly ? "is-on" : ""}" data-act="plus-plan" data-v="year"><span class="pp-top"><b>Annuel</b><em>−${save} %</em></span><span class="pp-price num">${euro(perMonth)}<small> / mois</small></span><span class="pp-sub">${euro(PLUS.yearly)} par an</span></button>
-      <button role="radio" aria-checked="${!yearly}" class="plus-plan ${!yearly ? "is-on" : ""}" data-act="plus-plan" data-v="month"><span class="pp-top"><b>Mensuel</b></span><span class="pp-price num">${euro(PLUS.monthly)}<small> / mois</small></span><span class="pp-sub">Sans engagement</span></button>
-    </div>
-    <button class="btn btn-primary btn-lg btn-block" ${PLUS.available ? `data-act="plus-buy"` : "disabled"}>${PLUS.available ? "S'abonner" : "Bientôt disponible"}</button>
-    <p class="small muted plus-note">${PLUS.available ? "Résiliable à tout moment." : "Le paiement n'est pas encore ouvert : rien ne t'est facturé pour le moment."}</p>
   </section>`;
+}
+// Fenêtre ouverte en touchant une fonction verrouillée
+function plusModal() {
+  const f = PLUS_FEAT[S.plusModal]; if (!f) return "";
+  return `<div class="modal pl-modal ${S.plusAnim ? "opening" : ""}" role="dialog" aria-modal="true" aria-labelledby="plm-title">
+    <div class="modal-bg" data-act="plus-close"></div>
+    <div class="modal-panel pl-mpanel">
+      <button class="icon-btn pl-mclose" data-act="plus-close" aria-label="Fermer">${icon("i-close")}</button>
+      <div class="pl-mtop"><span class="pl-mlock">${pic("lock", 22)}</span><span class="pl-logo">VERBLYX <b>PLUS</b></span></div>
+      <h2 class="pl-mtitle" id="plm-title">${esc(f[0])}</h2>
+      <p class="pl-mtext">${esc(f[1])}</p>
+      <div class="pl-mlist">${Object.entries(PLUS_FEAT).map(([k, [t]]) => `<span class="${k === S.plusModal ? "is-cur" : ""}">${pic("check", 15)}${esc(t)}</span>`).join("")}<span>${pic("check", 15)}${PLUS.msgs} échanges par jour avec Vex</span></div>
+      <p class="pl-mprice">À partir de <b>${euro(PLUS.yearly / 12)}</b> par mois · <span class="pl-soon">Bientôt disponible</span></p>
+      <div class="pl-mbtns"><button class="btn btn-primary btn-lg" data-act="plus-see">Voir l'offre Plus</button><button class="btn btn-ghost btn-lg" data-act="plus-close">Plus tard</button></div>
+    </div>
+  </div>`;
 }
 function viewShop() {
   const p = S.profile; refreshHearts();
@@ -3657,7 +3745,6 @@ function viewShop() {
       ${(p.freezes || 0) >= 2 ? `<span class="small muted">2 boucliers maximum</span>` : ""}
     </div>
   </div>
-  ${plusCard()}
   <section class="card pad">
     <span class="label">Gagner des pièces</span>
     <div class="earn">
@@ -3668,7 +3755,8 @@ function viewShop() {
       <div><b>+60</b><span>Obtenir une certification</span></div>
       <div><b>+5</b><span>Faire une révision</span></div>
     </div>
-  </section>`;
+  </section>  ${plusCard()}
+  `;
 }
 
 /* ---------- Paramètres du compte ---------- */
@@ -5450,7 +5538,6 @@ function viewCoach() {
         <div id="chat-end"></div>
       </div>
       <div class="coach-dock c2-dock">
-        ${CO.lockInfo && PLUS_FEAT[CO.lockInfo] ? `<div class="lock-info" role="status"><span class="li-ic">${pic("lock", 18)}</span><div><span class="plus-brand">VERBLYX <b>PLUS</b></span><b>${esc(PLUS_FEAT[CO.lockInfo][0])}</b><span>${esc(PLUS_FEAT[CO.lockInfo][1])} Bientôt disponible avec l'abonnement Plus.</span><div class="row"><button class="btn btn-primary btn-sm" data-go="shop">Voir l'offre</button><button class="btn btn-ghost btn-sm" data-act="lock-close">Fermer</button></div></div></div>` : ""}
         ${CO.toolsOpen ? toolsPanel() : ""}
         ${CO.voice ? `<div class="voice-bar ${CO.listening ? "is-listening" : ""}"><span class="vb-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>${CO.listening ? "Parle en anglais, je t'écoute…" : CO.vstate === "talk" ? "Vex parle…" : busy ? "Vex réfléchit…" : "Mode vocal activé"}</span>${!CO.listening && !busy ? `<button class="btn btn-primary btn-sm" data-act="mic">${pic("mic", 16)}Parler</button>` : ""}<button class="btn btn-ghost btn-sm" data-act="voice">Quitter</button></div>` : ""}
         ${tool ? `<div class="tool-chip">${pic(tool[2], 15)}<span>${esc(tool[1])}</span><button data-act="tool-off" aria-label="Annuler l'outil">${pic("x", 14)}</button></div>` : ""}
@@ -5486,9 +5573,9 @@ function chatErr(m, last) {
 // actions de la page Prof IA (appelées par le gestionnaire de clics général)
 function coachAction(act, v, el) {
   const u = S.ui, c = () => coachData();
-  if (act === "plus-locked") { CO.lockInfo = v; CO.toolsOpen = false; SFX.play("unselect"); render(); return true; }
-  if (act === "lock-close") { CO.lockInfo = null; render(); return true; }
-  if ((act === "co-panel" && plusLocked(v)) || (act === "voice" && plusLocked("voice")) || ((act === "role" || (act === "tool" && v === "sim") || (act === "co-start" && v === "sim")) && plusLocked("sim"))) { CO.lockInfo = act === "co-panel" ? v : act === "voice" ? "voice" : "sim"; CO.toolsOpen = false; render(); return true; }
+  if (act === "plus-locked") { S.plusModal = v; S.plusAnim = true; CO.toolsOpen = false; SFX.play("tap"); render(); return true; }
+  if (act === "plus-close" || act === "plus-see" || act === "plus-plan") return false;
+  if ((act === "co-panel" && plusLocked(v)) || (act === "voice" && plusLocked("voice")) || ((act === "role" || (act === "tool" && v === "sim") || (act === "co-start" && v === "sim")) && plusLocked("sim"))) { S.plusModal = act === "co-panel" ? v : act === "voice" ? "voice" : "sim"; S.plusAnim = true; CO.toolsOpen = false; render(); return true; }
   CO.lockInfo = null;
   switch (act) {
     case "co-panel": CO.panel = v && CO.panel !== v ? v : v && CO.panel === v && !el.closest(".c2-side") ? null : v || null; if (CO.panel === "focus") { const k = c().set.mode; if (k && FOCUS.mode !== k && !FOCUS.running && !FOCUS.elapsed) focusReset(k); } render(); return true;
@@ -5634,6 +5721,8 @@ $app.addEventListener("click", (ev) => {
     case "staff-logs": u.logActor = v; u.logs = null; u.admTab = "log"; SFX.play("tap"); render(); window.scrollTo(0, 0); break;
     case "log-refresh": logLoad(); break;
     case "plus-plan": u.plusPlan = v; SFX.play("tap"); render(); break;
+    case "plus-close": S.plusModal = null; render(); break;
+    case "plus-see": S.plusModal = null; go("shop"); setTimeout(() => { const c = document.getElementById("plus"); if (c) c.scrollIntoView({ block: "start", behavior: "smooth" }); }, 60); break;
     case "adm-ai": case "adm-ai-reset": {
       const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
       let lim = null;
@@ -5869,6 +5958,7 @@ document.addEventListener("keydown", (ev) => {
     return;
   }
   if (ev.key === "Escape" && S.doc) { S.doc = null; render(); return; }
+  if (ev.key === "Escape" && S.plusModal) { S.plusModal = null; render(); return; }
   if (ev.key === "Escape" && S.giftPop) { S.giftPop = null; render(); return; }
   if (ev.key === "Escape" && S.levelPop) { S.levelPop = null; render(); return; }
   if (ev.key === "Escape" && S.settingsOpen) { S.settingsOpen = false; S.ui.confirmReset = false; render(); return; }
