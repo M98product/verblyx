@@ -1544,6 +1544,37 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
 }
 @media (max-width: 1023px) and (min-width: 720px) { .c2-btn span { display: none; } .c2-btn { width: 38px; padding: 0; justify-content: center; } }
 body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-wave i, body.calm .cc-btn.is-rec { animation: none !important; }
+
+/* ---------- Verblyx Plus ---------- */
+.plus-card { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 22px; border-radius: 22px; background: var(--surface); border: 1px solid rgba(22, 119, 255, .35); box-shadow: 0 20px 50px -30px rgba(22, 119, 255, .55); overflow: hidden; }
+.plus-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, #1677FF, #00D6B5); }
+.plus-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.plus-brand { font: 800 12px var(--f-body); letter-spacing: .14em; color: var(--muted); }
+.plus-brand b { color: #5CF3DA; font-weight: 800; }
+.plus-title { font: 800 22px/1.25 var(--f-display); letter-spacing: -.01em; margin: 4px 0 0; }
+.plus-soon { flex: none; height: 26px; padding: 0 10px; border-radius: 8px; display: inline-grid; place-items: center; font: 700 11.5px var(--f-body); letter-spacing: .05em; text-transform: uppercase; color: #FFD08A; background: rgba(255, 196, 92, .1); border: 1px solid rgba(255, 196, 92, .3); }
+.plus-perks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
+.plus-perks li { display: flex; gap: 12px; align-items: flex-start; }
+.plus-perks li div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.plus-perks b { font: 700 14.5px var(--f-body); }
+.plus-perks span:not(.plus-ic) { font-size: 13px; color: var(--muted); line-height: 1.45; }
+.plus-ic { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: rgba(22, 119, 255, .14); color: #8CC2FF; }
+.plus-plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.plus-plan { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 14px 16px; border-radius: 16px; border: 1.5px solid var(--line-2); background: var(--bg-raise); color: var(--fg); text-align: left; cursor: pointer; transition: border-color .15s, background .15s; }
+.plus-plan:hover { border-color: var(--muted); }
+.plus-plan.is-on { border-color: #1677FF; background: rgba(22, 119, 255, .08); }
+.pp-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
+.pp-top b { font: 700 14px var(--f-body); }
+.pp-top em { font-style: normal; font: 700 11.5px var(--f-body); padding: 2px 7px; border-radius: 6px; color: #03261F; background: #00D6B5; }
+.pp-price { font: 800 22px var(--f-display); }
+.pp-price small { font: 600 13px var(--f-body); color: var(--muted); }
+.pp-sub { font-size: 12.5px; color: var(--muted); }
+.plus-card > .btn:disabled { opacity: 1; background: var(--surface-3); color: var(--fg-2); box-shadow: none; cursor: default; }
+.plus-note { margin: -8px 0 0; text-align: center; }
+.plus-tag { display: inline-grid; place-items: center; height: 18px; padding: 0 6px; margin-left: 6px; border-radius: 5px; font: 800 10px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: #5CF3DA; background: rgba(0, 214, 181, .12); vertical-align: 2px; }
+.plus-lock { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 14px; background: var(--bg-raise); border: 1px solid rgba(22, 119, 255, .35); font-size: 14px; color: var(--fg-2); }
+.plus-lock .btn { align-self: flex-start; }
+@media (max-width: 719px) { .plus-card { padding: 18px 16px; } .plus-perks { grid-template-columns: 1fr; } .plus-title { font-size: 20px; } .pp-price { font-size: 19px; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -3522,6 +3553,42 @@ function viewReview() {
 }
 
 /* ---------- Boutique ---------- */
+/* ---------- Verblyx Plus (abonnement, pas encore ouvert) ----------
+   Coût estimé d'un échange avec Vex : ~3 000 jetons envoyés + ~300 reçus
+   = ~0,0004 $ avec Gemini Flash-Lite, ~0,002 $ avec Groq (relais).
+   Abonné très actif (60 échanges/jour) : ~0,8 à 3,6 $ par mois ; au plafond (300/jour) : ~3,8 $ avec Flash-Lite.
+   Frais de paiement en ligne (~1,5 % + 0,25 €) : ~0,37 € par mois. */
+const PLUS = {
+  available: false,          // passer à true le jour où le paiement est branché
+  lockFocus: false,          // true = l'espace concentration devient réservé aux abonnés
+  monthly: 7.99, yearly: 59.99,
+  msgs: 300,                 // échanges avec Vex par jour pour un abonné (80 sans abonnement)
+};
+const euro = (n) => n.toFixed(2).replace(".", ",") + " €";
+function plusCard() {
+  const yearly = S.ui.plusPlan !== "month";
+  const perMonth = yearly ? PLUS.yearly / 12 : PLUS.monthly;
+  const save = Math.round((1 - PLUS.yearly / (PLUS.monthly * 12)) * 100);
+  const perks = [
+    ["chat", `${PLUS.msgs} échanges par jour avec Vex`, "Au lieu de 80 : discute, corrige et pratique sans compter."],
+    ["focus", "Espace concentration complet", "Minuteur Pomodoro, ambiances sonores et objectifs de session."],
+    ["wave", "Conversation vocale et simulations", "Parle avec Vex à l'oral et entraîne-toi en situation réelle."],
+    ["chart", "Suivi détaillé de tes progrès", "Tes points à améliorer et des exercices ciblés en continu."],
+  ];
+  return `<section class="plus-card enter-2" aria-labelledby="plus-title">
+    <div class="plus-head">
+      <div><span class="plus-brand">VERBLYX <b>PLUS</b></span><h2 class="plus-title" id="plus-title">Vex sans limites, à ton rythme</h2></div>
+      <span class="plus-soon">Bientôt disponible</span>
+    </div>
+    <ul class="plus-perks">${perks.map(([ic, t, d]) => `<li><span class="plus-ic">${pic(ic, 18)}</span><div><b>${t}</b><span>${d}</span></div></li>`).join("")}</ul>
+    <div class="plus-plans" role="radiogroup" aria-label="Formule">
+      <button role="radio" aria-checked="${yearly}" class="plus-plan ${yearly ? "is-on" : ""}" data-act="plus-plan" data-v="year"><span class="pp-top"><b>Annuel</b><em>−${save} %</em></span><span class="pp-price num">${euro(perMonth)}<small> / mois</small></span><span class="pp-sub">${euro(PLUS.yearly)} par an</span></button>
+      <button role="radio" aria-checked="${!yearly}" class="plus-plan ${!yearly ? "is-on" : ""}" data-act="plus-plan" data-v="month"><span class="pp-top"><b>Mensuel</b></span><span class="pp-price num">${euro(PLUS.monthly)}<small> / mois</small></span><span class="pp-sub">Sans engagement</span></button>
+    </div>
+    <button class="btn btn-primary btn-lg btn-block" ${PLUS.available ? `data-act="plus-buy"` : "disabled"}>${PLUS.available ? "S'abonner" : "Bientôt disponible"}</button>
+    <p class="small muted plus-note">${PLUS.available ? "Résiliable à tout moment." : "Le paiement n'est pas encore ouvert : rien ne t'est facturé. Toutes les fonctions actuelles restent accessibles."}</p>
+  </section>`;
+}
 function viewShop() {
   const p = S.profile; refreshHearts();
   const room = HEART_MAX - p.hearts, t = heartTimer();
@@ -3529,6 +3596,7 @@ function viewShop() {
   return `
   <header class="page-head enter"><div class="stack"><h1 class="h1">Boutique</h1><p class="muted">Dépense tes pièces pour continuer à apprendre sans t'arrêter.</p></div>
     <span class="pill-stat coin" style="height:40px;font-size:16px">${icon("i-coin")}${p.coins || 0} pièces</span></header>
+  ${plusCard()}
   <section class="card pad shop-hero enter-2">
     <div class="stack" style="gap:8px;min-width:0">
       <span class="label">Tes vies</span>
@@ -5273,8 +5341,9 @@ function toolsPanel() {
 }
 function focusPanel() {
   const c = coachData(), s = c.set;
+  if (PLUS.lockFocus && !S.isPlus) return `<div class="side-sec"><div class="plus-lock"><span class="plus-brand">VERBLYX <b>PLUS</b></span><b>L'espace concentration est inclus dans Verblyx Plus</b><span>Minuteur Pomodoro, ambiances sonores et objectifs de session.</span><button class="btn btn-primary btn-sm" data-go="shop">Découvrir Plus</button></div></div>`;
   return `<div class="side-sec">
-    <div class="ss-h"><b>Concentration</b><label class="co-switch"><input type="checkbox" data-act="set-timer" ${s.timer ? "checked" : ""}><span></span>Minuteur</label></div>
+    <div class="ss-h"><b>Concentration <span class="plus-tag" title="Inclus dans Verblyx Plus, offert pour le moment">Plus</span></b><label class="co-switch"><input type="checkbox" data-act="set-timer" ${s.timer ? "checked" : ""}><span></span>Minuteur</label></div>
     ${s.timer ? `<div class="fx-modes" role="radiogroup">${FMODES.map(([k, t]) => `<button role="radio" aria-checked="${FOCUS.mode === k}" class="${FOCUS.mode === k ? "is-on" : ""}" data-act="fx-mode" data-v="${k}">${t}</button>`).join("")}</div>
     <p class="small muted fx-desc">${(FMODES.find((x) => x[0] === FOCUS.mode) || FMODES[0])[2]}${FOCUS.phase === "break" && FOCUS.mode === "pomodoro" ? " · pause en cours" : ""}</p>
     <div class="fx-clock"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle id="fx-ring" cx="60" cy="60" r="52" class="fg ${FOCUS.phase === "break" ? "brk" : ""}" pathLength="100" stroke-dasharray="${FOCUS.total ? (1 - FOCUS.left / FOCUS.total) * 100 : 0} 100" transform="rotate(-90 60 60)"/></svg><span id="fx-time" class="num">${fmt(focusShown())}</span></div>
@@ -5523,6 +5592,7 @@ $app.addEventListener("click", (ev) => {
     case "staff-del-do": S.store.staffRemove(v).then(() => { u.staffList = (u.staffList || []).filter((m) => m.user_id !== v); u.staffDel = null; u.staffOk = "Membre retiré de l'équipe."; u.logs = null; SFX.play("unselect"); render(); }).catch((e) => { u.staffErr = (e && e.message) || "Erreur"; u.staffDel = null; render(); }); break;
     case "staff-logs": u.logActor = v; u.logs = null; u.admTab = "log"; SFX.play("tap"); render(); window.scrollTo(0, 0); break;
     case "log-refresh": logLoad(); break;
+    case "plus-plan": u.plusPlan = v; SFX.play("tap"); render(); break;
     case "adm-ai": case "adm-ai-reset": {
       const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
       let lim = null;
