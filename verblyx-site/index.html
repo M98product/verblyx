@@ -1385,7 +1385,7 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
 .cw-card { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); text-align: left; cursor: pointer; transition: transform .2s ease, border-color .2s, background .2s; }
 .cw-card:hover { transform: translateY(-2px); border-color: var(--line-2); background: var(--surface-2); }
 .cw-card b { font: 700 15px var(--f-body); }
-.cw-card > span:last-child { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+.cw-card .cw-d { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
 .cw-ic { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: rgba(22, 119, 255, .15); color: #8CC2FF; margin-bottom: 4px; }
 .cw-card:nth-child(2) .cw-ic { background: rgba(0, 214, 181, .13); color: #5CF3DA; }
 .cw-card:nth-child(3) .cw-ic { background: rgba(255, 196, 92, .12); color: #FFD08A; }
@@ -1530,7 +1530,8 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
   .cw-card { flex-direction: row; align-items: center; gap: 12px; padding: 12px 14px; }
   .cw-card .cw-ic { margin: 0; }
   .cw-card > b { flex: none; }
-  .cw-card > span:last-child { display: none; }
+  .cw-card .cw-d { display: none; }
+  .cw-lock { top: 50%; transform: translateY(-50%); }
   .cw-hero .vx { width: 84px !important; }
   .cw-title { font-size: 23px; }
   .bub { font-size: 15px; padding: 11px 14px; }
@@ -1575,6 +1576,30 @@ body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-
 .plus-lock { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 14px; background: var(--bg-raise); border: 1px solid rgba(22, 119, 255, .35); font-size: 14px; color: var(--fg-2); }
 .plus-lock .btn { align-self: flex-start; }
 @media (max-width: 719px) { .plus-card { padding: 18px 16px; } .plus-perks { grid-template-columns: 1fr; } .plus-title { font-size: 20px; } .pp-price { font-size: 19px; } }
+
+/* ---------- Fonctions Plus verrouillées ---------- */
+.is-locked { position: relative; }
+.c2-btn.is-locked, .side-tabs .is-locked { color: var(--faint); }
+.c2-btn.is-locked .pic:last-child, .side-tabs .is-locked .pic { color: #5CF3DA; }
+.side-tabs .is-locked { display: inline-flex; align-items: center; gap: 5px; }
+.tp-item.is-locked { color: var(--muted); }
+.tp-item.is-locked .pic:first-child { color: var(--faint); }
+.tp-item.is-locked .pic:last-child { margin-left: auto; color: #5CF3DA; }
+.cw-card.is-locked { position: relative; }
+.cw-card.is-locked .cw-ic { opacity: .55; }
+.cw-card.is-locked b { color: var(--fg-2); }
+.cw-lock { position: absolute; top: 14px; right: 14px; display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 7px; font: 800 10.5px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: #5CF3DA; background: rgba(0, 214, 181, .12); }
+@media (hover: hover) {
+  .has-tip:hover::after, .has-tip:focus-visible::after { content: attr(data-tip); position: absolute; z-index: 40; left: 50%; bottom: calc(100% + 10px); transform: translateX(-50%); width: max-content; max-width: 260px; padding: 9px 12px; border-radius: 12px; background: #0E1016; border: 1px solid var(--line-2); box-shadow: 0 14px 30px -12px rgba(0, 0, 0, .9); color: var(--fg-2); font: 500 12.5px/1.45 var(--f-body); text-align: left; text-transform: none; letter-spacing: 0; white-space: normal; pointer-events: none; animation: tipIn .15s ease; }
+  .has-tip.tip-below:hover::after, .has-tip.tip-below:focus-visible::after { bottom: auto; top: calc(100% + 10px); }
+  .side-tabs .has-tip:hover::after { left: auto; right: -40px; transform: none; }
+}
+@keyframes tipIn { from { opacity: 0; } }
+.lock-info { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid rgba(0, 214, 181, .35); animation: cmIn .2s ease; }
+.lock-info > div { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 14px; color: var(--fg-2); }
+.lock-info b { color: var(--fg); font-size: 15px; }
+.lock-info .row { gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.li-ic { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: rgba(0, 214, 181, .12); color: #5CF3DA; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -3560,10 +3585,19 @@ function viewReview() {
    Frais de paiement en ligne (~1,5 % + 0,25 €) : ~0,37 € par mois. */
 const PLUS = {
   available: false,          // passer à true le jour où le paiement est branché
-  lockFocus: false,          // true = l'espace concentration devient réservé aux abonnés
+  lockFocus: true,           // true = les fonctions Plus sont réservées aux abonnés (cadenas)
   monthly: 7.99, yearly: 59.99,
   msgs: 300,                 // échanges avec Vex par jour pour un abonné (80 sans abonnement)
 };
+// Fonctions réservées à Plus, et ce qu'on explique au survol du cadenas
+const PLUS_FEAT = {
+  focus: ["Espace concentration", "Minuteur Pomodoro, ambiances sonores (pluie, café, forêt…) et objectifs de session."],
+  voice: ["Conversation vocale", "Parle à Vex à voix haute : il t'écoute et te répond à l'oral."],
+  sim: ["Simulations", "Vex joue un rôle (café, aéroport, entretien…) et tu pratiques en situation réelle."],
+  progress: ["Suivi détaillé", "Tes points à améliorer, tes statistiques et des exercices ciblés sur tes erreurs."],
+};
+const plusLocked = (f) => PLUS.lockFocus && !S.isPlus && !!PLUS_FEAT[f];
+const plusTip = (f) => `${PLUS_FEAT[f][0]} · Verblyx Plus. ${PLUS_FEAT[f][1]} Bientôt disponible.`;
 const euro = (n) => n.toFixed(2).replace(".", ",") + " €";
 function plusCard() {
   const yearly = S.ui.plusPlan !== "month";
@@ -3586,7 +3620,7 @@ function plusCard() {
       <button role="radio" aria-checked="${!yearly}" class="plus-plan ${!yearly ? "is-on" : ""}" data-act="plus-plan" data-v="month"><span class="pp-top"><b>Mensuel</b></span><span class="pp-price num">${euro(PLUS.monthly)}<small> / mois</small></span><span class="pp-sub">Sans engagement</span></button>
     </div>
     <button class="btn btn-primary btn-lg btn-block" ${PLUS.available ? `data-act="plus-buy"` : "disabled"}>${PLUS.available ? "S'abonner" : "Bientôt disponible"}</button>
-    <p class="small muted plus-note">${PLUS.available ? "Résiliable à tout moment." : "Le paiement n'est pas encore ouvert : rien ne t'est facturé. Toutes les fonctions actuelles restent accessibles."}</p>
+    <p class="small muted plus-note">${PLUS.available ? "Résiliable à tout moment." : "Le paiement n'est pas encore ouvert : rien ne t'est facturé pour le moment."}</p>
   </section>`;
 }
 function viewShop() {
@@ -3596,7 +3630,6 @@ function viewShop() {
   return `
   <header class="page-head enter"><div class="stack"><h1 class="h1">Boutique</h1><p class="muted">Dépense tes pièces pour continuer à apprendre sans t'arrêter.</p></div>
     <span class="pill-stat coin" style="height:40px;font-size:16px">${icon("i-coin")}${p.coins || 0} pièces</span></header>
-  ${plusCard()}
   <section class="card pad shop-hero enter-2">
     <div class="stack" style="gap:8px;min-width:0">
       <span class="label">Tes vies</span>
@@ -3624,6 +3657,7 @@ function viewShop() {
       ${(p.freezes || 0) >= 2 ? `<span class="small muted">2 boucliers maximum</span>` : ""}
     </div>
   </div>
+  ${plusCard()}
   <section class="card pad">
     <span class="label">Gagner des pièces</span>
     <div class="earn">
@@ -4802,6 +4836,7 @@ const PIC = {
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
   target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
   stop: '<rect x="6" y="6" width="12" height="12" rx="2"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
 };
 const pic = (k, s = 18) => `<svg class="pic" viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PIC[k] || ""}</svg>`;
 
@@ -5230,7 +5265,7 @@ function focusReset(mode) {
   c.set.mode = mode;
 }
 function focusStart() {
-  if (FOCUS.running) return;
+  if (FOCUS.running || plusLocked("focus")) return;
   FOCUS.running = true; FOCUS.done = false; FOCUS.lastTick = Date.now();
   const c = coachData(); if (c.set.sound !== "silence") ambPlay(c.set.sound, c.set.vol);
   FOCUS.timer = setInterval(focusTick, 1000);
@@ -5326,7 +5361,7 @@ function coachWelcome() {
   ];
   return `<div class="co-welcome">
     <div class="cw-hero">${vx("wave", 112, "lead")}<div><h2 class="cw-title">Bonjour ${esc(p.first_name || "")}</h2><p class="muted">Je suis Vex, ton professeur. Écris-moi en anglais ou en français, je m'adapte à ton niveau ${esc(p.cefr_level || "")}.</p></div></div>
-    <div class="cw-grid">${starters.map(([k, t, d, ic]) => `<button class="cw-card" data-act="co-start" data-v="${k}"><span class="cw-ic">${pic(ic, 20)}</span><b>${esc(t)}</b><span>${esc(d)}</span></button>`).join("")}</div>
+    <div class="cw-grid">${starters.map(([k, t, d, ic]) => plusLocked(k) ? `<button class="cw-card is-locked has-tip" data-act="plus-locked" data-v="${k}" data-tip="${esc(plusTip(k))}"><span class="cw-ic">${pic(ic, 20)}</span><b>${esc(t)}</b><span class="cw-d">${esc(d)}</span><span class="cw-lock">${pic("lock", 14)}Plus</span></button>` : `<button class="cw-card" data-act="co-start" data-v="${k}"><span class="cw-ic">${pic(ic, 20)}</span><b>${esc(t)}</b><span class="cw-d">${esc(d)}</span></button>`).join("")}</div>
     <div class="cw-sugs">${["How do I use “since” and “for”?", "Corrige : Yesterday I have went to the office.", "Explique-moi le present perfect", "Let's talk about my weekend"].map((s) => `<button class="cw-sug" data-act="chat-sug" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>
     ${c.ok || c.quiz.n ? "" : `<p class="small muted cw-foot">Tes progrès avec Vex apparaîtront dans « Progrès » au fil de tes échanges.</p>`}
   </div>`;
@@ -5335,7 +5370,7 @@ function toolsPanel() {
   return `<div class="tools-pop" role="dialog" aria-label="Outils">
     <div class="tp-head"><b>Outils</b><button class="mact icon" data-act="tools" aria-label="Fermer">${pic("x", 16)}</button></div>
     ${CO.toolsOpen === "sim" ? `<p class="small muted" style="margin:0 2px 8px">Choisis une situation. Vex joue un rôle, tu réponds en anglais.</p><div class="tp-grid">${SCENARIOS.map(([k, t]) => `<button class="tp-item" data-act="role" data-v="${k}">${pic("chat", 18)}<span>${t}</span></button>`).join("")}</div>`
-    : `<div class="tp-grid">${TOOLS.map(([k, t, ic]) => `<button class="tp-item" data-act="tool" data-v="${k}">${pic(ic, 18)}<span>${t}</span></button>`).join("")}</div>
+    : `<div class="tp-grid">${TOOLS.map(([k, t, ic]) => plusLocked(k) ? `<button class="tp-item is-locked has-tip" data-act="plus-locked" data-v="${k}" data-tip="${esc(plusTip(k))}">${pic(ic, 18)}<span>${t}</span>${pic("lock", 15)}</button>` : `<button class="tp-item" data-act="tool" data-v="${k}">${pic(ic, 18)}<span>${t}</span></button>`).join("")}</div>
     <div class="tp-sub"><span class="small muted">Exercices rapides</span><div class="tp-row">${QCM_KINDS.map(([k, t, ic]) => `<button class="tp-chip" data-act="qcm" data-v="${k}">${pic(ic === "target" ? "target" : ic === "books" ? "books" : ic === "read" ? "read" : "bolt", 15)}${t}</button>`).join("")}</div></div>`}
   </div>`;
 }
@@ -5391,6 +5426,7 @@ function historyPanel() {
   </div>`;
 }
 const PANELS = [["focus", "Concentration", "focus"], ["progress", "Progrès", "chart"], ["history", "Historique", "clock"]];
+const lockedBtn = (f, ic, t) => `<button class="c2-btn is-locked has-tip tip-below" data-act="plus-locked" data-v="${f}" data-tip="${esc(plusTip(f))}" aria-label="${esc(t)} : réservé à Verblyx Plus">${pic(ic, 18)}<span>${t}</span>${pic("lock", 14)}</button>`;
 function viewCoach() {
   coLoad();
   const u = S.ui, busy = coachBusy(), tool = CO.tool && TOOLS.find((x) => x[0] === CO.tool), sc = CO.role && SCENARIOS.find((s) => s[0] === CO.role);
@@ -5401,8 +5437,8 @@ function viewCoach() {
       <header class="c2-top">
         <div id="coach-top" class="coach-top">${coachTopHTML()}</div>
         <div class="c2-btns">
-          ${canVoice() ? `<button class="c2-btn ${CO.voice ? "is-on" : ""}" data-act="voice" aria-pressed="${CO.voice}" title="Conversation vocale">${pic("wave", 18)}<span>Vocal</span></button>` : ""}
-          ${PANELS.map(([k, t, ic]) => `<button class="c2-btn ${panel === k ? "is-on" : ""}" data-act="co-panel" data-v="${k}" aria-pressed="${panel === k}" title="${t}">${pic(ic, 18)}<span>${t}</span></button>`).join("")}
+          ${canVoice() ? (plusLocked("voice") ? lockedBtn("voice", "wave", "Vocal") : `<button class="c2-btn ${CO.voice ? "is-on" : ""}" data-act="voice" aria-pressed="${CO.voice}" title="Conversation vocale">${pic("wave", 18)}<span>Vocal</span></button>`) : ""}
+          ${PANELS.map(([k, t, ic]) => plusLocked(k) ? lockedBtn(k, ic, t) : `<button class="c2-btn ${panel === k ? "is-on" : ""}" data-act="co-panel" data-v="${k}" aria-pressed="${panel === k}" title="${t}">${pic(ic, 18)}<span>${t}</span></button>`).join("")}
           ${S.chat.length ? `<button class="c2-btn" data-act="co-new" title="Nouvelle conversation">${pic("plus", 18)}<span>Nouvelle</span></button>` : ""}
         </div>
       </header>
@@ -5414,6 +5450,7 @@ function viewCoach() {
         <div id="chat-end"></div>
       </div>
       <div class="coach-dock c2-dock">
+        ${CO.lockInfo && PLUS_FEAT[CO.lockInfo] ? `<div class="lock-info" role="status"><span class="li-ic">${pic("lock", 18)}</span><div><span class="plus-brand">VERBLYX <b>PLUS</b></span><b>${esc(PLUS_FEAT[CO.lockInfo][0])}</b><span>${esc(PLUS_FEAT[CO.lockInfo][1])} Bientôt disponible avec l'abonnement Plus.</span><div class="row"><button class="btn btn-primary btn-sm" data-go="shop">Voir l'offre</button><button class="btn btn-ghost btn-sm" data-act="lock-close">Fermer</button></div></div></div>` : ""}
         ${CO.toolsOpen ? toolsPanel() : ""}
         ${CO.voice ? `<div class="voice-bar ${CO.listening ? "is-listening" : ""}"><span class="vb-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>${CO.listening ? "Parle en anglais, je t'écoute…" : CO.vstate === "talk" ? "Vex parle…" : busy ? "Vex réfléchit…" : "Mode vocal activé"}</span>${!CO.listening && !busy ? `<button class="btn btn-primary btn-sm" data-act="mic">${pic("mic", 16)}Parler</button>` : ""}<button class="btn btn-ghost btn-sm" data-act="voice">Quitter</button></div>` : ""}
         ${tool ? `<div class="tool-chip">${pic(tool[2], 15)}<span>${esc(tool[1])}</span><button data-act="tool-off" aria-label="Annuler l'outil">${pic("x", 14)}</button></div>` : ""}
@@ -5427,7 +5464,7 @@ function viewCoach() {
       </div>
     </div>
     ${panel ? `<aside class="c2-side" aria-label="${(PANELS.find((x) => x[0] === panel) || [])[1] || ""}">
-      <div class="side-head"><div class="side-tabs">${PANELS.map(([k, t]) => `<button class="${panel === k ? "is-on" : ""}" data-act="co-panel" data-v="${k}">${t}</button>`).join("")}</div><button class="mact icon" data-act="co-panel" data-v="" aria-label="Fermer">${pic("x", 18)}</button></div>
+      <div class="side-head"><div class="side-tabs">${PANELS.map(([k, t]) => plusLocked(k) ? `<button class="is-locked has-tip tip-below" data-act="plus-locked" data-v="${k}" data-tip="${esc(plusTip(k))}">${pic("lock", 13)}${t}</button>` : `<button class="${panel === k ? "is-on" : ""}" data-act="co-panel" data-v="${k}">${t}</button>`).join("")}</div><button class="mact icon" data-act="co-panel" data-v="" aria-label="Fermer">${pic("x", 18)}</button></div>
       <div class="side-body">${panel === "focus" ? focusPanel() : panel === "progress" ? progressPanel() : historyPanel()}</div>
     </aside><div class="c2-scrim" data-act="co-panel" data-v=""></div>` : ""}
   </div>`;
@@ -5449,6 +5486,10 @@ function chatErr(m, last) {
 // actions de la page Prof IA (appelées par le gestionnaire de clics général)
 function coachAction(act, v, el) {
   const u = S.ui, c = () => coachData();
+  if (act === "plus-locked") { CO.lockInfo = v; CO.toolsOpen = false; SFX.play("unselect"); render(); return true; }
+  if (act === "lock-close") { CO.lockInfo = null; render(); return true; }
+  if ((act === "co-panel" && plusLocked(v)) || (act === "voice" && plusLocked("voice")) || ((act === "role" || (act === "tool" && v === "sim") || (act === "co-start" && v === "sim")) && plusLocked("sim"))) { CO.lockInfo = act === "co-panel" ? v : act === "voice" ? "voice" : "sim"; CO.toolsOpen = false; render(); return true; }
+  CO.lockInfo = null;
   switch (act) {
     case "co-panel": CO.panel = v && CO.panel !== v ? v : v && CO.panel === v && !el.closest(".c2-side") ? null : v || null; if (CO.panel === "focus") { const k = c().set.mode; if (k && FOCUS.mode !== k && !FOCUS.running && !FOCUS.elapsed) focusReset(k); } render(); return true;
     case "co-new": coNew(); SFX.play("tap"); render(); return true;
