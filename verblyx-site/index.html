@@ -245,7 +245,7 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 14px; line-heigh
   body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
   .mtop { display: flex; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; align-items: center; justify-content: space-between; gap: 10px; padding: 10px max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)); background: rgba(7, 26, 45, .94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
   .main { padding: 20px max(16px, env(safe-area-inset-right, 0px)) 104px max(16px, env(safe-area-inset-left, 0px)); }
-  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 6px env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); background: rgba(7, 26, 45, .96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
+  .tabbar { display: grid; grid-template-columns: repeat(6, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 6px env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); background: rgba(7, 26, 45, .96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
   .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0 8px; border: 0; background: none; color: var(--muted); font: 600 11px var(--f-body); cursor: pointer; }
   .tab .ico { width: 24px; height: 24px; }
   .tab.is-active { color: var(--primary-text); }
@@ -724,6 +724,29 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .avatar.av-char svg { width: 100%; height: 100%; display: block; }
 .av-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 10px; margin-top: 14px; }
 .ob-me { display: flex; align-items: center; gap: 14px; }
+.lb-tabs { align-self: flex-start; }
+.lb-tabs button { display: inline-flex; align-items: center; gap: 6px; }
+.lb-tabs .ico { width: 16px; height: 16px; }
+.podium { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 10px; padding-top: 10px; }
+.pod { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; text-align: center; }
+.pod-name { font-weight: 700; font-size: 14px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pod-score { display: inline-flex; align-items: center; gap: 4px; font: 700 13px var(--f-body); color: var(--fg-2); }
+.pod-score .ico { width: 14px; height: 14px; color: var(--success); }
+.pod-medal { position: absolute; top: -8px; z-index: 2; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 800 13px var(--f-display); color: #1B1405; background: #C9CED6; box-shadow: 0 4px 10px -4px rgba(0,0,0,.6); }
+.pod-1 .pod-medal { background: #FFC94A; } .pod-3 .pod-medal { background: #E09A5C; }
+.pod-step { width: 100%; border-radius: 14px 14px 6px 6px; background: linear-gradient(180deg, var(--surface-3), var(--surface)); border: 1px solid var(--line); height: 54px; margin-top: 4px; }
+.pod-1 .pod-step { height: 84px; background: linear-gradient(180deg, rgba(255, 201, 74, .25), var(--surface)); border-color: rgba(255, 201, 74, .35); }
+.pod-3 .pod-step { height: 40px; }
+.pod.is-me .pod-name { color: var(--success); }
+.lb-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lb-row, .lb-me { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.lb-row.is-me, .lb-me { border-color: rgba(0, 214, 181, .5); background: linear-gradient(90deg, rgba(0, 214, 181, .1), transparent 70%), var(--surface); }
+.lb-me { position: sticky; bottom: 16px; box-shadow: 0 16px 40px -20px rgba(0,0,0,.9); }
+@media (max-width: 719px) { .lb-me { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); } .tab { font-size: 10px; } }
+.lb-rank { width: 28px; flex: none; text-align: center; font: 800 15px var(--f-display); color: var(--muted); }
+.lb-name { flex: 1; min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-score { flex: none; font: 800 15px var(--f-display); }
+.lb-score small { font: 600 12px var(--f-body); color: var(--muted); }
 .av-pick { aspect-ratio: 1; padding: 0; border: 2px solid transparent; border-radius: 50%; background: #163659; overflow: hidden; cursor: pointer; transition: transform .15s var(--spring), border-color .15s; }
 .av-pick svg { width: 100%; height: 100%; display: block; }
 .av-pick:hover { transform: scale(1.07); }
@@ -1389,9 +1412,9 @@ const unlockedBadges = () => { const c = badgeCtx(); return BADGES.filter((b) =>
 /* ============================================================
    Navigation
    ============================================================ */
-const HASH = { login: "connexion", checkmail: "confirmation", home: "decouvrir", onboarding: "bienvenue", test: "test", dashboard: "accueil", review: "revision", coach: "professeur", shop: "boutique", profile: "profil", settings: "parametres", admin: "admin" };
+const HASH = { login: "connexion", checkmail: "confirmation", home: "decouvrir", onboarding: "bienvenue", test: "test", dashboard: "accueil", review: "revision", coach: "professeur", shop: "boutique", profile: "profil", settings: "parametres", admin: "admin", competition: "competition" };
 const FROM_HASH = Object.fromEntries(Object.entries(HASH).map(([k, v]) => [v, k]));
-Object.assign(FROM_HASH, { inscription: "onboarding", questionnaire: "onboarding", lecons: "dashboard", parcours: "dashboard", tableau: "dashboard", vocabulaire: "review" });
+Object.assign(FROM_HASH, { classement: "competition", inscription: "onboarding", questionnaire: "onboarding", lecons: "dashboard", parcours: "dashboard", tableau: "dashboard", vocabulaire: "review" });
 function allowed(view) {
   const p = S.profile;
   if (view === "newpass") return view;
@@ -1403,7 +1426,7 @@ function allowed(view) {
   if (view === "session" && !S.session) return "dashboard";
   if (view === "settings") { S.settingsOpen = true; return "dashboard"; }
   if (view === "admin") return S.isAdmin ? "admin" : "dashboard";
-  if (!["dashboard", "review", "coach", "shop", "profile", "session"].includes(view)) return "dashboard";
+  if (!["dashboard", "review", "coach", "shop", "profile", "session", "competition"].includes(view)) return "dashboard";
   return view;
 }
 function go(view, opts = {}) {
@@ -1511,7 +1534,7 @@ function render() {
   else if (v === "checkmail") html = viewCheckMail();
   else if (v === "newpass") html = viewNewPass();
   else if (v === "session") html = viewSession();
-  else html = viewShell(v === "dashboard" ? viewMap() : v === "review" ? viewReview() : v === "coach" ? viewCoach() : v === "shop" ? viewShop() : v === "admin" ? viewAdmin() : viewProfile());
+  else html = viewShell(v === "dashboard" ? viewMap() : v === "review" ? viewReview() : v === "coach" ? viewCoach() : v === "shop" ? viewShop() : v === "admin" ? viewAdmin() : v === "competition" ? viewCompetition() : viewProfile());
   const active = document.activeElement && document.activeElement.id;
   const ss = S.session;
   const key = [v, S.ui.step, S.ui.phase, S.ui.answers && S.ui.answers.length, ss ? (ss.out ? "O" : ss.loading ? "L" : ss.error ? "E" : ss.done ? (ss.cheer ? "C" : "D") : ss.i) : ""].join(":");
@@ -2333,7 +2356,7 @@ async function finishSession() {
 }
 
 /* ---------- Espace élève ---------- */
-const NAV = [["dashboard", "Accueil", "i-home"], ["review", "Révision", "i-cards"], ["coach", "Prof IA", "i-chat"], ["shop", "Boutique", "i-bag"], ["profile", "Profil", "i-user"]];
+const NAV = [["dashboard", "Accueil", "i-home"], ["review", "Révision", "i-cards"], ["coach", "Prof IA", "i-chat"], ["competition", "Compétition", "i-trophy"], ["shop", "Boutique", "i-bag"], ["profile", "Profil", "i-user"]];
 function walletChips() {
   const p = S.profile; refreshHearts();
   const n = liveStreak(), t = heartTimer(), full = p.hearts >= HEART_MAX;
@@ -3019,6 +3042,49 @@ function adminMessages() {
   </section>`;
 }
 
+/* ---------- Compétition : classements ---------- */
+const LB_KINDS = [["xp", "XP", "i-bolt"], ["coins", "Pièces", "i-coin"], ["pulse", "Pulse", "i-pulse"]];
+const LB = { data: {}, at: {}, busy: {}, err: {} };
+async function lbLoad(kind, force) {
+  if (LB.busy[kind] || (!force && LB.data[kind] && Date.now() - LB.at[kind] < 60e3)) return;
+  LB.busy[kind] = true; LB.err[kind] = ""; if (S.view === "competition") render();
+  try {
+    if (!S.store.leaderboard) throw { message: "Les classements ne sont disponibles qu'une fois connecté." };
+    LB.data[kind] = await S.store.leaderboard(kind); LB.at[kind] = Date.now();
+  } catch (e) {
+    const m = (e && e.message) || "";
+    LB.err[kind] = /function|schema cache|does not exist/i.test(m) ? "Les classements ne sont pas encore activés (lance 004_competition.sql dans Supabase)." : m || "Impossible de charger le classement.";
+  }
+  LB.busy[kind] = false; if (S.view === "competition") render();
+}
+function viewCompetition() {
+  const u = S.ui, kind = u.lbKind || "xp";
+  if (!LB.data[kind] && !LB.busy[kind] && !LB.err[kind]) setTimeout(() => lbLoad(kind), 0);
+  const rows = LB.data[kind] || [];
+  const top = rows.filter((r) => r.rank <= 100);
+  const me = rows.find((r) => r.is_me);
+  const unit = kind === "xp" ? "XP" : kind === "coins" ? "pièces" : "j";
+  const ico = LB_KINDS.find((k) => k[0] === kind)[2];
+  const who = (r) => r.username ? "@" + r.username : r.first_name || "Élève";
+  const av = (r, size) => avatarHTML({ avatar_id: r.avatar_id, first_name: r.first_name }, size);
+  const podium = top.slice(0, 3);
+  const order = [podium[1], podium[0], podium[2]].filter(Boolean);
+  return `
+  <header class="page-head enter"><div class="stack"><h1 class="h1">Compétition</h1><p class="muted">Les 100 meilleurs élèves de Verblyx. Grimpe dans le classement !</p></div>
+    <button class="btn btn-ghost btn-sm" data-act="lb-refresh" ${LB.busy[kind] ? "disabled" : ""}>${LB.busy[kind] ? '<span class="spinner"></span>' : ""}Actualiser</button></header>
+  <div class="segmented lb-tabs" role="tablist">${LB_KINDS.map(([k, t, ic]) => `<button role="tab" aria-selected="${kind === k}" class="${kind === k ? "is-active" : ""}" data-act="lb-kind" data-v="${k}">${icon(ic)}${t}</button>`).join("")}</div>
+  ${notice(LB.err[kind])}
+  ${!LB.data[kind] && LB.busy[kind] ? `<div class="stack" style="gap:10px">${[1, 2, 3, 4].map(() => `<div class="skel" style="height:58px;border-radius:16px"></div>`).join("")}</div>` : ""}
+  ${LB.data[kind] && !top.length ? `<div class="card pad">${ask("go", "Personne n'est encore classé ici. Termine une leçon pour prendre la première place !", "", 104)}</div>` : ""}
+  ${order.length ? `<section class="podium enter-2">${order.map((r) => `<div class="pod pod-${r.rank} ${r.is_me ? "is-me" : ""}">
+      <span class="pod-medal">${r.rank}</span>${av(r, r.rank === 1 ? 84 : 66)}
+      <b class="pod-name">${esc(who(r))}</b><span class="pod-score num">${icon(ico)}${r.score} ${unit}</span>
+      <div class="pod-step"></div></div>`).join("")}</section>` : ""}
+  ${top.length > 3 ? `<ol class="lb-list enter-3">${top.slice(3).map((r) => `<li class="lb-row ${r.is_me ? "is-me" : ""}"><span class="lb-rank num">${r.rank}</span>${av(r, 40)}<span class="lb-name">${esc(who(r))}${r.is_me ? ` <span class="chip chip-blue" style="height:22px">Toi</span>` : ""}</span><span class="lb-score num">${r.score} <small>${unit}</small></span></li>`).join("")}</ol>` : ""}
+  ${me && (me.rank > 100 || me.score <= 0) ? `<div class="lb-me"><span class="lb-rank num">${me.score > 0 ? me.rank : "—"}</span>${av(me, 40)}<span class="lb-name">Toi <span class="small muted">${me.score > 0 ? "· continue, tu remontes !" : "· gagne tes premiers points pour entrer au classement"}</span></span><span class="lb-score num">${me.score} <small>${unit}</small></span></div>` : ""}
+  <p class="small muted">${kind === "pulse" ? "Le Pulse compte les jours d'affilée où tu as appris." : kind === "coins" ? "Les pièces que tu as en ce moment." : "Toute l'expérience gagnée depuis ton inscription."} Mis à jour toutes les minutes.</p>`;
+}
+
 /* ---------- Plus de vies ---------- */
 function outView(ses) {
   const p = S.profile, t = heartTimer(), can = (p.coins || 0) >= HEART_COST;
@@ -3368,6 +3434,8 @@ $app.addEventListener("click", (ev) => {
     case "copy-id": try { navigator.clipboard.writeText(accId(S.accountNo)); } catch {} u.copied = true; render(); setTimeout(() => { if (S.ui.copied) { S.ui.copied = false; if (S.settingsOpen) render(); } }, 1500); break;
     case "adm-tab": u.admTab = v; SFX.play("tap"); render(); break;
     case "fb-refresh": adminFbLoad(); break;
+    case "lb-kind": u.lbKind = v; SFX.play("tap"); render(); lbLoad(v); break;
+    case "lb-refresh": lbLoad(u.lbKind || "xp", true); break;
     case "prep-go": SFX.play("next"); prepRun(); break;
     case "prep-stop": PREP.stop = true; SFX.play("unselect"); render(); break;
     case "fb-done": { const id = Number(v), d = el.dataset.d === "1"; S.store.adminFeedbackDone(id, d).then(() => { const m = (S.ui.fbList || []).find((x) => x.id === id); if (m) m.done = d; render(); }).catch((e) => { S.ui.fbErr = (e && e.message) || "Erreur"; render(); }); break; }
@@ -3574,6 +3642,7 @@ function makeSupaStore(sb, uid) {
     async sendFeedback(message) { const { error } = await sb.rpc("send_feedback", { p_message: message }); if (error) throw error; },
     async adminFeedback() { const { data, error } = await sb.rpc("admin_feedback"); if (error) throw error; return data || []; },
     async adminFeedbackDone(id, done) { const { error } = await sb.rpc("admin_feedback_done", { p_id: id, p_done: done }); if (error) throw error; },
+    async leaderboard(kind) { const { data, error } = await sb.rpc("leaderboard", { p_kind: kind }); if (error) throw error; return data || []; },
     async adminGift(target, kind, amount, level) { const { error } = await sb.rpc("admin_gift", { p_target: target, p_kind: kind, p_amount: amount || 0, p_level: level || null }); if (error) throw error; },
   };
 }
