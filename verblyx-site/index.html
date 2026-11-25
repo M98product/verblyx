@@ -737,6 +737,46 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .side-lv:hover b { color: var(--success); }
 .side-lv + .side-foot { margin-top: 0; }
 @media (max-width: 1023px) { .side-lv { display: none; } .side-lv + .side-foot { margin-top: auto; } }
+.admin-prep { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 16px; padding: 14px 16px; border-radius: 18px; border: 1px dashed rgba(246, 190, 59, .55); background: linear-gradient(90deg, rgba(246, 190, 59, .09), transparent 60%), var(--surface); }
+.ap-head { display: flex; flex-direction: column; gap: 2px; min-width: 170px; }
+.ap-head b { font: 800 16px var(--f-display); }
+.ap-tag { display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; height: 20px; padding: 0 8px; border-radius: 999px; background: rgba(246, 190, 59, .16); color: #FFD56B; font: 800 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; }
+.ap-tag .ico { width: 12px; height: 12px; }
+.ap-run { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 6px; }
+.admin-prep .btn .ico { width: 16px; height: 16px; }
+.road { position: relative; margin-top: 10px; }
+.road-svg { position: absolute; left: 50%; top: 0; width: 440px; max-width: none; margin-left: -220px; overflow: visible; pointer-events: none; }
+.road-bg { fill: none; stroke: var(--surface-3); stroke-width: 16; stroke-linecap: round; }
+.road-done { fill: none; stroke: var(--success); stroke-width: 16; stroke-linecap: round; opacity: .9; }
+.road-line { fill: none; stroke: rgba(255, 255, 255, .22); stroke-width: 2; stroke-dasharray: 7 11; stroke-linecap: round; }
+.pstop { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; z-index: 2; }
+.pstop:has(.p-pop) { z-index: 40; }
+.pnode { position: relative; width: 66px; height: 66px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer; color: var(--muted); background: #2C2F3B; box-shadow: 0 6px 0 #15161C, inset 0 2px 0 rgba(255, 255, 255, .06); font: 800 22px var(--f-display); transition: transform .12s, filter .15s; -webkit-tap-highlight-color: transparent; }
+.pnode .ico { width: 28px; height: 28px; }
+.pnode:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+.pnode:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 #15161C; }
+.pnode:disabled { cursor: default; color: #5A5F6D; }
+.pnode.done, .pnode.skipped { background: var(--success); color: var(--success-ink); box-shadow: 0 6px 0 #0A8C77; }
+.pnode.skipped { filter: saturate(.55) brightness(.85); }
+.pnode.current { background: var(--primary); color: #fff; box-shadow: 0 6px 0 #0B4FB8, 0 0 0 9px rgba(22, 119, 255, .18); }
+.pnode.current::after { content: ""; position: absolute; inset: -14px; border-radius: inherit; border: 3px solid rgba(22, 119, 255, .45); animation: ring 2s var(--ease) infinite; }
+.pnode.k-unit, .pnode.k-exam { border-radius: 22px; width: 72px; height: 72px; }
+.pnode.k-exam.current, .pnode.k-exam.done { background: linear-gradient(160deg, #B68CFF, #7C5CFF); color: #fff; box-shadow: 0 6px 0 #5133C4; }
+.pnode.k-chest { width: 70px; height: 62px; border-radius: 18px; background: #3A3428; color: #8C7A55; box-shadow: 0 6px 0 #1E1A12; }
+.pnode.k-chest .ico { width: 32px; height: 32px; }
+.pnode.k-chest.ready { background: linear-gradient(160deg, #FFE7A0, #F6BE3B 50%, #C98A0B); color: #5A3B00; box-shadow: 0 6px 0 #8A5E05, 0 0 30px -4px rgba(246, 190, 59, .85); animation: chest-wiggle 1.8s ease-in-out infinite; }
+.pnode.k-chest.done { background: #4A3F26; color: #F6BE3B; box-shadow: 0 6px 0 #241E10; }
+.pnode.k-chest.skipped { background: #34302A; color: #6E6450; filter: none; box-shadow: 0 6px 0 #1E1A12; }
+@keyframes chest-wiggle { 0%, 70%, 100% { rotate: 0deg; } 76% { rotate: -7deg; } 82% { rotate: 6deg; } 88% { rotate: -4deg; } 94% { rotate: 2deg; } }
+.pstop .start-tip { bottom: calc(100% + 14px); }
+.start-tip.gold { color: #FFD56B; border-color: rgba(246, 190, 59, .6); }
+.road-clip { position: absolute; inset: 0 -16px; overflow: hidden; pointer-events: none; }
+.p-pop { position: absolute; top: calc(100% + 14px); left: calc(50% - var(--px, 0px)); transform: translateX(-50%); width: min(330px, 88vw); z-index: 40; filter: drop-shadow(0 20px 30px rgba(0, 0, 0, .55)); }
+.p-pop .stn-card { background: #262934; }
+.p-pop .stn-card .vx { display: none; }
+.p-pop::before { content: ""; position: absolute; top: -7px; left: calc(50% + var(--px, 0px)); width: 14px; height: 14px; transform: translateX(-50%) rotate(45deg); background: #262934; border-left: 1px solid var(--line-2); border-top: 1px solid var(--line-2); }
+.road-vex { position: absolute; z-index: 1; transform: translateY(-50%); }
+@media (max-width: 480px) { .road-vex { display: none; } }
 .xp-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 9px; border-radius: 999px; background: rgba(0, 214, 181, .13); border: 1px solid rgba(0, 214, 181, .35); color: var(--success); font: 800 12.5px var(--f-body); white-space: nowrap; }
 .xp-chip .ico { width: 13px; height: 13px; }
 .goal-bonus { border-color: rgba(0, 214, 181, .45); background: radial-gradient(240px 120px at 100% 0%, rgba(0, 214, 181, .14), transparent 70%), var(--surface); }
@@ -1023,6 +1063,7 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
   <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M5 8h14l-1.2 11.5a1.8 1.8 0 0 1-1.8 1.5H8a1.8 1.8 0 0 1-1.8-1.5z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></symbol>
   <symbol id="i-heart-fill" viewBox="0 0 24 24"><path d="M12 20.6 4.1 12.8A4.9 4.9 0 0 1 12 6.1a4.9 4.9 0 0 1 7.9 6.7z" fill="currentColor"/><ellipse cx="8.2" cy="9.3" rx="1.7" ry="1.2" fill="#fff" opacity=".45" transform="rotate(-35 8.2 9.3)"/></symbol>
   <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></symbol>
+  <symbol id="i-chest" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M3.5 10.5h17V19a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 19z"/><path d="M3.5 10.5V9a5 5 0 0 1 5-5h7a5 5 0 0 1 5 5v1.5"/><path d="M3.5 13.5h17"/><rect x="10" y="11.5" width="4" height="5" rx="1" fill="currentColor"/></symbol>
   <symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4M6 4.5h11l-2.2 4 2.2 4H6"/></symbol>
 </defs></svg>
 <div id="app"><div class="boot" aria-busy="true"><div class="stack" style="align-items:center;gap:14px"><div class="skel" style="width:120px;height:132px;border-radius:48px"></div><div class="skel" style="width:150px;height:12px"></div></div></div></div>
@@ -1708,7 +1749,7 @@ function render() {
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
   if (v === "coach") { const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" }); }
-  if (v === "dashboard" && fresh) { const n = document.querySelector(".stn.current"); if (n) n.scrollIntoView({ block: "center" }); setTimeout(prefetchNext, 400); }
+  if (v === "dashboard" && fresh) { const n = document.querySelector(".pnode.current, .pnode.ready, .stn.current"); if (n) n.scrollIntoView({ block: "center" }); setTimeout(prefetchNext, 400); }
 }
 // Vex parle : le texte s'écrit pendant qu'il bouge la bouche
 function typeSpeech() {
@@ -2705,35 +2746,74 @@ function viewMap() {
       lv.units.forEach((un, ui) => {
         const ust = steps.filter((s) => s.unit === un.id);
         const doneN = ust.filter((s) => stepDone(s) || stepSkipped(s)).length;
-        const isCur = curStep && curStep.unit === un.id;
+        const isCur = curStep && (curStep.unit === un.id || (curStep.kind === "exam" && curStep.level === lv.id && ui === lv.units.length - 1));
         html += `<div class="chapter ${isCur ? "is-current" : ""}" id="u-${un.id}">
           <div class="ch-head">
             <div style="min-width:0"><span class="ch-k">Chapitre ${ui + 1}</span><b>${esc(un.title)}</b></div>
             <div class="ch-meta"><span class="small muted num">${doneN}/${ust.length}</span><button class="link" data-act="guide" data-v="${un.id}">Programme</button></div>
           </div>
-          ${progress((doneN / ust.length) * 100, "thin")}
-          <ol class="voyage">`;
-        ust.forEach((s) => {
-          const i = steps.indexOf(s), st = stepState(s, i, cur);
-          const expanded = st === "current" || u.pop === s.id;
-          const mark = st === "done" || st === "skipped" ? icon("i-check") : st === "locked" ? icon("i-lock") : s.kind === "lesson" ? `<span class="num">${s.li + 1}</span>` : icon(s.kind === "unit" ? "i-shield" : "i-cert");
-          const label = s.kind === "lesson" ? s.title : s.kind === "unit" ? "Point de contrôle" : `Certification ${s.level}`;
-          const best = s.kind === "lesson" ? course().done[s.id] : s.kind === "unit" ? course().tests[s.unit] : course().exams[s.level];
-          html += `<li class="stn ${st} k-${s.kind}">
-            <span class="stn-mark" aria-hidden="true">${mark}</span>
-            ${expanded && st !== "locked" ? stationCard(s, st, label, best)
-              : `<button class="stn-row" data-act="pop" data-v="${s.id}" ${st === "locked" ? 'disabled aria-disabled="true"' : ""}><span class="stn-t">${esc(label)}</span>${best && best.best != null ? `<span class="small muted num">${Math.round(best.best * 100)} %</span>` : st === "skipped" ? `<span class="small muted">acquis</span>` : ""}</button>`}
-          </li>`;
-        });
-        html += `</ol></div>`;
+          ${progress((doneN / ust.length) * 100, "thin")}`;
+        html += chapterPath(lv, un, ui, ust, steps, cur) + `</div>`;
       });
     } else if (li > ci) {
       html += `<p class="small muted lvl-desc">${esc(lv.desc)}</p>`;
     }
     html += `</section>`;
   });
-  return `${S.ui.err ? notice(S.ui.err) : ""}<div class="map">${html}</div>
+  return `${S.isAdmin ? adminPrepCard() : ""}${S.ui.err ? notice(S.ui.err) : ""}<div class="map">${html}</div>
     ${u.guide ? guideSheet(u.guide) : ""}`;
+}
+const PATH_X = [0, 58, 88, 58, 0, -58, -88, -58];
+const CHEST_COINS = 1000;
+function chestState(unitId) {
+  const c = course(), claimed = c.chests && c.chests[unitId], t = c.tests[unitId];
+  const unitStep = allSteps().find((s) => s.kind === "unit" && s.unit === unitId);
+  if (claimed) return "done";
+  if (t && t.passed) return "ready";
+  if (unitStep && stepSkipped(unitStep)) return "skipped";
+  return "locked";
+}
+function chapterPath(lv, un, ui, ust, steps, cur) {
+  const u = S.ui;
+  const nodes = ust.map((s) => ({ s, kind: s.kind, id: s.id, st: stepState(s, steps.indexOf(s), cur) }));
+  nodes.push({ kind: "chest", id: "chest-" + un.id, unit: un.id, st: chestState(un.id) });
+  if (ui === lv.units.length - 1) { const ex = steps.find((s) => s.kind === "exam" && s.level === lv.id); if (ex) nodes.push({ s: ex, kind: "exam", id: ex.id, st: stepState(ex, steps.indexOf(ex), cur) }); }
+  const GAP = 104, TOP = 58;
+  const pts = nodes.map((n, i) => ({ x: PATH_X[i % PATH_X.length], y: TOP + i * GAP }));
+  const H = TOP + (nodes.length - 1) * GAP + 64;
+  const curve = (list) => list.map((p, i) => i === 0 ? `M${p.x} ${p.y}` : `C${list[i - 1].x} ${list[i - 1].y + GAP / 2} ${p.x} ${p.y - GAP / 2} ${p.x} ${p.y}`).join(" ");
+  let last = -1; nodes.forEach((n, i) => { if (n.st === "done" || n.st === "skipped" || n.st === "current" || n.st === "ready") last = i; });
+  const vexAt = nodes.findIndex((n) => n.st === "current");
+  const stops = nodes.map((n, i) => {
+    const p = pts[i], open = u.pop === n.id && n.st !== "locked";
+    let mark, label, act = "pop";
+    if (n.kind === "chest") {
+      mark = icon("i-chest"); act = "chest";
+      label = n.st === "done" ? "Coffre ouvert" : n.st === "ready" ? `Ouvrir le coffre : +${CHEST_COINS} pièces` : n.st === "skipped" ? "Chapitre acquis par le test de niveau" : `Coffre de ${CHEST_COINS} pièces : valide le point de contrôle pour l'ouvrir`;
+    } else {
+      mark = n.st === "done" || n.st === "skipped" ? icon("i-check") : n.st === "locked" ? icon("i-lock") : n.kind === "lesson" ? `<span class="num">${n.s.li + 1}</span>` : icon(n.kind === "unit" ? "i-shield" : "i-cert");
+      label = n.kind === "lesson" ? n.s.title : n.kind === "unit" ? "Point de contrôle" : `Certification ${n.s.level}`;
+    }
+    const best = n.kind === "lesson" ? course().done[n.id] : n.kind === "unit" ? course().tests[n.s.unit] : n.kind === "exam" ? course().exams[n.s.level] : null;
+    const tip = n.st === "current" && !open ? `<span class="start-tip">${n.kind === "lesson" ? (course().done[n.id] ? "Continuer" : "Commencer") : n.kind === "unit" ? "Point de contrôle" : "Certification"}</span>`
+      : n.kind === "chest" && n.st === "ready" ? `<span class="start-tip gold">+${CHEST_COINS} pièces !</span>` : "";
+    return `<div class="pstop" style="left:calc(50% + ${p.x}px);top:${p.y}px;--px:${p.x}px">
+      ${tip}
+      <button class="pnode ${n.st} k-${n.kind}" data-act="${act}" data-v="${n.kind === "chest" ? n.unit : n.id}" ${n.st === "locked" && n.kind !== "chest" ? "disabled" : ""} title="${esc(label)}" aria-label="${esc(label)}">${mark}</button>
+      ${open && n.kind !== "chest" ? `<div class="p-pop">${stationCard(n.s, n.st, label, best)}</div>` : ""}
+    </div>`;
+  }).join("");
+  const vexP = vexAt >= 0 ? pts[vexAt] : null;
+  const vexX = vexP ? (vexP.x > 0 ? vexP.x - 175 : vexP.x + 75) : 0;
+  return `<div class="road" style="height:${H}px">
+    <div class="road-clip" aria-hidden="true"><svg class="road-svg" viewBox="-220 0 440 ${H}" style="height:${H}px">
+      <path d="${curve(pts)}" class="road-bg"/>
+      ${last > 0 ? `<path d="${curve(pts.slice(0, last + 1))}" class="road-done"/>` : ""}
+      <path d="${curve(pts)}" class="road-line"/>
+    </svg></div>
+    ${stops}
+    ${vexP && u.pop !== nodes[vexAt].id ? `<div class="road-vex" style="left:calc(50% + ${vexX}px);top:${vexP.y - 62}px">${vx(nodes[vexAt].kind === "lesson" ? "wave" : "go", 100, "lead")}</div>` : ""}
+  </div>`;
 }
 // XP maximum qu'une étape rapporte (toutes les réponses justes du premier coup)
 function stepXp(s) {
@@ -2741,7 +2821,7 @@ function stepXp(s) {
   return s.kind === "unit" ? 20 : 30;
 }
 function stationCard(s, st, label, best) {
-  const kindLabel = s.kind === "lesson" ? `Leçon ${s.li + 1} sur ${s.n}` : s.kind === "unit" ? "70 % pour valider le chapitre" : `80 % pour valider le niveau ${s.level}`;
+  const kindLabel = s.kind === "lesson" ? `Leçon ${s.li + 1} sur ${s.n}` : s.kind === "unit" ? `70 % pour valider · coffre de ${CHEST_COINS} pièces` : `80 % pour valider le niveau ${s.level}`;
   const again = st === "done" || st === "skipped";
   const cta = again ? (s.kind === "lesson" ? "Refaire la leçon" : "Repasser") : s.kind === "lesson" ? (st === "current" && course().done[s.id] ? "Continuer" : "Commencer") : s.kind === "unit" ? "Passer le point de contrôle" : "Passer la certification";
   const dots = s.kind === "lesson" ? `<div class="mdots" aria-label="Méthode en 4 étapes">${METHOD.map((m) => `<span class="${again ? "on" : ""}" title="${m}">${m}</span>`).join("")}</div>` : "";
@@ -2836,6 +2916,7 @@ function viewShop() {
       <div><b>+10</b><span>Terminer une leçon (+5 si maîtrisée)</span></div>
       <div><b>+10</b><span>Atteindre l'objectif du jour</span></div>
       <div><b>+30</b><span>Valider un point de contrôle</span></div>
+      <div><b>+1000</b><span>Ouvrir le coffre d'un chapitre</span></div>
       <div><b>+60</b><span>Obtenir une certification</span></div>
       <div><b>+5</b><span>Faire une révision</span></div>
     </div>
@@ -3123,9 +3204,9 @@ function giftModal() {
     <div class="modal-panel gp-panel">
       <div class="gp-glow" aria-hidden="true"></div>
       <div class="gp-vex">${vx(vip ? "vip" : "party", 170, "gp-lead")}</div>
-      <span class="gp-kicker">${vip ? "Statut VIP débloqué" : "Surprise !"}</span>
-      <h2 class="gp-title" id="gp-title">${vip ? "Félicitations, tu es VIP !" : "Félicitations !"}</h2>
-      <p class="gp-sub">${vip ? "L'équipe Vex t'offre le statut <b>VIP</b> : un badge doré à côté de ton nom et un cadre en or autour de ton personnage, partout sur Verblyx." : "L'équipe Vex t'a envoyé un cadeau 🎁"}</p>
+      <span class="gp-kicker">${vip ? "Statut VIP débloqué" : g.chest ? "Coffre du chapitre" : "Surprise !"}</span>
+      <h2 class="gp-title" id="gp-title">${vip ? "Félicitations, tu es VIP !" : g.chest ? "Coffre ouvert !" : "Félicitations !"}</h2>
+      <p class="gp-sub">${g.chest && !vip ? `Bravo, tu as terminé le chapitre <b>« ${esc(g.chest)} »</b> ! Voici ton trésor :` : vip ? "L'équipe Vex t'offre le statut <b>VIP</b> : un badge doré à côté de ton nom et un cadre en or autour de ton personnage, partout sur Verblyx." : "L'équipe Vex t'a envoyé un cadeau 🎁"}</p>
       ${vip ? `<div class="gp-viptag">${avatarHTML(S.profile, 58, true)}<span><b>${esc(S.profile.first_name || "Toi")}</b> ${vipTag()}</span></div>` : ""}
       ${chips ? `<div class="gp-items">${chips}</div>` : ""}
       <button class="btn ${vip ? "btn-gold" : "btn-primary"} btn-lg btn-block" data-act="gift-close">${vip ? "Merci l'équipe Vex ! 👑" : "Merci Vex ! 🎉"}</button>
@@ -3277,22 +3358,23 @@ const PREP = { running: false, stop: false, done: 0, total: 0, fail: 0, cur: "",
 const lessonSteps = () => allSteps().filter((s) => s.kind === "lesson");
 const isReady = (id) => !!(COURSE.content && COURSE.content[id]) || !!(PREP.ready && PREP.ready.has(id));
 const prepSleep = async (sec) => { for (let i = 0; i < sec * 4 && !PREP.stop; i++) await new Promise((r) => setTimeout(r, 250)); };
+const prepRender = () => { if (S.view === "admin" || S.view === "dashboard") render(); };
 async function prepLoadReady() {
   PREP.loading = true;
   try { PREP.ready = new Set(await S.store.contentIds()); PREP.err = ""; }
   catch (e) { PREP.err = "Impossible de lire les leçons enregistrées : " + ((e && e.message) || "erreur"); PREP.ready = PREP.ready || new Set(); }
-  PREP.loading = false; if (S.view === "admin") render();
+  PREP.loading = false; prepRender();
 }
 async function prepRun() {
   if (PREP.running) return;
   if (!PREP.ready) await prepLoadReady();
   const todo = lessonSteps().filter((s) => !isReady(s.id));
   Object.assign(PREP, { running: true, stop: false, done: 0, fail: 0, total: todo.length, err: "" });
-  if (S.view === "admin") render();
+  prepRender();
   let limited = 0;
   for (const st of todo) {
     if (PREP.stop) break;
-    PREP.cur = `${st.level} · ${st.title}`; if (S.view === "admin") render();
+    PREP.cur = `${st.level} · ${st.title}`; prepRender();
     let ok = false;
     for (let attempt = 0; attempt < 3 && !ok && !PREP.stop; attempt++) {
       try {
@@ -3304,19 +3386,51 @@ async function prepRun() {
         else if (e && e.code === "rate_limited") {
           limited++;
           if (limited >= 3) { PREP.err = "Le quota du jour de Gemini semble atteint. Les leçons déjà prêtes sont gardées : relance demain pour finir."; PREP.stop = true; break; }
-          PREP.err = "Gemini demande une pause : reprise dans une minute…"; if (S.view === "admin") render();
+          PREP.err = "Gemini demande une pause : reprise dans une minute…"; prepRender();
           await prepSleep(60); PREP.err = "";
         }
       }
     }
     if (ok) PREP.done++; else if (!PREP.stop) PREP.fail++;
-    if (S.view === "admin") render();
+    prepRender();
     if (!PREP.stop) await prepSleep(4);
   }
   PREP.running = false; PREP.cur = "";
-  if (S.view === "admin") render();
+  prepRender();
 }
 window.addEventListener("beforeunload", (e) => { if (PREP.running) { e.preventDefault(); e.returnValue = ""; } });
+// Carte visible uniquement par l'admin, en haut de l'accueil
+function adminPrepCard() {
+  if (!PREP.ready && !PREP.loading) setTimeout(prepLoadReady, 0);
+  const all = lessonSteps(), ready = all.filter((s) => isReady(s.id)).length, missing = all.length - ready;
+  if (PREP.ready && !missing && !PREP.running) return "";
+  return `<section class="admin-prep">
+    <div class="ap-head"><span class="ap-tag">${icon("i-crown")}Admin</span><b>${PREP.ready ? `${ready}/${all.length} leçons prêtes` : "Lecture des leçons…"}</b><span class="small muted">Visible seulement par toi</span></div>
+    ${PREP.running
+      ? `<div class="ap-run"><div class="row between small"><span>Préparation : <b>${esc(PREP.cur)}</b></span><span class="num">${PREP.done + PREP.fail}/${PREP.total}</span></div>${progress(PREP.total ? ((PREP.done + PREP.fail) / PREP.total) * 100 : 0)}${PREP.err ? `<p class="small" style="color:var(--warn)">${esc(PREP.err)}</p>` : ""}</div>
+         <button class="btn btn-secondary btn-sm" data-act="prep-stop">Pause</button>`
+      : `<p class="small soft" style="flex:1;min-width:200px">${PREP.ready ? `Encore ${missing} leçon${missing > 1 ? "s" : ""} à écrire. Une fois préparées, elles s'ouvrent instantanément pour tous les élèves.` : ""}${PREP.err ? ` <span style="color:var(--warn)">${esc(PREP.err)}</span>` : ""}</p>
+         <button class="btn btn-primary btn-sm" data-act="prep-go" ${PREP.ready ? "" : "disabled"}>${icon("i-bolt")}Préparer toutes les leçons</button>`}
+  </section>`;
+}
+// Télécharger toutes les leçons prêtes dans un fichier (sauvegarde)
+async function exportLessons() {
+  const u = S.ui; u.expBusy = true; render();
+  try {
+    const rows = await S.store.allContent();
+    const out = { exported_at: new Date().toISOString(), lessons: {} };
+    lessonSteps().forEach((s) => {
+      const c = (COURSE.content && COURSE.content[s.id]) || (rows.find((r) => r.id === s.id) || {}).data;
+      if (c) out.lessons[s.id] = { level: s.level, title: s.title, content: c };
+    });
+    const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = `verblyx-lecons-${today()}.json`;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    u.expMsg = `${Object.keys(out.lessons).length} leçons téléchargées ✓`;
+  } catch (e) { u.expMsg = "Téléchargement impossible : " + ((e && e.message) || "erreur"); }
+  u.expBusy = false; render();
+}
 function adminLessons() {
   if (!PREP.ready && !PREP.loading) setTimeout(prepLoadReady, 0);
   const all = lessonSteps(), readyN = all.filter((s) => isReady(s.id)).length, missing = all.length - readyN;
@@ -3339,6 +3453,8 @@ function adminLessons() {
       : PREP.ready ? `<p><b>Toutes les leçons sont prêtes ✓</b></p><p class="small muted">Pour refaire une leçon, supprime-la dans Supabase (Table Editor → content) : elle sera recréée.</p>` : `<p class="muted">Chargement…</p>`}
       ${PREP.done && !PREP.running ? `<p class="small" style="color:var(--success)">${PREP.done} leçon${PREP.done > 1 ? "s" : ""} préparée${PREP.done > 1 ? "s" : ""} lors du dernier lancement.</p>` : ""}
       ${notice(PREP.err, "warn")}
+      <div class="row between" style="gap:12px;border-top:1px solid var(--line);padding-top:12px"><div><b>Sauvegarde</b><p class="small muted">Télécharge toutes les leçons prêtes dans un fichier sur ton ordinateur.</p>${S.ui.expMsg ? `<p class="small" style="color:var(--success)">${esc(S.ui.expMsg)}</p>` : ""}</div>
+        <button class="btn btn-secondary btn-sm" data-act="prep-export" ${S.ui.expBusy ? "disabled" : ""}>${S.ui.expBusy ? '<span class="spinner"></span>' : ""}Télécharger toutes les leçons</button></div>
     </div>
     <div class="adm-list" style="margin-top:14px">${perLevel.map((l) => `<div class="adm-row"><div class="row between"><b>${l.id} · ${esc(LEVEL_NAMES[l.id])}</b><span class="small muted num">${l.ok}/${l.n}</span></div><div style="margin-top:8px">${progress((l.ok / l.n) * 100, "thin")}</div></div>`).join("")}</div>
   </section>`;
@@ -3792,6 +3908,15 @@ $app.addEventListener("click", (ev) => {
     case "lb-me": { const m = document.querySelector(".lb2-row.is-me"); if (m) { m.scrollIntoView({ block: "center", behavior: "smooth" }); vxAnim(m, [{ transform: "scale(1)" }, { transform: "scale(1.03)" }, { transform: "scale(1)" }], { duration: 600 }); } break; }
     case "prep-go": SFX.play("next"); prepRun(); break;
     case "prep-stop": PREP.stop = true; SFX.play("unselect"); render(); break;
+    case "prep-export": exportLessons(); break;
+    case "chest": {
+      const c = course(); c.chests = c.chests || {};
+      if (c.chests[v] || !(c.tests[v] && c.tests[v].passed)) { u.pop = null; SFX.play("unselect"); const b = el; vxAnim(b, [{ transform: "translateX(0)" }, { transform: "translateX(-5px)" }, { transform: "translateX(5px)" }, { transform: "translateX(0)" }], { duration: 320 }); break; }
+      c.chests[v] = today(); S.profile.coins = (S.profile.coins || 0) + CHEST_COINS;
+      const f = findUnit(v);
+      S.giftPop = { items: [["i-coin", "+" + CHEST_COINS, "pièces", "coin"]], vip: false, chest: f ? f.un.title : "ce chapitre", raw: [], fresh: true };
+      saveProfile(); render(); break;
+    }
     case "fb-done": { const id = Number(v), d = el.dataset.d === "1"; S.store.adminFeedbackDone(id, d).then(() => { const m = (S.ui.fbList || []).find((x) => x.id === id); if (m) m.done = d; render(); }).catch((e) => { S.ui.fbErr = (e && e.message) || "Erreur"; render(); }); break; }
     case "adm-refresh": adminLoad(); break;
     case "adm-vip": {
@@ -4013,6 +4138,7 @@ function makeSupaStore(sb, uid) {
     async listLessons() { return []; },
     async loadContent(id) { const { data, error } = await sb.from("content").select("data").eq("id", id).maybeSingle(); if (error) throw error; return data ? data.data : null; },
     async saveContent(id, data) { const { error } = await sb.from("content").insert({ id, data }); if (error && error.code !== "23505") throw error; },
+    async allContent() { const { data, error } = await sb.from("content").select("id, data"); if (error) throw error; return data || []; },
     async contentIds() { const { data, error } = await sb.from("content").select("id"); if (error) throw error; return (data || []).map((r) => r.id); },
     async accountNo() {
       if (row && row.account_no) return row.account_no;
