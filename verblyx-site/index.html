@@ -408,6 +408,9 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 14px; line-heigh
 /* Carte du parcours */
 .map { display: flex; flex-direction: column; gap: 18px; }
 .lvl-block { display: flex; flex-direction: column; gap: 18px; }
+/* le niveau en cours reste affiché en haut pendant qu'on parcourt le chemin */
+.lvl-block.is-current > .lvl-head { position: sticky; top: 12px; z-index: 8; border-color: rgba(22, 119, 255, .45); box-shadow: 0 10px 24px -10px rgba(0, 0, 0, .8), 0 0 0 6px var(--bg); }
+@media (max-width: 719px) { .lvl-block.is-current > .lvl-head { top: calc(var(--mtoph, 53px) + env(safe-area-inset-top, 0px) + 8px); } }
 .lvl-head { display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); color: var(--fg); cursor: pointer; text-align: left; transition: border-color .15s; }
 .lvl-head:hover { border-color: var(--line-2); }
 .lvl-head .ico { color: var(--muted); }
@@ -2881,7 +2884,7 @@ function scrollToCurrent() {
   if (document.readyState !== "complete") window.addEventListener("load", () => setTimeout(scrollToCurrent, 0), { once: true });
   const n = document.querySelector(".pnode.k-chest.ready, .pnode.current");
   if (!n) return;
-  const top = n.getBoundingClientRect().top + window.scrollY - (window.innerWidth < 720 ? 150 : 110);
+  const top = n.getBoundingClientRect().top + window.scrollY - (window.innerWidth < 720 ? 230 : 190);
   window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
 }
 function viewMap() {
@@ -2896,7 +2899,7 @@ function viewMap() {
     const byDefault = li === ci || (li < ci && li >= lvIdx(course().start));
     const open = S.lvOpen && lv.id in S.lvOpen ? S.lvOpen[lv.id] : byDefault;
     const state = li < ci ? (li < lvIdx(course().start) ? "Validé par le test de niveau" : "Validé") : li > ci ? "Se débloque après la certification " + LEVELS[li - 1] : `${pr.passed} chapitre${pr.passed > 1 ? "s" : ""} validé${pr.passed > 1 ? "s" : ""} sur ${pr.total}`;
-    html += `<section class="lvl-block ${li > ci ? "is-locked" : ""}">
+    html += `<section class="lvl-block ${li > ci ? "is-locked" : ""} ${li === ci && open ? "is-current" : ""}">
       <button class="lvl-head" data-act="lvl" data-v="${lv.id}" aria-expanded="${open}">
         <span class="lvl-badge">${lv.id}</span>
         <span class="lvl-tx"><b>${lv.name}</b><span>${state}</span></span>
