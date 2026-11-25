@@ -1693,6 +1693,11 @@ body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-
 }
 @media (max-width: 370px) { .mtop .brand > span, .mtop .brand > b { display: none; } }
 @media (max-width: 379px) { .ct-meta .ct-chip:not(.tok-chip):not(.is-toast) { display: none; } }
+
+/* emplacement publicitaire (fin de leçon) */
+.ad-wrap { width: 100%; max-width: 480px; margin: 6px auto 0; padding: 8px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+.ad-wrap:has(ins[data-ad-status="unfilled"]) { display: none; }
+.ad-label { font: 700 10px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--faint); text-align: left; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -2446,7 +2451,7 @@ function render() {
     else if (fresh || S.chatScroll) { S.chatScroll = false; window.scrollTo(0, 0); }
   }
   if (v === "dashboard" && fresh) { setTimeout(scrollToCurrent, 0); setTimeout(prefetchNext, 400); }
-  mountCaptcha(); mountGsi();
+  mountCaptcha(); mountGsi(); mountAd();
   document.body.classList.toggle("v-coach", v === "coach");
   if (v !== "coach" && (CO.voice || CO.listening)) stopVoice();
 }
@@ -3448,10 +3453,11 @@ const DOCS = {
   privacy: { title: "Politique de confidentialité", body: [
     ["", "Dernière mise à jour : " + LEGAL_UPDATED + ". Nous respectons ta vie privée et le Règlement général sur la protection des données (RGPD)."],
     ["Ce que nous collectons", "• Ton compte : adresse e-mail, mot de passe (chiffré, nous ne le voyons jamais), ou ton nom et ton e-mail si tu te connectes avec Google.\n• Ton profil : prénom, pseudo, personnage, niveau, objectifs, temps par jour et difficultés choisies.\n• Ta progression : leçons, scores, erreurs, vocabulaire, XP, pièces, vies, Pulse.\n• Tes échanges avec le prof IA et les messages que tu nous envoies depuis l'Aide."],
-    ["Pourquoi", "Uniquement pour faire fonctionner Verblyx : sauvegarder ta progression, personnaliser tes leçons, afficher les classements, répondre à tes messages et protéger le service contre les abus. Nous ne vendons jamais tes données et il n'y a pas de publicité."],
+    ["Pourquoi", "Uniquement pour faire fonctionner Verblyx : sauvegarder ta progression, personnaliser tes leçons, afficher les classements, répondre à tes messages et protéger le service contre les abus. Nous ne vendons jamais tes données."],
+    ["Publicité", "Une annonce Google (AdSense) peut s'afficher à la fin d'une leçon, jamais pendant. Par défaut, ces annonces ne sont pas personnalisées. Google peut utiliser des cookies pour les afficher et mesurer leur efficacité : une fenêtre te demande ton accord à ta première visite, et tu peux le changer à tout moment. Les membres VIP ne voient aucune publicité."],
     ["Qui y a accès", "Nos prestataires techniques, uniquement pour le service : Supabase (comptes et base de données, hébergés en Europe), Vercel (hébergement du site), Google Gemini et Groq (génération des leçons et réponses du prof IA), Cloudflare Turnstile (protection anti-robots à l'inscription et à la connexion) et Google (si tu choisis de te connecter avec ton compte Google). Les questions envoyées au prof IA sont transmises à ces services d'IA : n'y écris pas d'informations personnelles sensibles."],
     ["Ce que voient les autres élèves", "Dans les classements : ton pseudo (ou ton prénom), ton personnage, ton niveau et ton score. Jamais ton e-mail ni le reste de ton profil."],
-    ["Stockage dans ton navigateur", "Verblyx enregistre quelques informations sur ton appareil (session de connexion, réglage du son, conversation en cours). Ce sont des éléments nécessaires au fonctionnement, sans traceur publicitaire."],
+    ["Stockage dans ton navigateur", "Verblyx enregistre quelques informations sur ton appareil (session de connexion, réglage du son, conversation en cours). Ce sont des éléments nécessaires au fonctionnement. Si tu l'acceptes, Google peut aussi déposer des cookies pour les annonces affichées en fin de leçon."],
     ["Durée de conservation", "Tes données sont conservées tant que ton compte existe. Si tu demandes sa suppression, elles sont effacées."],
     ["Tes droits", "Tu peux accéder à tes données, les corriger, les supprimer, t'opposer à leur utilisation ou en demander une copie. Pour cela, écris-nous " + LEGAL_CONTACT + ". Tu peux aussi saisir la CNIL (cnil.fr) si tu estimes que tes droits ne sont pas respectés."],
   ] },
@@ -4839,6 +4845,40 @@ function endCheer() {
   clearTimeout(cheerTimer);
   if (S.view === "session" && S.session && S.session.cheer) { S.session.cheer = false; render(); }
 }
+/* ---------- Publicité Google AdSense (fin de leçon) ----------
+   Active seulement si adsenseClient et adsenseSlot sont remplis dans config.js.
+   Jamais pour les VIP, l'admin ou l'équipe, jamais pendant une leçon. */
+const ADS = { client: "", slot: "", npa: true, loaded: false, el: null, key: null };
+const adsOn = () => !!(ADS.client && ADS.slot) && !S.isVip && !isStaff();
+function adSlot(r) {
+  if (!adsOn() || !r || r.passed === false || !["lesson", "unit", "exam", "review"].includes(r.kind)) return "";
+  return `<div class="ad-wrap" data-ad-slot-here aria-label="Publicité"><span class="ad-label">Publicité</span></div>`;
+}
+function loadAds() {
+  if (ADS.loaded || !ADS.client) return; ADS.loaded = true;
+  const m = document.createElement("meta"); m.name = "google-adsense-account"; m.content = ADS.client; document.head.appendChild(m);
+  window.adsbygoogle = window.adsbygoogle || [];
+  // annonces non personnalisées par défaut (public jeune, RGPD)
+  if (ADS.npa) window.adsbygoogle.requestNonPersonalizedAds = 1;
+  const sc = document.createElement("script"); sc.async = true; sc.crossOrigin = "anonymous";
+  sc.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + encodeURIComponent(ADS.client);
+  document.head.appendChild(sc);
+}
+// une seule annonce par fin de leçon : on la garde même si l'écran se redessine
+function mountAd() {
+  const host = document.querySelector("[data-ad-slot-here]"); if (!host) return;
+  const key = S.session ? (S.session.st && S.session.st.id) + ":" + (S.session.doneAt || (S.session.doneAt = Date.now())) : "x";
+  if (ADS.key !== key || !ADS.el) {
+    ADS.key = key;
+    ADS.el = document.createElement("ins");
+    ADS.el.className = "adsbygoogle"; ADS.el.style.display = "block";
+    ADS.el.setAttribute("data-ad-client", ADS.client); ADS.el.setAttribute("data-ad-slot", ADS.slot);
+    ADS.el.setAttribute("data-ad-format", "auto"); ADS.el.setAttribute("data-full-width-responsive", "true");
+    host.appendChild(ADS.el);
+    loadAds();
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch {}
+  } else host.appendChild(ADS.el);
+}
 function resultView(ses) {
   const r = ses.done, p = S.profile;
   const newB = BADGES.filter((b) => (r.newBadges || []).includes(b.id));
@@ -4862,6 +4902,7 @@ function resultView(ses) {
       ${r.bonusGoals ? `<p class="chip chip-teal">Objectif bonus atteint · +${5 * r.bonusGoals} pièces</p>` : ""}
       ${r.goalReached ? `<p class="chip chip-teal">Objectif du jour atteint · +10 pièces</p>` : `<p class="small muted num">${todayXp() >= goalXp() ? `${todayXp()} / ${(Math.floor(todayXp() / goalXp()) + 1) * goalXp()} XP pour l'objectif bonus` : `${todayXp()} / ${goalXp()} XP pour l'objectif du jour`} · Pulse de ${plural(liveStreak(), "jour", "jours")}</p>`}
       ${newB.length ? `<div class="stack" style="gap:8px;align-items:center"><span class="label">${newB.some((b) => b.secret) ? em("unlock", 18) + " Badge secret débloqué" : "Nouveau succès"}</span><div class="row" style="justify-content:center">${newB.map((b) => `<div class="badge">${b.svg}<span>${b.name}</span></div>`).join("")}</div></div>` : ""}
+      ${adSlot(r)}
     </main>
     <footer class="flow-foot"><div class="flow-foot-in"><span></span><button class="btn btn-primary btn-lg" data-act="ses-quit">Continuer</button></div></footer>
   </div>`;
@@ -6268,6 +6309,10 @@ async function boot() {
   const cfg = window.VERBLYX_CONFIG || {};
   CAP.key = String(cfg.turnstileSiteKey || "").trim();
   GSI.id = String(cfg.googleClientId || "").trim();
+  ADS.client = String(cfg.adsenseClient || "").trim(); ADS.slot = String(cfg.adsenseSlot || "").trim();
+  if (cfg.adsensePersonalized === true) ADS.npa = false;
+  // le code Google est chargé dès l'ouverture (nécessaire pour que Google vérifie le site)
+  if (ADS.client) loadAds();
   S.tts = browserTTS(); S.dict = browserDictation();
   if (S.dict) {
     S.dict.onFinal(({ text }) => { if (onDictFinal(text)) return; if (S.view !== "session") return; S.ui.spoken = ((S.ui.spoken || "") + text).trim(); const el = document.getElementById("spoken"); if (el) el.textContent = `Tu as dit : « ${S.ui.spoken} »`; const b = document.querySelector('[data-act="check"]'); if (b) b.disabled = !S.ui.spoken; });
