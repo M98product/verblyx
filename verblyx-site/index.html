@@ -725,6 +725,49 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .av-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 10px; margin-top: 14px; }
 .ob-me { display: flex; align-items: center; gap: 14px; }
 .lb-tabs { align-self: flex-start; }
+.vip-tag { display: inline-flex; align-items: center; gap: 3px; height: 19px; padding: 0 7px 0 5px; border-radius: 999px; vertical-align: middle; background: linear-gradient(135deg, #FFE7A0, #F6BE3B 45%, #C98A0B); color: #3A2600; font: 800 10.5px/1 var(--f-body); letter-spacing: .06em; box-shadow: 0 0 12px -3px rgba(246, 190, 59, .8), inset 0 1px 0 rgba(255, 255, 255, .6); white-space: nowrap; }
+.vip-tag .ico { width: 11px; height: 11px; color: #3A2600; }
+.avatar.is-vip { box-shadow: 0 0 0 2.5px #F6BE3B, 0 0 16px -2px rgba(246, 190, 59, .75); }
+.vip-btn .ico { width: 15px; height: 15px; color: #F6BE3B; }
+.adm-wide { grid-column: 1 / -1; }
+.adm-edit { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+.adm-edit label { display: flex; flex-direction: column; gap: 4px; }
+.adm-edit .input { height: 40px; width: 100%; }
+.lvl-chip { display: inline-flex; align-items: center; height: 19px; padding: 0 7px; border-radius: 6px; background: var(--primary-soft); color: var(--primary-text); font: 800 10.5px var(--f-display); }
+.lb-hero { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 18px 20px; border-radius: 20px; border: 1px solid rgba(22, 119, 255, .45); background: radial-gradient(420px 160px at 0% 0%, rgba(22, 119, 255, .28), transparent 70%), radial-gradient(300px 140px at 100% 100%, rgba(0, 214, 181, .16), transparent 70%), var(--surface); }
+.lb-hero-me { display: flex; align-items: center; gap: 14px; }
+.lb-hero-rank { display: block; font: 800 34px/1 var(--f-display); letter-spacing: -.02em; }
+.lb-hero-txt { flex: 1; min-width: 180px; color: var(--fg-2); }
+.lb-hero-txt b { color: var(--fg); }
+.p2 { display: grid; grid-template-columns: 1fr 1.15fr 1fr; align-items: end; gap: 10px; padding-top: 26px; }
+.p2-col { position: relative; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; text-align: center; }
+.p2-crown { position: absolute; top: -26px; color: #FFC94A; filter: drop-shadow(0 4px 10px rgba(255, 201, 74, .6)); animation: tip 2.6s ease-in-out infinite; }
+.p2-crown .ico { width: 30px; height: 30px; }
+.p2-av { border-radius: 50%; padding: 3px; background: linear-gradient(160deg, #D8DEE8, #8E99AA); }
+.p2-1 .p2-av { background: linear-gradient(160deg, #FFE9A6, #F2B230 55%, #B97A06); box-shadow: 0 0 34px -6px rgba(246, 190, 59, .8); }
+.p2-3 .p2-av { background: linear-gradient(160deg, #F3C49A, #C9773C); }
+.p2-av .avatar { box-shadow: none; }
+.p2-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14.5px; margin-top: 4px; }
+.p2-col.is-me .p2-name { color: var(--success); }
+.p2-tags, .lb2-tags { display: inline-flex; gap: 5px; align-items: center; min-height: 19px; }
+.p2-score { display: inline-flex; align-items: center; gap: 4px; font: 800 15px var(--f-display); }
+.p2-score .ico, .lb2-score .ico { width: 15px; height: 15px; color: var(--success); }
+.p2-step { width: 100%; margin-top: 6px; display: grid; place-items: center; border-radius: 16px 16px 8px 8px; border: 1px solid var(--line-2); background: linear-gradient(180deg, rgba(216, 222, 232, .18), var(--surface)); height: 70px; }
+.p2-step span { font: 800 30px var(--f-display); color: rgba(234, 251, 255, .55); }
+.p2-1 .p2-step { height: 104px; border-color: rgba(246, 190, 59, .5); background: linear-gradient(180deg, rgba(246, 190, 59, .35), var(--surface)); }
+.p2-1 .p2-step span { color: #FFD56B; font-size: 40px; }
+.p2-3 .p2-step { height: 52px; background: linear-gradient(180deg, rgba(201, 119, 60, .28), var(--surface)); }
+.lb2-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lb2-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px 10px 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); transition: border-color .15s, transform .15s; }
+.lb2-row:hover { border-color: var(--line-2); }
+.lb2-row.is-top .lb2-rank { color: var(--primary-text); }
+.lb2-row.is-me { border-color: rgba(0, 214, 181, .55); background: linear-gradient(90deg, rgba(0, 214, 181, .12), transparent 70%), var(--surface); }
+.lb2-sticky { position: sticky; bottom: 16px; z-index: 5; box-shadow: 0 16px 40px -18px rgba(0, 0, 0, .9); }
+@media (max-width: 719px) { .lb2-sticky { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); } .p2-av .avatar { width: 64px !important; height: 64px !important; } .p2-1 .p2-av .avatar { width: 78px !important; height: 78px !important; } }
+.lb2-rank { width: 30px; flex: none; text-align: center; font: 800 16px var(--f-display); color: var(--muted); }
+.lb2-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.lb2-who b { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb2-score { flex: none; display: inline-flex; align-items: center; gap: 5px; font: 800 16px var(--f-display); }
 .lb-tabs button { display: inline-flex; align-items: center; gap: 6px; }
 .lb-tabs .ico { width: 16px; height: 16px; }
 .podium { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 10px; padding-top: 10px; }
@@ -2401,8 +2444,8 @@ function viewShell(inner) {
       ${logo()}
       ${(S.isAdmin ? [...NAV, ["admin", "Admin", "i-gear"]] : NAV).map(([v, t, ic]) => `<button class="nav-item ${cur === v ? "is-active" : ""}" data-go="${v}" aria-label="${t}" ${cur === v ? 'aria-current="page"' : ""}>${icon(ic)}<span>${t}</span></button>`).join("")}
       <div class="side-foot">
-        ${avatarHTML(p, 36)}
-        <span class="who"><b>${esc(p.first_name || "Élève")}</b><span class="small muted" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.username ? "@" + esc(p.username) + " · " : ""}Niveau ${esc(p.cefr_level)}</span>${S.store.kind === "local" ? `<span class="small" style="display:block;color:var(--warn)">Mode démo</span>` : ""}</span>
+        ${avatarHTML(p, 36, S.isVip)}
+        <span class="who"><b>${esc(p.first_name || "Élève")}</b><span class="small muted" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${S.isVip ? vipTag() + " " : ""}${p.username ? "@" + esc(p.username) + " · " : ""}Niveau ${esc(p.cefr_level)}</span>${S.store.kind === "local" ? `<span class="small" style="display:block;color:var(--warn)">Mode démo</span>` : ""}</span>
         <button class="icon-btn gear ${S.settingsOpen ? "is-on" : ""}" data-act="settings-open" aria-label="Paramètres du compte" title="Paramètres">${icon("i-gear")}</button>
       </div>
     </aside>
@@ -2699,11 +2742,12 @@ const AVATAR = (() => {
 })();
 const avValid = (i) => Number.isInteger(i) && i >= 0 && i < AVATAR.LIST.length;
 const avRandom = () => Math.floor(Math.random() * AVATAR.LIST.length);
-function avatarHTML(p, size = 36) {
-  const st = `width:${size}px;height:${size}px;font-size:${Math.round(size * .42)}px`;
-  if (p && avValid(p.avatar_id)) return `<span class="avatar av-char" aria-hidden="true" style="${st}">${AVATAR.svg(AVATAR.LIST[p.avatar_id], true)}</span>`;
-  return `<span class="avatar" aria-hidden="true" style="${st}">${esc(((p && p.first_name) || "?").charAt(0).toUpperCase())}</span>`;
+function avatarHTML(p, size = 36, vip = false) {
+  const st = `width:${size}px;height:${size}px;font-size:${Math.round(size * .42)}px`, v = vip ? " is-vip" : "";
+  if (p && avValid(p.avatar_id)) return `<span class="avatar av-char${v}" aria-hidden="true" style="${st}">${AVATAR.svg(AVATAR.LIST[p.avatar_id], true)}</span>`;
+  return `<span class="avatar${v}" aria-hidden="true" style="${st}">${esc(((p && p.first_name) || "?").charAt(0).toUpperCase())}</span>`;
 }
+const vipTag = () => `<span class="vip-tag" title="Membre VIP">${icon("i-crown")}VIP</span>`;
 function prefs() {
   const p = S.profile || {};
   return Object.assign({ anim: true, cheer: true, listen: true, speak: true }, p.prefs || {});
@@ -2745,7 +2789,7 @@ function settingsModal() {
   let body = "";
   if (tab === "profil") body = `
     <section class="set-group"><h3>Ton personnage</h3>
-      <div class="av-edit" style="margin-top:6px">${avatarHTML(p, 84)}<p class="small muted" style="max-width:260px">Choisis le personnage qui te ressemble. Il s'affiche sur ton profil et dans le menu.</p></div>
+      <div class="av-edit" style="margin-top:6px">${avatarHTML(p, 84, S.isVip)}<p class="small muted" style="max-width:260px">Choisis le personnage qui te ressemble. Il s'affiche sur ton profil et dans le menu.</p></div>
       <div class="av-grid" role="radiogroup" aria-label="Personnages">${AVATAR.LIST.map((o, i) => `<button class="av-pick ${p.avatar_id === i ? "is-on" : ""}" data-act="av-pick" data-v="${i}" role="radio" aria-checked="${p.avatar_id === i}" aria-label="Personnage ${i + 1}">${AVATAR.svg(o, true)}</button>`).join("")}</div>
     </section>
     <section class="set-group"><h3>Prénom</h3>
@@ -2833,6 +2877,10 @@ function applyGift(p, g) {
     p.cefr_level = g.level; p.level_progress = 0; p.placement_done = true;
     p.course = p.course || newCourse(g.level); p.course.start = g.level;
   }
+  if (g.kind === "profile") {
+    if (typeof g.first_name === "string" && g.first_name) p.first_name = g.first_name;
+    if (typeof g.username === "string") { if (g.username) p.username = g.username; else delete p.username; }
+  }
   return p;
 }
 function giftText(gs) {
@@ -2843,6 +2891,7 @@ function giftText(gs) {
   if (sum.coins) parts.push(`${sum.coins > 0 ? "+" : ""}${sum.coins} pièces`);
   if (sum.hearts >= HEART_MAX) parts.push("toutes tes vies"); else if (sum.hearts) parts.push(`${sum.hearts > 0 ? "+" : ""}${plural(sum.hearts, "vie", "vies")}`);
   if (lv) parts.push(`niveau ${lv}`);
+  if (gs.some((g) => g.kind === "profile")) parts.push("profil mis à jour");
   return parts.length ? `Cadeau de l'équipe Verblyx : ${parts.join(", ")} !` : "";
 }
 let giftBusy = false;
@@ -2919,14 +2968,23 @@ function viewAdmin() {
       ${list.length && !rows.length ? `<p class="muted">Aucun compte ne correspond.</p>` : ""}
       ${rows.map((r) => { const p = r.p, open = u.admOpen === r.id; return `<div class="adm-row">
         <div class="adm-top">
-          ${avatarHTML(p, 40)}<span class="adm-id">${r.account_no ? accId(r.account_no) : "—"}</span>
-          <div class="adm-who"><b>${esc(p.first_name || "(pas encore de prénom)")}${p.username ? ` <span class="small muted">@${esc(p.username)}</span>` : ""}</b><span class="small muted">${esc(r.email || "")}</span><span class="small muted">Créé le ${fmt(r.signed_up)} · vu ${fmt(r.last_sign_in)}</span></div>
+          ${avatarHTML(p, 40, r.vip)}<span class="adm-id">${r.account_no ? accId(r.account_no) : "—"}</span>
+          <div class="adm-who"><b>${esc(p.first_name || "(pas encore de prénom)")}${p.username ? ` <span class="small muted">@${esc(p.username)}</span>` : ""}${r.vip ? " " + vipTag() : ""}</b><span class="small muted">${esc(r.email || "")}</span><span class="small muted">Créé le ${fmt(r.signed_up)} · vu ${fmt(r.last_sign_in)}</span></div>
           <div class="adm-nums"><span>Niveau ${esc(p.cefr_level || "?")}</span><span>${p.xp || 0} XP</span><span>❤ ${hearts(p)}/${HEART_MAX}</span><span>🪙 ${p.coins || 0}</span><span>🔥 ${p.streak || 0} j</span><span>${Object.keys((p.course && p.course.done) || {}).length} leçons</span></div>
           ${r.account_no ? `<button class="btn btn-${open ? "primary" : "secondary"} btn-sm" data-act="adm-open" data-v="${r.id}">${open ? "Fermer" : "Gérer"}</button>` : `<span class="small muted">Inscription pas terminée</span>`}
         </div>
         ${r.pending ? `<p class="small" style="color:var(--warn);margin-top:8px">${plural(r.pending, "cadeau", "cadeaux")} en attente (déjà compté ci-dessus)</p>` : ""}
         ${u.admMsg && u.admMsg.id === r.id ? `<p class="small" style="color:var(--success);margin-top:8px">${esc(u.admMsg.text)}</p>` : ""}
         ${open ? `<div class="adm-tools">
+          <div class="adm-tool adm-wide"><span class="label">Profil</span>
+            <div class="adm-edit">
+              <label><span class="small muted">Prénom</span><input id="admFn" class="input" maxlength="40" value="${esc(p.first_name || "")}"></label>
+              <label><span class="small muted">Pseudo</span><input id="admUn" class="input" maxlength="21" placeholder="(aucun)" value="${esc(p.username || "")}" autocapitalize="off" spellcheck="false"></label>
+              <label><span class="small muted">E-mail de connexion</span><input id="admEm" class="input" type="email" value="${esc(r.email || "")}" autocapitalize="off" spellcheck="false"></label>
+            </div>
+            <div class="row"><button class="btn btn-primary btn-sm" data-act="adm-save" data-v="${r.id}" ${u.admSaving ? "disabled" : ""}>${u.admSaving ? '<span class="spinner"></span>' : ""}Enregistrer</button>
+              <button class="btn ${r.vip ? "btn-ghost" : "btn-secondary"} btn-sm vip-btn" data-act="adm-vip" data-v="${r.id}" data-on="${r.vip ? 0 : 1}">${icon("i-crown")}${r.vip ? "Retirer le VIP" : "Donner le VIP"}</button></div>
+          </div>
           <div class="adm-tool"><span class="label">Niveau</span><div class="row"><select id="admLv" class="input">${LEVEL_IDS.map((l) => `<option ${l === p.cefr_level ? "selected" : ""}>${l}</option>`).join("")}</select><button class="btn btn-secondary btn-sm" data-act="adm-level" data-v="${r.id}">Appliquer</button></div></div>
           <div class="adm-tool"><span class="label">XP</span><div class="row"><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="xp" data-n="50">+50</button><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="xp" data-n="100">+100</button><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="xp" data-n="500">+500</button></div>
             <div class="row"><input id="admXp" class="input" type="number" placeholder="Autre" aria-label="XP à ajouter"><button class="btn btn-secondary btn-sm" data-act="adm-xp" data-v="${r.id}">Ajouter</button></div></div>
@@ -3061,28 +3119,45 @@ function viewCompetition() {
   const u = S.ui, kind = u.lbKind || "xp";
   if (!LB.data[kind] && !LB.busy[kind] && !LB.err[kind]) setTimeout(() => lbLoad(kind), 0);
   const rows = LB.data[kind] || [];
-  const top = rows.filter((r) => r.rank <= 100);
+  const top = rows.filter((r) => r.rank <= 100 && r.score > 0);
   const me = rows.find((r) => r.is_me);
-  const unit = kind === "xp" ? "XP" : kind === "coins" ? "pièces" : "j";
+  const unit = kind === "xp" ? "XP" : kind === "coins" ? "pièces" : kind === "pulse" ? "jours" : "";
   const ico = LB_KINDS.find((k) => k[0] === kind)[2];
   const who = (r) => r.username ? "@" + r.username : r.first_name || "Élève";
-  const av = (r, size) => avatarHTML({ avatar_id: r.avatar_id, first_name: r.first_name }, size);
-  const podium = top.slice(0, 3);
-  const order = [podium[1], podium[0], podium[2]].filter(Boolean);
+  const av = (r, size) => avatarHTML({ avatar_id: r.avatar_id, first_name: r.first_name }, size, r.vip);
+  const lvl = (r) => r.level ? `<span class="lvl-chip">${esc(r.level)}</span>` : "";
+  const ranked = me && me.score > 0;
+  const ahead = ranked && me.rank > 1 ? rows.find((r) => r.rank === Math.min(me.rank - 1, 100)) : null;
+  const heroMsg = !LB.data[kind] ? "Chargement du classement…"
+    : !ranked ? `Gagne tes premiers ${unit} pour entrer dans le classement !`
+    : me.rank === 1 ? "Tu es n°1 ! Garde ta couronne 👑"
+    : ahead ? `Encore <b>${ahead.score - me.score + 1} ${unit}</b> pour dépasser <b>${esc(who(ahead))}</b>` : "Continue comme ça !";
+  const pod = (r) => !r ? `<div class="p2-col p2-empty"></div>` : `<div class="p2-col p2-${r.rank} ${r.is_me ? "is-me" : ""}">
+      ${r.rank === 1 ? `<span class="p2-crown">${icon("i-crown")}</span>` : ""}
+      <div class="p2-av">${av(r, r.rank === 1 ? 92 : 72)}</div>
+      <b class="p2-name">${esc(who(r))}</b>
+      <div class="p2-tags">${r.vip ? vipTag() : ""}${lvl(r)}</div>
+      <span class="p2-score num">${icon(ico)}${r.score.toLocaleString("fr-FR")}</span>
+      <div class="p2-step"><span>${r.rank}</span></div>
+    </div>`;
   return `
-  <header class="page-head enter"><div class="stack"><h1 class="h1">Compétition</h1><p class="muted">Les 100 meilleurs élèves de Verblyx. Grimpe dans le classement !</p></div>
+  <header class="page-head enter"><div class="stack"><h1 class="h1">Compétition</h1><p class="muted">Le top 100 de Verblyx, mis à jour en direct.</p></div>
     <button class="btn btn-ghost btn-sm" data-act="lb-refresh" ${LB.busy[kind] ? "disabled" : ""}>${LB.busy[kind] ? '<span class="spinner"></span>' : ""}Actualiser</button></header>
+  <section class="lb-hero enter-2">
+    <div class="lb-hero-me">${avatarHTML(S.profile, 62, S.isVip)}<div><span class="label">Ta place</span><b class="lb-hero-rank num">${ranked ? "#" + me.rank : "—"}</b></div></div>
+    <p class="lb-hero-txt">${heroMsg}</p>
+    ${ranked && me.rank <= 100 && me.rank > 3 ? `<button class="btn btn-secondary btn-sm" data-act="lb-me">Voir ma place</button>` : ""}
+  </section>
   <div class="segmented lb-tabs" role="tablist">${LB_KINDS.map(([k, t, ic]) => `<button role="tab" aria-selected="${kind === k}" class="${kind === k ? "is-active" : ""}" data-act="lb-kind" data-v="${k}">${icon(ic)}${t}</button>`).join("")}</div>
   ${notice(LB.err[kind])}
-  ${!LB.data[kind] && LB.busy[kind] ? `<div class="stack" style="gap:10px">${[1, 2, 3, 4].map(() => `<div class="skel" style="height:58px;border-radius:16px"></div>`).join("")}</div>` : ""}
-  ${LB.data[kind] && !top.length ? `<div class="card pad">${ask("go", "Personne n'est encore classé ici. Termine une leçon pour prendre la première place !", "", 104)}</div>` : ""}
-  ${order.length ? `<section class="podium enter-2">${order.map((r) => `<div class="pod pod-${r.rank} ${r.is_me ? "is-me" : ""}">
-      <span class="pod-medal">${r.rank}</span>${av(r, r.rank === 1 ? 84 : 66)}
-      <b class="pod-name">${esc(who(r))}</b><span class="pod-score num">${icon(ico)}${r.score} ${unit}</span>
-      <div class="pod-step"></div></div>`).join("")}</section>` : ""}
-  ${top.length > 3 ? `<ol class="lb-list enter-3">${top.slice(3).map((r) => `<li class="lb-row ${r.is_me ? "is-me" : ""}"><span class="lb-rank num">${r.rank}</span>${av(r, 40)}<span class="lb-name">${esc(who(r))}${r.is_me ? ` <span class="chip chip-blue" style="height:22px">Toi</span>` : ""}</span><span class="lb-score num">${r.score} <small>${unit}</small></span></li>`).join("")}</ol>` : ""}
-  ${me && (me.rank > 100 || me.score <= 0) ? `<div class="lb-me"><span class="lb-rank num">${me.score > 0 ? me.rank : "—"}</span>${av(me, 40)}<span class="lb-name">Toi <span class="small muted">${me.score > 0 ? "· continue, tu remontes !" : "· gagne tes premiers points pour entrer au classement"}</span></span><span class="lb-score num">${me.score} <small>${unit}</small></span></div>` : ""}
-  <p class="small muted">${kind === "pulse" ? "Le Pulse compte les jours d'affilée où tu as appris." : kind === "coins" ? "Les pièces que tu as en ce moment." : "Toute l'expérience gagnée depuis ton inscription."} Mis à jour toutes les minutes.</p>`;
+  ${!LB.data[kind] && LB.busy[kind] ? `<div class="stack" style="gap:10px">${[1, 2, 3, 4].map(() => `<div class="skel" style="height:62px;border-radius:16px"></div>`).join("")}</div>` : ""}
+  ${top.length ? `<section class="p2 enter-2">${pod(top[1])}${pod(top[0])}${pod(top[2])}</section>` : ""}
+  ${top.length > 3 ? `<ol class="lb2-list enter-3">${top.slice(3).map((r) => `<li class="lb2-row ${r.is_me ? "is-me" : ""} ${r.rank <= 10 ? "is-top" : ""}">
+      <span class="lb2-rank num">${r.rank}</span>${av(r, 42)}
+      <span class="lb2-who"><b>${esc(who(r))}${r.is_me ? ` <span class="chip chip-teal" style="height:20px;font-size:11px">Toi</span>` : ""}</b><span class="lb2-tags">${r.vip ? vipTag() : ""}${lvl(r)}</span></span>
+      <span class="lb2-score num">${icon(ico)}${r.score.toLocaleString("fr-FR")}</span></li>`).join("")}</ol>` : ""}
+  ${me && (me.rank > 100 || !ranked) ? `<div class="lb2-row is-me lb2-sticky"><span class="lb2-rank num">${ranked ? me.rank : "—"}</span>${av(me, 42)}<span class="lb2-who"><b>Toi</b><span class="small muted">${ranked ? "Continue, tu remontes !" : "Pas encore classé"}</span></span><span class="lb2-score num">${icon(ico)}${me.score}</span></div>` : ""}
+  <p class="small muted">${kind === "pulse" ? "Le Pulse compte les jours d'affilée où tu as appris." : kind === "coins" ? "Les pièces que tu as en ce moment." : "Toute l'expérience gagnée depuis ton inscription."}</p>`;
 }
 
 /* ---------- Plus de vies ---------- */
@@ -3113,7 +3188,7 @@ function viewProfile() {
   const doneN = Object.keys(course().done).length;
   const block = (title, items, good, empty) => `<section class="card pad"><h2 class="h3">${title}</h2><div style="margin-top:14px">${items.length ? items.map((s) => `<div class="skill"><div class="t"><span>${esc(skillLabel(s.skill))}</span><span class="small muted num">${Math.round(s.mastery * 100)} %</span></div>${progress(Math.max(6, s.mastery * 100), "thin" + (good ? "" : " weak"))}</div>`).join("") : `<p class="small muted">${empty}</p>`}</div></section>`;
   return `
-  <header class="page-head enter"><div class="row" style="gap:16px;flex-wrap:nowrap">${avatarHTML(p, 64)}<div class="stack"><h1 class="h1">${esc(p.first_name || "Élève")}</h1><p class="muted">${p.username ? "@" + esc(p.username) + " · " : ""}Niveau ${esc(p.cefr_level)} · ${LEVEL_NAMES[p.cefr_level]}</p></div></div><button class="btn btn-secondary" data-act="settings-open">${icon("i-gear")} Paramètres</button></header>
+  <header class="page-head enter"><div class="row" style="gap:16px;flex-wrap:nowrap">${avatarHTML(p, 64, S.isVip)}<div class="stack"><h1 class="h1" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">${esc(p.first_name || "Élève")}${S.isVip ? vipTag() : ""}</h1><p class="muted">${p.username ? "@" + esc(p.username) + " · " : ""}Niveau ${esc(p.cefr_level)} · ${LEVEL_NAMES[p.cefr_level]}</p></div></div><button class="btn btn-secondary" data-act="settings-open">${icon("i-gear")} Paramètres</button></header>
   <section class="card pad enter-2">
     <div class="row between"><span class="label">Niveau d'expérience</span><span class="small muted num">${xp} XP</span></div>
     <p class="h2" style="margin:6px 0 10px">Niveau ${n}</p>${progress(((xp - lo) / (hi - lo)) * 100)}<p class="small muted num" style="margin-top:6px">${hi - xp} XP avant le niveau ${n + 1}</p>
@@ -3436,10 +3511,38 @@ $app.addEventListener("click", (ev) => {
     case "fb-refresh": adminFbLoad(); break;
     case "lb-kind": u.lbKind = v; SFX.play("tap"); render(); lbLoad(v); break;
     case "lb-refresh": lbLoad(u.lbKind || "xp", true); break;
+    case "lb-me": { const m = document.querySelector(".lb2-row.is-me"); if (m) { m.scrollIntoView({ block: "center", behavior: "smooth" }); vxAnim(m, [{ transform: "scale(1)" }, { transform: "scale(1.03)" }, { transform: "scale(1)" }], { duration: 600 }); } break; }
     case "prep-go": SFX.play("next"); prepRun(); break;
     case "prep-stop": PREP.stop = true; SFX.play("unselect"); render(); break;
     case "fb-done": { const id = Number(v), d = el.dataset.d === "1"; S.store.adminFeedbackDone(id, d).then(() => { const m = (S.ui.fbList || []).find((x) => x.id === id); if (m) m.done = d; render(); }).catch((e) => { S.ui.fbErr = (e && e.message) || "Erreur"; render(); }); break; }
     case "adm-refresh": adminLoad(); break;
+    case "adm-vip": {
+      const on = el.dataset.on === "1";
+      S.store.adminSetVip(v, on).then(() => { const r = (u.admList || []).find((x) => x.id === v); if (r) r.vip = on; if (S.authUser && v === S.authUser.id) S.isVip = on; u.admMsg = { id: v, text: on ? "Badge VIP ajouté ✓" : "Badge VIP retiré." }; SFX.play(on ? "fanfare" : "unselect"); render(); })
+        .catch((e) => { u.admErr = (e && e.message) || "Erreur"; render(); });
+      break;
+    }
+    case "adm-save": {
+      const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
+      const val = (id) => ((document.getElementById(id) || {}).value || "").trim();
+      const fn = val("admFn"), un = val("admUn").replace(/^@+/, ""), em = val("admEm").toLowerCase();
+      const cur = { ...(r.profile || {}) }; (r.gifts || []).forEach((g) => applyGift(cur, g));
+      if (!fn) { u.admErr = "Le prénom ne peut pas être vide."; render(); break; }
+      if (un && !/^[A-Za-z0-9._]{3,20}$/.test(un)) { u.admErr = "Pseudo invalide : 3 à 20 caractères (lettres, chiffres, point ou tiret bas)."; render(); break; }
+      if (em && !okEmail(em)) { u.admErr = "Adresse e-mail invalide."; render(); break; }
+      const chFn = fn !== (cur.first_name || "") ? fn : null, chUn = un !== (cur.username || "") ? un : null, chEm = em && em !== (r.email || "").toLowerCase() ? em : null;
+      if (chFn === null && chUn === null && chEm === null) { u.admMsg = { id: v, text: "Rien n'a changé." }; render(); break; }
+      u.admSaving = true; u.admErr = ""; render();
+      S.store.adminUpdateUser(v, chFn, chUn, chEm).then(() => {
+        r.profile = { ...(r.profile || {}) };
+        if (chFn !== null) r.profile.first_name = chFn;
+        if (chUn !== null) { if (chUn) r.profile.username = chUn; else delete r.profile.username; }
+        if (chEm) r.email = chEm;
+        if (S.authUser && v === S.authUser.id) claimGifts();
+        u.admMsg = { id: v, text: "Profil mis à jour ✓" + (chEm ? " L'élève se connecte maintenant avec " + chEm + "." : "") }; SFX.play("select");
+      }).catch((e) => { u.admErr = (e && e.message) || "Erreur"; }).finally(() => { u.admSaving = false; render(); });
+      break;
+    }
     case "adm-open": u.admOpen = u.admOpen === v ? null : v; u.admMsg = ""; SFX.play("tap"); render(); break;
     case "adm-gift": adminGiftDo(v, el.dataset.k, Number(el.dataset.n)); break;
     case "adm-level": { const s = document.getElementById("admLv"); if (s) adminGiftDo(v, "level", 0, s.value); break; }
@@ -3643,6 +3746,9 @@ function makeSupaStore(sb, uid) {
     async adminFeedback() { const { data, error } = await sb.rpc("admin_feedback"); if (error) throw error; return data || []; },
     async adminFeedbackDone(id, done) { const { error } = await sb.rpc("admin_feedback_done", { p_id: id, p_done: done }); if (error) throw error; },
     async leaderboard(kind) { const { data, error } = await sb.rpc("leaderboard", { p_kind: kind }); if (error) throw error; return data || []; },
+    async isVip() { const { data, error } = await sb.rpc("is_vip"); return !error && data === true; },
+    async adminSetVip(target, on) { const { error } = await sb.rpc("admin_set_vip", { p_target: target, p_on: on }); if (error) throw error; },
+    async adminUpdateUser(target, fn, un, em) { const { error } = await sb.rpc("admin_update_user", { p_target: target, p_first_name: fn, p_username: un, p_email: em }); if (error) throw error; },
     async adminGift(target, kind, amount, level) { const { error } = await sb.rpc("admin_gift", { p_target: target, p_kind: kind, p_amount: amount || 0, p_level: level || null }); if (error) throw error; },
   };
 }
@@ -3778,11 +3884,12 @@ async function enterSession(session) {
     S.ui = {}; render(); return;
   }
   S.store = makeSupaStore(SB, session.user.id);
-  S.accountNo = null; S.isAdmin = false; S.giftNote = "";
+  S.accountNo = null; S.isAdmin = false; S.isVip = false; S.giftNote = "";
   try {
     const [profile, vocab] = await Promise.all([S.store.loadProfile(), S.store.loadVocab()]);
     S.accountNo = await S.store.accountNo().catch(() => null);
     S.isAdmin = await S.store.isAdmin().catch(() => false);
+    S.isVip = await S.store.isVip().catch(() => false);
     S.profile = profile; S.vocab = vocab || {};
   } catch { $app.innerHTML = bootScreen("Impossible de charger tes données", "Vérifie ta connexion, puis recharge la page."); return; }
   // Inscription confirmée par e-mail : on récupère le profil préparé avant la confirmation
