@@ -2438,7 +2438,13 @@ function render() {
   if (showLevel && S.levelPop.fresh) { S.levelPop.fresh = false; setTimeout(() => { giftFx(); const r = document.querySelector(".lv-ring"); if (r) vxAnim(r, [{ transform: "scale(.4) rotate(-20deg)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: .6 }, { transform: "none" }], { duration: 700, easing: "ease-out" }); }, 80); }
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
-  if (v === "coach" && ((fresh && S.chat.length) || S.chatScroll)) { S.chatScroll = false; scrollChatEnd(); } else if (v === "coach" && fresh) window.scrollTo(0, 0);
+  if (v === "coach") {
+    // on descend en bas seulement s'il y a déjà une vraie conversation ; sinon on reste en haut (en-tête visible)
+    const talked = S.chat.some((m) => m.role === "user");
+    if (S.chatScroll && talked) { S.chatScroll = false; scrollChatEnd(); }
+    else if (fresh && talked) scrollChatEnd();
+    else if (fresh || S.chatScroll) { S.chatScroll = false; window.scrollTo(0, 0); }
+  }
   if (v === "dashboard" && fresh) { setTimeout(scrollToCurrent, 0); setTimeout(prefetchNext, 400); }
   mountCaptcha(); mountGsi();
   document.body.classList.toggle("v-coach", v === "coach");
