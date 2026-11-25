@@ -121,6 +121,11 @@ img, svg { max-width: 100%; }
 .notice .n-ic { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 9px; background: var(--nc); color: #14161C; }
 .notice .n-ic svg { width: 16px; height: 16px; }
 .cf-box { display: flex; justify-content: center; }
+.gsi-wrap { position: relative; display: flex; justify-content: center; min-height: 48px; }
+.gsi-wrap .gsi-slot { display: none; }
+.gsi-wrap.is-ready .gsi-slot { display: flex; justify-content: center; width: 100%; }
+.gsi-wrap.is-ready .gsi-alt { display: none; }
+.gsi-wrap .gsi-alt { width: 100%; }
 .notice .n-tx { min-width: 0; overflow-wrap: anywhere; }
 .notice-error { --nc: var(--danger); --nb: rgba(255, 107, 129, .12); }
 .notice-warn { --nc: var(--warn); --nb: rgba(255, 196, 92, .1); }
@@ -1979,7 +1984,7 @@ function render() {
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
   if (v === "coach" && (fresh || S.chatScroll)) { S.chatScroll = false; scrollChatEnd(); }
   if (v === "dashboard" && fresh) { setTimeout(scrollToCurrent, 0); setTimeout(prefetchNext, 400); }
-  mountCaptcha();
+  mountCaptcha(); mountGsi();
 }
 // Vex parle : le texte s'écrit pendant qu'il bouge la bouche
 function typeSpeech() {
@@ -2963,7 +2968,7 @@ const DOCS = {
     ["", "Dernière mise à jour : " + LEGAL_UPDATED + ". Nous respectons ta vie privée et le Règlement général sur la protection des données (RGPD)."],
     ["Ce que nous collectons", "• Ton compte : adresse e-mail, mot de passe (chiffré, nous ne le voyons jamais), ou ton nom et ton e-mail si tu te connectes avec Google.\n• Ton profil : prénom, pseudo, personnage, niveau, objectifs, temps par jour et difficultés choisies.\n• Ta progression : leçons, scores, erreurs, vocabulaire, XP, pièces, vies, Pulse.\n• Tes échanges avec le prof IA et les messages que tu nous envoies depuis l'Aide."],
     ["Pourquoi", "Uniquement pour faire fonctionner Verblyx : sauvegarder ta progression, personnaliser tes leçons, afficher les classements, répondre à tes messages et protéger le service contre les abus. Nous ne vendons jamais tes données et il n'y a pas de publicité."],
-    ["Qui y a accès", "Nos prestataires techniques, uniquement pour le service : Supabase (comptes et base de données, hébergés en Europe), Vercel (hébergement du site) et Google Gemini (génération des leçons et réponses du prof IA). Les questions envoyées au prof IA sont transmises à Gemini : n'y écris pas d'informations personnelles sensibles."],
+    ["Qui y a accès", "Nos prestataires techniques, uniquement pour le service : Supabase (comptes et base de données, hébergés en Europe), Vercel (hébergement du site), Google Gemini et Groq (génération des leçons et réponses du prof IA), Cloudflare Turnstile (protection anti-robots à l'inscription et à la connexion) et Google (si tu choisis de te connecter avec ton compte Google). Les questions envoyées au prof IA sont transmises à ces services d'IA : n'y écris pas d'informations personnelles sensibles."],
     ["Ce que voient les autres élèves", "Dans les classements : ton pseudo (ou ton prénom), ton personnage, ton niveau et ton score. Jamais ton e-mail ni le reste de ton profil."],
     ["Stockage dans ton navigateur", "Verblyx enregistre quelques informations sur ton appareil (session de connexion, réglage du son, conversation en cours). Ce sont des éléments nécessaires au fonctionnement, sans traceur publicitaire."],
     ["Durée de conservation", "Tes données sont conservées tant que ton compte existe. Si tu demandes sa suppression, elles sont effacées."],
@@ -4917,6 +4922,7 @@ const bootScreen = (title, text) => `<div class="boot"><div class="stack" style=
 async function boot() {
   const cfg = window.VERBLYX_CONFIG || {};
   CAP.key = String(cfg.turnstileSiteKey || "").trim();
+  GSI.id = String(cfg.googleClientId || "").trim();
   S.tts = browserTTS(); S.dict = browserDictation();
   if (S.dict) {
     S.dict.onFinal(({ text }) => { if (S.view !== "session") return; S.ui.spoken = ((S.ui.spoken || "") + text).trim(); const el = document.getElementById("spoken"); if (el) el.textContent = `Tu as dit : « ${S.ui.spoken} »`; const b = document.querySelector('[data-act="check"]'); if (b) b.disabled = !S.ui.spoken; });
@@ -5072,7 +5078,57 @@ function viewNewPass() {
     </form>`);
 }
 const GOOGLE_G = `<svg viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>`;
-const googleBtn = (label = "Continuer avec Google") => `<button type="button" class="btn btn-google btn-lg btn-block" data-act="google" aria-label="${label}" ${S.ui.gBusy ? "disabled" : ""}><span class="g-ic">${S.ui.gBusy ? '<span class="spinner"></span>' : GOOGLE_G}</span>${S.ui.gBusy ? "Ouverture de Google…" : label}</button>`;
+/* ---------- Connexion Google « officielle » (Google Identity Services) ----------
+   Si googleClientId est rempli dans config.js, le bouton est celui de Google et la fenêtre
+   affiche le nom du site (verblyx.vercel.app) au lieu de l'adresse technique de Supabase. */
+const GSI = { id: "", ready: null, raw: "" };
+function loadGsi() {
+  if (window.google && window.google.accounts && window.google.accounts.id) return Promise.resolve(window.google);
+  if (GSI.ready) return GSI.ready;
+  GSI.ready = new Promise((ok, ko) => {
+    const sc = document.createElement("script");
+    sc.src = "https://accounts.google.com/gsi/client"; sc.async = true;
+    sc.onload = () => ok(window.google); sc.onerror = () => { GSI.ready = null; ko(new Error("gsi")); };
+    document.head.appendChild(sc);
+  });
+  return GSI.ready;
+}
+async function sha256hex(t) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }
+function mountGsi() {
+  if (!GSI.id) return;
+  const els = [...document.querySelectorAll("[data-gsi]:not([data-on])")]; if (!els.length) return;
+  els.forEach((el) => { el.dataset.on = "1"; });
+  loadGsi().then(async (g) => {
+    // un « nonce » neuf : Google le met dans le jeton, Supabase vérifie qu'il correspond
+    GSI.raw = [...crypto.getRandomValues(new Uint8Array(24))].map((x) => x.toString(16).padStart(2, "0")).join("");
+    g.accounts.id.initialize({ client_id: GSI.id, callback: gsiDone, nonce: await sha256hex(GSI.raw), ux_mode: "popup", auto_select: false, itp_support: true, use_fedcm_for_button: true });
+    els.forEach((el) => {
+      if (!el.isConnected) return;
+      const w = Math.max(220, Math.min(400, Math.round(el.getBoundingClientRect().width) || 360));
+      g.accounts.id.renderButton(el.querySelector(".gsi-slot"), { type: "standard", theme: "filled_black", size: "large", shape: "pill", text: el.dataset.gsi, logo_alignment: "center", width: w, locale: "fr" });
+      el.classList.add("is-ready");
+    });
+  }).catch(() => { els.forEach((el) => el.classList.add("is-fallback")); });
+}
+async function gsiDone(resp) {
+  const u = S.ui;
+  if (S.view === "onboarding") {
+    const p = obDraft();
+    p.first_name = (p.first_name || obName()).slice(0, 40); p.onboarded = true;
+    if (!avValid(p.avatar_id)) p.avatar_id = avRandom();
+    try { localStorage.setItem("verblyx:pending", JSON.stringify(p)); } catch {}
+  }
+  u.gBusy = true; u.error = ""; render();
+  const captcha = await captchaToken();
+  if (captcha === null) { u.gBusy = false; u.error = CAPTCHA_FAIL; return render(); }
+  const { data, error } = await SB.auth.signInWithIdToken({ provider: "google", token: resp && resp.credential, nonce: GSI.raw, ...(captcha ? { options: { captchaToken: captcha } } : {}) });
+  if (error) { u.gBusy = false; u.error = frAuth(error.message); document.querySelectorAll("[data-gsi]").forEach((el) => el.removeAttribute("data-on")); return render(); }
+  SFX.play("fanfare");
+  await enterSession(data.session);
+}
+const googleBtnClassic = (label = "Continuer avec Google") => `<button type="button" class="btn btn-google btn-lg btn-block" data-act="google" aria-label="${label}" ${S.ui.gBusy ? "disabled" : ""}><span class="g-ic">${S.ui.gBusy ? '<span class="spinner"></span>' : GOOGLE_G}</span>${S.ui.gBusy ? "Ouverture de Google…" : label}</button>`;
+const googleBtn = (label = "Continuer avec Google") => !GSI.id || S.ui.gBusy ? googleBtnClassic(label)
+  : `<div class="gsi-wrap" data-gsi="${/inscrire/i.test(label) ? "signup_with" : "continue_with"}"><div class="gsi-slot"></div><div class="gsi-alt">${googleBtnClassic(label)}</div></div>`;
 const orLine = () => `<div class="or-line"><span>ou</span></div>`;
 async function googleSignIn() {
   const u = S.ui;
