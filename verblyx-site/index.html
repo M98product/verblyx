@@ -1658,6 +1658,11 @@ body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-
 .pl-mbtns { display: flex; gap: 8px; flex-wrap: wrap; }
 .pl-mbtns .btn { flex: 1 1 160px; }
 @media (max-width: 719px) { .pl-modal { align-items: end; padding: 0; } .pl-modal .pl-mpanel { max-width: none; border-radius: 22px 22px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); } }
+
+.tok-chip { gap: 7px; }
+.tok-bar { display: inline-block; width: 34px; height: 5px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.tok-bar b { display: block; height: 100%; border-radius: inherit; background: #00D6B5; }
+.tok-chip.is-low .tok-bar b { background: #FFC45C; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -4268,8 +4273,8 @@ function adminPanel(r, p) {
       </div>
       <div class="row adm-actions"><button class="btn btn-primary btn-sm" data-act="adm-save" data-v="${r.id}" ${u.admSaving ? "disabled" : ""}>${u.admSaving ? '<span class="spinner"></span>' : ""}Enregistrer le profil</button></div>
       <div class="adm-grow"><span class="small muted">Niveau CECRL</span><div class="row"><select id="admLv" class="input" aria-label="Niveau">${LEVEL_IDS.map((l) => `<option ${l === p.cefr_level ? "selected" : ""}>${l}</option>`).join("")}</select><button class="btn btn-secondary btn-sm" data-act="adm-level" data-v="${r.id}">Appliquer</button></div></div>`));
-  if (can("profiles") && r.ai_limit !== undefined) parts.push(box("Prof IA", r.is_admin ? "Les administrateurs ne sont pas limités." : `Utilisé aujourd'hui : ${r.ai_used || 0} échange${(r.ai_used || 0) > 1 ? "s" : ""}${r.ai_limit != null ? ` sur ${r.ai_limit}` : ""}.`, r.is_admin ? "" : `
-      <div class="adm-grow"><span class="small muted">Limite par jour ${r.ai_custom ? "(personnalisée)" : `(normale : ${r.vip ? "150, VIP" : "80"})`}</span><div class="row adm-custom"><input id="admAi" class="input" type="number" inputmode="numeric" min="0" max="2000" value="${r.ai_limit != null ? r.ai_limit : ""}" aria-label="Limite d'échanges par jour"><button class="btn btn-primary btn-sm" data-act="adm-ai" data-v="${r.id}">Appliquer</button>${r.ai_custom ? `<button class="btn btn-ghost btn-sm" data-act="adm-ai-reset" data-v="${r.id}">Limite normale</button>` : ""}</div></div>`));
+  if (can("profiles") && r.ai_limit !== undefined) parts.push(box("Prof IA", `Consommé aujourd'hui : ${tokNum(r.ai_used || 0)} jetons sur ${tokNum(r.ai_limit || 0)} (environ ${Math.floor((r.ai_used || 0) / TOK_PER_MSG)} échanges).`, `
+      <div class="adm-grow"><span class="small muted">Quota de jetons par jour ${r.ai_custom ? "(personnalisé)" : `(normal : ${r.is_admin ? "200 000, admin" : r.vip ? "60 000, VIP" : "30 000"})`}</span><div class="row adm-custom"><input id="admAi" class="input" type="number" inputmode="numeric" min="0" max="2000000" step="1000" value="${r.ai_limit != null ? r.ai_limit : ""}" aria-label="Quota de jetons par jour"><button class="btn btn-primary btn-sm" data-act="adm-ai" data-v="${r.id}">Appliquer</button>${r.ai_custom ? `<button class="btn btn-ghost btn-sm" data-act="adm-ai-reset" data-v="${r.id}">Quota normal</button>` : ""}</div><span class="small muted">≈ ${TOK_PER_MSG.toLocaleString("fr-FR")} jetons par échange avec Vex.</span></div>`));
   if (can("vip")) parts.push(box("Statut", "", `<div class="adm-vip-line"><span>${r.vip ? `${vipTag()} <span class="small muted">Ce compte est VIP.</span>` : `<span class="small muted">Ce compte n'est pas VIP.</span>`}</span>
       <button class="btn ${r.vip ? "btn-ghost" : "btn-secondary"} btn-sm vip-btn" data-act="adm-vip" data-v="${r.id}" data-on="${r.vip ? 0 : 1}">${icon("i-crown")}${r.vip ? "Retirer le VIP" : "Donner le VIP"}</button></div>`));
   return `<div class="adm-panel">${parts.join("")}<p class="small muted adm-foot">Inscrit le ${admDate(r.signed_up, true)} · ${Object.keys((p.course && p.course.done) || {}).length} leçons terminées${can("accounts") ? "" : ""}</p></div>`;
@@ -4387,7 +4392,7 @@ function logSentence(l) {
     case "staff_add": return [`a ajouté ${t} à l'équipe (${perms(d.apres)})`, "team"];
     case "staff_perms": return [`a changé les droits de ${t} : ${perms(d.apres)}`, "team"];
     case "staff_remove": return [`a retiré ${t} de l'équipe`, "del"];
-    case "ai_limit": return [d.apres == null ? `a remis la limite IA de ${t} à la valeur normale` : `a fixé la limite IA de ${t} à <b class="num">${d.apres}</b> échanges par jour`, "edit"];
+    case "ai_limit": return [d.apres == null ? `a remis le quota IA de ${t} à la valeur normale` : `a fixé le quota IA de ${t} à <b class="num">${tokNum(d.apres)}</b> ${d.unite === "jetons" ? "jetons" : "échanges"} par jour`, "edit"];
     default: return [`${esc(l.action)} sur ${t}`, "edit"];
   }
 }
@@ -4445,7 +4450,7 @@ async function prepRun() {
     let ok = false;
     for (let attempt = 0; attempt < 3 && !ok && !PREP.stop; attempt++) {
       try {
-        const c = cleanContent(await S.sample.json(genPrompt(st), { modelTier: "default" }));
+        const c = cleanContent(await S.sample.json(genPrompt(st), { modelTier: "default", purpose: "prep" }));
         await S.store.saveContent(st.id, c);
         PREP.ready.add(st.id); ok = true; limited = 0;
       } catch (e) {
@@ -5011,9 +5016,15 @@ async function loadAiUsage() {
   if (!S.store || !S.store.myAiUsage) return;
   try { const d = await S.store.myAiUsage(); if (d) { CO.ai = { used: Number(d.used) || 0, limit: d.limit == null ? null : Number(d.limit) }; if (S.view === "coach") render(); } } catch {}
 }
+// Quota du jour en jetons (tokens). Un échange avec Vex en consomme environ 2 000.
+const TOK_PER_MSG = 2000;
 const aiLeft = () => CO.ai && CO.ai.limit != null ? Math.max(0, CO.ai.limit - CO.ai.used) : null;
-const aiSpent = () => { if (CO.ai) CO.ai.used++; };
-const aiBlocked = () => aiLeft() === 0;
+let aiRefreshT = null;
+// après chaque réponse, on relit la consommation exacte calculée par le serveur
+const aiSpent = () => { clearTimeout(aiRefreshT); aiRefreshT = setTimeout(loadAiUsage, 600); };
+const aiBlocked = () => aiLeft() !== null && aiLeft() <= 0;
+const fmtTok = (n) => n >= 10000 ? Math.round(n / 1000) + " k" : n >= 1000 ? (Math.round(n / 100) / 10).toString().replace(".", ",") + " k" : String(n);
+const tokNum = (n) => Number(n).toLocaleString("fr-FR");
 
 /* ---------- Ce que l'IA sait de l'élève ---------- */
 function topErrors(n = 3) {
@@ -5066,7 +5077,7 @@ function readBilan(reply, userText) {
   return { ok: false, cats };
 }
 // Ce que l'IA « voit » de la conversation
-const chatTurns = () => S.chat.filter((m) => !m.error && !m.local).slice(-14).map((m) => ({ role: m.role, content: m.quiz ? `${m.text || ""}\n[QCM « ${m.quiz.title} » : ${m.quiz.questions.map((q) => q.q).join(" | ")}]`.trim() : m.vocab ? `[Liste de vocabulaire : ${m.vocab.words.map((w) => w.w).join(", ")}]` : stripBilan(m.content) }));
+const chatTurns = () => S.chat.filter((m) => !m.error && !m.local).slice(-10).map((m) => ({ role: m.role, content: m.quiz ? `${m.text || ""}\n[QCM « ${m.quiz.title} » : ${m.quiz.questions.map((q) => q.q).join(" | ")}]`.trim() : m.vocab ? `[Liste de vocabulaire : ${m.vocab.words.map((w) => w.w).join(", ")}]` : stripBilan(m.content) }));
 const dropErrors = () => { while (S.chat.length && S.chat[S.chat.length - 1].error) S.chat.pop(); };
 const coachBusy = () => S.ui.streaming != null && Date.now() - (S.ui.streamAt || 0) < 100000;
 
@@ -5401,7 +5412,7 @@ function coachTopHTML() {
       ${CO.toast ? `<span class="ct-chip is-toast">${esc(CO.toast.text)}</span>` : ""}
       ${FOCUS.running || FOCUS.elapsed ? `<button class="ct-chip is-timer ${FOCUS.running ? "on" : ""}" data-act="co-panel" data-v="focus" aria-label="Minuteur">${pic("clock", 15)}<span id="fx-time-mini">${fmt(focusShown())}</span></button>` : ""}
       <span class="ct-chip" title="XP gagnée avec Vex aujourd'hui (maximum ${COACH_XP_CAP})">${pic("bolt", 15)}${xpToday} XP</span>
-      ${left != null ? `<span class="ct-chip ${left <= 5 ? "is-low" : ""}" title="Échanges avec Vex restants aujourd'hui (sur ${CO.ai.limit})">${pic("chat", 15)}${left} / ${CO.ai.limit}</span>` : CO.ai ? `<span class="ct-chip" title="Aucune limite d'échanges pour ton compte">${pic("chat", 15)}Illimité</span>` : ""}
+      ${left != null ? `<span class="ct-chip tok-chip ${left < TOK_PER_MSG * 3 ? "is-low" : ""}" title="Jetons IA restants aujourd'hui : ${tokNum(left)} sur ${tokNum(CO.ai.limit)} (environ ${Math.floor(left / TOK_PER_MSG)} échanges)">${pic("chat", 15)}<span>${fmtTok(left)}</span><i class="tok-bar"><b style="width:${Math.round((left / Math.max(1, CO.ai.limit)) * 100)}%"></b></i></span>` : ""}
     </div>`;
 }
 function paintCoachTop() {
@@ -5434,7 +5445,7 @@ function chatMsgHTML(m, i) {
     if (m.icon) return `<div class="cm cm-me"><div class="req-pill">${pic(m.icon === "books" ? "books" : m.icon === "read" ? "read" : m.icon === "target" ? "target" : m.icon === "chat" ? "chat" : m.icon === "check" ? "check" : m.icon === "bulb" ? "bulb" : "bolt", 15)}<span>${esc(m.label || m.content)}</span></div></div>`;
     return `<div class="cm cm-me"><div class="bub bub-me">${m.tag ? `<span class="bub-tag">${esc(m.tag)}</span>` : ""}${rich(m.label || m.content)}</div>${m.tr && m.trOpen ? `<div class="bub-tr">${rich(m.tr)}</div>` : ""}</div>`;
   }
-  if (m.error) return m.content === "quota" ? `<div class="cm"><div class="co-note">${pic("clock", 18)}<div><b>Tu as utilisé tous tes échanges avec Vex aujourd'hui</b><span>Ils reviennent demain. En attendant, tu peux réviser tes mots ou continuer ton parcours.</span></div></div></div>` : `<div class="cm">${chatErr(m, i === S.chat.length - 1)}</div>`;
+  if (m.error) return m.content === "quota" ? `<div class="cm"><div class="co-note">${pic("clock", 18)}<div><b>Tu as utilisé tes jetons IA du jour</b><span>Ils reviennent demain. En attendant, tu peux réviser tes mots ou continuer ton parcours.</span></div></div></div>` : `<div class="cm">${chatErr(m, i === S.chat.length - 1)}</div>`;
   const body = m.text != null ? (m.text ? rich(m.text) : "") : rich(m.content);
   return `<div class="cm cm-ai">
     <div class="cm-av">${vx("st_wink", 30)}</div>
@@ -5549,11 +5560,11 @@ function viewCoach() {
         ${tool ? `<div class="tool-chip">${pic(tool[2], 15)}<span>${esc(tool[1])}</span><button data-act="tool-off" aria-label="Annuler l'outil">${pic("x", 14)}</button></div>` : ""}
         <form class="c2-composer" data-form="chat">
           <button type="button" class="cc-btn ${CO.toolsOpen ? "is-on" : ""}" data-act="tools" aria-label="Outils" aria-expanded="${!!CO.toolsOpen}">${pic("grid", 20)}</button>
-          <textarea id="coachInput" rows="1" placeholder="${esc(blocked ? "Plus d'échanges pour aujourd'hui" : tool ? tool[3] : sc ? "Réponds en anglais…" : "Écris à Vex…")}" ${S.sample && !blocked ? "" : "disabled"} aria-label="Message pour Vex">${esc(u.chatDraft || "")}</textarea>
+          <textarea id="coachInput" rows="1" placeholder="${esc(blocked ? "Plus de jetons IA pour aujourd'hui" : tool ? tool[3] : sc ? "Réponds en anglais…" : "Écris à Vex…")}" ${S.sample && !blocked ? "" : "disabled"} aria-label="Message pour Vex">${esc(u.chatDraft || "")}</textarea>
           ${S.dict ? `<button type="button" class="cc-btn ${CO.listening ? "is-rec" : ""}" data-act="mic" aria-label="${CO.listening ? "Arrêter la dictée" : "Dicter un message"}" ${blocked ? "disabled" : ""}>${pic(CO.listening ? "stop" : "mic", 20)}</button>` : ""}
           <button class="cc-send" aria-label="Envoyer" ${busy || !S.sample || blocked ? "disabled" : ""}>${pic("send", 20)}</button>
         </form>
-        <p class="c2-hint small">${aiLeft() != null ? `${aiLeft()} échange${aiLeft() > 1 ? "s" : ""} avec Vex restant${aiLeft() > 1 ? "s" : ""} aujourd'hui sur ${CO.ai.limit} · ` : CO.ai ? "Échanges illimités · " : ""}Entrée pour envoyer, Maj + Entrée pour aller à la ligne</p>
+        <p class="c2-hint small">${aiLeft() != null ? `${tokNum(aiLeft())} jetons IA restants aujourd'hui (environ ${Math.floor(aiLeft() / TOK_PER_MSG)} échange${Math.floor(aiLeft() / TOK_PER_MSG) > 1 ? "s" : ""}) · ` : ""}Entrée pour envoyer, Maj + Entrée pour aller à la ligne</p>
       </div>
     </div>
     ${panel ? `<aside class="c2-side" aria-label="${(PANELS.find((x) => x[0] === panel) || [])[1] || ""}">
@@ -5566,7 +5577,7 @@ function viewCoach() {
 function scrollChatEnd(smooth) { const go = () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: smooth ? "smooth" : "auto" }); go(); requestAnimationFrame(go); }
 function chatErr(m, last) {
   const raw = String(m.content || ""), detail = raw.replace(/^Erreur serveur\s*:\s*/i, "").replace(/\s*Réessaie[^.]*\.?\s*$/i, "");
-  const [title, sub] = /échanges avec Vex|limite de/i.test(raw) ? ["Tu as utilisé tous tes échanges du jour", "Ils reviennent demain. Tu peux continuer ton parcours ou réviser tes mots en attendant."]
+  const [title, sub] = /jetons IA|échanges avec Vex|limite de/i.test(raw) ? ["Tu as utilisé tes jetons IA du jour", "Ils reviennent demain. Tu peux continuer ton parcours ou réviser tes mots en attendant."]
     : /quota|patiente|beaucoup travaillé/i.test(raw) ? ["Vex fait une courte pause", "Le service d'IA est très demandé. Réessaie dans quelques minutes."]
     : /session/i.test(raw) ? ["Session expirée", "Reconnecte-toi puis réessaie."]
     : /surcharg|ne répond pas|503|502/i.test(raw) ? ["Service momentanément indisponible", "Les serveurs sont très sollicités. Réessaie dans un instant."]
@@ -5732,9 +5743,9 @@ $app.addEventListener("click", (ev) => {
     case "adm-ai": case "adm-ai-reset": {
       const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
       let lim = null;
-      if (a === "adm-ai") { const n = Math.round(Number((document.getElementById("admAi") || {}).value)); if (!Number.isFinite(n) || n < 0 || n > 2000) { u.admErr = "La limite doit être un nombre entre 0 et 2000."; render(); break; } lim = n; }
-      S.store.adminSetAiLimit(v, lim).then(() => { u.logs = null; u.admMsg = { id: v, text: lim == null ? "Limite IA remise à la valeur normale." : `Limite IA fixée à ${lim} échanges par jour.` }; SFX.play("select"); adminLoad(); })
-        .catch((e) => { const m = (e && e.message) || ""; u.admErr = /function|schema cache|does not exist/i.test(m) ? "Lance d'abord 010_prof_ia.sql dans Supabase." : m || "Erreur"; render(); });
+      if (a === "adm-ai") { const n = Math.round(Number((document.getElementById("admAi") || {}).value)); if (!Number.isFinite(n) || n < 0 || n > 2000000) { u.admErr = "Le quota doit être un nombre entre 0 et 2 000 000 jetons."; render(); break; } lim = n; }
+      S.store.adminSetAiLimit(v, lim).then(() => { u.logs = null; u.admMsg = { id: v, text: lim == null ? "Quota IA remis à la valeur normale." : `Quota IA fixé à ${tokNum(lim)} jetons par jour.` }; SFX.play("select"); adminLoad(); })
+        .catch((e) => { const m = (e && e.message) || ""; u.admErr = /function|schema cache|does not exist/i.test(m) ? "Lance d'abord 011_ai_jetons.sql dans Supabase." : m || "Erreur"; render(); });
       break;
     }
     case "adm-custom": { const k = (document.getElementById("admKind") || {}).value || "coins", n = Math.round(Number((document.getElementById("admAmt") || {}).value)); if (!n || n < 1) { u.admErr = "Indique une quantité positive."; render(); break; } adminGiftDo(v, k, k === "hearts" ? Math.min(n, HEART_MAX) : n); break; }
@@ -6098,7 +6109,7 @@ function makeAi(sb, sbUrl, sbKey) {
     return { text, truncated: false };
   };
   ask.json = async (prompt, opts = {}) => {
-    const r = await call({ kind: "json", messages: [{ role: "user", content: String(prompt) }] }, opts.signal);
+    const r = await call({ kind: "json", messages: [{ role: "user", content: String(prompt) }], ...(opts.purpose ? { purpose: opts.purpose } : {}) }, opts.signal);
     try { return JSON.parse(r.text); }
     catch { const m = String(r.text || "").match(/[\[{][\s\S]*[\]}]/); if (m) { try { return JSON.parse(m[0]); } catch {} } throw { code: "invalid_json", text: r.text }; }
   };
