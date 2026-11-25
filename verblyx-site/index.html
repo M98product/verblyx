@@ -3407,7 +3407,9 @@ function viewCoach() {
 async function sendChat(text) {
   const t = String(text || "").trim();
   const u = S.ui;
-  if (!t || u.streaming != null || !S.sample) return;
+  if (!t || !S.sample) return;
+  if (u.streaming != null && Date.now() - (u.streamAt || 0) < 100000) return;
+  u.streamAt = Date.now();
   S.chat.push({ role: "user", content: t.slice(0, 2000) }); SFX.play("tap");
   u.chatDraft = ""; u.chatError = ""; u.streaming = ""; render();
   const p = S.profile;
@@ -3785,16 +3787,24 @@ function makeAi(sb, sbUrl, sbKey) {
     }
     const reader = res.body.getReader(), dec = new TextDecoder();
     let text = "";
+    const t0 = Date.now();
+    // Si plus rien n'arrive pendant un moment, on considère la réponse terminée
+    const readStep = () => new Promise((resolve, reject) => {
+      const t = setTimeout(() => resolve({ idle: true }), text ? 8000 : 40000);
+      reader.read().then((r) => { clearTimeout(t); resolve(r); }, (e) => { clearTimeout(t); reject(e); });
+    });
     try {
       for (;;) {
-        const { done, value } = await reader.read();
+        const step = await readStep();
+        if (step.idle || Date.now() - t0 > 90000) { reader.cancel().catch(() => {}); if (!text) throw { idle: true }; break; }
+        const { done, value } = step;
         if (done) break;
         const delta = dec.decode(value, { stream: true });
         if (!delta) continue;
         text += delta;
         if (opts.onText) opts.onText({ text, delta });
       }
-    } catch (e) { if (text) throw { text, message: "Réponse interrompue." }; throw { message: "Connexion interrompue. Réessaie." }; }
+    } catch (e) { if (text) throw { text, message: "Réponse interrompue." }; throw { message: e && e.idle ? "Vex met trop de temps à répondre. Réessaie." : "Connexion interrompue. Réessaie." }; }
     if (!text.trim()) throw { message: "Vex n'a rien répondu. Réessaie." };
     return { text, truncated: false };
   }
