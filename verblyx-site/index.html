@@ -775,8 +775,11 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .p-pop .stn-card { background: #262934; }
 .p-pop .stn-card .vx { display: none; }
 .p-pop::before { content: ""; position: absolute; top: -7px; left: calc(50% + var(--px, 0px)); width: 14px; height: 14px; transform: translateX(-50%) rotate(45deg); background: #262934; border-left: 1px solid var(--line-2); border-top: 1px solid var(--line-2); }
-.road-vex { position: absolute; z-index: 1; transform: translateY(-50%); }
-@media (max-width: 480px) { .road-vex { display: none; } }
+.road-vex { position: absolute; z-index: 1; left: calc(50% + var(--vxd)); }
+@media (max-width: 480px) { .road-vex { left: calc(50% + var(--vxm)); margin-top: 18px; } .road-vex .vx { width: 72px !important; } }
+.pseudo-state { flex: none; font: 700 12.5px var(--f-body); white-space: nowrap; }
+.pseudo-state.ok { color: var(--success); } .pseudo-state.bad { color: var(--danger); } .pseudo-state.wait { color: var(--muted); }
+.lb2-list .lb2-row.rk-1 .lb2-rank { color: #FFC94A; } .lb2-list .lb2-row.rk-2 .lb2-rank { color: #C9CED6; } .lb2-list .lb2-row.rk-3 .lb2-rank { color: #E09A5C; }
 .xp-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 9px; border-radius: 999px; background: rgba(0, 214, 181, .13); border: 1px solid rgba(0, 214, 181, .35); color: var(--success); font: 800 12.5px var(--f-body); white-space: nowrap; }
 .xp-chip .ico { width: 13px; height: 13px; }
 .goal-bonus { border-color: rgba(0, 214, 181, .45); background: radial-gradient(240px 120px at 100% 0%, rgba(0, 214, 181, .14), transparent 70%), var(--surface); }
@@ -1813,9 +1816,44 @@ const OB_TIME_LBL = { 5: "Express", 10: "Équilibré", 15: "Régulier", 20: "Amb
 const OB_BASE = ["level", "goals", "time", "diffs", "name", "pseudo"];
 const obSteps = () => S.authUser ? OB_BASE : [...OB_BASE, "account"];
 const OB_POSE = { level: "think", goals: "go", time: "chart", diffs: "heart", name: "wave", pseudo: "pro", account: "go" };
-const PSEUDO_RE = /^[A-Za-z0-9._]{3,20}$/;
+const PSEUDO_RE = /^[a-z0-9._]{3,20}$/;
+// tout passe en minuscules, sans espace ni caractère interdit
+const cleanPseudo = (v) => String(v || "").toLowerCase().replace(/^@+/, "").replace(/\s+/g, "_").replace(/[^a-z0-9._]/g, "");
+const PSEUDO_FREE = {};
+let pseudoTimer = null;
+async function pseudoFree(name) {
+  if (!PSEUDO_RE.test(name)) return false;
+  if (name in PSEUDO_FREE) return PSEUDO_FREE[name];
+  if (!SB) return true;
+  let data, error;
+  try { ({ data, error } = await SB.rpc("username_available", { p_username: name })); } catch (e) { error = e; }
+  if (error) return (PSEUDO_FREE[name] = true); // vérification impossible (réseau, fonction pas encore installée) : la règle de la base protège quand même
+  PSEUDO_FREE[name] = data === true;
+  return PSEUDO_FREE[name];
+}
+// vérifie le pseudo pendant la frappe et met à jour l'indicateur sous le champ
+function checkPseudoLive(name, where) {
+  clearTimeout(pseudoTimer);
+  const set = (cls, txt) => { const el = document.getElementById(where); if (el) { el.className = "pseudo-state " + cls; el.textContent = txt; } };
+  if (!name) return set("", "");
+  if (!PSEUDO_RE.test(name)) return set("bad", name.length < 3 ? "Au moins 3 caractères" : "Caractères non autorisés");
+  if (name in PSEUDO_FREE) { set(PSEUDO_FREE[name] ? "ok" : "bad", PSEUDO_FREE[name] ? "✓ Disponible" : "✗ Déjà pris"); pseudoCheer(name); return refreshObNext(); }
+  set("wait", "Vérification…");
+  pseudoTimer = setTimeout(async () => {
+    const ok = await pseudoFree(name);
+    const cur = where === "obUserState" ? obUser() : cleanPseudo((document.getElementById("setUser") || {}).value);
+    if (cur !== name) return;
+    set(ok ? "ok" : "bad", ok ? "✓ Disponible" : "✗ Déjà pris");
+    refreshObNext(); pseudoCheer(name);
+  }, 350);
+}
+function pseudoCheer(name) {
+  const rx = document.querySelector(".foot-msg"); if (!rx || !document.getElementById("obUser")) return;
+  rx.innerHTML = PSEUDO_FREE[name] === true ? vx("st_joy", 34) + `<span>${esc("Trop bien, @" + name + " !")}</span>` : "";
+}
+function refreshObNext() { const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady(); }
 const obName = () => (S.ui.firstName ?? (obDraft().first_name || S.suggestedName || "")).trim();
-const obUser = () => String(S.ui.username ?? obDraft().username ?? "").trim().replace(/^@+/, "");
+const obUser = () => cleanPseudo(S.ui.username ?? obDraft().username ?? "");
 function obDraft() {
   if (S.profile) return S.profile;
   if (!S.draft) S.draft = newProfile("");
@@ -1827,14 +1865,14 @@ function obReaction(step, p) {
   if (step === "time") return ({ 5:"Petit à petit, ça marche !", 10:"Le bon rythme pour une vraie habitude.", 15:"Super rythme !", 20:"Sérieux ! Tu vas progresser vite.", 30:"Intense ! J'adore ta motivation.", 45:"Mode champion activé !" })[p.daily_minutes] || "";
   if (step === "diffs") return p.difficulties.length ? "Je vais surtout t'entraîner là-dessus." : "Rien en tête ? Le test m'aidera à voir.";
   if (step === "name") { const n = obName(); return n ? `Enchanté, ${n} !` : ""; }
-  if (step === "pseudo") return PSEUDO_RE.test(obUser()) ? `Trop bien, @${obUser()} !` : "";
+  if (step === "pseudo") return PSEUDO_FREE[obUser()] === true ? `Trop bien, @${obUser()} !` : "";
   if (step === "account") return "Dernière étape !";
   return "";
 }
 function obReady() {
   const u = S.ui, step = obSteps()[u.step || 0];
   if (step === "name") return !!obName();
-  if (step === "pseudo") return PSEUDO_RE.test(obUser()) && avValid(obDraft().avatar_id);
+  if (step === "pseudo") return PSEUDO_RE.test(obUser()) && PSEUDO_FREE[obUser()] !== false && (obUser() in PSEUDO_FREE || !SB) && avValid(obDraft().avatar_id);
   if (step === "account") return okEmail(u.email) && String(u.pass || "").length >= 8;
   return true;
 }
@@ -1846,7 +1884,8 @@ async function obNext() {
     p.first_name = obName().slice(0, 40);
   }
   if (step === "pseudo") {
-    if (!PSEUDO_RE.test(obUser())) { u.error = "Ton pseudo : 3 à 20 caractères (lettres, chiffres, point ou tiret bas)."; return render(); }
+    if (!PSEUDO_RE.test(obUser())) { u.error = "Ton pseudo : 3 à 20 caractères (lettres minuscules, chiffres, point ou tiret bas)."; return render(); }
+    if (!(await pseudoFree(obUser()))) { u.error = "Ce pseudo est déjà pris : choisis-en un autre."; return render(); }
     if (!avValid(p.avatar_id)) { u.error = "Choisis ton personnage."; return render(); }
     p.username = obUser();
   }
@@ -1872,7 +1911,12 @@ async function obNext() {
   const isNew = !S.profile;
   if (isNew) S.profile = p;
   try { await S.store.saveProfile(S.profile); }
-  catch {
+  catch (e) {
+    if (/duplicate|unique|23505/i.test(String((e && (e.message || e.code)) || "")) && S.profile.username) {
+      // pseudo pris entre-temps : on crée le compte sans pseudo, l'élève en choisira un autre dans les paramètres
+      PSEUDO_FREE[S.profile.username] = false; delete S.profile.username;
+      try { await S.store.saveProfile(S.profile); S.draft = null; S.ui.error = ""; go("celebrate"); return; } catch {}
+    }
     if (isNew) S.profile = null;
     u.saving = false; u.error = "Impossible de créer ton compte pour le moment. Vérifie ta connexion et réessaie."; return render();
   }
@@ -1897,6 +1941,7 @@ function viewOnboarding() {
   const p = obDraft(), u = S.ui;
   const steps = obSteps(), i = u.step || 0, step = steps[i];
   if (step === "pseudo" && !avValid(p.avatar_id)) p.avatar_id = avRandom();
+  if (step === "pseudo" && PSEUDO_RE.test(obUser()) && !(obUser() in PSEUDO_FREE)) setTimeout(() => checkPseudoLive(obUser(), "obUserState"), 0);
   const local = S.store.kind === "local";
   let body = "", canNext = true, nextLabel = "Continuer";
   if (step === "level") {
@@ -1932,8 +1977,8 @@ function viewOnboarding() {
     canNext = obReady();
     body = `${ask(OB_POSE.pseudo, "Choisis ton pseudo et ton personnage !", "C'est ce que les autres verront de toi.")}
       <form class="stack" data-form="ob-name" novalidate style="gap:14px">
-        <div class="ob-me">${avatarHTML(p, 76)}<div class="user-in" style="flex:1"><span>@</span><input id="obUser" class="input big-input" style="padding-left:32px" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ton_pseudo" value="${esc(u.username ?? p.username ?? "")}" maxlength="21" aria-label="Ton pseudo"></div></div>
-        <p class="small muted" style="margin-top:-6px">3 à 20 caractères : lettres, chiffres, point ou tiret bas.</p>
+        <div class="ob-me">${avatarHTML(p, 76)}<div class="user-in" style="flex:1"><span>@</span><input id="obUser" class="input big-input" style="padding-left:32px" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ton_pseudo" value="${esc(obUser())}" maxlength="21" aria-label="Ton pseudo"></div></div>
+        <div class="row between" style="margin-top:-6px;gap:8px"><p class="small muted">3 à 20 caractères : lettres minuscules, chiffres, point ou tiret bas. Chaque pseudo est unique.</p><span id="obUserState" class="pseudo-state ${obUser() in PSEUDO_FREE ? (PSEUDO_FREE[obUser()] ? "ok" : "bad") : ""}">${obUser() in PSEUDO_FREE ? (PSEUDO_FREE[obUser()] ? "✓ Disponible" : "✗ Déjà pris") : ""}</span></div>
         <div class="av-grid" role="radiogroup" aria-label="Personnages">${AVATAR.LIST.map((o, k) => `<button type="button" class="av-pick ${p.avatar_id === k ? "is-on" : ""}" data-act="ob-av" data-v="${k}" role="radio" aria-checked="${p.avatar_id === k}" aria-label="Personnage ${k + 1}">${AVATAR.svg(o, true)}</button>`).join("")}</div>
         ${notice(u.error)}
         <button type="submit" hidden></button>
@@ -2805,6 +2850,7 @@ function chapterPath(lv, un, ui, ust, steps, cur) {
   }).join("");
   const vexP = vexAt >= 0 ? pts[vexAt] : null;
   const vexX = vexP ? (vexP.x > 0 ? vexP.x - 175 : vexP.x + 75) : 0;
+  const vexXm = vexP ? (vexP.x > 0 ? vexP.x - 128 : vexP.x + 54) : 0;
   return `<div class="road" style="height:${H}px">
     <div class="road-clip" aria-hidden="true"><svg class="road-svg" viewBox="-220 0 440 ${H}" style="height:${H}px">
       <path d="${curve(pts)}" class="road-bg"/>
@@ -2812,7 +2858,7 @@ function chapterPath(lv, un, ui, ust, steps, cur) {
       <path d="${curve(pts)}" class="road-line"/>
     </svg></div>
     ${stops}
-    ${vexP && u.pop !== nodes[vexAt].id ? `<div class="road-vex" style="left:calc(50% + ${vexX}px);top:${vexP.y - 62}px">${vx(nodes[vexAt].kind === "lesson" ? "wave" : "go", 100, "lead")}</div>` : ""}
+    ${vexP && u.pop !== nodes[vexAt].id ? `<div class="road-vex" style="--vxd:${vexX}px;--vxm:${vexXm}px;top:${vexP.y - 62}px">${vx(nodes[vexAt].kind === "lesson" ? "wave" : "go", 100, "lead")}</div>` : ""}
   </div>`;
 }
 // XP maximum qu'une étape rapporte (toutes les réponses justes du premier coup)
@@ -3088,7 +3134,7 @@ function settingsModal() {
         <div class="user-in"><span>@</span><input id="setUser" class="input" style="height:44px" value="${esc(u.userDraft ?? p.username ?? "")}" maxlength="20" placeholder="ton_pseudo" aria-label="Ton pseudo" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
         <button class="btn btn-secondary btn-sm" style="height:44px">OK</button>
       </form>
-      <p class="small muted" style="margin-top:6px">3 à 20 caractères : lettres, chiffres, point ou tiret bas.</p>${setMsg(u.userOk, u.userErr)}
+      <div class="row between" style="margin-top:6px;gap:8px"><p class="small muted">3 à 20 caractères : lettres minuscules, chiffres, point ou tiret bas. Chaque pseudo est unique.</p><span id="setUserState" class="pseudo-state"></span></div>${setMsg(u.userOk, u.userErr)}
       ${S.accountNo ? `<div class="set-idline">ID <code>${accId(S.accountNo)}</code><button data-act="copy-id">${u.copied ? "copié ✓" : "copier"}</button></div>` : ""}
     </section>`;
   if (tab === "compte") body = `
@@ -3533,13 +3579,12 @@ function viewCompetition() {
   <section class="lb-hero enter-2">
     <div class="lb-hero-me">${avatarHTML(S.profile, 62, S.isVip)}<div><span class="label">Ta place</span><b class="lb-hero-rank num">${ranked ? "#" + me.rank : "—"}</b></div></div>
     <p class="lb-hero-txt">${heroMsg}</p>
-    ${ranked && me.rank <= 100 && me.rank > 3 ? `<button class="btn btn-secondary btn-sm" data-act="lb-me">Voir ma place</button>` : ""}
+    ${ranked && me.rank <= 100 ? `<button class="btn btn-secondary btn-sm" data-act="lb-me">Voir ma place</button>` : ""}
   </section>
   <div class="segmented lb-tabs" role="tablist">${LB_KINDS.map(([k, t, ic]) => `<button role="tab" aria-selected="${kind === k}" class="${kind === k ? "is-active" : ""}" data-act="lb-kind" data-v="${k}">${icon(ic)}${t}</button>`).join("")}</div>
   ${notice(LB.err[kind])}
   ${!LB.data[kind] && LB.busy[kind] ? `<div class="stack" style="gap:10px">${[1, 2, 3, 4].map(() => `<div class="skel" style="height:62px;border-radius:16px"></div>`).join("")}</div>` : ""}
-  ${top.length ? `<section class="p2 enter-2">${pod(top[1])}${pod(top[0])}${pod(top[2])}</section>` : ""}
-  ${top.length > 3 ? `<ol class="lb2-list enter-3">${top.slice(3).map((r) => `<li class="lb2-row ${r.is_me ? "is-me" : ""} ${r.rank <= 10 ? "is-top" : ""}">
+  ${top.length ? `<ol class="lb2-list enter-3">${top.map((r) => `<li class="lb2-row ${r.is_me ? "is-me" : ""} ${r.rank <= 3 ? "rk-" + r.rank : ""} ${r.rank <= 10 ? "is-top" : ""}">
       <span class="lb2-rank num">${r.rank}</span>${av(r, 42)}
       <span class="lb2-who"><b>${esc(who(r))}${r.is_me ? ` <span class="chip chip-teal" style="height:20px;font-size:11px">Toi</span>` : ""}</b><span class="lb2-tags">${r.vip ? vipTag() : ""}${lvl(r)}</span></span>
       <span class="lb2-score num">${icon(ico)}${r.score.toLocaleString("fr-FR")}</span></li>`).join("")}</ol>` : ""}
@@ -3928,10 +3973,10 @@ $app.addEventListener("click", (ev) => {
     case "adm-save": {
       const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
       const val = (id) => ((document.getElementById(id) || {}).value || "").trim();
-      const fn = val("admFn"), un = val("admUn").replace(/^@+/, ""), em = val("admEm").toLowerCase();
+      const fn = val("admFn"), un = cleanPseudo(val("admUn")), em = val("admEm").toLowerCase();
       const cur = { ...(r.profile || {}) }; (r.gifts || []).forEach((g) => applyGift(cur, g));
       if (!fn) { u.admErr = "Le prénom ne peut pas être vide."; render(); break; }
-      if (un && !/^[A-Za-z0-9._]{3,20}$/.test(un)) { u.admErr = "Pseudo invalide : 3 à 20 caractères (lettres, chiffres, point ou tiret bas)."; render(); break; }
+      if (un && !PSEUDO_RE.test(un)) { u.admErr = "Pseudo invalide : 3 à 20 caractères (lettres minuscules, chiffres, point ou tiret bas)."; render(); break; }
       if (em && !okEmail(em)) { u.admErr = "Adresse e-mail invalide."; render(); break; }
       const chFn = fn !== (cur.first_name || "") ? fn : null, chUn = un !== (cur.username || "") ? un : null, chEm = em && em !== (r.email || "").toLowerCase() ? em : null;
       if (chFn === null && chUn === null && chEm === null) { u.admMsg = { id: v, text: "Rien n'a changé." }; render(); break; }
@@ -4030,10 +4075,11 @@ $app.addEventListener("input", (ev) => {
   const t = ev.target, u = S.ui;
   if (t.id === "obEmail") { u.email = t.value; const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady(); }
   if (t.id === "obUser") {
-    u.username = t.value; u.error = "";
+    const clean = cleanPseudo(t.value); if (t.value !== clean) { const pos = t.selectionStart - (t.value.length - clean.length); t.value = clean; try { t.setSelectionRange(pos, pos); } catch {} }
+    u.username = clean; u.error = "";
+    checkPseudoLive(clean, "obUserState");
     const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady();
-    const rx = document.querySelector(".foot-msg"); const v = obUser();
-    if (rx) rx.innerHTML = PSEUDO_RE.test(v) ? vx("st_joy", 34) + `<span>${esc("Trop bien, @" + v + " !")}</span>` : "";
+    const rx = document.querySelector(".foot-msg"); if (rx && PSEUDO_FREE[clean] !== true) rx.innerHTML = "";
   }
   if (t.id === "obPass") { u.pass = t.value; const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady(); }
   if (t.id === "firstName") {
@@ -4054,7 +4100,8 @@ $app.addEventListener("input", (ev) => {
   if (t.id === "vocabSearch") { u.q = t.value; render(); }
   if (t.id === "admQ") { u.admQ = t.value; render(); }
   if (t.id === "setPass") { u.passOk = ""; u.passErr = ""; }
-  if (t.id === "setUser") { u.userDraft = t.value; u.userOk = ""; u.userErr = ""; }
+  if (t.id === "setUser") { const clean = cleanPseudo(t.value); if (t.value !== clean) { const pos = t.selectionStart - (t.value.length - clean.length); t.value = clean; try { t.setSelectionRange(pos, pos); } catch {} } u.userDraft = clean; u.userOk = ""; u.userErr = ""; if (clean !== (S.profile.username || "")) checkPseudoLive(clean, "setUserState"); }
+  if (t.id === "admUn") { const clean = cleanPseudo(t.value); if (t.value !== clean) t.value = clean; }
   if (t.id === "setHelp") { u.helpDraft = t.value; u.helpOk = ""; u.helpErr = ""; }
 });
 $app.addEventListener("change", (ev) => {
@@ -4079,13 +4126,7 @@ $app.addEventListener("submit", (ev) => {
   }
   if (f === "chat") sendChat(document.getElementById("coachInput").value);
   if (f === "settings-pass") changePass();
-  if (f === "settings-user") {
-    const v = (document.getElementById("setUser").value || "").trim().replace(/^@+/, "");
-    const u = S.ui; u.userOk = ""; u.userErr = "";
-    if (v && !/^[A-Za-z0-9._]{3,20}$/.test(v)) { u.userErr = "3 à 20 caractères : lettres, chiffres, point ou tiret bas."; render(); return; }
-    S.profile.username = v || undefined; if (!v) delete S.profile.username; u.userDraft = null;
-    u.userOk = v ? "Pseudo enregistré." : "Pseudo retiré."; SFX.play("select"); saveProfile(); render();
-  }
+  if (f === "settings-user") saveMyPseudo();
   if (f === "settings-help") sendHelp();
 });
 document.addEventListener("keydown", (ev) => {
@@ -4312,7 +4353,7 @@ async function enterSession(session) {
   const meta = session.user.user_metadata || {};
   S.suggestedName = String(meta.given_name || meta.first_name || String(meta.full_name || meta.name || "").split(" ")[0] || "").slice(0, 40);
   if (!S.profile) {
-    try { const pend = JSON.parse(localStorage.getItem("verblyx:pending") || "null"); if (pend) { S.profile = pend; await S.store.saveProfile(pend); localStorage.removeItem("verblyx:pending"); joined = true; } } catch {}
+    try { const pend = JSON.parse(localStorage.getItem("verblyx:pending") || "null"); if (pend) { S.profile = pend; try { await S.store.saveProfile(pend); } catch { delete pend.username; await S.store.saveProfile(pend); } localStorage.removeItem("verblyx:pending"); joined = true; } } catch {}
   } else { try { localStorage.removeItem("verblyx:pending"); } catch {} }
   if (S.profile) {
     const p = S.profile;
@@ -4439,6 +4480,17 @@ async function changePass() {
   u.passBusy = false;
   if (error) u.passErr = /different from the old|same/i.test(error.message) ? "Choisis un mot de passe différent de l'ancien." : frAuth(error.message);
   else { u.passOk = "Mot de passe changé ✓"; SFX.play("select"); }
+  render();
+}
+async function saveMyPseudo() {
+  const v = cleanPseudo((document.getElementById("setUser") || {}).value);
+  const u = S.ui, old = S.profile.username; u.userOk = ""; u.userErr = "";
+  if (v === (old || "")) { u.userOk = "C'est déjà ton pseudo."; return render(); }
+  if (v && !PSEUDO_RE.test(v)) { u.userErr = "3 à 20 caractères : lettres minuscules, chiffres, point ou tiret bas."; return render(); }
+  if (v && !(await pseudoFree(v))) { u.userErr = "Ce pseudo est déjà pris : choisis-en un autre."; return render(); }
+  if (v) S.profile.username = v; else delete S.profile.username;
+  try { await S.store.saveProfile(S.profile); u.userDraft = null; u.userOk = v ? "Pseudo enregistré ✓" : "Pseudo retiré."; SFX.play("select"); if (v) PSEUDO_FREE[v] = true; }
+  catch (e) { if (old) S.profile.username = old; else delete S.profile.username; u.userErr = /duplicate|unique|23505/i.test(String((e && (e.message || e.code)) || "")) ? "Ce pseudo vient d'être pris : choisis-en un autre." : "Impossible d'enregistrer pour le moment."; }
   render();
 }
 async function sendHelp() {
