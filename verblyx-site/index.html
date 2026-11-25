@@ -1767,7 +1767,7 @@ function render() {
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
   if (v === "coach") { const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" }); }
-  if (v === "dashboard" && fresh) { const n = document.querySelector(".pnode.current, .pnode.ready, .stn.current"); if (n) n.scrollIntoView({ block: "center" }); setTimeout(prefetchNext, 400); }
+  if (v === "dashboard" && fresh) { setTimeout(scrollToCurrent, 0); setTimeout(prefetchNext, 400); }
 }
 // Vex parle : le texte s'écrit pendant qu'il bouge la bouche
 function typeSpeech() {
@@ -2786,6 +2786,16 @@ function badgesCard(short) {
 /* ---------- Accueil : la carte du parcours ---------- */
 const NODE_ICON = { lesson: "i-book", unit: "i-shield", exam: "i-cert" };
 const SWING = [0, 46, 76, 46, 0, -46, -76, -46];
+// Ouvre l'accueil directement sur l'étape en cours (en haut de l'écran) ; on remonte pour voir ce qui est déjà fait
+try { history.scrollRestoration = "manual"; } catch {}
+function scrollToCurrent() {
+  if (S.view !== "dashboard") return;
+  if (document.readyState !== "complete") window.addEventListener("load", () => setTimeout(scrollToCurrent, 0), { once: true });
+  const n = document.querySelector(".pnode.k-chest.ready, .pnode.current");
+  if (!n) return;
+  const top = n.getBoundingClientRect().top + window.scrollY - (window.innerWidth < 720 ? 150 : 110);
+  window.scrollTo({ top: Math.max(0, top), behavior: "auto" });
+}
 function viewMap() {
   const u = S.ui, steps = allSteps(), cur = currentIdx();
   const curStep = steps[cur];
@@ -2794,7 +2804,9 @@ function viewMap() {
   COURSE.levels.forEach((lv) => {
     const li = lvIdx(lv.id), ci = lvIdx(curLevel);
     const pr = levelProgress(lv.id);
-    const open = li === ci || u.openLevel === lv.id;
+    // niveaux faits (pas sautés par le test) dépliés au-dessus, pour pouvoir remonter le chemin
+    const byDefault = li === ci || (li < ci && li >= lvIdx(course().start));
+    const open = S.lvOpen && lv.id in S.lvOpen ? S.lvOpen[lv.id] : byDefault;
     const state = li < ci ? (li < lvIdx(course().start) ? "Validé par le test de niveau" : "Validé") : li > ci ? "Se débloque après la certification " + LEVELS[li - 1] : `${pr.passed} chapitre${pr.passed > 1 ? "s" : ""} validé${pr.passed > 1 ? "s" : ""} sur ${pr.total}`;
     html += `<section class="lvl-block ${li > ci ? "is-locked" : ""}">
       <button class="lvl-head" data-act="lvl" data-v="${lv.id}" aria-expanded="${open}">
@@ -4037,7 +4049,7 @@ $app.addEventListener("click", (ev) => {
     }
     case "t-submit": finishPlacement(true); break;
     case "t-skip": finishPlacement(false); break;
-    case "lvl": { const ci = lvIdx((allSteps()[currentIdx()] || {}).level || "C2"); if (lvIdx(v) > ci) { SFX.play("unselect"); break; } u.openLevel = u.openLevel === v ? null : v; u.pop = null; SFX.play("tap"); render(); break; }
+    case "lvl": { const ci = lvIdx((allSteps()[currentIdx()] || {}).level || "C2"); if (lvIdx(v) > ci) { SFX.play("unselect"); break; } S.lvOpen = S.lvOpen || {}; const wasOpen = !!document.querySelector(`.lvl-head[data-v="${v}"][aria-expanded="true"]`); S.lvOpen[v] = !wasOpen; u.pop = null; SFX.play("tap"); render(); break; }
     case "pop": u.pop = u.pop === v ? null : v; SFX.play("tap"); render(); break;
     case "open": { const st = allSteps().find((x) => x.id === v); if (st) { SFX.play("next"); openStep(st); } break; }
     case "guide": u.guide = v; u.pop = null; SFX.play("tap"); render(); break;
