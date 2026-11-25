@@ -5020,7 +5020,8 @@ async function captchaToken() {
 const CAPTCHA_FAIL = "La vérification anti-robot n'a pas abouti. Vérifie ta connexion (ou désactive ton bloqueur de pubs), puis réessaie.";
 const frAuth = (m) => {
   m = String(m || "");
-  if (/captcha/i.test(m)) return "La vérification anti-robot a échoué. Réessaie.";
+  if (/no captcha token/i.test(m) && !CAP.key) return "La protection anti-robot est activée dans Supabase, mais la Site Key Cloudflare n'est pas dans config.js. Ajoute-la (turnstileSiteKey) ou désactive le captcha dans Supabase.";
+  if (/captcha/i.test(m)) return "La vérification anti-robot a échoué. Recharge la page et réessaie.";
   if (/invalid login/i.test(m)) return "E-mail ou mot de passe incorrect.";
   if (/already registered|already exists/i.test(m)) return "Un compte existe déjà avec cet e-mail : connecte-toi.";
   if (/email not confirmed/i.test(m)) return "Confirme d'abord ton adresse e-mail (regarde dans ta boîte de réception).";
