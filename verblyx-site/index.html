@@ -3349,7 +3349,7 @@ function makeSupaStore(sb, uid) {
   };
 }
 // Professeur IA : même interface que celle utilisée par l'application
-function makeAi(sb) {
+function makeAi(sb, sbUrl, sbKey) {
   async function call(body, signal) {
     if (signal && signal.aborted) throw { code: "cancelled" };
     const req = sb.functions.invoke("ai", { body });
@@ -3364,8 +3364,42 @@ function makeAi(sb) {
     if (r.data && r.data.error) throw { message: r.data.error };
     return r.data || {};
   }
+  async function streamText(messages, opts) {
+    const { data } = await sb.auth.getSession();
+    const token = data && data.session ? data.session.access_token : "";
+    if (!token) throw { code: "session_expired" };
+    const res = await fetch(sbUrl + "/functions/v1/ai", {
+      method: "POST", signal: opts.signal,
+      headers: { "Content-Type": "application/json", apikey: sbKey, Authorization: "Bearer " + token },
+      body: JSON.stringify({ kind: "text", stream: true, messages }),
+    }).catch((e) => { throw e && e.name === "AbortError" ? { code: "cancelled" } : { message: "Connexion impossible. Vérifie ta connexion." }; });
+    if (!res.ok) {
+      let msg = ""; try { msg = (await res.json()).error || ""; } catch {}
+      if (res.status === 429) throw { code: "rate_limited", message: msg };
+      if (res.status === 401) throw { code: "session_expired" };
+      throw { message: msg || "Vex n'a pas pu répondre. Réessaie dans un instant." };
+    }
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    let text = "";
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const delta = dec.decode(value, { stream: true });
+        if (!delta) continue;
+        text += delta;
+        if (opts.onText) opts.onText({ text, delta });
+      }
+    } catch (e) { if (text) throw { text, message: "Réponse interrompue." }; throw { message: "Connexion interrompue. Réessaie." }; }
+    if (!text.trim()) throw { message: "Vex n'a rien répondu. Réessaie." };
+    return { text, truncated: false };
+  }
   const ask = async (input, opts = {}) => {
     const messages = typeof input === "string" ? [{ role: "user", content: input }] : input;
+    if (opts.onText && sbUrl && window.ReadableStream) {
+      const { data } = await sb.auth.getSession();
+      if (data && data.session && data.session.access_token) return streamText(messages, opts);
+    }
     const r = await call({ kind: "text", messages }, opts.signal);
     const text = String(r.text || "");
     if (opts.onText) opts.onText({ text, delta: text });
@@ -3430,7 +3464,7 @@ async function boot() {
   }
   const sbUrl = String(cfg.supabaseUrl).trim().replace(/\/(rest|auth)\/v1.*$/, "").replace(/\/+$/, "");
   SB = window.supabase.createClient(sbUrl, String(cfg.supabaseAnonKey).trim());
-  S.sample = makeAi(SB);
+  S.sample = makeAi(SB, sbUrl, String(cfg.supabaseAnonKey).trim());
   SB.auth.onAuthStateChange((event) => { if (event === "PASSWORD_RECOVERY") setTimeout(() => { S.view = "newpass"; S.ui = {}; render(); }, 0); });
   const { data } = await SB.auth.getSession();
   await enterSession(data.session);
