@@ -728,6 +728,38 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .legal-links button { border: 0; background: none; padding: 2px 0; color: #52656D; font: 800 12.5px/1.2 "Dosis", "Barlow Semi Condensed", "Inter", sans-serif; letter-spacing: .03em; text-transform: uppercase; cursor: pointer; transition: color .15s; }
 .legal-links button:hover { color: #93A8B1; }
 .legal-links.on-land { padding: 12px 4px 0; }
+.gift-modal { z-index: 90; }
+.gift-modal .modal-bg { background: radial-gradient(600px 420px at 50% 40%, rgba(22, 119, 255, .28), rgba(3, 6, 12, .78)); }
+.gift-modal.is-vip .modal-bg { background: radial-gradient(600px 420px at 50% 40%, rgba(246, 190, 59, .32), rgba(8, 6, 2, .8)); }
+.gp-panel { max-width: 430px; align-items: center; text-align: center; gap: 10px; padding: 26px 26px 22px; overflow: visible; background: linear-gradient(180deg, #2A2D3A, #1F2129); border-color: rgba(92, 243, 218, .35); animation: gp-in .6s var(--spring) both; }
+.gift-modal.is-vip .gp-panel { border-color: rgba(246, 190, 59, .6); background: linear-gradient(180deg, #33291A, #1F1C16); box-shadow: 0 0 60px -14px rgba(246, 190, 59, .55), 0 30px 70px -24px rgba(0, 0, 0, .9); }
+@keyframes gp-in { 0% { opacity: 0; transform: translateY(30px) scale(.8); } 100% { opacity: 1; transform: none; } }
+.gp-glow { position: absolute; top: -70px; left: 50%; width: 260px; height: 260px; transform: translateX(-50%); border-radius: 50%; background: conic-gradient(from 0deg, rgba(92, 243, 218, .0), rgba(92, 243, 218, .22), rgba(255, 92, 138, .2), rgba(255, 212, 90, .22), rgba(92, 243, 218, 0)); filter: blur(6px); animation: gp-spin 8s linear infinite; pointer-events: none; }
+.gift-modal.is-vip .gp-glow { background: conic-gradient(from 0deg, rgba(246, 190, 59, 0), rgba(246, 190, 59, .38), rgba(255, 241, 184, .25), rgba(246, 190, 59, .38), rgba(246, 190, 59, 0)); }
+@keyframes gp-spin { to { transform: translateX(-50%) rotate(360deg); } }
+.gp-vex { position: relative; margin-top: -96px; }
+.gp-kicker { position: relative; display: inline-flex; padding: 4px 12px; border-radius: 999px; background: rgba(92, 243, 218, .14); color: var(--success); font: 800 12px var(--f-body); letter-spacing: .08em; text-transform: uppercase; }
+.gift-modal.is-vip .gp-kicker { background: rgba(246, 190, 59, .16); color: #FFD56B; }
+.gp-title { position: relative; font: 800 30px/1.15 var(--f-display); letter-spacing: -.02em; background: linear-gradient(95deg, #fff, #5CF3DA); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.gift-modal.is-vip .gp-title { background: linear-gradient(95deg, #FFF1B8, #F6BE3B 60%, #E7A01E); -webkit-background-clip: text; background-clip: text; }
+.gp-sub { color: var(--fg-2); font-size: 15px; max-width: 30em; }
+.gp-items { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 6px 0 8px; }
+.gp-item { min-width: 104px; padding: 12px 14px 10px; border-radius: 18px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line-2); display: flex; flex-direction: column; align-items: center; gap: 2px; animation: cel-pop .5s var(--spring) both; }
+.gp-item:nth-child(2) { animation-delay: .12s; } .gp-item:nth-child(3) { animation-delay: .24s; } .gp-item:nth-child(4) { animation-delay: .36s; }
+.gp-item b { font: 800 24px var(--f-display); }
+.gp-item span:last-child { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.gp-ic .ico { width: 26px; height: 26px; }
+.gp-xp .gp-ic { color: var(--success); } .gp-coin .gp-ic { color: var(--warn); } .gp-level .gp-ic { color: var(--primary-text); } .gp-prof .gp-ic { color: #B68CFF; }
+.gp-xp b { color: var(--success); } .gp-coin b { color: var(--warn); } .gp-heart b { color: #FF5C8A; }
+.gp-viptag { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-radius: 16px; background: rgba(246, 190, 59, .08); border: 1px solid rgba(246, 190, 59, .3); margin: 4px 0 6px; animation: cel-pop .5s .2s var(--spring) both; }
+.gp-viptag b { font-weight: 800; }
+.btn-gold { background: linear-gradient(135deg, #FFE7A0, #F6BE3B 45%, #C98A0B); color: #3A2600; box-shadow: 0 12px 30px -14px rgba(246, 190, 59, .9); font-weight: 800; }
+.btn-gold:hover:not(:disabled) { filter: brightness(1.06); }
+.confetti { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.confetti i { position: absolute; top: -20px; width: 9px; height: 14px; border-radius: 2px; opacity: 0; animation: confetti-fall var(--t) var(--d) cubic-bezier(.25, .6, .4, 1) infinite; }
+@keyframes confetti-fall { 0% { opacity: 0; transform: translate(0, -20px) rotate(0); } 8% { opacity: 1; } 100% { opacity: .9; transform: translate(var(--x), 105vh) rotate(calc(var(--r) + 540deg)); } }
+.vx-hat { animation: vx-prop-in .5s var(--spring) both; }
+@media (max-width: 520px) { .gp-title { font-size: 25px; } .gp-vex .vx { width: 140px !important; } .gp-vex { margin-top: -80px; } }
 .legal-links.in-set { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
 .legal-links.in-doc { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
 .modal-panel.doc-panel { max-width: 680px; gap: 10px; }
@@ -930,6 +962,7 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
   <linearGradient id="vx-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B8EFF"/><stop offset="1" stop-color="#0B4DB5"/></linearGradient>
   <linearGradient id="vx-v" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E3E8E"/><stop offset="1" stop-color="#155FD0"/></linearGradient>
   <linearGradient id="vx-teal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5CF3DA"/><stop offset="1" stop-color="#00B89C"/></linearGradient>
+  <linearGradient id="vx-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A6"/><stop offset=".55" stop-color="#F6BE3B"/><stop offset="1" stop-color="#D08E0C"/></linearGradient>
   <linearGradient id="lg-v" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1677FF"/><stop offset="1" stop-color="#00D6B5"/></linearGradient>
   <filter id="vx-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   <filter id="vx-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2"/></filter>
@@ -1027,6 +1060,8 @@ const PROPS = {
   laptop: `<g class="vx-prop"><path d="M60 150L72 122H140L128 150Z" fill="#0B2342" stroke="#2A5C96" stroke-width="2"/><path d="M90 130L98 144L106 130" stroke="#00D6B5" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#vx-glow)"/><path d="M48 150H136Q138 158 130 160H54Q46 158 48 150Z" fill="#163A63"/></g>`,
   book: `<g class="vx-prop"><path d="M100 134C88 128 74 127 62 130V164C74 161 88 162 100 168Z" fill="#0F3A6B"/><path d="M100 134C112 128 126 127 138 130V164C126 161 112 162 100 168Z" fill="#124A86"/><path d="M100 134V168" stroke="#081F3D" stroke-width="2"/><path d="M68 138C76 136 86 137 94 140M106 140C114 137 124 136 132 138" stroke="#5BE9FF" stroke-width="2" opacity=".6" stroke-linecap="round"/></g>`,
   trophy: `<g class="vx-prop"><path d="M156 34H186V46C186 58 178 66 171 66C164 66 156 58 156 46Z" fill="url(#vx-teal)"/><path d="M156 38H148C148 48 152 54 158 55M186 38H194C194 48 190 54 184 55" stroke="#00D6B5" stroke-width="3.5" fill="none"/><rect x="167" y="66" width="8" height="10" fill="#00B89C"/><rect x="160" y="76" width="22" height="7" rx="2.5" fill="#0B8F7A"/><path d="M164 42L170 54L176 42" stroke="#EAFBFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>`,
+  partyHat: `<g class="vx-prop vx-hat"><path d="M48 31 L96 14 L62 -30 Z" fill="#FF5C8A" stroke="#C8325E" stroke-width="2.5" stroke-linejoin="round"/><path d="M54 10 L83 0 M58 -9 L74 -14" stroke="#FFD45A" stroke-width="5" stroke-linecap="round"/><circle cx="66" cy="18" r="2.6" fill="#5CF3DA"/><circle cx="62" cy="-2" r="2.2" fill="#fff"/><circle cx="80" cy="12" r="2.2" fill="#fff"/><path d="M45 31 C58 28 82 18 99 13" stroke="#5CF3DA" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="62" cy="-31" r="7" fill="#FFD45A" stroke="#E0A21B" stroke-width="2"/></g><g class="vx-prop vx-twinkle"><path d="M168 34l2.6 6.4 6.4 2.6-6.4 2.6-2.6 6.4-2.6-6.4-6.4-2.6 6.4-2.6z" fill="#FFD45A"/><path d="M24 70l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#5CF3DA"/><circle cx="182" cy="76" r="3" fill="#FF5C8A"/><circle cx="16" cy="40" r="2.6" fill="#FFD45A"/></g>`,
+  crown: `<g class="vx-prop vx-hat"><path d="M66 22 L70 -10 L86 6 L100 -18 L114 6 L130 -10 L134 22 Z" fill="url(#vx-gold)" stroke="#B37A08" stroke-width="2.5" stroke-linejoin="round"/><rect x="64" y="16" width="72" height="10" rx="4" fill="#F2B230" stroke="#B37A08" stroke-width="2.5"/><circle cx="100" cy="21" r="3.6" fill="#FF5C8A"/><circle cx="82" cy="21" r="2.8" fill="#5CF3DA"/><circle cx="118" cy="21" r="2.8" fill="#5CF3DA"/><circle cx="70" cy="-11" r="3" fill="#FFF1B8"/><circle cx="100" cy="-19" r="3.4" fill="#FFF1B8"/><circle cx="130" cy="-11" r="3" fill="#FFF1B8"/></g><g class="vx-prop vx-twinkle" fill="#FFD45A"><path d="M30 26l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><path d="M172 18l2.4 6 6 2.4-6 2.4-2.4 6-2.4-6-6-2.4 6-2.4z"/><circle cx="182" cy="58" r="3"/></g>`,
 };
 // Humeurs : yeux, bouche, angle des bras (°), accessoire
 const MOODS = {
@@ -1047,6 +1082,8 @@ const MOODS = {
   love:     { eyes: "love",   mouth: "open",  la: 0,    ra: 0 },
   surprise: { eyes: "wide",   mouth: "o",     la: 34,   ra: -34 },
   encourage:{ eyes: "happy",  mouth: "smile", la: 0,    ra: "up", prop: "spark" },
+  party:    { eyes: "happy",  mouth: "open",  la: "up", ra: "up", prop: "partyHat" },
+  vip:      { eyes: "wink",   mouth: "open",  la: "up", ra: "up", prop: "crown" },
 };
 // Anciens noms de poses → humeurs (compatibilité)
 const POSES = {
@@ -1610,6 +1647,8 @@ function render() {
   const keepEls = [".set-main", ".set-panel"].map((s) => { const e = document.querySelector(s); return e ? e.scrollTop : 0; });
   const keepFaq = [...document.querySelectorAll(".faq details")].map((d) => d.open);
   if (S.doc) { html += docModal(); S.docAnim = false; }
+  const showGift = S.giftPop && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
+  if (showGift) html += giftModal();
   $app.innerHTML = html;
   [".set-main", ".set-panel"].forEach((s, k) => { const e = document.querySelector(s); if (e && keepEls[k]) e.scrollTop = keepEls[k]; });
   document.querySelectorAll(".faq details").forEach((d, k) => { if (keepFaq[k]) d.open = true; });
@@ -1620,6 +1659,7 @@ function render() {
     const el = document.querySelector(f.sel || ".vx.lead");
     if (el) setTimeout(() => vxReact(el, f.react), fresh ? 380 : 0);
   }
+  if (showGift && S.giftPop.fresh) { S.giftPop.fresh = false; setTimeout(giftFx, 80); }
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
   if (v === "coach") { const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" }); }
@@ -2969,6 +3009,44 @@ function giftText(gs) {
   if (gs.some((g) => g.kind === "profile")) parts.push("profil mis à jour");
   return parts.length ? `Cadeau de l'équipe Verblyx : ${parts.join(", ")} !` : "";
 }
+function giftSummary(gs) {
+  const sum = { xp: 0, coins: 0, hearts: 0 }; let lv = null;
+  gs.forEach((g) => { if (g.kind === "level") lv = g.level; else if (g.kind in sum) sum[g.kind] += Number(g.n) || 0; });
+  const items = [];
+  if (sum.xp) items.push(["i-bolt", `${sum.xp > 0 ? "+" : ""}${sum.xp}`, "XP", "xp"]);
+  if (sum.coins) items.push(["i-coin", `${sum.coins > 0 ? "+" : ""}${sum.coins}`, "pièces", "coin"]);
+  if (sum.hearts >= HEART_MAX) items.push(["heart", "Toutes", "tes vies", "heart"]);
+  else if (sum.hearts) items.push(["heart", `${sum.hearts > 0 ? "+" : ""}${sum.hearts}`, sum.hearts > 1 ? "vies" : "vie", "heart"]);
+  if (lv) items.push(["i-up", lv, "nouveau niveau", "level"]);
+  if (gs.some((g) => g.kind === "profile")) items.push(["i-user", "Profil", "mis à jour", "prof"]);
+  return { items, vip: gs.some((g) => g.kind === "vip" && g.on) };
+}
+const CONFETTI = ["#FF5C8A", "#FFD45A", "#5CF3DA", "#1677FF", "#B68CFF", "#FFFFFF"];
+function giftModal() {
+  const g = S.giftPop; if (!g) return "";
+  const vip = g.vip, gold = ["#FFE9A6", "#F6BE3B", "#D08E0C", "#FFF6D6", "#FFD45A"];
+  const conf = Array.from({ length: 34 }, (_, k) => { const c = (vip ? gold : CONFETTI)[k % (vip ? 5 : 6)]; return `<i style="left:${(k * 37) % 100}%;background:${c};--d:${(k % 9) * .28}s;--t:${2.6 + (k % 5) * .45}s;--r:${(k * 53) % 360}deg;--x:${((k % 7) - 3) * 22}px;${k % 3 === 0 ? "border-radius:50%;width:8px;height:8px;" : ""}"></i>`; }).join("");
+  const chips = g.items.map(([ic, big, small, cls]) => `<div class="gp-item gp-${cls}"><span class="gp-ic">${ic === "heart" ? heartImg(true, 30) : icon(ic)}</span><b class="num">${esc(big)}</b><span>${esc(small)}</span></div>`).join("");
+  return `<div class="modal gift-modal ${vip ? "is-vip" : ""}" role="dialog" aria-modal="true" aria-labelledby="gp-title">
+    <div class="modal-bg" data-act="gift-close"></div>
+    <div class="confetti" aria-hidden="true">${conf}</div>
+    <div class="modal-panel gp-panel">
+      <div class="gp-glow" aria-hidden="true"></div>
+      <div class="gp-vex">${vx(vip ? "vip" : "party", 170, "gp-lead")}</div>
+      <span class="gp-kicker">${vip ? "Statut VIP débloqué" : "Surprise !"}</span>
+      <h2 class="gp-title" id="gp-title">${vip ? "Félicitations, tu es VIP !" : "Félicitations !"}</h2>
+      <p class="gp-sub">${vip ? "L'équipe Vex t'offre le statut <b>VIP</b> : un badge doré à côté de ton nom et un cadre en or autour de ton personnage, partout sur Verblyx." : "L'équipe Vex t'a envoyé un cadeau 🎁"}</p>
+      ${vip ? `<div class="gp-viptag">${avatarHTML(S.profile, 58, true)}<span><b>${esc(S.profile.first_name || "Toi")}</b> ${vipTag()}</span></div>` : ""}
+      ${chips ? `<div class="gp-items">${chips}</div>` : ""}
+      <button class="btn ${vip ? "btn-gold" : "btn-primary"} btn-lg btn-block" data-act="gift-close">${vip ? "Merci l'équipe Vex ! 👑" : "Merci Vex ! 🎉"}</button>
+    </div>
+  </div>`;
+}
+function giftFx() {
+  const lead = document.querySelector(".gp-lead");
+  SFX.play("fanfare");
+  [150, 750, 1400].forEach((t, k) => setTimeout(() => { if (lead && lead.isConnected) { vxBurst(lead); vxJump(lead, k === 1 ? 18 : 12); } }, t));
+}
 let giftBusy = false;
 async function claimGifts() {
   if (giftBusy || !S.profile || !S.store || S.store.kind !== "supabase" || !S.profile.placement_done) return;
@@ -2979,7 +3057,13 @@ async function claimGifts() {
       gs.forEach((g) => applyGift(S.profile, g));
       STEPS_CACHE = null;
       await saveProfile();
-      const t = giftText(gs); if (t) { S.giftNote = t; SFX.play("fanfare"); }
+      const sm = giftSummary(gs);
+      if (sm.vip) S.isVip = true;
+      if (sm.items.length || sm.vip) {
+        // si plusieurs cadeaux arrivent, on les regroupe dans la même fenêtre
+        if (S.giftPop) { S.giftPop.items = giftSummary([...(S.giftPop.raw || []), ...gs]).items; S.giftPop.vip = S.giftPop.vip || sm.vip; S.giftPop.raw = [...(S.giftPop.raw || []), ...gs]; }
+        else S.giftPop = { ...sm, raw: gs, fresh: true };
+      }
       if (S.view !== "session") render();
     }
   } catch {}
@@ -3581,7 +3665,7 @@ $app.addEventListener("click", (ev) => {
     }
     case "settings-open": S.settingsOpen = true; S.setAnim = true; S.setTab = S.setTab || "profil"; u.userOk = ""; u.userErr = ""; u.helpOk = ""; u.helpErr = ""; u.avErr = ""; u.saved = ""; u.setErr = ""; u.passOk = ""; u.passErr = ""; u.confirmReset = false; SFX.play("tap"); if (!S.accountNo && S.store.accountNo) S.store.accountNo().then((n) => { if (n) { S.accountNo = n; if (S.settingsOpen) render(); } }).catch(() => {}); render(); setTimeout(() => { const i = document.getElementById("setName"); if (i) i.focus(); }, 50); break;
     case "settings-close": S.settingsOpen = false; u.confirmReset = false; render(); break;
-    case "gift-close": S.giftNote = ""; render(); break;
+    case "gift-close": S.giftNote = ""; if (S.giftPop) { S.giftPop = null; SFX.play("select"); } render(); break;
     case "set-tab": S.setTab = v; u.confirmReset = false; SFX.play("tap"); render(); { const m = document.querySelector(".set-main"); if (m) m.scrollTop = 0; } break;
     case "pref": { const p = S.profile; p.prefs = { ...prefs(), [v]: !prefs()[v] }; SFX.play(p.prefs[v] ? "select" : "unselect"); if (v === "anim") applyMotion(); render(); saveProfile(); break; }
     case "av-pick": S.profile.avatar_id = Number(v); delete S.profile.avatar; delete S.profile.avatar_color; SFX.play("select"); render(); saveProfile(); break;
@@ -3777,6 +3861,7 @@ document.addEventListener("keydown", (ev) => {
     return;
   }
   if (ev.key === "Escape" && S.doc) { S.doc = null; render(); return; }
+  if (ev.key === "Escape" && S.giftPop) { S.giftPop = null; render(); return; }
   if (ev.key === "Escape" && S.settingsOpen) { S.settingsOpen = false; S.ui.confirmReset = false; render(); return; }
   if (ev.key === "Escape" && S.ui.guide) { S.ui.guide = null; render(); return; }
   if (ev.target.closest && ev.target.closest("input,textarea")) return;
