@@ -46,13 +46,13 @@
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: hidden; overscroll-behavior: none; touch-action: manipulation; }
-body { overflow-x: hidden; overscroll-behavior: none; }
-@supports (overflow: clip) { html, body { overflow-x: clip; } }
+body { overscroll-behavior: none; }
+@supports (overflow: clip) { html { overflow-x: clip; } }
 * { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 1023px) { input, textarea, select, .input, .composer input { font-size: 16px !important; } }
 body {
   background: radial-gradient(1100px 520px at 50% -240px, rgba(22, 119, 255, .13), transparent 70%) no-repeat, var(--bg);
-  color: var(--fg); font: 400 15px/1.6 var(--f-body); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  color: var(--fg); font: 400 15px/1.6 var(--f-body); -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3, h4 { font-family: var(--f-display); margin: 0; letter-spacing: -.015em; text-wrap: balance; }
 p { margin: 0; }
