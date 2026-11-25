@@ -1291,8 +1291,8 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
    ========================================================= */
 .main-in:has(> .coach2) { max-width: 1140px; }
 .pic { flex: none; display: block; }
-.coach2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: start; }
-.c2-main { width: 100%; max-width: 780px; margin-inline: auto; }
+.coach2 { display: block; }
+.c2-main { width: 100%; max-width: 780px; margin-left: auto !important; margin-right: auto !important; }
 /* en-tête : Vex et l'état de la séance */
 .c2-top { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; padding: 4px 0 6px; }
 .coach-top { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1 1 100%; }
@@ -1502,26 +1502,13 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
 .hist-open { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 9px 10px; border: 0; background: none; color: var(--fg); text-align: left; cursor: pointer; }
 .hist-open b { font: 600 14px var(--f-body); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .c2-scrim { display: none; }
-/* grand écran : le panneau s'affiche à côté de la discussion */
-@media (min-width: 1280px) {
-  .coach2.has-panel { grid-template-columns: minmax(0, 1fr) 340px; }
-  .coach2.has-panel .c2-main { max-width: none; }
-  .c2-side { position: sticky; top: 24px; max-height: calc(100dvh - 48px); }
-}
-/* très grand écran : la discussion reste au centre, le panneau s'ouvre à droite sans rien déplacer */
-@media (min-width: 1700px) {
-  .coach2.has-panel { grid-template-columns: minmax(0, 1fr); }
-  .coach2.has-panel .c2-main { max-width: 780px; }
-  .c2-side { position: fixed; z-index: 30; top: 24px; right: 24px; bottom: 24px; width: 360px; max-height: none; animation: sideIn .28s cubic-bezier(.2, .8, .3, 1); }
-  @keyframes sideIn { from { transform: translateX(24px); opacity: 0; } }
-}
-/* écran moyen : le panneau glisse par-dessus, à droite */
-@media (max-width: 1279px) {
-  .c2-side { position: fixed; z-index: 61; top: 16px; right: 16px; bottom: 16px; width: min(380px, calc(100vw - 32px)); animation: sideIn .28s cubic-bezier(.2, .8, .3, 1); }
-  .c2-scrim { display: block; position: fixed; inset: 0; z-index: 60; background: rgba(2, 10, 20, .55); animation: fadeIn .2s ease; }
-  @keyframes sideIn { from { transform: translateX(24px); opacity: 0; } }
-  @keyframes fadeIn { from { opacity: 0; } }
-}
+/* le panneau passe toujours par-dessus, à droite : la discussion ne bouge jamais */
+.c2-side { position: fixed; z-index: 61; top: 16px; right: 16px; bottom: 16px; width: min(380px, calc(100vw - 32px)); max-height: none; animation: sideIn .28s cubic-bezier(.2, .8, .3, 1); }
+.c2-scrim { display: block; position: fixed; inset: 0; z-index: 60; background: rgba(2, 10, 20, .55); animation: fadeIn .2s ease; }
+@keyframes sideIn { from { transform: translateX(24px); opacity: 0; } }
+@keyframes fadeIn { from { opacity: 0; } }
+/* très grand écran : il reste assez de place à droite, inutile d'assombrir la page */
+@media (min-width: 1700px) { .c2-scrim { display: none; } .c2-side { z-index: 30; top: 24px; right: 24px; bottom: 24px; width: 360px; } }
 /* téléphone : le panneau monte du bas de l'écran */
 @media (max-width: 719px) {
   .c2-side { top: auto; left: 0; right: 0; bottom: 0; width: 100%; max-height: 84dvh; border-radius: 22px 22px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); animation: sheetIn .3s cubic-bezier(.2, .8, .3, 1); }
@@ -1671,6 +1658,41 @@ body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-
 .qr-btn:hover:not(:disabled) { background: rgba(22, 119, 255, .18); border-color: #1677FF; }
 .qr-btn:active:not(:disabled) { transform: scale(.97); }
 .qr-btn:disabled { opacity: .5; cursor: default; }
+
+/* ---------- Prof IA sur téléphone : en-tête compact ---------- */
+@media (max-width: 719px) {
+  .c2-top { gap: 12px; padding-top: 0; }
+  .coach-top { gap: 10px; flex-wrap: nowrap; }
+  .ct-vex { width: 46px; height: 46px; border-radius: 15px; }
+  .ct-vex .vx { width: 40px !important; }
+  .ct-id { flex: 1 1 auto; min-width: 0; }
+  .ct-id b { font-size: 17px; gap: 6px; }
+  .ct-lv { height: 20px; font-size: 11px; padding: 0 6px; }
+  .ct-status { font-size: 12.5px; }
+  .ct-meta { flex: none; gap: 5px; margin-left: 0; }
+  .ct-chip { height: 28px; padding: 0 8px; gap: 5px; font-size: 12px; border-radius: 9px; }
+  .ct-chip .pic { width: 13px; height: 13px; }
+  .tok-bar { width: 22px; }
+  .ct-chip.is-toast { position: absolute; left: 50%; transform: translateX(-50%); top: calc(100% + 6px); z-index: 5; white-space: nowrap; }
+  .coach-top { position: relative; }
+  .c2-btns { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 6px; width: 100%; overflow: visible; }
+  .c2-btn { flex-direction: column; justify-content: center; gap: 3px; height: 54px; padding: 4px 2px; border-radius: 14px; font-size: 11.5px; width: auto; }
+  .c2-btn span { display: block; white-space: nowrap; }
+  .c2-btn .pic { width: 19px; height: 19px; }
+  .cm .bub-ai { border-radius: 6px 18px 18px 18px; }
+  .qr { gap: 7px; }
+  .qr-btn { min-height: 40px; font-size: 14px; padding: 8px 14px; }
+}
+
+/* petits téléphones : la barre du haut tient sur la largeur */
+@media (max-width: 400px) {
+  .mtop { gap: 6px; padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); }
+  .mtop > .row { gap: 4px !important; }
+  .mtop .pill-stat { height: 32px; padding: 0 9px; gap: 5px; font-size: 13px; }
+  .mtop .pill-stat .ico, .mtop .pill-stat img { width: 16px; height: 16px; }
+}
+@media (max-width: 370px) { .mtop .brand > span, .mtop .brand > b { display: none; } }
+@media (max-width: 379px) { .ct-meta .ct-chip:not(.tok-chip):not(.is-toast) { display: none; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -5490,7 +5512,7 @@ function coachTopHTML() {
     <div class="ct-meta">
       ${CO.toast ? `<span class="ct-chip is-toast">${esc(CO.toast.text)}</span>` : ""}
       <span class="ct-chip" title="XP gagnée avec Vex aujourd'hui (maximum ${COACH_XP_CAP})">${pic("bolt", 15)}${xpToday} XP</span>
-      ${left != null ? `<span class="ct-chip tok-chip ${left < TOK_PER_MSG * 3 ? "is-low" : ""}" title="Jetons IA restants aujourd'hui : ${tokNum(left)} sur ${tokNum(CO.ai.limit)} (environ ${Math.floor(left / TOK_PER_MSG)} échanges)">${pic("chat", 15)}<span>${fmtTok(left)}</span><i class="tok-bar"><b style="width:${Math.round((left / Math.max(1, CO.ai.limit)) * 100)}%"></b></i></span>` : ""}
+      ${left != null ? `<span class="ct-chip tok-chip ${left < TOK_PER_MSG * 3 ? "is-low" : ""}" title="Jetons IA restants aujourd'hui : ${tokNum(left)} sur ${tokNum(CO.ai.limit)}">${pic("chat", 15)}<span>${fmtTok(left)}</span><i class="tok-bar"><b style="width:${Math.round((left / Math.max(1, CO.ai.limit)) * 100)}%"></b></i></span>` : ""}
     </div>`;
 }
 function paintCoachTop() {
@@ -5645,7 +5667,7 @@ function viewCoach() {
           ${S.dict ? `<button type="button" class="cc-btn ${CO.listening ? "is-rec" : ""}" data-act="mic" aria-label="${CO.listening ? "Arrêter la dictée" : "Dicter un message"}" ${blocked ? "disabled" : ""}>${pic(CO.listening ? "stop" : "mic", 20)}</button>` : ""}
           <button class="cc-send" aria-label="Envoyer" ${busy || !S.sample || blocked ? "disabled" : ""}>${pic("send", 20)}</button>
         </form>
-        <p class="c2-hint small">${aiLeft() != null ? `${tokNum(aiLeft())} jetons IA restants aujourd'hui (environ ${Math.floor(aiLeft() / TOK_PER_MSG)} échange${Math.floor(aiLeft() / TOK_PER_MSG) > 1 ? "s" : ""}) · ` : ""}Entrée pour envoyer, Maj + Entrée pour aller à la ligne</p>
+        <p class="c2-hint small">${aiLeft() != null ? `${tokNum(aiLeft())} jetons IA restants aujourd'hui · ` : ""}Entrée pour envoyer, Maj + Entrée pour aller à la ligne</p>
       </div>
     </div>
     ${panel ? `<aside class="c2-side" aria-label="${(PANELS.find((x) => x[0] === panel) || [])[1] || ""}">
