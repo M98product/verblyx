@@ -724,6 +724,16 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .avatar.av-char svg { width: 100%; height: 100%; display: block; }
 .av-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 10px; margin-top: 14px; }
 .ob-me { display: flex; align-items: center; gap: 14px; }
+.legal-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; padding: 10px 4px 4px; }
+.legal-links button { border: 0; background: none; padding: 4px 2px; color: var(--faint); font: 700 12px var(--f-display); letter-spacing: .07em; text-transform: uppercase; cursor: pointer; transition: color .15s; }
+.legal-links button:hover { color: var(--fg); }
+.legal-links.on-land { padding: 12px 4px 0; }
+.legal-links.in-set { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); }
+.legal-links.in-doc { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
+.modal-panel.doc-panel { max-width: 680px; gap: 10px; }
+.doc-body h3 { font: 700 15.5px var(--f-display); margin: 16px 0 6px; color: var(--fg); }
+.doc-body p { color: var(--fg-2); font-size: 14.5px; line-height: 1.65; }
+.signup-terms .link { font-size: inherit; }
 .btn-google { position: relative; justify-content: center; gap: 0; padding: 0 56px; background: #131417; color: #ECEDF0; border: 1px solid #4A4E5A; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 10px 24px -16px rgba(0, 0, 0, .9); font: 600 15.5px var(--f-body); letter-spacing: .005em; overflow: hidden; transition: background-color .2s, border-color .2s, box-shadow .2s, transform .1s; }
 .btn-google::before { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(66, 133, 244, .16) 45%, rgba(52, 168, 83, .12) 55%, transparent 70%); transform: translateX(-100%); transition: transform .7s var(--ease); pointer-events: none; }
 .btn-google:hover:not(:disabled) { background: #1B1C21; border-color: #6B7080; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 0 0 4px rgba(66, 133, 244, .12), 0 14px 30px -16px rgba(0, 0, 0, .9); }
@@ -1599,6 +1609,7 @@ function render() {
   render.lastKey = key;
   const keepEls = [".set-main", ".set-panel"].map((s) => { const e = document.querySelector(s); return e ? e.scrollTop : 0; });
   const keepFaq = [...document.querySelectorAll(".faq details")].map((d) => d.open);
+  if (S.doc) { html += docModal(); S.docAnim = false; }
   $app.innerHTML = html;
   [".set-main", ".set-panel"].forEach((s, k) => { const e = document.querySelector(s); if (e && keepEls[k]) e.scrollTop = keepEls[k]; });
   document.querySelectorAll(".faq details").forEach((d, k) => { if (keepFaq[k]) d.open = true; });
@@ -1663,6 +1674,7 @@ function viewHome() {
       </div>
     </main>
     <footer class="land-strip">
+      <div class="wrap">${legalLinks("on-land")}</div>
       <div class="wrap method-band">${[["Comprendre", "La règle en quelques phrases"], ["Analyser", "La phrase décortiquée"], ["S'entraîner", "Dix formats d'exercices"], ["Maîtriser", "Tu valides vraiment"]].map(([t, d], k) => `<div class="mb-it"><span class="mb-n num">0${k + 1}</span><div><b>${t}</b><span>${d}</span></div></div>`).join("")}</div>
     </footer>
   </div>`;
@@ -1808,7 +1820,8 @@ function viewOnboarding() {
         <input id="obEmail" class="input big-input" type="email" autocomplete="email" placeholder="Ton adresse e-mail" value="${esc(u.email || "")}" aria-label="Ton adresse e-mail">
         <input id="obPass" class="input big-input" type="password" autocomplete="new-password" placeholder="Un mot de passe (8 caractères minimum)" aria-label="Ton mot de passe">
         ${orLine()}${googleBtn("S'inscrire avec Google")}
-        <p class="small muted">Déjà inscrit ? <button type="button" class="link" data-go="login">Connecte-toi</button>. En créant ton compte, tu acceptes que tes réponses soient analysées par l'IA pour personnaliser tes leçons.</p>
+        <p class="small muted signup-terms">En m'inscrivant, j'accepte les <button type="button" class="link" data-act="doc" data-v="terms">Conditions d'utilisation</button> et la <button type="button" class="link" data-act="doc" data-v="privacy">Politique de confidentialité</button> de Verblyx.</p>
+        <p class="small muted">Déjà inscrit ? <button type="button" class="link" data-go="login">Connecte-toi</button></p>
         ${notice(u.error)}
         <button type="submit" hidden></button>
       </form>`;
@@ -2465,7 +2478,7 @@ function viewShell(inner) {
     </aside>
     <header class="mtop">${logo()}<span class="row" style="gap:6px;flex-wrap:nowrap">${walletChips()}</span></header>
     <main class="main"><div class="main-in">${S.saveError ? notice(S.saveError) : ""}${S.giftNote ? `<div class="gift-note" role="status"><span>🎁 ${esc(S.giftNote)}</span><button class="icon-btn" data-act="gift-close" aria-label="Fermer">${icon("i-close")}</button></div>` : ""}${inner}</div></main>
-    ${rail ? `<aside class="rail" aria-label="Ta progression"><div class="row" style="gap:8px">${walletChips()}</div>${goalCard()}${streakCard()}${badgesCard(true)}</aside>` : ""}
+    ${rail ? `<aside class="rail" aria-label="Ta progression"><div class="row" style="gap:8px">${walletChips()}</div>${goalCard()}${streakCard()}${badgesCard(true)}${legalLinks()}</aside>` : ""}
     ${S.settingsOpen ? settingsModal() : ""}
     <nav class="tabbar" aria-label="Navigation">${NAV.map(([v, t, ic]) => `<button class="tab ${cur === v ? "is-active" : ""}" data-go="${v}" ${cur === v ? 'aria-current="page"' : ""}>${icon(ic)}${t}</button>`).join("")}</nav>
   </div>`;
@@ -2488,6 +2501,53 @@ function goalCard() {
     </div>
   </section>`;
 }
+/* ---------- À propos, Conditions, Confidentialité ---------- */
+const LEGAL_UPDATED = "25 novembre 2026";
+const LEGAL_CONTACT = "depuis l'application : Paramètres → Aide → « Écrire à l'équipe »";
+const DOCS = {
+  about: { title: "À propos de Verblyx", body: [
+    ["", "Verblyx est une application pour apprendre l'anglais du niveau A1 au niveau C2, pensée pour les francophones."],
+    ["Notre méthode", "Chaque leçon suit 4 étapes : Comprendre la règle, Analyser une phrase modèle, S'entraîner avec des exercices variés, puis Maîtriser en validant ce que tu as appris. Des points de contrôle valident chaque chapitre et une certification valide chaque niveau."],
+    ["Vex, ton prof", "Vex est la mascotte et le professeur de Verblyx. Le prof IA répond à tes questions, corrige tes phrases et prépare des entraînements sur les notions où tu fais encore des erreurs."],
+    ["Pour qui ?", "Pour tous ceux qui veulent progresser à leur rythme : voyage, travail, études, examens ou simple envie de comprendre les séries sans sous-titres."],
+    ["Nous contacter", "Une question, un bug ou une idée ? Écris-nous " + LEGAL_CONTACT + "."],
+  ] },
+  terms: { title: "Conditions d'utilisation", body: [
+    ["", "Dernière mise à jour : " + LEGAL_UPDATED + ". En créant un compte ou en utilisant Verblyx, tu acceptes les présentes conditions."],
+    ["1. Le service", "Verblyx propose des leçons d'anglais, des exercices, un test de niveau, un professeur basé sur l'intelligence artificielle et des fonctions de jeu (XP, pièces, vies, Pulse, classements). Le service peut évoluer : des fonctions peuvent être ajoutées, modifiées ou retirées."],
+    ["2. Ton compte", "Tu dois fournir une adresse e-mail valide et garder ton mot de passe secret. Tu es responsable de ce qui est fait avec ton compte. Si tu as moins de 15 ans, tu dois avoir l'accord d'un parent ou d'un tuteur pour t'inscrire."],
+    ["3. Bonne conduite", "Ton prénom, ton pseudo et ton personnage peuvent apparaître dans les classements. Ils doivent rester respectueux : pas d'insultes, de contenus choquants, ni d'usurpation d'identité. Il est interdit de tricher (modifier ses points, contourner les limites) ou de perturber le service. En cas d'abus, nous pouvons modifier ton pseudo, suspendre ou supprimer ton compte."],
+    ["4. L'intelligence artificielle", "Les explications et corrections du prof IA sont générées automatiquement. Elles sont utiles mais peuvent parfois contenir des erreurs : garde un esprit critique. Le nombre d'actions IA par jour peut être limité."],
+    ["5. Monnaie virtuelle et classements", "Les XP, pièces, vies et boucliers n'ont aucune valeur réelle : ils ne peuvent être ni échangés, ni remboursés, ni convertis en argent. Les classements sont donnés à titre ludique ; pour les rendre plus vivants, ils peuvent inclure des profils d'animation."],
+    ["6. Contenus", "Les leçons, textes, illustrations, la mascotte Vex et le logo Verblyx appartiennent à Verblyx. Tu peux les utiliser pour apprendre, mais pas les copier ou les revendre."],
+    ["7. Disponibilité", "Nous faisons de notre mieux pour que Verblyx fonctionne bien, mais nous ne pouvons pas garantir un service sans interruption ni erreur. Verblyx ne remplace pas une certification officielle (TOEIC, IELTS, Cambridge…)."],
+    ["8. Fin d'utilisation", "Tu peux arrêter d'utiliser Verblyx à tout moment et demander la suppression de ton compte " + LEGAL_CONTACT + "."],
+    ["9. Modifications", "Ces conditions peuvent être mises à jour. En cas de changement important, nous te prévenons dans l'application. Elles sont soumises au droit français."],
+  ] },
+  privacy: { title: "Politique de confidentialité", body: [
+    ["", "Dernière mise à jour : " + LEGAL_UPDATED + ". Nous respectons ta vie privée et le Règlement général sur la protection des données (RGPD)."],
+    ["Ce que nous collectons", "• Ton compte : adresse e-mail, mot de passe (chiffré, nous ne le voyons jamais), ou ton nom et ton e-mail si tu te connectes avec Google.\n• Ton profil : prénom, pseudo, personnage, niveau, objectifs, temps par jour et difficultés choisies.\n• Ta progression : leçons, scores, erreurs, vocabulaire, XP, pièces, vies, Pulse.\n• Tes échanges avec le prof IA et les messages que tu nous envoies depuis l'Aide."],
+    ["Pourquoi", "Uniquement pour faire fonctionner Verblyx : sauvegarder ta progression, personnaliser tes leçons, afficher les classements, répondre à tes messages et protéger le service contre les abus. Nous ne vendons jamais tes données et il n'y a pas de publicité."],
+    ["Qui y a accès", "Nos prestataires techniques, uniquement pour le service : Supabase (comptes et base de données, hébergés en Europe), Vercel (hébergement du site) et Google Gemini (génération des leçons et réponses du prof IA). Les questions envoyées au prof IA sont transmises à Gemini : n'y écris pas d'informations personnelles sensibles."],
+    ["Ce que voient les autres élèves", "Dans les classements : ton pseudo (ou ton prénom), ton personnage, ton niveau et ton score. Jamais ton e-mail ni le reste de ton profil."],
+    ["Stockage dans ton navigateur", "Verblyx enregistre quelques informations sur ton appareil (session de connexion, réglage du son, conversation en cours). Ce sont des éléments nécessaires au fonctionnement, sans traceur publicitaire."],
+    ["Durée de conservation", "Tes données sont conservées tant que ton compte existe. Si tu demandes sa suppression, elles sont effacées."],
+    ["Tes droits", "Tu peux accéder à tes données, les corriger, les supprimer, t'opposer à leur utilisation ou en demander une copie. Pour cela, écris-nous " + LEGAL_CONTACT + ". Tu peux aussi saisir la CNIL (cnil.fr) si tu estimes que tes droits ne sont pas respectés."],
+  ] },
+};
+const legalLinks = (cls = "") => `<nav class="legal-links ${cls}" aria-label="Informations">${[["about", "À propos"], ["terms", "Conditions d'utilisation"], ["privacy", "Confidentialité"]].map(([k, t]) => `<button type="button" data-act="doc" data-v="${k}">${t}</button>`).join("")}</nav>`;
+function docModal() {
+  const d = DOCS[S.doc]; if (!d) return "";
+  return `<div class="modal ${S.docAnim ? "opening" : ""}" role="dialog" aria-modal="true" aria-labelledby="doc-title">
+    <div class="modal-bg" data-act="doc-close"></div>
+    <div class="modal-panel doc-panel">
+      <div class="row between" style="flex-wrap:nowrap"><h2 class="h2" id="doc-title">${esc(d.title)}</h2><button class="icon-btn" data-act="doc-close" aria-label="Fermer">${icon("i-close")}</button></div>
+      <div class="doc-body">${d.body.map(([t, p]) => `${t ? `<h3>${esc(t)}</h3>` : ""}<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("")}</div>
+      ${legalLinks("in-doc")}
+    </div>
+  </div>`;
+}
+
 function badgesCard(short) {
   const got = unlockedBadges();
   const list = short ? BADGES.slice(0, 8) : BADGES;
@@ -2862,7 +2922,8 @@ function settingsModal() {
         <button class="btn btn-primary btn-sm" style="align-self:flex-start" ${u.helpBusy ? "disabled" : ""}>${u.helpBusy ? '<span class="spinner"></span>' : ""}Envoyer</button>
       </form>${setMsg(u.helpOk, u.helpErr)}
     </section>` : ""}
-    <p class="small" style="color:var(--faint);margin-top:18px">Verblyx · version 1.2</p>`;
+    ${legalLinks("in-set")}
+    <p class="small" style="color:var(--faint);margin-top:6px;text-align:center">Verblyx · version 1.3</p>`;
   const tabs = SET_TABS.map(([k, t, ic]) => `<button class="set-tab ${tab === k ? "is-on" : ""}" data-act="set-tab" data-v="${k}">${icon(ic)}<span>${t}</span></button>`).join("")
     + (S.isAdmin ? `<button class="set-tab" data-go="admin">${icon("i-gear")}<span>Espace admin</span></button>` : "");
   const opening = S.setAnim; S.setAnim = false;
@@ -3498,6 +3559,8 @@ $app.addEventListener("click", (ev) => {
     case "forgot-off": u.forgot = false; u.error = ""; u.info = ""; render(); break;
     case "logout": doLogout(); break;
     case "google": googleSignIn(); break;
+    case "doc": S.doc = v; S.docAnim = true; SFX.play("tap"); render(); { const b = document.querySelector(".doc-panel"); if (b) b.scrollTop = 0; } break;
+    case "doc-close": S.doc = null; render(); break;
     case "sound": SFX.toggle(); render(); break;
     case "strip": { const st = document.getElementById("strip"); if (st) st.scrollBy({ left: Number(v) * 260, behavior: "smooth" }); break; }
     case "ob-level": obDraft().self_level = v; SFX.play("select"); render(); vxReact(lead(), v === "unknown" ? "nod" : "cheer"); break;
@@ -3713,6 +3776,7 @@ document.addEventListener("keydown", (ev) => {
     if (n >= 1 && n <= opts.length) opts[n - 1].click();
     return;
   }
+  if (ev.key === "Escape" && S.doc) { S.doc = null; render(); return; }
   if (ev.key === "Escape" && S.settingsOpen) { S.settingsOpen = false; S.ui.confirmReset = false; render(); return; }
   if (ev.key === "Escape" && S.ui.guide) { S.ui.guide = null; render(); return; }
   if (ev.target.closest && ev.target.closest("input,textarea")) return;
@@ -4078,3 +4142,4 @@ boot().catch((e) => {
 
 </body>
 </html>
+
