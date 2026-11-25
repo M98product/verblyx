@@ -117,9 +117,17 @@ img, svg { max-width: 100%; }
 .progress { height: 10px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
 .progress > span { display: block; height: 100%; border-radius: inherit; background: var(--success); transition: width .8s var(--ease); }
 .progress.thin { height: 6px; }
-.notice { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; font-size: 14px; background: var(--surface-2); color: var(--fg-2); border: 1px solid var(--line); }
-.notice-error { background: var(--danger-soft); border-color: rgba(255, 107, 129, .35); color: #FFC3CD; }
-.notice-warn { background: rgba(255, 196, 92, .1); border-color: rgba(255, 196, 92, .3); color: #FFDDA0; }
+.notice { --nc: var(--primary-text); --nb: rgba(140, 194, 255, .1); display: flex; gap: 12px; align-items: center; padding: 11px 14px 11px 12px; border-radius: 14px; font: 500 14px/1.45 var(--f-body); background: linear-gradient(90deg, var(--nb), rgba(255, 255, 255, .015)); color: var(--fg); border: 1px solid var(--line-2); border-left: 3px solid var(--nc); animation: noticeIn .28s cubic-bezier(.2, .8, .3, 1.2); }
+.notice .n-ic { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 9px; background: var(--nc); color: #14161C; }
+.notice .n-ic svg { width: 16px; height: 16px; }
+.notice .n-tx { min-width: 0; overflow-wrap: anywhere; }
+.notice-error { --nc: var(--danger); --nb: rgba(255, 107, 129, .12); }
+.notice-warn { --nc: var(--warn); --nb: rgba(255, 196, 92, .1); }
+.notice-success { --nc: var(--success); --nb: rgba(0, 214, 181, .1); }
+.notice.sm { padding: 8px 12px 8px 9px; font-size: 13.5px; border-radius: 12px; margin-top: 8px; }
+.notice.sm .n-ic { width: 22px; height: 22px; border-radius: 7px; }
+.notice.sm .n-ic svg { width: 14px; height: 14px; }
+@keyframes noticeIn { from { opacity: 0; transform: translateY(-4px); } }
 .skel { border-radius: 10px; background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%); background-size: 200% 100%; animation: skel 1.4s ease-in-out infinite; }
 @keyframes skel { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 
@@ -1002,7 +1010,8 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
 .set-id { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); }
 .set-id code { font: 700 18px var(--f-mono, ui-monospace, monospace); letter-spacing: .06em; color: var(--accent, #00D6B5); }
 .set-logout { margin-top: 10px; }
-.gift-note { display: flex; align-items: center; gap: 10px; justify-content: space-between; padding: 12px 14px; margin-bottom: 14px; border-radius: 14px; background: rgba(0, 214, 181, .12); border: 1px solid rgba(0, 214, 181, .35); color: var(--fg); font-size: 14.5px; }
+.gift-note { display: flex; align-items: center; gap: 10px; justify-content: space-between; padding: 10px 12px; margin-bottom: 14px; border-radius: 14px; background: linear-gradient(90deg, rgba(0, 214, 181, .12), rgba(255, 255, 255, .015)); border: 1px solid var(--line-2); border-left: 3px solid var(--success); color: var(--fg); font: 500 14.5px/1.45 var(--f-body); animation: noticeIn .28s cubic-bezier(.2, .8, .3, 1.2); }
+.main-in > .notice { margin-bottom: 14px; }
 .adm-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 .adm-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px; }
 .adm-stat { padding: 14px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); }
@@ -1504,7 +1513,8 @@ const emojify = (html) => EMOJI_MAP.reduce((s, [re, n]) => s.replace(re, () => e
 const rich = (t) => emojify(esc(t).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/^[*-] /gm, "• ").replace(/\n/g, "<br>"));
 const blanked = (q, fill) => esc(q).split("___").join(`<span class="blank">${fill ? esc(fill) : "&nbsp;"}</span>`);
 const progress = (v, cls = "") => `<div class="progress ${cls}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(v)}"><span style="width:${Math.max(0, Math.min(100, v))}%"></span></div>`;
-const notice = (m, kind = "error") => m ? `<div class="notice notice-${kind}" role="alert">${esc(m)}</div>` : "";
+const N_IC = { error: '<path d="M12 7v6" stroke-width="3"/><circle cx="12" cy="17.2" r="1.7" fill="currentColor" stroke="none"/>', warn: '<path d="M12 7v6" stroke-width="3"/><circle cx="12" cy="17.2" r="1.7" fill="currentColor" stroke="none"/>', info: '<circle cx="12" cy="6.8" r="1.7" fill="currentColor" stroke="none"/><path d="M12 11v7" stroke-width="3"/>', success: '<path d="M6 12.5l4 4 8-9" stroke-width="3"/>' };
+const notice = (m, kind = "error", sm = false) => m ? `<div class="notice notice-${kind}${sm ? " sm" : ""}" role="${kind === "error" ? "alert" : "status"}"><span class="n-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${N_IC[kind] || N_IC.info}</svg></span><span class="n-tx">${esc(m)}</span></div>` : "";
 const plural = (n, one, many) => `${n} ${n > 1 ? many : one}`;
 const logo = () => `<button class="brand" data-go="home" aria-label="Verblyx, accueil"><svg viewBox="0 0 48 44" aria-hidden="true"><path d="M2 4h12.5L24 27.5 33.5 4H46L30.5 40h-13z" fill="url(#lg-v)"/><path d="M2 4h12.5L24 27.5l-3.2 7.6z" fill="#0F5FD0" opacity=".55"/></svg><span>VERBLYX</span></button>`;
 function aiError(e) {
@@ -1914,7 +1924,7 @@ function checkPseudoLive(name, where) {
 }
 function pseudoCheer(name) {
   const rx = document.querySelector(".foot-msg"); if (!rx || !document.getElementById("obUser")) return;
-  rx.innerHTML = PSEUDO_FREE[name] === true ? vx("st_joy", 34) + `<span>${esc("Trop bien, @" + name + " !")}</span>` : "";
+  rx.innerHTML = PSEUDO_FREE[name] === true ? vx("st_joy", 34) + `<span>${esc("@" + name + " est disponible.")}</span>` : "";
 }
 function refreshObNext() { const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady(); }
 const obName = () => (S.ui.firstName ?? (obDraft().first_name || S.suggestedName || "")).trim();
@@ -1925,13 +1935,13 @@ function obDraft() {
   return S.draft;
 }
 function obReaction(step, p) {
-  if (step === "level") return ({ A1:"Parfait, on commence en douceur !", A2:"Super, on va consolider tes bases.", B1:"Bien ! On va t'emmener plus loin.", B2:"Impressionnant ! On va affiner tout ça.", C1:"Wow ! On va viser la précision.", unknown:"Aucun souci, le test va nous le dire." })[p.self_level] || "";
-  if (step === "goals") return p.goals.length ? "Noté ! Tes leçons parleront de ça." : "";
-  if (step === "time") return ({ 5:"Petit à petit, ça marche !", 10:"Le bon rythme pour une vraie habitude.", 15:"Super rythme !", 20:"Sérieux ! Tu vas progresser vite.", 30:"Intense ! J'adore ta motivation.", 45:"Mode champion activé !" })[p.daily_minutes] || "";
-  if (step === "diffs") return p.difficulties.length ? "Je vais surtout t'entraîner là-dessus." : "Rien en tête ? Le test m'aidera à voir.";
-  if (step === "name") { const n = obName(); return n ? `Enchanté, ${n} !` : ""; }
-  if (step === "pseudo") return PSEUDO_FREE[obUser()] === true ? `Trop bien, @${obUser()} !` : "";
-  if (step === "account") return "Dernière étape !";
+  if (step === "level") return ({ A1:"Très bien, on part des bases.", A2:"Bien noté, on va consolider tes bases.", B1:"Bien noté, on va t'emmener plus loin.", B2:"Bon niveau, on va affiner ton anglais.", C1:"Excellent niveau, on visera la précision.", unknown:"Aucun souci, le test va nous le dire." })[p.self_level] || "";
+  if (step === "goals") return p.goals.length ? "C'est noté, tes leçons seront adaptées." : "";
+  if (step === "time") return ({ 5:"Idéal pour commencer en douceur.", 10:"Le bon rythme pour prendre l'habitude.", 15:"Un bon rythme pour progresser.", 20:"Tu vas progresser rapidement.", 30:"Un rythme soutenu, très efficace.", 45:"Un rythme intensif, on y va." })[p.daily_minutes] || "";
+  if (step === "diffs") return p.difficulties.length ? "Je vais surtout t'entraîner là-dessus." : "Pas de souci, le test me le montrera.";
+  if (step === "name") { const n = obName(); return n ? `Enchanté, ${n}.` : ""; }
+  if (step === "pseudo") return PSEUDO_FREE[obUser()] === true ? `@${obUser()} est disponible.` : "";
+  if (step === "account") return "C'est la dernière étape.";
   return "";
 }
 function obReady() {
@@ -1949,8 +1959,8 @@ async function obNext() {
     p.first_name = obName().slice(0, 40);
   }
   if (step === "pseudo") {
-    if (!PSEUDO_RE.test(obUser())) { u.error = "Ton pseudo : 3 à 20 caractères (lettres minuscules, chiffres, point ou tiret bas)."; return render(); }
-    if (!(await pseudoFree(obUser()))) { u.error = "Ce pseudo est déjà pris : choisis-en un autre."; return render(); }
+    if (!PSEUDO_RE.test(obUser())) { u.error = "Ton pseudo doit faire 3 à 20 caractères (minuscules, chiffres, point ou tiret bas)."; return render(); }
+    if (!(await pseudoFree(obUser()))) { u.error = "Ce pseudo est déjà pris. Choisis-en un autre."; return render(); }
     if (!avValid(p.avatar_id)) { u.error = "Choisis ton personnage."; return render(); }
     p.username = obUser();
   }
@@ -2040,7 +2050,7 @@ function viewOnboarding() {
   }
   if (step === "pseudo") {
     canNext = obReady();
-    body = `${ask(OB_POSE.pseudo, "Choisis ton pseudo et ton personnage !", "C'est ce que les autres verront de toi.")}
+    body = `${ask(OB_POSE.pseudo, "Choisis ton pseudo et ton personnage", "C'est ce que les autres verront de toi.")}
       <form class="stack" data-form="ob-name" novalidate style="gap:14px">
         <div class="ob-me">${avatarHTML(p, 76)}<div class="user-in" style="flex:1"><span>@</span><input id="obUser" class="input big-input" style="padding-left:32px" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ton_pseudo" value="${esc(obUser())}" maxlength="21" aria-label="Ton pseudo"></div></div>
         <div class="row between" style="margin-top:-6px;gap:8px"><p class="small muted">3 à 20 caractères : lettres minuscules, chiffres, point ou tiret bas. Chaque pseudo est unique.</p><span id="obUserState" class="pseudo-state ${obUser() in PSEUDO_FREE ? (PSEUDO_FREE[obUser()] ? "ok" : "bad") : ""}">${obUser() in PSEUDO_FREE ? (PSEUDO_FREE[obUser()] ? "✓ Disponible" : "✗ Déjà pris") : ""}</span></div>
@@ -2051,7 +2061,7 @@ function viewOnboarding() {
   }
   if (step === "account") {
     canNext = obReady();
-    body = `${ask(OB_POSE.account, "Dernière étape : sécurise ton compte !", "Pour retrouver ta progression sur tous tes appareils.")}
+    body = `${ask(OB_POSE.account, "Crée ton compte", "Pour retrouver ta progression sur tous tes appareils.")}
       <form class="stack" data-form="ob-name" novalidate style="gap:10px">
         <input id="obEmail" class="input big-input" type="email" autocomplete="email" placeholder="Ton adresse e-mail" value="${esc(u.email || "")}" aria-label="Ton adresse e-mail">
         <input id="obPass" class="input big-input" type="password" autocomplete="new-password" placeholder="Un mot de passe (8 caractères minimum)" aria-label="Ton mot de passe">
@@ -2167,7 +2177,7 @@ function viewTest() {
   const pct = u.phase === "intro" ? 4 : u.phase === "mcq" ? 8 + Math.min(80, (u.answers.length / 12) * 80) : u.phase === "done" ? 100 : 92;
   let body = "", foot = "";
   if (u.phase === "intro") {
-    body = `${ask("think", `Voyons où tu en es, ${S.profile.first_name} !`)}
+    body = `${ask("think", `Voyons ton niveau, ${S.profile.first_name}`)}
       <div class="card pad stack" style="gap:14px">
         <div class="row" style="flex-wrap:nowrap;align-items:flex-start">${emo(EMO.time(5))}<div><b>Environ 5 minutes</b><p class="small muted">Une dizaine de questions, puis quelques phrases à écrire.</p></div></div>
         <div class="row" style="flex-wrap:nowrap;align-items:flex-start">${emo(EMO.level.B1)}<div><b>Un test qui s'adapte</b><p class="small muted">Les questions deviennent plus difficiles quand tu réussis, plus simples quand tu bloques.</p></div></div>
@@ -2177,7 +2187,7 @@ function viewTest() {
   }
   if (u.phase === "mcq") {
     const q = currentQuestion(u);
-    body = `${ask("think", u.answers.length === 0 ? `Voyons où tu en es, ${S.profile.first_name} ! Choisis le mot qui complète la phrase.` : "Choisis le mot qui complète la phrase.", "", 104)}
+    body = `${ask("think", u.answers.length === 0 ? `Choisis le mot qui complète la phrase.` : "Choisis le mot qui complète la phrase.", "", 104)}
       <p class="sentence">${blanked(q.question, u.sel)}</p>
       <div class="options grid">${q.options.map((o, k) => `<button class="option ${u.sel === o ? "is-selected" : ""}" data-act="t-pick" data-v="${esc(o)}"><span class="key">${k + 1}</span><span class="tx"><b>${esc(o)}</b></span></button>`).join("")}</div>`;
     foot = `<span class="foot-msg" style="color:var(--muted)">Question ${u.answers.length + 1}</span><button class="btn btn-primary btn-lg" data-act="t-answer" ${u.sel ? "" : "disabled"}>Valider</button>`;
@@ -2706,7 +2716,7 @@ function walletChips() {
         <b class="hp-title">Pulse</b>
         <div class="hp-big"><span class="hp-ic pulse">${icon("i-pulse")}</span><span class="num">${n}</span></div>
         <div class="hp-week">${week}</div>
-        <p class="hp-msg">${n ? `${plural(n, "jour", "jours")} d'affilée !` : "Ton Pulse est à zéro"}</p>
+        <p class="hp-msg">${n ? `${plural(n, "jour", "jours")} d'affilée` : "Ton Pulse est à zéro"}</p>
         <p class="hp-sub">${n ? "Reviens demain pour le faire grandir." : "Termine une leçon aujourd'hui pour le lancer."}</p>
       </div>
     </div>
@@ -2715,7 +2725,7 @@ function walletChips() {
       <div class="hud-pop" role="tooltip">
         <b class="hp-title">Vies</b>
         <div class="hp-hearts">${hearts}</div>
-        <p class="hp-msg">${full ? "Tu as toutes tes vies !" : p.hearts ? `Encore ${plural(p.hearts, "vie", "vies")}` : "Plus de vies"}</p>
+        <p class="hp-msg">${full ? "Toutes tes vies sont pleines" : p.hearts ? `Encore ${plural(p.hearts, "vie", "vies")}` : "Plus de vies"}</p>
         ${full ? `<button class="hp-link" data-go="dashboard">Continue d'apprendre</button>` : `<p class="hp-sub">Recharge complète dans ${t}</p><button class="hp-link" data-go="shop">Recharger dans la boutique</button>`}
       </div>
     </div>
@@ -2724,7 +2734,7 @@ function walletChips() {
       <div class="hud-pop" role="tooltip">
         <b class="hp-title">Pièces</b>
         <div class="hp-big"><span class="hp-ic coin">${icon("i-coin")}</span><span class="num">${p.coins || 0}</span></div>
-        <p class="hp-msg">${(p.coins || 0) >= HEART_COST ? "De quoi t'offrir une vie !" : `Encore ${HEART_COST - (p.coins || 0)} pour une vie`}</p>
+        <p class="hp-msg">${(p.coins || 0) >= HEART_COST ? "Assez pour une vie" : `Encore ${HEART_COST - (p.coins || 0)} pour une vie`}</p>
         <p class="hp-sub">Gagne des pièces en terminant tes leçons et ton objectif du jour.</p>
         <button class="hp-link" data-go="shop">Ouvrir la boutique</button>
       </div>
@@ -2766,7 +2776,7 @@ function goalCard() {
     <div class="row between" style="flex-wrap:nowrap"><span class="label">${tier === 1 ? "Objectif du jour" : `Objectif bonus ${tier > 2 ? "×" + tier : ""}`}</span>${tier > 1 ? `<span class="chip chip-teal" style="height:22px">${icon("i-check")}${tier - 1} atteint${tier > 2 ? "s" : ""}</span>` : ""}</div>
     <div class="goal" style="margin-top:12px">
       <svg class="ring" viewBox="0 0 72 72" aria-hidden="true"><circle class="bg" cx="36" cy="36" r="30" fill="none" stroke-width="8"/>${pct > 0 ? `<circle class="fg" cx="36" cy="36" r="30" fill="none" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="${pct} 100" transform="rotate(-90 36 36)"/>` : ""}</svg>
-      <div><p class="h3 num">${x} / ${target} XP</p><p class="small muted">${tier === 1 ? `Encore ${g - x} XP aujourd'hui.` : `Objectif du jour atteint ! Bonus : encore ${target - x} XP pour +5 pièces.`}</p></div>
+      <div><p class="h3 num">${x} / ${target} XP</p><p class="small muted">${tier === 1 ? `Encore ${g - x} XP aujourd'hui.` : `Objectif atteint. Encore ${target - x} XP pour gagner 5 pièces.`}</p></div>
     </div>
   </section>`;
 }
@@ -2852,7 +2862,9 @@ try { history.scrollRestoration = "manual"; } catch {}
   addEventListener("resize", sched);
   // pendant qu'on écrit au prof, la barre du bas disparaît : le chat descend tout en bas
   document.addEventListener("focusin", (e) => { if (e.target.id === "coachInput") document.body.classList.add("typing"); });
-  document.addEventListener("focusout", (e) => { if (e.target.id === "coachInput") document.body.classList.remove("typing"); });
+  // toucher un bouton du chat garde le clavier ouvert : la barre ne saute pas sous le doigt
+  document.addEventListener("pointerdown", (e) => { if (document.body.classList.contains("typing") && e.target.closest(".coach-dock button")) e.preventDefault(); });
+  document.addEventListener("focusout", (e) => { if (e.target.id === "coachInput") setTimeout(() => { const a = document.activeElement; if (!a || a.id !== "coachInput") document.body.classList.remove("typing"); }, 120); });
 })();
 function scrollToCurrent() {
   if (S.view !== "dashboard") return;
@@ -2931,7 +2943,7 @@ function chapterPath(lv, un, ui, ust, steps, cur) {
     }
     const best = n.kind === "lesson" ? course().done[n.id] : n.kind === "unit" ? course().tests[n.s.unit] : n.kind === "exam" ? course().exams[n.s.level] : null;
     const tip = n.st === "current" && !open ? `<span class="start-tip">${n.kind === "lesson" ? (course().done[n.id] ? "Continuer" : "Commencer") : n.kind === "unit" ? "Point de contrôle" : "Certification"}</span>`
-      : n.kind === "chest" && n.st === "ready" ? `<span class="start-tip gold">+${CHEST_COINS} pièces !</span>` : "";
+      : n.kind === "chest" && n.st === "ready" ? `<span class="start-tip gold">+${CHEST_COINS} pièces</span>` : "";
     return `<div class="pstop" style="left:calc(50% + ${p.x}px);top:${p.y}px;--px:${p.x}px">
       ${tip}
       <button class="pnode ${n.st} k-${n.kind}" data-act="${act}" data-v="${n.kind === "chest" ? n.unit : n.id}" ${n.st === "locked" && n.kind !== "chest" ? "disabled" : ""} title="${esc(label)}" aria-label="${esc(label)}">${mark}</button>
@@ -3027,7 +3039,7 @@ function viewShop() {
     </div>
     ${vx(p.hearts <= 1 ? "sad" : "heart", 110, "lead")}
   </section>
-  ${S.ui.shopMsg ? `<div class="notice">${esc(S.ui.shopMsg)}</div>` : ""}
+  ${notice(S.ui.shopMsg, "success")}
   <div class="shop-grid enter-3">
     ${SHOP.map((it) => {
       const n = it.n || room, price = it.price();
@@ -3203,7 +3215,7 @@ const FAQ = [
   ["Comment changer mon mot de passe ?", "Dans Paramètres > Compte. Si tu l'as oublié, déconnecte-toi puis clique sur « Mot de passe oublié ? » sur la page de connexion."],
 ];
 const setToggle = (title, sub, act, v, on) => `<div class="set-row2"><div><b>${title}</b><span class="small muted">${sub}</span></div><button class="switch ${on ? "on" : ""}" data-act="${act}" data-v="${v}" role="switch" aria-checked="${on}" aria-label="${title}"><i></i></button></div>`;
-const setMsg = (ok, err) => `${ok ? `<p class="small" style="color:var(--success);margin-top:6px">${esc(ok)}</p>` : ""}${err ? `<p class="small" style="color:var(--danger);margin-top:6px">${esc(err)}</p>` : ""}`;
+const setMsg = (ok, err) => `${notice(ok, "success", true)}${notice(err, "error", true)}`;
 function settingsModal() {
   const p = S.profile, u = S.ui, online = S.store.kind === "supabase", pr = prefs();
   const tab = S.setTab || "profil";
@@ -3225,7 +3237,7 @@ function settingsModal() {
         <button class="btn btn-secondary btn-sm" style="height:44px">OK</button>
       </form>
       <div class="row between" style="margin-top:6px;gap:8px"><p class="small muted">3 à 20 caractères : lettres minuscules, chiffres, point ou tiret bas. Chaque pseudo est unique.</p><span id="setUserState" class="pseudo-state"></span></div>${setMsg(u.userOk, u.userErr)}
-      ${S.accountNo ? `<div class="set-idline">ID <code>${accId(S.accountNo)}</code><button data-act="copy-id">${u.copied ? "copié ✓" : "copier"}</button></div>` : ""}
+      ${S.accountNo ? `<div class="set-idline">ID <code>${accId(S.accountNo)}</code><button data-act="copy-id">${u.copied ? "copié" : "copier"}</button></div>` : ""}
     </section>`;
   if (tab === "compte") body = `
     <section class="set-group"><h3>Connexion</h3>
@@ -3314,7 +3326,7 @@ function giftText(gs) {
   if (sum.hearts >= HEART_MAX) parts.push("toutes tes vies"); else if (sum.hearts) parts.push(`${sum.hearts > 0 ? "+" : ""}${plural(sum.hearts, "vie", "vies")}`);
   if (lv) parts.push(`niveau ${lv}`);
   if (gs.some((g) => g.kind === "profile")) parts.push("profil mis à jour");
-  return parts.length ? `Cadeau de l'équipe Verblyx : ${parts.join(", ")} !` : "";
+  return parts.length ? `L'équipe Verblyx t'a envoyé ${parts.join(", ")}.` : "";
 }
 function giftSummary(gs) {
   const sum = { xp: 0, coins: 0, hearts: 0 }; let lv = null;
@@ -3340,12 +3352,12 @@ function giftModal() {
     <div class="modal-panel gp-panel">
       <div class="gp-glow" aria-hidden="true"></div>
       <div class="gp-vex">${vx(vip ? "vip" : "party", 170, "gp-lead")}</div>
-      <span class="gp-kicker">${vip ? "Statut VIP débloqué" : g.chest ? "Coffre du chapitre" : "Surprise !"}</span>
-      <h2 class="gp-title" id="gp-title">${vip ? "Félicitations, tu es VIP !" : g.chest ? "Coffre ouvert !" : "Félicitations !"}</h2>
-      <p class="gp-sub">${g.chest && !vip ? `Bravo, tu as terminé le chapitre <b>« ${esc(g.chest)} »</b> ! Voici ton trésor :` : vip ? "L'équipe Vex t'offre le statut <b>VIP</b> : un badge doré à côté de ton nom et un cadre en or autour de ton personnage, partout sur Verblyx." : "L'équipe Vex t'a envoyé un cadeau " + em("gift", 20)}</p>
+      <span class="gp-kicker">${vip ? "Statut VIP débloqué" : g.chest ? "Coffre du chapitre" : "Cadeau"}</span>
+      <h2 class="gp-title" id="gp-title">${vip ? "Tu es maintenant VIP" : g.chest ? "Chapitre terminé" : "Tu as reçu un cadeau"}</h2>
+      <p class="gp-sub">${g.chest && !vip ? `Tu as terminé le chapitre <b>« ${esc(g.chest)} »</b>. Voici ta récompense.` : vip ? "L'équipe Verblyx t'offre le statut <b>VIP</b>. Ton nom porte désormais un badge doré et ton personnage un cadre en or, partout sur Verblyx." : "L'équipe Verblyx t'a envoyé ce cadeau."}</p>
       ${vip ? `<div class="gp-viptag">${avatarHTML(S.profile, 58, true)}<span><b>${esc(S.profile.first_name || "Toi")}</b> ${vipTag()}</span></div>` : ""}
       ${chips ? `<div class="gp-items">${chips}</div>` : ""}
-      <button class="btn ${vip ? "btn-gold" : "btn-primary"} btn-lg btn-block" data-act="gift-close">${vip ? "Merci l'équipe Vex !" + em("crown", 20) : "Merci Vex !" + em("party", 20)}</button>
+      <button class="btn ${vip ? "btn-gold" : "btn-primary"} btn-lg btn-block" data-act="gift-close">${vip ? "Merci" + em("crown", 20) : "Récupérer" + em("gift", 20)}</button>
     </div>
   </div>`;
 }
@@ -3361,8 +3373,8 @@ function levelModal() {
       <div class="gp-vex">${vx("trophy", 160, "gp-lead")}</div>
       <span class="gp-kicker">${L.cefr ? "Nouveau palier" : "Niveau supérieur"}</span>
       ${L.up ? `<div class="lv-ring"><span class="lv-ring-in"><small>Niveau</small><b class="num">${L.n}</b></span></div>` : ""}
-      <h2 class="gp-title" id="lv-title">${L.cefr ? `Bienvenue en ${esc(L.cefr)} !` : `Niveau ${L.n} atteint !`}</h2>
-      <p class="gp-sub">${L.cefr ? `Tu as validé ton niveau : place au niveau <b>${esc(L.cefr)} · ${esc(LEVEL_NAMES[L.cefr] || "")}</b>. ${L.up ? `Et tu passes aussi au niveau ${L.n} d'expérience !` : ""}` : "Tes efforts paient : continue comme ça, Vex est fier de toi !"}</p>
+      <h2 class="gp-title" id="lv-title">${L.cefr ? `Bienvenue en ${esc(L.cefr)}` : `Niveau ${L.n} atteint`}</h2>
+      <p class="gp-sub">${L.cefr ? `Tu as validé ton niveau. Tu passes au niveau <b>${esc(L.cefr)} · ${esc(LEVEL_NAMES[L.cefr] || "")}</b>. ${L.up ? `Tu atteins aussi le niveau ${L.n} d'expérience.` : ""}` : "Ta régularité paie. Continue sur ce rythme."}</p>
       ${L.up ? `<div class="lv-next"><div class="row between small"><span class="muted">Prochain niveau</span><span class="num">${xp - cur} / ${next - cur} XP</span></div>${progress(((xp - cur) / (next - cur)) * 100)}</div>` : ""}
       <button class="btn btn-primary btn-lg btn-block" data-act="level-close">Continuer${em("sparkle", 20)}</button>
     </div>
@@ -3416,7 +3428,7 @@ async function adminGiftDo(id, kind, n, level) {
     if (r) r.gifts = [...(r.gifts || []), { kind, n, level }];
     // si c'est mon propre compte, je le reçois tout de suite
     if (S.authUser && id === S.authUser.id) claimGifts();
-    u.admMsg = { id, text: "Envoyé ✓ L'élève le reçoit à sa prochaine visite (ou dans la minute s'il est connecté)." };
+    u.admMsg = { id, text: "Envoyé. L'élève le recevra à sa prochaine visite, ou dans la minute s'il est connecté." };
     SFX.play("select");
   } catch (e) { u.admErr = (e && e.message) || "Erreur"; }
   render();
@@ -3462,7 +3474,7 @@ function viewAdmin() {
           ${r.account_no ? `<button class="btn btn-${open ? "primary" : "secondary"} btn-sm" data-act="adm-open" data-v="${r.id}">${open ? "Fermer" : "Gérer"}</button>` : `<span class="small muted">Inscription pas terminée</span>`}
         </div>
         ${r.pending ? `<p class="small" style="color:var(--warn);margin-top:8px">${plural(r.pending, "cadeau", "cadeaux")} en attente (déjà compté ci-dessus)</p>` : ""}
-        ${u.admMsg && u.admMsg.id === r.id ? `<p class="small" style="color:var(--success);margin-top:8px">${esc(u.admMsg.text)}</p>` : ""}
+        ${u.admMsg && u.admMsg.id === r.id ? notice(u.admMsg.text, /^Rien/.test(u.admMsg.text) ? "info" : "success", true) : ""}
         ${open ? `<div class="adm-tools">
           <div class="adm-tool adm-wide"><span class="label">Profil</span>
             <div class="adm-edit">
@@ -3518,11 +3530,11 @@ async function prepRun() {
         await S.store.saveContent(st.id, c);
         PREP.ready.add(st.id); ok = true; limited = 0;
       } catch (e) {
-        if (e && e.code === "session_expired") { PREP.err = "Ta session a expiré : reconnecte-toi puis relance."; PREP.stop = true; }
+        if (e && e.code === "session_expired") { PREP.err = "Ta session a expiré. Reconnecte-toi puis relance."; PREP.stop = true; }
         else if (e && e.code === "rate_limited") {
           limited++;
-          if (limited >= 3) { PREP.err = "Le quota du jour de Gemini semble atteint. Les leçons déjà prêtes sont gardées : relance demain pour finir."; PREP.stop = true; break; }
-          PREP.err = "Gemini demande une pause : reprise dans une minute…"; prepRender();
+          if (limited >= 3) { PREP.err = "Le quota quotidien de Gemini est atteint. Les leçons prêtes sont conservées, relance demain pour terminer."; PREP.stop = true; break; }
+          PREP.err = "Gemini demande une pause. Reprise automatique dans une minute."; prepRender();
           await prepSleep(60); PREP.err = "";
         }
       }
@@ -3563,7 +3575,7 @@ async function exportLessons() {
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob); a.download = `verblyx-lecons-${today()}.json`;
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    u.expMsg = `${Object.keys(out.lessons).length} leçons téléchargées ✓`;
+    u.expMsg = `${Object.keys(out.lessons).length} leçons téléchargées.`;
   } catch (e) { u.expMsg = "Téléchargement impossible : " + ((e && e.message) || "erreur"); }
   u.expBusy = false; render();
 }
@@ -3586,7 +3598,7 @@ function adminLessons() {
         <p class="small" style="color:var(--warn)">Garde cet onglet ouvert pendant la préparation. Tu peux naviguer dans le site.</p>`
       : missing ? `<div class="row between" style="gap:12px"><div><b>${missing} leçon${missing > 1 ? "s" : ""} à préparer</b><p class="small muted">Une leçon toutes les ~10 secondes, pour respecter les limites gratuites de Gemini.</p></div>
         <button class="btn btn-primary" data-act="prep-go" ${PREP.ready ? "" : "disabled"}>Préparer les leçons</button></div>`
-      : PREP.ready ? `<p><b>Toutes les leçons sont prêtes ✓</b></p><p class="small muted">Pour refaire une leçon, supprime-la dans Supabase (Table Editor → content) : elle sera recréée.</p>` : `<p class="muted">Chargement…</p>`}
+      : PREP.ready ? `<p><b>Toutes les leçons sont prêtes</b></p><p class="small muted">Pour refaire une leçon, supprime-la dans Supabase (Table Editor → content) : elle sera recréée.</p>` : `<p class="muted">Chargement…</p>`}
       ${PREP.done && !PREP.running ? `<p class="small" style="color:var(--success)">${PREP.done} leçon${PREP.done > 1 ? "s" : ""} préparée${PREP.done > 1 ? "s" : ""} lors du dernier lancement.</p>` : ""}
       ${notice(PREP.err, "warn")}
       <div class="row between" style="gap:12px;border-top:1px solid var(--line);padding-top:12px"><div><b>Sauvegarde</b><p class="small muted">Télécharge toutes les leçons prêtes dans un fichier sur ton ordinateur.</p>${S.ui.expMsg ? `<p class="small" style="color:var(--success)">${esc(S.ui.expMsg)}</p>` : ""}</div>
@@ -3652,9 +3664,9 @@ function viewCompetition() {
   const ranked = me && me.score > 0;
   const ahead = ranked && me.rank > 1 ? rows.find((r) => r.rank === Math.min(me.rank - 1, 100)) : null;
   const heroMsg = !LB.data[kind] ? "Chargement du classement…"
-    : !ranked ? `Gagne tes premiers ${unit} pour entrer dans le classement !`
-    : me.rank === 1 ? "Tu es n°1 ! Garde ta couronne " + em("crown", 20)
-    : ahead ? `Encore <b>${ahead.score - me.score + 1} ${unit}</b> pour dépasser <b>${esc(who(ahead))}</b>` : "Continue comme ça !";
+    : !ranked ? `Gagne tes premiers ${unit} pour entrer dans le classement.`
+    : me.rank === 1 ? "Tu es premier du classement " + em("crown", 20)
+    : ahead ? `Encore <b>${ahead.score - me.score + 1} ${unit}</b> pour dépasser <b>${esc(who(ahead))}</b>` : "Continue pour gagner des places.";
   const pod = (r) => !r ? `<div class="p2-col p2-empty"></div>` : `<div class="p2-col p2-${r.rank} ${r.is_me ? "is-me" : ""}">
       ${r.rank === 1 ? `<span class="p2-crown">${icon("i-crown")}</span>` : ""}
       <div class="p2-av">${av(r, r.rank === 1 ? 92 : 72)}</div>
@@ -3802,7 +3814,7 @@ function viewSession() {
       body += `<div class="verdict ${r.ok ? "ok" : "ko"}" role="status">
         ${vx(r.ok ? "st_joy" : "st_sad", 52, "fx-res")}
         <div class="fb-body">
-          <span class="fb-title">${r.skip ? "Exercice passé" : r.ok ? ["Bien vu !", "Exact !", "C'est ça !", "Parfait !"][ses.i % 4] : "Presque…"}</span>
+          <span class="fb-title">${r.skip ? "Exercice passé" : r.ok ? ["Correct", "Bonne réponse", "Exact", "Parfait"][ses.i % 4] : "Pas tout à fait"}</span>
           ${r.note ? `<span class="small soft">${esc(r.note)}</span>` : ""}
           ${showCorrect ? `<span><span class="muted">${PROD.includes(it.ex.type) ? "Version corrigée" : "La bonne réponse"} :</span> <b>${esc(r.correct)}</b></span>` : ""}
           ${r.explain ? `<span class="soft small">${esc(r.explain)}</span>` : ""}
@@ -3879,7 +3891,7 @@ function exerciseView(ses, it) {
   return `${top}${q}${inp}`;
 }
 /* Petite fête express à la fin d'une séance */
-const CHEERS = [["Bravo !", "On continue ?"], ["Bien joué !", "On enchaîne ?"], ["Super !", "Prêt pour la suite ?"], ["Génial !", "Tu progresses vite !"]];
+const CHEERS = [["Bien joué", "On continue ?"], ["Séance réussie", "Prêt pour la suite ?"], ["Beau travail", "On enchaîne ?"], ["C'est fait", "Tu progresses bien."]];
 let cheerTimer = null;
 function cheerView(ses) {
   const [a, b] = CHEERS[Math.floor(Math.random() * CHEERS.length)];
@@ -3904,9 +3916,9 @@ function resultView(ses) {
   const r = ses.done, p = S.profile;
   const newB = BADGES.filter((b) => (r.newBadges || []).includes(b.id));
   const failed = r.passed === false;
-  const title = r.levelUp ? `Niveau ${r.levelUp} débloqué !` : failed ? "Pas encore validé" : r.kind === "unit" ? "Unité validée !" : r.kind === "exam" ? `Niveau ${ses.st.level} validé !` : r.kind === "lesson" ? (r.mastered ? "Leçon maîtrisée !" : "Leçon terminée") : "Séance terminée !";
-  const sub = failed ? `Il faut ${r.kind === "unit" ? "70" : "80"} % pour valider. Revois les leçons de l'unité, puis réessaie : Vex croit en toi.`
-    : r.kind === "lesson" && !r.mastered ? "Tu progresses ! Cette leçon reviendra en révision pour bien l'ancrer." : "Continue comme ça, chaque jour compte.";
+  const title = r.levelUp ? `Niveau ${r.levelUp} débloqué` : failed ? "Pas encore validé" : r.kind === "unit" ? "Unité validée" : r.kind === "exam" ? `Niveau ${ses.st.level} validé` : r.kind === "lesson" ? (r.mastered ? "Leçon maîtrisée" : "Leçon terminée") : "Séance terminée";
+  const sub = failed ? `Il faut ${r.kind === "unit" ? "70" : "80"} % pour valider. Revois les leçons de l'unité, puis retente ta chance.`
+    : r.kind === "lesson" && !r.mastered ? "Cette leçon reviendra plus tard en révision pour bien l'ancrer." : "Chaque séance compte. À demain.";
   return `<div class="flow">
     <main class="flow-body" style="align-items:center;text-align:center;justify-content:center">
       <div class="result">
@@ -3922,7 +3934,7 @@ function resultView(ses) {
       </div>
       ${r.bonusGoals ? `<p class="chip chip-teal">Objectif bonus atteint · +${5 * r.bonusGoals} pièces</p>` : ""}
       ${r.goalReached ? `<p class="chip chip-teal">Objectif du jour atteint · +10 pièces</p>` : `<p class="small muted num">${todayXp() >= goalXp() ? `${todayXp()} / ${(Math.floor(todayXp() / goalXp()) + 1) * goalXp()} XP pour l'objectif bonus` : `${todayXp()} / ${goalXp()} XP pour l'objectif du jour`} · Pulse de ${plural(liveStreak(), "jour", "jours")}</p>`}
-      ${newB.length ? `<div class="stack" style="gap:8px;align-items:center"><span class="label">${newB.some((b) => b.secret) ? em("unlock", 18) + " Badge secret débloqué !" : "Nouveau succès"}</span><div class="row" style="justify-content:center">${newB.map((b) => `<div class="badge">${b.svg}<span>${b.name}</span></div>`).join("")}</div></div>` : ""}
+      ${newB.length ? `<div class="stack" style="gap:8px;align-items:center"><span class="label">${newB.some((b) => b.secret) ? em("unlock", 18) + " Badge secret débloqué" : "Nouveau succès"}</span><div class="row" style="justify-content:center">${newB.map((b) => `<div class="badge">${b.svg}<span>${b.name}</span></div>`).join("")}</div></div>` : ""}
     </main>
     <footer class="flow-foot"><div class="flow-foot-in"><span></span><button class="btn btn-primary btn-lg" data-act="ses-quit">Continuer</button></div></footer>
   </div>`;
@@ -3960,7 +3972,7 @@ function quizCard(m, mi) {
     ${z.questions.map((q, qi) => { const pk = picks[qi], done = pk != null; return `<div class="qz ${done ? (pk === q.answer ? "ok" : "ko") : ""}">
       <p class="qz-q"><span class="num">${qi + 1}.</span> ${blanked(q.q, done ? q.answer : "")}</p>
       <div class="qz-opts">${q.options.map((o) => `<button class="qz-opt ${done ? (o === q.answer ? "is-right" : o === pk ? "is-wrong" : "is-off") : ""}" data-act="qz" data-m="${mi}" data-q="${qi}" data-v="${esc(o)}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>
-      ${done ? `<p class="qz-ex">${pk === q.answer ? em("check", 18) + "<b>Exact !</b>" : `${em("cross", 18)}<span>La bonne réponse : <b>${esc(q.answer)}</b>.</span>`} ${esc(q.explain)}</p>` : ""}
+      ${done ? `<p class="qz-ex">${pk === q.answer ? em("check", 18) + "<b>Correct.</b>" : `${em("cross", 18)}<span>La bonne réponse : <b>${esc(q.answer)}</b>.</span>`} ${esc(q.explain)}</p>` : ""}
     </div>`; }).join("")}
     ${answered === n ? `<div class="quiz-end"><b>${score === n ? em("trophy", 22) + "Parfait" : score >= n / 2 ? em("star", 22) + "Bien joué" : em("rocket", 22) + "Continue"} : ${score}/${n}</b><div class="row" style="gap:6px">${QCM_KINDS.map((q) => qcmChip(q, false)).join("")}</div></div>` : ""}
   </div>`;
@@ -3972,7 +3984,7 @@ function viewCoach() {
   <header class="page-head enter"><div class="stack"><h1 class="h1">Professeur IA</h1><p class="muted">Vex connaît ton niveau (${esc(p.cefr_level)}) et tes difficultés.</p></div>${S.chat.length ? `<button class="btn btn-ghost" data-act="chat-clear">Nouvelle conversation</button>` : ""}</header>
   ${!S.sample ? notice("Vex n'est pas disponible pour le moment. Recharge la page.", "warn") : ""}
   <div class="chat">
-    ${S.chat.length === 0 ? `${ask("talk", `Salut ${p.first_name || ""} ! Pose-moi une question, écris-moi en anglais pour que je te corrige, ou lance un QCM.`)}
+    ${S.chat.length === 0 ? `${ask("talk", `Bonjour ${p.first_name || ""}. Pose-moi une question, écris en anglais pour être corrigé, ou lance un QCM.`)}
       <div class="grid-2">${SUGGESTIONS.map((s) => `<button class="suggest" data-act="chat-sug" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>` : ""}
     ${S.chat.map((m, mi) => m.role === "user" ? `<div class="msg me">${m.icon ? em(m.icon, 18) : ""}${rich(m.content)}</div>` : m.error ? `<div class="ai-row">${vx("st_sad", 36)}<div class="msg ai err"><span>${esc(m.content)}</span>${m.retry && mi === S.chat.length - 1 ? `<button class="btn btn-secondary btn-sm" data-act="chat-retry">Réessayer</button>` : ""}</div></div>` : `<div class="ai-row">${vx("st_wink", 36)}<div class="msg ai ${m.quiz ? "has-quiz" : ""}">${m.text != null ? (m.text ? `<div>${rich(m.text)}</div>` : "") : rich(m.content)}${m.quiz ? quizCard(m, mi) : ""}</div></div>`).join("")}
     ${busy ? `<div class="ai-row">${vx(u.streaming ? "st_wink" : "st_hmm", 36, "talking-vx")}<div class="msg ai" id="stream">${u.streaming ? streamView(u.streaming) : `<span class="row small muted" style="gap:8px"><span class="spinner"></span> ${u.quizBusy ? "Vex prépare ton QCM…" : "Vex réfléchit…"}</span>`}</div></div>` : ""}
@@ -3997,9 +4009,10 @@ Niveau CECRL : ${p.cefr_level}. Objectifs : ${p.goals.map((g) => GOALS_FR[g] || 
 Difficultés connues : ${[...weakSkills().map(skillLabel), ...p.difficulties].join(", ") || "aucune identifiée"}.
 Règles :
 - Va droit au but : 2 à 6 phrases, 120 mots maximum. Explications en français, exemples en anglais du niveau ${p.cefr_level}.
-- Si l'élève écrit en anglais, corrige d'abord ses erreurs (❌ … → ✅ … + règle en une ligne), puis réponds.
+- Si l'élève écrit en anglais, corrige d'abord ses erreurs sur une ligne par erreur (❌ forme fautive → ✅ forme correcte, puis la règle en quelques mots), puis réponds.
 - Si l'élève demande un QCM, un quiz, un test ou des exercices : écris UNE phrase d'introduction, puis un bloc qui commence par \`\`\`qcm et finit par \`\`\`, contenant uniquement ce JSON : {"title":"titre court","questions":[{"q":"phrase avec ___ ou question courte","options":["a","b","c"],"answer":"a","explain":"pourquoi, en une phrase en français"}]} — 5 questions, 3 options chacune, une seule bonne réponse.
-- Pas de titres Markdown ; tu peux utiliser **gras** et des listes avec "- ". Ton chaleureux et motivant.
+- Pas de titres Markdown ; tu peux utiliser **gras** et des listes avec "- ".
+- Style : celui d'un vrai professeur, naturel, posé et précis. Tutoie l'élève. Pas d'emoji (sauf ❌ et ✅ pour les corrections), pas de formules creuses (« Excellente question », « Super », « N'hésite pas »), pas de point d'exclamation à chaque phrase, pas de résumé final. Une seule question de relance au maximum.
 - Tu ne parles que d'apprentissage de l'anglais.
 Les messages suivants sont la conversation avec l'élève.`;
 }
@@ -4044,8 +4057,8 @@ async function quickQuiz(kind) {
 5 questions variées et différentes de d'habitude. Chaque question : une phrase avec ___ ou une question courte, 3 options plausibles, UNE seule bonne réponse certaine, une explication d'une phrase en français.
 Réponds UNIQUEMENT avec ce JSON : {"title":"titre court en français","questions":[{"q":"...","options":["...","...","..."],"answer":"...","explain":"..."}]}`, { modelTier: "quick" });
     const quiz = cleanQuiz(raw);
-    if (!quiz) throw { message: "Le QCM reçu était incomplet. Réessaie." };
-    S.chat.push({ role: "assistant", content: `QCM : ${quiz.title}`, text: "À toi de jouer ! Clique sur la bonne réponse.", quiz });
+    if (!quiz) throw { message: "Le QCM n'a pas pu être créé. Réessaie." };
+    S.chat.push({ role: "assistant", content: `QCM : ${quiz.title}`, text: "Choisis la bonne réponse à chaque question.", quiz });
     SFX.play("pop");
   } catch (e) { S.chat.push({ role: "assistant", error: true, content: aiError(e) || "Le QCM n'a pas pu être créé.", retry: { type: "qcm", kind } }); }
   u.streaming = null; u.quizBusy = false; S.chatScroll = true;
@@ -4105,7 +4118,7 @@ $app.addEventListener("click", (ev) => {
     case "ob-next": swapScreen(() => obNext()); break;
     case "ob-av": obDraft().avatar_id = Number(v); SFX.play("select"); render(); { const l = document.querySelector(".ob-me .avatar"); if (l) vxAnim(l, [{ transform: "scale(.8)" }, { transform: "scale(1.08)" }, { transform: "scale(1)" }], { duration: 380, easing: "ease-out" }); } break;
     case "cheer-go": SFX.play("tap"); endCheer(); break;
-    case "buy": { const done = buyItem(v); u.shopMsg = done ? "Achat effectué : tes vies sont rechargées." : ""; if (done) { render(); const l = document.querySelector(".vx.lead"); if (l) vxReact(l, "love"); } break; }
+    case "buy": { const done = buyItem(v); u.shopMsg = done ? "Achat effectué. Tes vies sont rechargées." : ""; if (done) { render(); const l = document.querySelector(".vx.lead"); if (l) vxReact(l, "love"); } break; }
     case "buy-heart-go": {
       const p = S.profile, ses = S.session;
       if ((p.coins || 0) < HEART_COST) break;
@@ -4142,7 +4155,7 @@ $app.addEventListener("click", (ev) => {
     case "adm-refresh": adminLoad(); break;
     case "adm-vip": {
       const on = el.dataset.on === "1";
-      S.store.adminSetVip(v, on).then(() => { const r = (u.admList || []).find((x) => x.id === v); if (r) r.vip = on; if (S.authUser && v === S.authUser.id) S.isVip = on; u.admMsg = { id: v, text: on ? "Badge VIP ajouté ✓" : "Badge VIP retiré." }; SFX.play(on ? "fanfare" : "unselect"); render(); })
+      S.store.adminSetVip(v, on).then(() => { const r = (u.admList || []).find((x) => x.id === v); if (r) r.vip = on; if (S.authUser && v === S.authUser.id) S.isVip = on; u.admMsg = { id: v, text: on ? "Badge VIP ajouté." : "Badge VIP retiré." }; SFX.play(on ? "fanfare" : "unselect"); render(); })
         .catch((e) => { u.admErr = (e && e.message) || "Erreur"; render(); });
       break;
     }
@@ -4163,7 +4176,7 @@ $app.addEventListener("click", (ev) => {
         if (chUn !== null) { if (chUn) r.profile.username = chUn; else delete r.profile.username; }
         if (chEm) r.email = chEm;
         if (S.authUser && v === S.authUser.id) claimGifts();
-        u.admMsg = { id: v, text: "Profil mis à jour ✓" + (chEm ? " L'élève se connecte maintenant avec " + chEm + "." : "") }; SFX.play("select");
+        u.admMsg = { id: v, text: "Profil mis à jour." + (chEm ? " L'élève se connecte maintenant avec " + chEm + "." : "") }; SFX.play("select");
       }).catch((e) => { u.admErr = (e && e.message) || "Erreur"; }).finally(() => { u.admSaving = false; render(); });
       break;
     }
@@ -4276,7 +4289,7 @@ $app.addEventListener("input", (ev) => {
   if (t.id === "firstName") {
     u.firstName = t.value;
     const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady();
-    const rx = document.querySelector(".foot-msg"); if (rx) rx.innerHTML = t.value.trim() ? vx("st_joy", 34) + `<span>${esc("Enchanté, " + t.value.trim() + " !")}</span>` : "";
+    const rx = document.querySelector(".foot-msg"); if (rx) rx.innerHTML = t.value.trim() ? vx("st_joy", 34) + `<span>${esc("Enchanté, " + t.value.trim() + ".")}</span>` : "";
   }
   if (t.id === "placementWriting") {
     u.writing = t.value;
@@ -4588,11 +4601,11 @@ function viewLogin() {
   if (u.forgot) return authShell(`${ask("think", "Pas de souci : je t'envoie un lien pour choisir un nouveau mot de passe.", "", 110)}
     <form class="stack" data-form="forgot" novalidate style="gap:12px">
       <label class="field"><span class="label">Adresse e-mail</span><input id="loginEmail" class="input" type="email" autocomplete="email" value="${esc(u.email || "")}" placeholder="toi@exemple.com"></label>
-      ${u.info ? `<div class="notice">${esc(u.info)}</div>` : ""}${notice(u.error)}
+      ${notice(u.info, "info")}${notice(u.error)}
       <button class="btn btn-primary btn-lg btn-block" ${u.busy ? "disabled" : ""}>${u.busy ? '<span class="spinner"></span>' : ""}Envoyer le lien</button>
       <button type="button" class="btn btn-ghost" data-act="forgot-off">Retour à la connexion</button>
     </form>`);
-  return authShell(`${ask("wave", "Content de te revoir ! Connecte-toi pour reprendre ton parcours.", "", 110)}
+  return authShell(`${ask("wave", "Content de te revoir. Connecte-toi pour reprendre ton parcours.", "", 110)}
     <form class="stack" data-form="login" novalidate style="gap:12px">
       <label class="field"><span class="label">Adresse e-mail</span><input id="loginEmail" class="input" type="email" autocomplete="email" value="${esc(u.email || "")}" placeholder="toi@exemple.com"></label>
       <label class="field"><span class="label">Mot de passe</span><input id="loginPass" class="input" type="password" autocomplete="current-password" placeholder="Ton mot de passe"></label>
@@ -4603,8 +4616,8 @@ function viewLogin() {
     ${orLine()}${googleBtn()}`);
 }
 function viewCheckMail() {
-  return authShell(`${ask("love", "Presque fini ! Confirme ton adresse e-mail.", "", 120)}
-    <div class="card pad stack" style="gap:8px"><p>Je t'ai envoyé un lien de confirmation à <b>${esc(S.ui.email || "ton adresse")}</b>.</p><p class="small muted">Clique dessus, puis reviens ici pour te connecter. Pense à regarder dans les spams.</p></div>
+  return authShell(`${ask("love", "Confirme ton adresse e-mail", "", 120)}
+    <div class="card pad stack" style="gap:8px"><p>Un lien de confirmation a été envoyé à <b>${esc(S.ui.email || "ton adresse")}</b>.</p><p class="small muted">Clique dessus, puis reviens ici pour te connecter. Pense à regarder dans les spams.</p></div>
     <button class="btn btn-primary btn-lg btn-block" data-go="login">J'ai confirmé, me connecter</button>`);
 }
 function viewNewPass() {
@@ -4670,7 +4683,7 @@ async function changePass() {
   const { error } = await SB.auth.updateUser({ password: pw });
   u.passBusy = false;
   if (error) u.passErr = /different from the old|same/i.test(error.message) ? "Choisis un mot de passe différent de l'ancien." : frAuth(error.message);
-  else { u.passOk = "Mot de passe changé ✓"; SFX.play("select"); }
+  else { u.passOk = "Mot de passe modifié."; SFX.play("select"); }
   render();
 }
 async function saveMyPseudo() {
@@ -4678,9 +4691,9 @@ async function saveMyPseudo() {
   const u = S.ui, old = S.profile.username; u.userOk = ""; u.userErr = "";
   if (v === (old || "")) { u.userOk = "C'est déjà ton pseudo."; return render(); }
   if (v && !PSEUDO_RE.test(v)) { u.userErr = "3 à 20 caractères : lettres minuscules, chiffres, point ou tiret bas."; return render(); }
-  if (v && !(await pseudoFree(v))) { u.userErr = "Ce pseudo est déjà pris : choisis-en un autre."; return render(); }
+  if (v && !(await pseudoFree(v))) { u.userErr = "Ce pseudo est déjà pris. Choisis-en un autre."; return render(); }
   if (v) S.profile.username = v; else delete S.profile.username;
-  try { await S.store.saveProfile(S.profile); u.userDraft = null; u.userOk = v ? "Pseudo enregistré ✓" : "Pseudo retiré."; SFX.play("select"); if (v) PSEUDO_FREE[v] = true; }
+  try { await S.store.saveProfile(S.profile); u.userDraft = null; u.userOk = v ? "Pseudo enregistré." : "Pseudo retiré."; SFX.play("select"); if (v) PSEUDO_FREE[v] = true; }
   catch (e) { if (old) S.profile.username = old; else delete S.profile.username; u.userErr = /duplicate|unique|23505/i.test(String((e && (e.message || e.code)) || "")) ? "Ce pseudo vient d'être pris : choisis-en un autre." : "Impossible d'enregistrer pour le moment."; }
   render();
 }
@@ -4689,8 +4702,8 @@ async function sendHelp() {
   u.helpOk = ""; u.helpErr = "";
   if (msg.length < 3) { u.helpErr = "Écris un message un peu plus long."; return render(); }
   u.helpBusy = true; render();
-  try { await S.store.sendFeedback(msg); u.helpDraft = ""; u.helpOk = "Merci ! Ton message est bien arrivé. On te répond par e-mail."; SFX.play("select"); }
-  catch (e) { u.helpErr = /function|schema cache|does not exist/i.test((e && e.message) || "") ? "L'envoi de messages n'est pas encore activé." : ((e && e.message) || "Envoi impossible. Réessaie."); }
+  try { await S.store.sendFeedback(msg); u.helpDraft = ""; u.helpOk = "Message envoyé. L'équipe te répondra par e-mail."; SFX.play("select"); }
+  catch (e) { u.helpErr = /function|schema cache|does not exist/i.test((e && e.message) || "") ? "L'envoi de messages n'est pas encore activé." : ((e && e.message) || "L'envoi a échoué. Réessaie dans un instant."); }
   u.helpBusy = false; render();
 }
 async function doLogout() {
