@@ -1708,7 +1708,7 @@ function render() {
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
   if (v === "coach") { const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" }); }
-  if (v === "dashboard" && fresh) { const n = document.querySelector(".stn.current"); if (n) n.scrollIntoView({ block: "center" }); }
+  if (v === "dashboard" && fresh) { const n = document.querySelector(".stn.current"); if (n) n.scrollIntoView({ block: "center" }); setTimeout(prefetchNext, 400); }
 }
 // Vex parle : le texte s'écrit pendant qu'il bouge la bouche
 function typeSpeech() {
@@ -2260,16 +2260,33 @@ Forme des exercices :
 "skill" est un identifiant parmi : ${SKILL_IDS.join(", ")}.`;
 }
 let genCtl = null, genTimer = null;
+const CONTENT_MEM = {};
+// Lit une leçon déjà écrite (programme, base partagée ou mémoire) — jamais d'IA ici
+async function readyContent(id) {
+  if (COURSE.content && COURSE.content[id]) return cleanContent(COURSE.content[id]);
+  if (CONTENT_MEM[id]) return CONTENT_MEM[id];
+  try { const c = await S.store.loadContent(id); if (c) return (CONTENT_MEM[id] = cleanContent(c)); } catch {}
+  return null;
+}
+// Sur l'accueil, on charge en avance la prochaine leçon pour qu'elle s'ouvre tout de suite
+function prefetchNext() {
+  try { const st = allSteps()[currentIdx()]; if (st && st.kind === "lesson") readyContent(st.id).catch(() => {}); } catch {}
+}
+function genNotice(focus) {
+  const ses = S.session; if (!ses || !ses.loading) return;
+  ses.ai = true;
+  ses.focus = !!focus;
+  const m = document.getElementById("gen-msg"); if (m) m.textContent = focus ? "Vex prépare un entraînement rien que pour toi…" : "Vex écrit cette leçon pour la toute première fois…";
+  const n = document.getElementById("gen-note"); if (n) { n.hidden = false; if (focus) n.textContent = "Un entraînement sur mesure, basé sur tes erreurs : ça prend quelques secondes."; }
+}
 async function getContent(st, focusSkill) {
-  if (!focusSkill) {
-    if (COURSE.content && COURSE.content[st.id]) return cleanContent(COURSE.content[st.id]);
-    try { const c = await S.store.loadContent(st.id); if (c) return cleanContent(c); } catch {}
-  }
+  if (!focusSkill) { const c = await readyContent(st.id); if (c) return c; }
+  genNotice(!!focusSkill);
   if (!S.sample) throw { message: "Cette leçon n'est pas encore prête et Vex n'est pas disponible pour la préparer. Réessaie dans un instant." };
   genCtl = new AbortController();
   const raw = await S.sample.json(genPrompt(st, focusSkill), { modelTier: "default", signal: genCtl.signal, cache: false });
   const c = cleanContent(raw);
-  if (!focusSkill) S.store.saveContent(st.id, c).catch(() => {});
+  if (!focusSkill) { CONTENT_MEM[st.id] = c; S.store.saveContent(st.id, c).catch(() => {}); }
   return c;
 }
 
@@ -3477,9 +3494,9 @@ function viewSession() {
   if (ses.out) return outView(ses);
   if (ses.loading) return `<div class="flow"><div class="flow-top"><button class="icon-btn" data-act="ses-quit" aria-label="Annuler">${icon("i-close")}</button>${progress(3)}</div>
     <main class="flow-body" style="align-items:center;text-align:center;justify-content:center">${vx("think", 160, "lead")}
-      <h1 class="h2">${esc(ses.title)}</h1><p class="muted" id="gen-msg">Vex prépare ta séance…</p><p class="small muted num" id="gen-t">0 s</p>
+      <h1 class="h2">${esc(ses.title)}</h1><p class="muted" id="gen-msg">${ses.ai ? (ses.focus ? "Vex prépare un entraînement rien que pour toi…" : "Vex écrit cette leçon pour la toute première fois…") : "Ouverture de la leçon…"}</p><p class="small muted num" id="gen-t">0 s</p>
       <div class="stack" style="width:100%;max-width:420px;gap:10px"><div class="skel" style="height:14px"></div><div class="skel" style="height:14px;width:80%"></div><div class="skel" style="height:14px;width:60%"></div></div>
-      <p class="small muted">La première fois, une leçon prend quelques secondes à préparer. Ensuite, elle est instantanée pour tout le monde.</p>
+      <p class="small muted" id="gen-note" ${ses.ai ? "" : "hidden"}>Cette leçon n'avait encore jamais été ouverte : Vex l'écrit maintenant, puis elle sera enregistrée et instantanée pour tout le monde.</p>
     </main></div>`;
   if (ses.error) return `<div class="flow"><div class="flow-top"><button class="icon-btn" data-act="ses-quit" aria-label="Fermer">${icon("i-close")}</button>${progress(0)}</div>
     <main class="flow-body" style="align-items:center;text-align:center">${vx("sad", 140, "lead")}<h1 class="h2">Séance indisponible</h1><p class="muted">${esc(ses.error)}</p>
