@@ -640,7 +640,7 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 14px; line-heigh
 
 /* Cartes des compteurs (survol) */
 .hud { position: relative; display: inline-flex; }
-.rail { overflow: visible; height: auto; z-index: 15; }
+.rail { overflow: visible; height: auto; z-index: 15; align-self: start; top: 0; }
 .pill-stat.heart .ico { color: #FF4D5E; filter: none; }
 .hud-pop { position: absolute; top: calc(100% + 12px); right: -8px; z-index: 70; width: 268px; padding: 18px 18px 14px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; border-radius: 20px; background: #262934; border: 1px solid var(--line-2); box-shadow: 0 24px 48px -20px rgba(0, 0, 0, .9); opacity: 0; visibility: hidden; transform: translateY(-8px) scale(.96); transform-origin: top right; transition: opacity .18s ease, transform .22s var(--spring), visibility 0s linear .2s; }
 .hud-pop::before { content: ""; position: absolute; top: -14px; left: 0; right: 0; height: 14px; }
