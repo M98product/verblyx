@@ -120,6 +120,7 @@ img, svg { max-width: 100%; }
 .notice { --nc: var(--primary-text); --nb: rgba(140, 194, 255, .1); display: flex; gap: 12px; align-items: center; padding: 11px 14px 11px 12px; border-radius: 14px; font: 500 14px/1.45 var(--f-body); background: linear-gradient(90deg, var(--nb), rgba(255, 255, 255, .015)); color: var(--fg); border: 1px solid var(--line-2); border-left: 3px solid var(--nc); animation: noticeIn .28s cubic-bezier(.2, .8, .3, 1.2); }
 .notice .n-ic { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 9px; background: var(--nc); color: #14161C; }
 .notice .n-ic svg { width: 16px; height: 16px; }
+.cf-box { display: flex; justify-content: center; }
 .notice .n-tx { min-width: 0; overflow-wrap: anywhere; }
 .notice-error { --nc: var(--danger); --nb: rgba(255, 107, 129, .12); }
 .notice-warn { --nc: var(--warn); --nb: rgba(255, 196, 92, .1); }
@@ -1839,6 +1840,7 @@ function render() {
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
   if (v === "coach" && (fresh || S.chatScroll)) { S.chatScroll = false; scrollChatEnd(); }
   if (v === "dashboard" && fresh) { setTimeout(scrollToCurrent, 0); setTimeout(prefetchNext, 400); }
+  mountCaptcha();
 }
 // Vex parle : le texte s'écrit pendant qu'il bouge la bouche
 function typeSpeech() {
@@ -1986,7 +1988,9 @@ async function obNext() {
   u.saving = true; render();
   p.first_name = name.slice(0, 40); p.onboarded = true; if (!avValid(p.avatar_id)) p.avatar_id = avRandom();
   if (!S.authUser) {
-    const { data, error } = await SB.auth.signUp({ email: u.email.trim(), password: u.pass, options: { data: { first_name: p.first_name }, emailRedirectTo: location.origin + location.pathname } });
+    const captcha = await captchaToken();
+    if (captcha === null) { u.saving = false; u.error = CAPTCHA_FAIL; return render(); }
+    const { data, error } = await SB.auth.signUp({ email: u.email.trim(), password: u.pass, options: { data: { first_name: p.first_name }, emailRedirectTo: location.origin + location.pathname, ...(captcha ? { captchaToken: captcha } : {}) } });
     if (error) { u.saving = false; u.error = frAuth(error.message); return render(); }
     if (!data.session) {
       try { localStorage.setItem("verblyx:pending", JSON.stringify(p)); } catch {}
@@ -2079,7 +2083,7 @@ function viewOnboarding() {
         ${orLine()}${googleBtn("S'inscrire avec Google")}
         <p class="small muted signup-terms">En m'inscrivant, j'accepte les <button type="button" class="link" data-act="doc" data-v="terms">Conditions d'utilisation</button> et la <button type="button" class="link" data-act="doc" data-v="privacy">Politique de confidentialité</button> de Verblyx.</p>
         <p class="small muted">Déjà inscrit ? <button type="button" class="link" data-go="login">Connecte-toi</button></p>
-        ${notice(u.error)}
+        ${captchaBox()}${notice(u.error)}
         <button type="submit" hidden></button>
       </form>`;
   }
@@ -4543,6 +4547,7 @@ function browserDictation() {
 const bootScreen = (title, text) => `<div class="boot"><div class="stack" style="align-items:center;max-width:460px;text-align:center;padding:24px">${vx("sad", 140)}<h1 class="h2">${title}</h1><p class="muted">${text}</p></div></div>`;
 async function boot() {
   const cfg = window.VERBLYX_CONFIG || {};
+  CAP.key = String(cfg.turnstileSiteKey || "").trim();
   S.tts = browserTTS(); S.dict = browserDictation();
   if (S.dict) {
     S.dict.onFinal(({ text }) => { if (S.view !== "session") return; S.ui.spoken = ((S.ui.spoken || "") + text).trim(); const el = document.getElementById("spoken"); if (el) el.textContent = `Tu as dit : « ${S.ui.spoken} »`; const b = document.querySelector('[data-act="check"]'); if (b) b.disabled = !S.ui.spoken; });
@@ -4606,8 +4611,45 @@ async function enterSession(session) {
   render();
   claimGifts();
 }
+/* ---------- Captcha Cloudflare Turnstile (anti-robots) ----------
+   Actif seulement si turnstileSiteKey est rempli dans config.js.
+   Le jeton part avec l'inscription, la connexion et le mot de passe oublié ; Supabase le vérifie. */
+const CAP = { key: "", token: "", widget: null, ready: null };
+function loadTurnstile() {
+  if (window.turnstile) return Promise.resolve(window.turnstile);
+  if (CAP.ready) return CAP.ready;
+  CAP.ready = new Promise((ok, ko) => {
+    const sc = document.createElement("script");
+    sc.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"; sc.async = true;
+    sc.onload = () => ok(window.turnstile); sc.onerror = () => { CAP.ready = null; ko(new Error("turnstile")); };
+    document.head.appendChild(sc);
+  });
+  return CAP.ready;
+}
+const captchaBox = () => CAP.key ? `<div class="cf-box" data-cf aria-label="Vérification anti-robot"></div>` : "";
+function mountCaptcha() {
+  if (!CAP.key) return;
+  document.querySelectorAll(".cf-box[data-cf]:not([data-on])").forEach((el) => {
+    el.dataset.on = "1";
+    loadTurnstile().then((ts) => {
+      if (!el.isConnected) return;
+      CAP.widget = ts.render(el, { sitekey: CAP.key, appearance: "interaction-only", theme: "dark", language: "fr",
+        callback: (t) => { CAP.token = t; }, "expired-callback": () => { CAP.token = ""; }, "error-callback": () => { CAP.token = ""; } });
+    }).catch(() => {});
+  });
+}
+// attend le jeton (en général moins de 2 s, sans rien faire) ; un jeton ne sert qu'une fois
+async function captchaToken() {
+  if (!CAP.key) return undefined;
+  for (let i = 0; i < 48 && !CAP.token; i++) await new Promise((r) => setTimeout(r, 250));
+  const t = CAP.token; CAP.token = "";
+  try { if (window.turnstile && CAP.widget != null) window.turnstile.reset(CAP.widget); } catch {}
+  return t || null;
+}
+const CAPTCHA_FAIL = "La vérification anti-robot n'a pas abouti. Vérifie ta connexion (ou désactive ton bloqueur de pubs), puis réessaie.";
 const frAuth = (m) => {
   m = String(m || "");
+  if (/captcha/i.test(m)) return "La vérification anti-robot a échoué. Réessaie.";
   if (/invalid login/i.test(m)) return "E-mail ou mot de passe incorrect.";
   if (/already registered|already exists/i.test(m)) return "Un compte existe déjà avec cet e-mail : connecte-toi.";
   if (/email not confirmed/i.test(m)) return "Confirme d'abord ton adresse e-mail (regarde dans ta boîte de réception).";
@@ -4629,7 +4671,7 @@ function viewLogin() {
   if (u.forgot) return authShell(`${ask("think", "Pas de souci : je t'envoie un lien pour choisir un nouveau mot de passe.", "", 110)}
     <form class="stack" data-form="forgot" novalidate style="gap:12px">
       <label class="field"><span class="label">Adresse e-mail</span><input id="loginEmail" class="input" type="email" autocomplete="email" value="${esc(u.email || "")}" placeholder="toi@exemple.com"></label>
-      ${notice(u.info, "info")}${notice(u.error)}
+      ${captchaBox()}${notice(u.info, "info")}${notice(u.error)}
       <button class="btn btn-primary btn-lg btn-block" ${u.busy ? "disabled" : ""}>${u.busy ? '<span class="spinner"></span>' : ""}Envoyer le lien</button>
       <button type="button" class="btn btn-ghost" data-act="forgot-off">Retour à la connexion</button>
     </form>`);
@@ -4637,7 +4679,7 @@ function viewLogin() {
     <form class="stack" data-form="login" novalidate style="gap:12px">
       <label class="field"><span class="label">Adresse e-mail</span><input id="loginEmail" class="input" type="email" autocomplete="email" value="${esc(u.email || "")}" placeholder="toi@exemple.com"></label>
       <label class="field"><span class="label">Mot de passe</span><input id="loginPass" class="input" type="password" autocomplete="current-password" placeholder="Ton mot de passe"></label>
-      ${notice(u.error)}
+      ${captchaBox()}${notice(u.error)}
       <button class="btn btn-primary btn-lg btn-block" ${u.busy ? "disabled" : ""}>${u.busy ? '<span class="spinner"></span>' : ""}Se connecter</button>
       <div class="row between"><button type="button" class="link" data-act="forgot-on">Mot de passe oublié ?</button><button type="button" class="link" data-act="start">Créer un compte</button></div>
     </form>
@@ -4679,7 +4721,9 @@ async function doLogin() {
   if (!okEmail(email)) { u.error = "Cette adresse e-mail ne semble pas valide."; return render(); }
   if (!pass) { u.error = "Indique ton mot de passe."; return render(); }
   u.busy = true; u.error = ""; render();
-  const { data, error } = await SB.auth.signInWithPassword({ email, password: pass });
+  const captcha = await captchaToken();
+  if (captcha === null) { u.busy = false; u.error = CAPTCHA_FAIL; return render(); }
+  const { data, error } = await SB.auth.signInWithPassword({ email, password: pass, ...(captcha ? { options: { captchaToken: captcha } } : {}) });
   if (error) { u.busy = false; u.error = frAuth(error.message); return render(); }
   SFX.play("fanfare");
   await enterSession(data.session);
@@ -4688,7 +4732,9 @@ async function doForgot() {
   const u = S.ui, email = (document.getElementById("loginEmail").value || "").trim(); u.email = email;
   if (!okEmail(email)) { u.error = "Cette adresse e-mail ne semble pas valide."; return render(); }
   u.busy = true; u.error = ""; render();
-  const { error } = await SB.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+  const captcha = await captchaToken();
+  if (captcha === null) { u.busy = false; u.error = CAPTCHA_FAIL; return render(); }
+  const { error } = await SB.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname, ...(captcha ? { captchaToken: captcha } : {}) });
   u.busy = false;
   if (error) u.error = frAuth(error.message); else u.info = "Si un compte existe pour cette adresse, tu vas recevoir un lien dans quelques minutes.";
   render();
