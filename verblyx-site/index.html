@@ -720,6 +720,13 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 14px; line-heigh
 .av-sw { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; }
 .av-sw.is-on { border-color: #fff; box-shadow: 0 0 0 2px var(--primary); }
 img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
+.avatar.av-char { background: #163659; overflow: hidden; padding: 0; box-shadow: inset 0 0 0 1px rgba(234, 251, 255, .08); }
+.avatar.av-char svg { width: 100%; height: 100%; display: block; }
+.av-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 10px; margin-top: 14px; }
+.av-pick { aspect-ratio: 1; padding: 0; border: 2px solid transparent; border-radius: 50%; background: #163659; overflow: hidden; cursor: pointer; transition: transform .15s var(--spring), border-color .15s; }
+.av-pick svg { width: 100%; height: 100%; display: block; }
+.av-pick:hover { transform: scale(1.07); }
+.av-pick.is-on { border-color: var(--success); box-shadow: 0 0 0 3px rgba(0, 214, 181, .25); }
 .user-in { position: relative; flex: 1; min-width: 0; }
 .user-in span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 600; }
 .user-in .input { padding-left: 30px; }
@@ -1617,7 +1624,7 @@ async function obNext() {
   if (!S.authUser && !okEmail(u.email)) { u.error = "Cette adresse e-mail ne semble pas valide."; return render(); }
   if (!S.authUser && String(u.pass || "").length < 8) { u.error = "Ton mot de passe doit faire au moins 8 caractères."; return render(); }
   u.saving = true; u.error = ""; render();
-  p.first_name = name.slice(0, 40); p.onboarded = true;
+  p.first_name = name.slice(0, 40); p.onboarded = true; if (!avValid(p.avatar_id)) p.avatar_id = avRandom();
   if (!S.authUser) {
     const { data, error } = await SB.auth.signUp({ email: u.email.trim(), password: u.pass, options: { data: { first_name: p.first_name }, emailRedirectTo: location.origin + location.pathname } });
     if (error) { u.saving = false; u.error = frAuth(error.message); return render(); }
@@ -2529,11 +2536,112 @@ function viewShop() {
 
 /* ---------- Paramètres du compte ---------- */
 const AV_COLORS = ["#1677FF", "#00B89C", "#7C5CFF", "#E5487A", "#F29D25", "#2BB5E8"];
+// Personnages Verblyx : petits avatars vectoriels (viewBox 0 0 100 100)
+const AVATAR = (() => {
+  const INK = "#1D1B22";
+  const SK = `stroke="${INK}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"`;
+  const SKIN = { a: "#F6CFB0", b: "#EDB58E", c: "#D08F62", d: "#9A6240", e: "#6A422A" };
+  const shade = (hex, k) => { const n = parseInt(hex.slice(1), 16); const f = (v) => Math.max(0, Math.min(255, Math.round(v * k))); return "#" + [f(n >> 16), f((n >> 8) & 255), f(n & 255)].map((v) => v.toString(16).padStart(2, "0")).join(""); };
+
+  const curls = (pts, c) => pts.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" ${SK}/>`).join("") + pts.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r - 1.3}" fill="${c}"/>`).join("");
+  // Cheveux : [derrière la tête, devant]
+  const HAIR = {
+    none: () => ["", ""],
+    buzz: (c) => ["", `<path d="M28 46 C27 31 37 23 50 23 C63 23 73 31 72 46 C64 39 36 39 28 46 Z" fill="${c}" ${SK}/>`],
+    messy: (c) => ["", `<path d="M25 52 C20 38 27 24 40 21 C44 14 56 13 61 19 C73 19 82 32 76 52 C73 44 70 40 66 38 C61 43 53 43 47 39 C41 44 35 42 32 41 C29 44 27 48 25 52 Z" fill="${c}" ${SK}/><path d="M44 22 L48 27 M57 21 L58 27 M36 27 L40 31" ${SK} fill="none" opacity=".45"/>`],
+    spiky: (c) => ["", `<path d="M25 50 L21 40 L28 35 L22 27 L33 26 L32 17 L42 21 L46 11 L52 19 L60 11 L63 21 L73 16 L71 26 L80 28 L74 35 L80 42 L75 50 C71 42 63 38 57 39 L53 34 L48 40 C40 38 32 41 25 50 Z" fill="${c}" ${SK}/>`],
+    curly: (c) => ["", curls([[27, 44, 8], [29, 32, 9], [38, 23, 10], [50, 19, 10], [62, 22, 10], [71, 31, 9], [73, 43, 8], [42, 34, 8], [55, 33, 8], [64, 37, 7], [33, 40, 7]], c)],
+    afro: (c) => [curls([[22, 50, 9], [78, 50, 9], [20, 38, 9], [80, 38, 9]], c), curls([[25, 30, 10], [34, 20, 11], [47, 15, 11], [60, 16, 11], [71, 22, 10], [76, 33, 9], [42, 31, 8], [56, 30, 8], [66, 35, 7], [31, 38, 7]], c)],
+    fluffy: (c) => ["", curls([[28, 40, 8], [31, 29, 9], [41, 22, 10], [53, 19, 10], [64, 23, 9], [72, 33, 9], [73, 44, 7], [45, 33, 8], [58, 34, 8], [35, 39, 6]], c)],
+    long: (c) => [`<path d="M23 46 C22 26 35 17 50 17 C65 17 78 26 77 46 L79 84 C71 88 63 86 60 81 L40 81 C37 86 29 88 21 84 Z" fill="${c}" ${SK}/>`,
+      `<path d="M27 50 C26 31 37 22 50 22 C63 22 74 31 73 50 C67 42 61 36 55 34 C50 40 40 43 27 50 Z" fill="${c}" ${SK}/>`],
+    wavy: (c) => [`<path d="M23 44 C21 25 35 16 50 16 C65 16 79 25 77 44 C82 52 76 58 80 66 C84 74 78 82 72 84 C68 87 62 85 60 81 L40 81 C38 85 32 87 28 84 C22 82 16 74 20 66 C24 58 18 52 23 44 Z" fill="${c}" ${SK}/>`,
+      `<path d="M27 50 C25 31 37 21 50 21 C63 21 75 31 73 50 C70 44 66 40 62 38 C58 42 54 42 50 37 C44 42 36 44 27 50 Z" fill="${c}" ${SK}/>`],
+    bob: (c) => [`<path d="M22 48 C21 27 34 18 50 18 C66 18 79 27 78 48 L78 70 C70 72 66 70 64 66 L36 66 C34 70 30 72 22 70 Z" fill="${c}" ${SK}/>`,
+      `<path d="M27 48 C27 30 37 23 50 23 C63 23 73 30 73 48 C69 42 63 39 50 39 C37 39 31 42 27 48 Z" fill="${c}" ${SK}/>`],
+  };
+  // Couvre-chefs : [derrière, devant]
+  const HAT = {
+    none: () => ["", ""],
+    beanie: (c) => ["", `<path d="M25 42 C24 22 36 12 50 12 C64 12 76 22 75 42 Z" fill="${c}" ${SK}/><rect x="22" y="34" width="56" height="11" rx="5.5" fill="${shade(c, 1.12)}" ${SK}/><path d="M32 37 V42 M40 37 V42 M48 37 V42 M56 37 V42 M64 37 V42" stroke="${INK}" stroke-width="1.2" opacity=".35"/>`],
+    cap: (c) => ["", `<path d="M26 44 C26 25 37 17 50 17 C63 17 74 25 74 44 Z" fill="${c}" ${SK}/><path d="M30 41 C22 40 11 42 7 47 C13 50 25 48 32 45 Z" fill="${shade(c, .82)}" ${SK}/><path d="M50 17 V22" ${SK}/>`],
+    capBack: (c) => ["", `<path d="M26 44 C26 25 37 17 50 17 C63 17 74 25 74 44 Z" fill="${c}" ${SK}/><path d="M41 44 C42 37 58 37 59 44" fill="${shade(c, .7)}" ${SK}/><path d="M70 36 C78 34 86 36 90 40 C84 43 76 43 71 42 Z" fill="${shade(c, .82)}" ${SK}/>`],
+    hood: (c) => [`<path d="M17 72 C12 40 27 14 50 14 C73 14 88 40 83 72 C80 82 20 82 17 72 Z" fill="${c}" ${SK}/>`,
+      `<path d="M25 52 C24 32 35 22 50 22 C65 22 76 32 75 52 C72 39 63 31 50 31 C37 31 28 39 25 52 Z" fill="${shade(c, 1.18)}" ${SK}/>`],
+    headphones: (c) => ["", `<path d="M24 52 C22 22 78 22 76 52" fill="none" stroke="${INK}" stroke-width="8" stroke-linecap="round"/><path d="M24 52 C22 22 78 22 76 52" fill="none" stroke="${c}" stroke-width="4.5" stroke-linecap="round"/><rect x="15" y="45" width="13" height="20" rx="6" fill="${c}" ${SK}/><rect x="72" y="45" width="13" height="20" rx="6" fill="${c}" ${SK}/>`],
+  };
+  const ACC = {
+    glasses: () => `<circle cx="40" cy="55" r="7.5" fill="rgba(255,255,255,.12)" stroke="${INK}" stroke-width="2.2"/><circle cx="60" cy="55" r="7.5" fill="rgba(255,255,255,.12)" stroke="${INK}" stroke-width="2.2"/><path d="M47.5 55 H52.5" stroke="${INK}" stroke-width="2.2"/>`,
+    sunglasses: () => `<path d="M29 49 H47 V56 C47 61 43 63 38 63 C32 63 29 60 29 55 Z M53 49 H71 V55 C71 60 68 63 62 63 C57 63 53 61 53 56 Z" fill="#101014"/><path d="M47 51 H53" stroke="#101014" stroke-width="2.4"/><path d="M33 52 L37 52" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>`,
+    earrings: () => `<circle cx="27.5" cy="64" r="2.6" fill="none" stroke="#C9CED6" stroke-width="1.8"/><circle cx="72.5" cy="64" r="2.6" fill="none" stroke="#C9CED6" stroke-width="1.8"/>`,
+    bow: () => `<g transform="translate(64 26) rotate(12)"><path d="M0 0 L-9 -6 L-9 6 Z M0 0 L9 -6 L9 6 Z" fill="#F48FB1" ${SK}/><circle r="2.8" fill="#F06292" ${SK}/></g>`,
+    clips: () => `<g fill="#F48FB1" ${SK}><path d="M30 34 l4 -3 l1 4 z M34 37 l4 -3 l1 4 z"/><path d="M70 34 l-4 -3 l-1 4 z M66 37 l-4 -3 l-1 4 z"/></g>`,
+    mask: () => `<path d="M28 59 H72 V62 C72 70 66 74 58 74 H42 C34 74 28 70 28 62 Z" fill="#141418" stroke="${INK}" stroke-width="2.4"/>`,
+    blush: () => `<ellipse cx="34" cy="63" rx="4" ry="2.4" fill="#F48FB1" opacity=".55"/><ellipse cx="66" cy="63" rx="4" ry="2.4" fill="#F48FB1" opacity=".55"/>`,
+  };
+  const eyes = () => [40, 60].map((x) => `<ellipse cx="${x}" cy="55" rx="5.6" ry="7" fill="#fff" stroke="${INK}" stroke-width="1.8"/><ellipse cx="${x + 0.6}" cy="56" rx="4.3" ry="5.6" fill="${INK}"/><circle cx="${x + 2}" cy="53.2" r="1.4" fill="#fff"/>`).join("");
+  const top = (c) => `<path d="M13 101 C13 86 25 77 50 77 C75 77 87 86 87 101 Z" fill="${c}" ${SK}/><path d="M35 79 C40 86 60 86 65 79" fill="none" stroke="${INK}" stroke-width="1.6" opacity=".35"/><path d="M45 85 V93 M55 85 V93" stroke="${shade(c, 1.5)}" stroke-width="1.8" stroke-linecap="round"/>`;
+
+  function svg(o, round) {
+    const skin = SKIN[o.skin] || SKIN.b;
+    const [hb, hf] = (HAIR[o.hair] || HAIR.messy)(o.hairColor || "#1F1A1A");
+    const [tb, tf] = (HAT[o.hat] || HAT.none)(o.hatColor || "#1C1C22");
+    const acc = (o.acc || []).filter((a) => ACC[a]);
+    return `<svg viewBox="${round ? "11 9 78 78" : "0 0 100 100"}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      ${tb}${hb}${top(o.top || "#1C1C22")}
+      <rect x="28" y="29" width="44" height="45" rx="17" fill="${skin}" ${SK}/>
+      ${acc.includes("blush") ? ACC.blush() : ""}${eyes()}
+      ${hf}${tf}
+      ${acc.filter((a) => a !== "blush").map((a) => ACC[a]()).join("")}
+    </svg>`;
+  }
+  // Les personnages proposés aux élèves
+  const K = "#1C1C22", BR = "#4A2E1F", BL = "#E9CF8E", WH = "#EEEEF2", AU = "#B5562C";
+  const LIST = [
+    { skin: "d", hair: "curly", hairColor: K, top: K },
+    { skin: "b", hair: "messy", hairColor: BR, top: "#F2F2F2" },
+    { skin: "b", hair: "wavy", hairColor: K, hat: "cap", hatColor: K, top: "#6A3FC4" },
+    { skin: "c", hair: "curly", hairColor: K, top: "#1E4FB0" },
+    { skin: "b", hair: "spiky", hairColor: K, top: K },
+    { skin: "e", hair: "none", hat: "beanie", hatColor: K, top: "#2E7D4F" },
+    { skin: "a", hair: "long", hairColor: K, hat: "headphones", hatColor: "#F2F2F2", top: "#F08CB4" },
+    { skin: "b", hair: "messy", hairColor: K, hat: "cap", hatColor: K, top: "#D83A34" },
+    { skin: "d", hair: "afro", hairColor: BR, top: "#F2F2F2", acc: ["earrings"] },
+    { skin: "b", hair: "curly", hairColor: K, top: "#1F5132" },
+    { skin: "b", hair: "long", hairColor: K, hat: "capBack", hatColor: "#EDE8DC", top: K },
+    { skin: "c", hair: "spiky", hairColor: K, top: "#5B9BE0" },
+    { skin: "a", hair: "wavy", hairColor: BL, top: "#F2F2F2" },
+    { skin: "b", hair: "curly", hairColor: K, top: K, acc: ["sunglasses"] },
+    { skin: "b", hair: "spiky", hairColor: K, top: "#1E4FB0" },
+    { skin: "a", hair: "fluffy", hairColor: WH, top: K },
+    { skin: "d", hair: "none", hat: "hood", hatColor: K, top: K },
+    { skin: "a", hair: "long", hairColor: K, top: "#F08CB4", acc: ["clips", "blush"] },
+    { skin: "c", hair: "messy", hairColor: BR, top: "#E3D5BC" },
+    { skin: "b", hair: "none", hat: "beanie", hatColor: K, top: "#2E7D4F" },
+    { skin: "d", hair: "wavy", hairColor: K, hat: "headphones", hatColor: "#8A8F99", top: "#6A3FC4" },
+    { skin: "b", hair: "long", hairColor: K, hat: "beanie", hatColor: K, top: "#1F5132" },
+    { skin: "b", hair: "wavy", hairColor: K, top: "#F2F2F2", acc: ["earrings"] },
+    { skin: "c", hair: "curly", hairColor: K, top: "#D83A34" },
+    { skin: "b", hair: "bob", hairColor: AU, top: "#1E3A6E", acc: ["blush"] },
+    { skin: "a", hair: "fluffy", hairColor: WH, top: K, acc: ["glasses"] },
+    { skin: "b", hair: "none", hat: "hood", hatColor: K, top: "#6A3FC4" },
+    { skin: "d", hair: "curly", hairColor: K, top: "#F2B526", acc: ["earrings"] },
+    { skin: "b", hair: "messy", hairColor: K, top: "#1F5132", acc: ["glasses"] },
+    { skin: "b", hair: "buzz", hairColor: K, hat: "capBack", hatColor: K, top: "#A0A4AC" },
+    { skin: "d", hair: "curly", hairColor: K, top: K, acc: ["earrings"] },
+    { skin: "b", hair: "long", hairColor: K, top: "#F2F2F2", acc: ["bow"] },
+    { skin: "b", hair: "none", hat: "beanie", hatColor: K, top: "#1F5132", acc: ["glasses"] },
+    { skin: "c", hair: "messy", hairColor: BR, top: "#E3D5BC" },
+    { skin: "b", hair: "none", hat: "hood", hatColor: K, top: K, acc: ["mask"] },
+  ];
+  return { svg, LIST };
+})();
+const avValid = (i) => Number.isInteger(i) && i >= 0 && i < AVATAR.LIST.length;
+const avRandom = () => Math.floor(Math.random() * AVATAR.LIST.length);
 function avatarHTML(p, size = 36) {
   const st = `width:${size}px;height:${size}px;font-size:${Math.round(size * .42)}px`;
-  if (p && typeof p.avatar === "string" && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(p.avatar)) return `<img class="avatar" src="${p.avatar}" alt="" style="${st}">`;
-  const c = p && AV_COLORS.includes(p.avatar_color) ? p.avatar_color : "var(--primary)";
-  return `<span class="avatar" aria-hidden="true" style="${st};background:${c}">${esc(((p && p.first_name) || "?").charAt(0).toUpperCase())}</span>`;
+  if (p && avValid(p.avatar_id)) return `<span class="avatar av-char" aria-hidden="true" style="${st}">${AVATAR.svg(AVATAR.LIST[p.avatar_id], true)}</span>`;
+  return `<span class="avatar" aria-hidden="true" style="${st}">${esc(((p && p.first_name) || "?").charAt(0).toUpperCase())}</span>`;
 }
 function prefs() {
   const p = S.profile || {};
@@ -2575,14 +2683,9 @@ function settingsModal() {
   const tab = S.setTab || "profil";
   let body = "";
   if (tab === "profil") body = `
-    <section class="set-group"><h3>Photo de profil</h3>
-      <div class="av-edit">${avatarHTML(p, 84)}
-        <div class="av-btns">
-          <label class="btn btn-secondary btn-sm" style="cursor:pointer">Choisir une photo<input id="setAvatar" type="file" accept="image/*" hidden></label>
-          ${p.avatar ? `<button class="btn btn-ghost btn-sm danger-txt" data-act="av-remove">Retirer la photo</button>` : ""}
-        </div>
-        ${p.avatar ? "" : `<div class="stack" style="gap:6px"><span class="small muted">Ou une couleur</span><div class="av-colors">${AV_COLORS.map((c) => `<button class="av-sw ${(p.avatar_color || AV_COLORS[0]) === c ? "is-on" : ""}" style="background:${c}" data-act="av-color" data-v="${c}" aria-label="Couleur"></button>`).join("")}</div></div>`}
-      </div>${setMsg("", u.avErr)}
+    <section class="set-group"><h3>Ton personnage</h3>
+      <div class="av-edit" style="margin-top:6px">${avatarHTML(p, 84)}<p class="small muted" style="max-width:260px">Choisis le personnage qui te ressemble. Il s'affiche sur ton profil et dans le menu.</p></div>
+      <div class="av-grid" role="radiogroup" aria-label="Personnages">${AVATAR.LIST.map((o, i) => `<button class="av-pick ${p.avatar_id === i ? "is-on" : ""}" data-act="av-pick" data-v="${i}" role="radio" aria-checked="${p.avatar_id === i}" aria-label="Personnage ${i + 1}">${AVATAR.svg(o, true)}</button>`).join("")}</div>
     </section>
     <section class="set-group"><h3>Prénom</h3>
       <form class="row" data-form="settings-name" style="gap:8px;flex-wrap:nowrap" novalidate>
@@ -2755,7 +2858,7 @@ function viewAdmin() {
       ${list.length && !rows.length ? `<p class="muted">Aucun compte ne correspond.</p>` : ""}
       ${rows.map((r) => { const p = r.p, open = u.admOpen === r.id; return `<div class="adm-row">
         <div class="adm-top">
-          <span class="adm-id">${r.account_no ? accId(r.account_no) : "—"}</span>
+          ${avatarHTML(p, 40)}<span class="adm-id">${r.account_no ? accId(r.account_no) : "—"}</span>
           <div class="adm-who"><b>${esc(p.first_name || "(pas encore de prénom)")}${p.username ? ` <span class="small muted">@${esc(p.username)}</span>` : ""}</b><span class="small muted">${esc(r.email || "")}</span><span class="small muted">Créé le ${fmt(r.signed_up)} · vu ${fmt(r.last_sign_in)}</span></div>
           <div class="adm-nums"><span>Niveau ${esc(p.cefr_level || "?")}</span><span>${p.xp || 0} XP</span><span>❤ ${hearts(p)}/${HEART_MAX}</span><span>🪙 ${p.coins || 0}</span><span>🔥 ${p.streak || 0} j</span><span>${Object.keys((p.course && p.course.done) || {}).length} leçons</span></div>
           ${r.account_no ? `<button class="btn btn-${open ? "primary" : "secondary"} btn-sm" data-act="adm-open" data-v="${r.id}">${open ? "Fermer" : "Gérer"}</button>` : `<span class="small muted">Inscription pas terminée</span>`}
@@ -3221,7 +3324,7 @@ $app.addEventListener("click", (ev) => {
     case "gift-close": S.giftNote = ""; render(); break;
     case "set-tab": S.setTab = v; u.confirmReset = false; SFX.play("tap"); render(); { const m = document.querySelector(".set-main"); if (m) m.scrollTop = 0; } break;
     case "pref": { const p = S.profile; p.prefs = { ...prefs(), [v]: !prefs()[v] }; SFX.play(p.prefs[v] ? "select" : "unselect"); if (v === "anim") applyMotion(); render(); saveProfile(); break; }
-    case "av-color": S.profile.avatar_color = v; delete S.profile.avatar; SFX.play("select"); render(); saveProfile(); break;
+    case "av-pick": S.profile.avatar_id = Number(v); delete S.profile.avatar; delete S.profile.avatar_color; SFX.play("select"); render(); saveProfile(); break;
     case "av-remove": delete S.profile.avatar; u.avErr = ""; SFX.play("unselect"); render(); saveProfile(); break;
     case "copy-id": try { navigator.clipboard.writeText(accId(S.accountNo)); } catch {} u.copied = true; render(); setTimeout(() => { if (S.ui.copied) { S.ui.copied = false; if (S.settingsOpen) render(); } }, 1500); break;
     case "adm-tab": u.admTab = v; SFX.play("tap"); render(); break;
@@ -3579,6 +3682,7 @@ async function enterSession(session) {
       const gap = Math.round((new Date(today()) - new Date(p.last_active)) / 864e5) - 1;
       if (gap >= 1 && gap <= p.freezes) { p.freezes -= gap; p.last_active = yesterday(); saveProfile(); }
     }
+    if (!avValid(p.avatar_id)) { p.avatar_id = avRandom(); delete p.avatar; saveProfile(); }
     p.skills = p.skills || {}; p.goals = p.goals || []; p.difficulties = p.difficulties || []; p.days = p.days || {}; p.xp = p.xp || 0; p.streak = p.streak || 0;
   }
   const fromHash = FROM_HASH[location.hash.slice(1)];
