@@ -1507,6 +1507,13 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
   .coach2.has-panel .c2-main { max-width: none; }
   .c2-side { position: sticky; top: 24px; max-height: calc(100dvh - 48px); }
 }
+/* très grand écran : la discussion reste au centre, le panneau s'ouvre à droite sans rien déplacer */
+@media (min-width: 1700px) {
+  .coach2.has-panel { grid-template-columns: minmax(0, 1fr); }
+  .coach2.has-panel .c2-main { max-width: 780px; }
+  .c2-side { position: fixed; z-index: 30; top: 24px; right: 24px; bottom: 24px; width: 360px; max-height: none; animation: sideIn .28s cubic-bezier(.2, .8, .3, 1); }
+  @keyframes sideIn { from { transform: translateX(24px); opacity: 0; } }
+}
 /* écran moyen : le panneau glisse par-dessus, à droite */
 @media (max-width: 1279px) {
   .c2-side { position: fixed; z-index: 61; top: 16px; right: 16px; bottom: 16px; width: min(380px, calc(100vw - 32px)); animation: sideIn .28s cubic-bezier(.2, .8, .3, 1); }
@@ -3637,7 +3644,7 @@ function viewReview() {
    Frais de paiement en ligne (~1,5 % + 0,25 €) : ~0,37 € par mois. */
 const PLUS = {
   available: false,          // passer à true le jour où le paiement est branché
-  lockFocus: true,           // true = les fonctions Plus sont réservées aux abonnés (cadenas)
+  lockFocus: false,          // true = les fonctions Plus sont réservées aux abonnés (cadenas)
   monthly: 7.99, yearly: 59.99,
   msgs: 300,                 // échanges avec Vex par jour pour un abonné (80 sans abonnement)
 };
@@ -3755,8 +3762,7 @@ function viewShop() {
       <div><b>+60</b><span>Obtenir une certification</span></div>
       <div><b>+5</b><span>Faire une révision</span></div>
     </div>
-  </section>  ${plusCard()}
-  `;
+  </section>  `;
 }
 
 /* ---------- Paramètres du compte ---------- */
@@ -5003,7 +5009,7 @@ function coOpen(id) {
 /* ---------- Limite d'échanges avec l'IA ---------- */
 async function loadAiUsage() {
   if (!S.store || !S.store.myAiUsage) return;
-  try { const d = await S.store.myAiUsage(); if (d) { const was = aiBlocked(); CO.ai = { used: Number(d.used) || 0, limit: d.limit == null ? null : Number(d.limit) }; if (S.view === "coach") { if (aiBlocked() !== was) render(); else { paintCoachTop(); const h = document.querySelector(".c2-hint"); if (h && aiLeft() != null) h.textContent = `${aiLeft()} échange${aiLeft() > 1 ? "s" : ""} avec Vex restant${aiLeft() > 1 ? "s" : ""} aujourd'hui · Entrée pour envoyer, Maj + Entrée pour aller à la ligne`; } } } } catch {}
+  try { const d = await S.store.myAiUsage(); if (d) { CO.ai = { used: Number(d.used) || 0, limit: d.limit == null ? null : Number(d.limit) }; if (S.view === "coach") render(); } } catch {}
 }
 const aiLeft = () => CO.ai && CO.ai.limit != null ? Math.max(0, CO.ai.limit - CO.ai.used) : null;
 const aiSpent = () => { if (CO.ai) CO.ai.used++; };
@@ -5395,7 +5401,7 @@ function coachTopHTML() {
       ${CO.toast ? `<span class="ct-chip is-toast">${esc(CO.toast.text)}</span>` : ""}
       ${FOCUS.running || FOCUS.elapsed ? `<button class="ct-chip is-timer ${FOCUS.running ? "on" : ""}" data-act="co-panel" data-v="focus" aria-label="Minuteur">${pic("clock", 15)}<span id="fx-time-mini">${fmt(focusShown())}</span></button>` : ""}
       <span class="ct-chip" title="XP gagnée avec Vex aujourd'hui (maximum ${COACH_XP_CAP})">${pic("bolt", 15)}${xpToday} XP</span>
-      ${left != null ? `<span class="ct-chip ${left <= 5 ? "is-low" : ""}" title="Échanges avec Vex restants aujourd'hui">${pic("chat", 15)}${left}</span>` : ""}
+      ${left != null ? `<span class="ct-chip ${left <= 5 ? "is-low" : ""}" title="Échanges avec Vex restants aujourd'hui (sur ${CO.ai.limit})">${pic("chat", 15)}${left} / ${CO.ai.limit}</span>` : CO.ai ? `<span class="ct-chip" title="Aucune limite d'échanges pour ton compte">${pic("chat", 15)}Illimité</span>` : ""}
     </div>`;
 }
 function paintCoachTop() {
@@ -5466,7 +5472,7 @@ function focusPanel() {
   const c = coachData(), s = c.set;
   if (PLUS.lockFocus && !S.isPlus) return `<div class="side-sec"><div class="plus-lock"><span class="plus-brand">VERBLYX <b>PLUS</b></span><b>L'espace concentration est inclus dans Verblyx Plus</b><span>Minuteur Pomodoro, ambiances sonores et objectifs de session.</span><button class="btn btn-primary btn-sm" data-go="shop">Découvrir Plus</button></div></div>`;
   return `<div class="side-sec">
-    <div class="ss-h"><b>Concentration <span class="plus-tag" title="Inclus dans Verblyx Plus, offert pour le moment">Plus</span></b><label class="co-switch"><input type="checkbox" data-act="set-timer" ${s.timer ? "checked" : ""}><span></span>Minuteur</label></div>
+    <div class="ss-h"><b>Concentration</b><label class="co-switch"><input type="checkbox" data-act="set-timer" ${s.timer ? "checked" : ""}><span></span>Minuteur</label></div>
     ${s.timer ? `<div class="fx-modes" role="radiogroup">${FMODES.map(([k, t]) => `<button role="radio" aria-checked="${FOCUS.mode === k}" class="${FOCUS.mode === k ? "is-on" : ""}" data-act="fx-mode" data-v="${k}">${t}</button>`).join("")}</div>
     <p class="small muted fx-desc">${(FMODES.find((x) => x[0] === FOCUS.mode) || FMODES[0])[2]}${FOCUS.phase === "break" && FOCUS.mode === "pomodoro" ? " · pause en cours" : ""}</p>
     <div class="fx-clock"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle id="fx-ring" cx="60" cy="60" r="52" class="fg ${FOCUS.phase === "break" ? "brk" : ""}" pathLength="100" stroke-dasharray="${FOCUS.total ? (1 - FOCUS.left / FOCUS.total) * 100 : 0} 100" transform="rotate(-90 60 60)"/></svg><span id="fx-time" class="num">${fmt(focusShown())}</span></div>
@@ -5547,7 +5553,7 @@ function viewCoach() {
           ${S.dict ? `<button type="button" class="cc-btn ${CO.listening ? "is-rec" : ""}" data-act="mic" aria-label="${CO.listening ? "Arrêter la dictée" : "Dicter un message"}" ${blocked ? "disabled" : ""}>${pic(CO.listening ? "stop" : "mic", 20)}</button>` : ""}
           <button class="cc-send" aria-label="Envoyer" ${busy || !S.sample || blocked ? "disabled" : ""}>${pic("send", 20)}</button>
         </form>
-        <p class="c2-hint small">${aiLeft() != null ? `${aiLeft()} échange${aiLeft() > 1 ? "s" : ""} avec Vex restant${aiLeft() > 1 ? "s" : ""} aujourd'hui · ` : ""}Entrée pour envoyer, Maj + Entrée pour aller à la ligne</p>
+        <p class="c2-hint small">${aiLeft() != null ? `${aiLeft()} échange${aiLeft() > 1 ? "s" : ""} avec Vex restant${aiLeft() > 1 ? "s" : ""} aujourd'hui sur ${CO.ai.limit} · ` : CO.ai ? "Échanges illimités · " : ""}Entrée pour envoyer, Maj + Entrée pour aller à la ligne</p>
       </div>
     </div>
     ${panel ? `<aside class="c2-side" aria-label="${(PANELS.find((x) => x[0] === panel) || [])[1] || ""}">
