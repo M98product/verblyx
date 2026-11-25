@@ -236,6 +236,9 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 14px; line-heigh
 .side-foot .who b { display: block; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .main { min-width: 0; padding: 36px 32px 64px; }
 .main-in { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+.main-in:has(> .adm) { max-width: 1120px; }
+.adm-lv { justify-self: start; }
+.adm-tr > span[data-l] .adm-lv { align-self: flex-start; }
 .rail { position: sticky; top: 0; height: 100vh; overflow-y: auto; padding: 36px 24px 36px 4px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: thin; }
 .mtop, .tabbar { display: none; }
 @media (min-width: 1200px) { .only-narrow { display: none !important; } }
@@ -1105,6 +1108,132 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
 .progress.weak > span { background: var(--danger); }
 .chip .ico { width: 14px; height: 14px; color: var(--success); }
 
+/* ---------- Console admin / modération ---------- */
+.adm { display: flex; flex-direction: column; gap: 18px; max-width: 1120px; container-type: inline-size; }
+.aic { flex: none; display: block; }
+.adm-hero { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px; }
+.adm-hero-tx { flex: 1 1 320px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.adm-hero-act { flex: none; }
+.adm-hero-tx .muted { max-width: 620px; }
+.adm-role { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 8px; font: 700 11.5px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: #8CC2FF; background: rgba(22, 119, 255, .12); border: 1px solid rgba(22, 119, 255, .3); }
+.adm-role.is-admin { color: #F6C452; background: rgba(246, 190, 59, .1); border-color: rgba(246, 190, 59, .32); }
+.adm-btn { display: inline-flex; align-items: center; gap: 7px; }
+.adm-nav { display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; margin-top: -4px; }
+.adm-nav::-webkit-scrollbar { display: none; }
+.adm-nav button { flex: none; position: relative; display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border: 0; background: none; color: var(--muted); font: 600 14px var(--f-body); cursor: pointer; transition: color .15s; }
+.adm-nav button:hover { color: var(--fg); }
+.adm-nav button.is-on { color: var(--fg); }
+.adm-nav button.is-on::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 2px; border-radius: 2px; background: var(--primary); }
+.adm-nav em { font-style: normal; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 6px; display: inline-grid; place-items: center; font: 700 11.5px var(--f-body); background: var(--surface-3); color: var(--fg-2); }
+.adm-nav button.is-on em { background: rgba(22, 119, 255, .18); color: #8CC2FF; }
+.adm-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.adm-kpi { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.adm-kpi span { font: 600 12px var(--f-body); color: var(--muted); letter-spacing: .02em; }
+.adm-kpi b { font: 800 26px/1.15 var(--f-display); letter-spacing: -.02em; }
+.adm-kpi small { color: var(--faint); font-size: 12px; }
+.adm-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.adm-search { flex: 1 1 320px; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px; border-radius: 12px; background: var(--bg-raise); border: 1.5px solid var(--line-2); color: var(--faint); transition: border-color .15s; }
+.adm-search:focus-within { border-color: var(--primary); color: var(--fg-2); }
+.adm-search input { flex: 1; min-width: 0; height: 100%; border: 0; background: none; color: var(--fg); font: 400 15px var(--f-body); }
+.adm-search input:focus { outline: none; }
+.adm-field { flex: none; }
+.adm-select { display: inline-flex; align-items: center; gap: 10px; }
+.adm-select .input { height: 40px; width: auto; min-width: 200px; }
+.adm-seg { display: inline-flex; padding: 3px; border-radius: 11px; background: var(--surface); border: 1px solid var(--line); }
+.adm-seg button { height: 32px; padding: 0 14px; border: 0; border-radius: 8px; background: none; color: var(--muted); font: 600 13.5px var(--f-body); cursor: pointer; }
+.adm-seg button.is-on { background: var(--surface-3); color: var(--fg); }
+.adm-empty { padding: 28px 16px; text-align: center; color: var(--muted); font-size: 14.5px; }
+.adm-badge { display: inline-flex; align-items: center; height: 19px; padding: 0 7px; border-radius: 6px; font: 700 10.5px var(--f-body); letter-spacing: .04em; text-transform: uppercase; vertical-align: 2px; color: #8CC2FF; background: rgba(22, 119, 255, .14); }
+.adm-badge.is-admin { color: #F6C452; background: rgba(246, 190, 59, .12); }
+.adm-id { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; padding: 3px 7px; border-radius: 6px; background: var(--surface-3); color: var(--fg-2); }
+.adm-card { padding: 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
+.adm-section-h { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.adm-actions { gap: 8px; flex-wrap: wrap; }
+.adm-actions.between { justify-content: space-between; }
+.adm-confirm { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 4px 4px 4px 12px; border-radius: 12px; background: rgba(255, 107, 129, .08); border: 1px solid rgba(255, 107, 129, .3); }
+.adm-danger { color: #FF97A8; }
+.adm-danger:hover { color: var(--danger); background: rgba(255, 107, 129, .08); }
+/* tableau des comptes */
+.adm-table { border-radius: 16px; background: var(--surface); border: 1px solid var(--line); overflow: hidden; }
+.adm-tr { display: grid; grid-template-columns: minmax(160px, 1fr) 52px 60px 48px 64px 48px 100px 92px; align-items: center; gap: 8px; padding: 12px 16px; }
+.adm-th { padding: 10px 16px; background: var(--surface-2); border-bottom: 1px solid var(--line); font: 700 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--faint); }
+.adm-acc { border-bottom: 1px solid var(--line); transition: background .15s; }
+.adm-acc:last-child { border-bottom: 0; }
+.adm-acc:hover, .adm-acc.is-open { background: rgba(255, 255, 255, .02); }
+.adm-acc.is-open { box-shadow: inset 3px 0 0 var(--primary); }
+.adm-cell-who { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.adm-who { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.adm-who b { font: 700 14.5px var(--f-body); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm-who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm-lv { display: inline-grid; place-items: center; min-width: 34px; height: 24px; padding: 0 6px; border-radius: 7px; background: rgba(22, 119, 255, .14); color: #8CC2FF; font: 800 12px var(--f-body); }
+.adm-tr > span.num { font-weight: 600; font-size: 14px; }
+.adm-cell-act { display: flex; justify-content: flex-end; }
+.adm-manage { padding: 0 10px; gap: 4px; }
+.adm-manage .aic { transition: transform .2s; }
+.adm-manage[aria-expanded="true"] .aic { transform: rotate(90deg); }
+.adm-pending { margin: -4px 16px 10px; color: var(--warn); }
+.adm-pad { padding: 0 16px 10px; }
+.adm-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); align-items: start; gap: 12px; padding: 4px 16px 16px; }
+.adm-box { display: flex; flex-direction: column; gap: 12px; padding: 14px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); }
+.adm-box-h { display: flex; flex-direction: column; gap: 2px; }
+.adm-box-h b { font: 700 14.5px var(--f-body); }
+.adm-grow { display: flex; flex-direction: column; gap: 6px; }
+.adm-grow .row { gap: 6px; flex-wrap: wrap; }
+.adm-grow select.input, .adm-custom .input { height: 38px; width: auto; flex: 1 1 90px; min-width: 0; }
+.adm-edit { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.adm-edit label { display: flex; flex-direction: column; gap: 4px; }
+.adm-edit .input { height: 40px; width: 100%; }
+.adm-vip-line { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.adm-foot { grid-column: 1 / -1; }
+.adm-mail { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@container (max-width: 760px) {
+  .adm-th { display: none; }
+  .adm-tr { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 12px; }
+  .adm-tr > .adm-cell-who { grid-column: 1 / -1; }
+  .adm-tr > span[data-l] { display: flex; flex-direction: column; gap: 2px; }
+  .adm-tr > span[data-l]::before { content: attr(data-l); font: 700 10.5px var(--f-body); letter-spacing: .05em; text-transform: uppercase; color: var(--faint); }
+  .adm-cell-act { grid-column: 1 / -1; justify-content: stretch; }
+  .adm-cell-act .btn { flex: 1; }
+}
+@media (max-width: 519px) { .adm-panel { grid-template-columns: 1fr; padding: 4px 12px 14px; } .adm-tr { padding: 12px; } .adm-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .adm-kpi b { font-size: 22px; } }
+/* messages */
+.adm-msgs { display: flex; flex-direction: column; gap: 10px; }
+.adm-msg { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--primary); }
+.adm-msg.is-done { border-left-color: var(--line-2); }
+.adm-msg.is-done p { color: var(--muted); }
+.adm-msg header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.adm-msg .adm-when { margin-left: auto; }
+.adm-msg p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; line-height: 1.6; }
+.adm-msg footer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-top: 10px; border-top: 1px solid var(--line); }
+.adm-status { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 7px; font: 700 11px var(--f-body); letter-spacing: .04em; text-transform: uppercase; }
+.adm-status.new { color: #8CC2FF; background: rgba(22, 119, 255, .15); }
+.adm-status.done { color: var(--success); background: rgba(0, 214, 181, .12); }
+/* équipe */
+.adm-team { display: flex; flex-direction: column; gap: 12px; }
+.adm-member-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.adm-perms { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
+.adm-perm { position: relative; display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--bg-raise); border: 1px solid var(--line); cursor: pointer; transition: border-color .15s, background .15s; }
+.adm-perm:hover { border-color: var(--line-2); }
+.adm-perm input { position: absolute; opacity: 0; pointer-events: none; }
+.adm-perm-box { flex: none; display: grid; place-items: center; width: 20px; height: 20px; margin-top: 1px; border-radius: 6px; border: 1.5px solid var(--line-2); color: transparent; transition: background .15s, border-color .15s; }
+.adm-perm input:checked + .adm-perm-box { background: var(--primary); border-color: var(--primary); color: #fff; }
+.adm-perm input:focus-visible + .adm-perm-box { box-shadow: 0 0 0 3px rgba(22, 119, 255, .35); }
+.adm-perm:has(input:checked) { border-color: rgba(22, 119, 255, .45); background: rgba(22, 119, 255, .06); }
+.adm-perm-tx { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.adm-perm-tx b { font: 600 14px var(--f-body); }
+.adm-perm-tx small { color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+/* journal */
+.adm-log { display: flex; flex-direction: column; gap: 18px; }
+.adm-log-day { display: flex; flex-direction: column; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); overflow: hidden; }
+.adm-log-d { padding: 10px 16px; background: var(--surface-2); border-bottom: 1px solid var(--line); font: 700 11.5px var(--f-body); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.adm-log-row { display: grid; grid-template-columns: 10px 1fr auto; align-items: baseline; gap: 12px; padding: 11px 16px; border-bottom: 1px solid var(--line); font-size: 14px; line-height: 1.5; }
+.adm-log-row:last-child { border-bottom: 0; }
+.adm-log-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); transform: translateY(-1px); }
+.k-coin .adm-log-dot { background: #F6BE3B; } .k-xp .adm-log-dot { background: #5CF3DA; } .k-heart .adm-log-dot { background: #FF5C8A; }
+.k-vip .adm-log-dot { background: #F6C452; } .k-del .adm-log-dot { background: var(--danger); } .k-team .adm-log-dot { background: #B68CFF; } .k-msg .adm-log-dot { background: var(--success); }
+.adm-log-tx { min-width: 0; overflow-wrap: anywhere; color: var(--fg-2); }
+.adm-log-tx > b:first-child { color: var(--fg); }
+.adm-levels { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -1710,7 +1839,7 @@ function allowed(view) {
   if (view === "onboarding" || view === "test") return "dashboard";
   if (view === "session" && !S.session) return "dashboard";
   if (view === "settings") { S.settingsOpen = true; return "dashboard"; }
-  if (view === "admin") return S.isAdmin ? "admin" : "dashboard";
+  if (view === "admin") return isStaff() ? "admin" : "dashboard";
   if (view === "review") return "coach";
   if (!["dashboard", "coach", "shop", "profile", "session", "competition"].includes(view)) return "dashboard";
   return view;
@@ -2774,7 +2903,7 @@ function viewShell(inner) {
   <div class="shell ${rail ? "has-rail" : ""}">
     <aside class="side">
       ${logo()}
-      ${(S.isAdmin ? [...NAV, ["admin", "Admin", "i-gear"]] : NAV).map(([v, t, ic]) => `<button class="nav-item ${cur === v ? "is-active" : ""}" data-go="${v}" aria-label="${t}" ${cur === v ? 'aria-current="page"' : ""}>${icon(ic)}<span>${t}</span></button>`).join("")}
+      ${(isStaff() ? [...NAV, ["admin", S.isAdmin ? "Admin" : "Modération", "i-gear"]] : NAV).map(([v, t, ic]) => `<button class="nav-item ${cur === v ? "is-active" : ""}" data-go="${v}" aria-label="${t}" ${cur === v ? 'aria-current="page"' : ""}>${icon(ic)}<span>${t}</span></button>`).join("")}
       ${(() => { const xp = p.xp || 0, n = xpLevel(xp), lo = xpLevelFloor(n), hi = xpLevelFloor(n + 1); return `<button class="side-lv" data-go="profile" aria-label="Niveau ${n}, ${hi - xp} XP avant le niveau ${n + 1}"><b>Niveau ${n}</b>${progress(((xp - lo) / (hi - lo)) * 100, "thin")}<span>${hi - xp} XP avant le niveau ${n + 1}</span></button>`; })()}
       <div class="side-foot">
         ${avatarHTML(p, 36, S.isVip)}
@@ -3311,7 +3440,7 @@ function settingsModal() {
     ${legalLinks("in-set")}
     <p class="small" style="color:var(--faint);margin-top:6px;text-align:center">Verblyx · version 1.3</p>`;
   const tabs = SET_TABS.map(([k, t, ic]) => `<button class="set-tab ${tab === k ? "is-on" : ""}" data-act="set-tab" data-v="${k}">${icon(ic)}<span>${t}</span></button>`).join("")
-    + (S.isAdmin ? `<button class="set-tab" data-go="admin">${icon("i-gear")}<span>Espace admin</span></button>` : "");
+    + (isStaff() ? `<button class="set-tab" data-go="admin">${icon("i-gear")}<span>${S.isAdmin ? "Espace admin" : "Modération"}</span></button>` : "");
   const opening = S.setAnim; S.setAnim = false;
   return `<div class="modal ${opening ? "opening" : ""}" role="dialog" aria-modal="true" aria-labelledby="set-title">
     <div class="modal-bg" data-act="settings-close"></div>
@@ -3440,7 +3569,76 @@ async function claimGifts() {
 window.addEventListener("focus", () => claimGifts());
 setInterval(() => { if (document.visibilityState === "visible") claimGifts(); }, 60000);
 
-/* ---------- Espace admin ---------- */
+/* ---------- Équipe : droits ---------- */
+const PERM_DEFS = [
+  ["accounts", "Voir les comptes", "Liste des élèves, progression, dates d'inscription."],
+  ["gifts", "Envoyer des cadeaux", "XP, pièces et vies, jusqu'à 5 000 par envoi."],
+  ["profiles", "Modifier les profils", "Prénom, pseudo et niveau des élèves."],
+  ["vip", "Gérer le VIP", "Donner ou retirer le badge VIP."],
+  ["messages", "Traiter les messages", "Lire les messages d'aide et les marquer comme traités."],
+  ["messages_delete", "Supprimer les messages", "Effacer définitivement un message d'aide."],
+];
+const PERM_LABEL = Object.fromEntries(PERM_DEFS.map(([k, t]) => [k, t]));
+const can = (p) => !!S.isAdmin || (S.perms || []).includes(p);
+const canAccounts = () => ["accounts", "gifts", "profiles", "vip"].some(can);
+const canMessages = () => can("messages") || can("messages_delete");
+const isStaff = () => !!S.isAdmin || (S.perms || []).length > 0;
+// Petites icônes au trait pour la console
+const AIC = {
+  users: '<path d="M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20"/><circle cx="10" cy="8" r="3.5"/><path d="M20 20v-1.5a3.5 3.5 0 0 0-2.5-3.35M15.5 4.6a3.5 3.5 0 0 1 0 6.8"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/>',
+  shield: '<path d="M12 3 5 6v5.5c0 4.4 3 8.2 7 9.5 4-1.3 7-5.1 7-9.5V6l-7-3Z"/><path d="m9 12 2 2 4-4"/>',
+  log: '<path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>',
+  book: '<path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5Z"/><path d="M12 6.5V19.5"/>',
+  refresh: '<path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20v-4h-4"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  chev: '<path d="m9 6 6 6-6 6"/>',
+  gift: '<rect x="3.5" y="9" width="17" height="11" rx="1.5"/><path d="M12 9v11M3.5 13h17M12 9S10.5 4.5 8 4.5 5.5 7 7 8s5 1 5 1Zm0 0s1.5-4.5 4-4.5S18.5 7 17 8s-5 1-5 1Z"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
+  crown: '<path d="m3 8 4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8Z"/>',
+};
+const aic = (k, s = 18) => `<svg class="aic" viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${AIC[k] || ""}</svg>`;
+const admDate = (d, withYear) => d ? new Date(d).toLocaleString("fr-FR", { day: "2-digit", month: "short", ...(withYear ? { year: "numeric" } : {}), hour: "2-digit", minute: "2-digit" }) : "jamais";
+const admAgo = (d) => {
+  if (!d) return "jamais";
+  const s = (Date.now() - new Date(d).getTime()) / 1000;
+  if (s < 60) return "à l'instant"; if (s < 3600) return `il y a ${Math.floor(s / 60)} min`; if (s < 86400) return `il y a ${Math.floor(s / 3600)} h`;
+  if (s < 7 * 86400) return `il y a ${Math.floor(s / 86400)} j`; return new Date(d).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
+};
+
+function admTabList() {
+  const u = S.ui, unread = u.fbList ? u.fbList.filter((m) => !m.done).length : 0;
+  return [
+    canAccounts() && ["", "Comptes", "users", u.admList ? u.admList.length : null],
+    canMessages() && ["msg", "Messages", "mail", unread || null],
+    S.isAdmin && ["team", "Équipe", "shield", u.staffList ? u.staffList.length : null],
+    S.isAdmin && ["log", "Journal", "log", null],
+    S.isAdmin && ["lessons", "Leçons", "book", null],
+  ].filter(Boolean);
+}
+function admShell(cur, title, sub, actions, body) {
+  const tabs = admTabList();
+  return `<section class="adm">
+    <header class="adm-hero">
+      <div class="adm-hero-tx">
+        <span class="adm-role ${S.isAdmin ? "is-admin" : ""}">${aic(S.isAdmin ? "crown" : "shield", 14)}${S.isAdmin ? "Administrateur" : "Modérateur"}</span>
+        <h1 class="h1">${title}</h1>
+        <p class="muted">${sub}</p>
+      </div>
+      ${actions ? `<div class="adm-hero-act">${actions}</div>` : ""}
+    </header>
+    ${tabs.length > 1 ? `<nav class="adm-nav" aria-label="Sections">${tabs.map(([k, t, ic, n]) => `<button class="${cur === k ? "is-on" : ""}" data-act="adm-tab" data-v="${k}" ${cur === k ? 'aria-current="page"' : ""}>${aic(ic, 17)}<span>${t}</span>${n != null ? `<em class="num">${n}</em>` : ""}</button>`).join("")}</nav>` : ""}
+    ${body}
+  </section>`;
+}
+const admRefresh = (act, busy) => `<button class="btn btn-secondary btn-sm adm-btn" data-act="${act}" ${busy ? "disabled" : ""}>${busy ? '<span class="spinner"></span>' : aic("refresh", 16)}Actualiser</button>`;
+const admKpi = (label, value, hint) => `<div class="adm-kpi"><span>${label}</span><b class="num">${value}</b>${hint ? `<small>${hint}</small>` : ""}</div>`;
+
+/* ---------- Espace admin / modération ---------- */
 async function adminLoad() {
   const u = S.ui; u.admBusy = true; u.admErr = ""; render();
   try { u.admList = await S.store.adminList(); }
@@ -3453,14 +3651,24 @@ async function adminGiftDo(id, kind, n, level) {
     await S.store.adminGift(id, kind, n, level);
     const r = (u.admList || []).find((x) => x.id === id);
     if (r) r.gifts = [...(r.gifts || []), { kind, n, level }];
-    // si c'est mon propre compte, je le reçois tout de suite
     if (S.authUser && id === S.authUser.id) claimGifts();
-    u.admMsg = { id, text: "Envoyé. L'élève le recevra à sa prochaine visite, ou dans la minute s'il est connecté." };
+    const what = kind === "level" ? `Niveau ${level} appliqué.` : `${n > 0 ? "+" : ""}${n} ${kind === "xp" ? "XP" : kind === "coins" ? "pièces" : n > 1 ? "vies" : "vie"} envoyé${kind === "hearts" && n > 1 ? "es" : kind === "coins" ? "es" : ""}.`;
+    u.admMsg = { id, text: what + " L'élève le recevra à sa prochaine visite, ou dans la minute s'il est connecté." };
+    u.logs = null;
     SFX.play("select");
   } catch (e) { u.admErr = (e && e.message) || "Erreur"; }
   render();
 }
 function viewAdmin() {
+  const u = S.ui, tabs = admTabList().map((t) => t[0]);
+  if (!tabs.includes(u.admTab || "")) u.admTab = tabs[0] || "";
+  if (u.admTab === "msg") return adminMessages();
+  if (u.admTab === "lessons") return adminLessons();
+  if (u.admTab === "team") return adminTeam();
+  if (u.admTab === "log") return adminLogs();
+  return adminAccounts();
+}
+function adminAccounts() {
   const u = S.ui;
   if (!u.admList && !u.admBusy && !u.admErr) setTimeout(adminLoad, 0);
   const list = u.admList || [];
@@ -3469,63 +3677,206 @@ function viewAdmin() {
     const p = clone(r.profile || {});
     (r.gifts || []).forEach((g) => applyGift(p, g));
     return { ...r, p, pending: (r.gifts || []).length };
-  }).filter((r) => !q || [r.email, r.p.first_name, r.account_no ? accId(r.account_no) : "", r.account_no].join(" ").toLowerCase().includes(q));
+  }).filter((r) => !q || [r.email, r.p.first_name, r.p.username ? "@" + r.p.username : "", r.account_no ? accId(r.account_no) : ""].join(" ").toLowerCase().includes(q));
   const day = new Date().toISOString().slice(0, 10);
   const today = list.filter((r) => String(r.signed_up || "").slice(0, 10) === day).length;
   const week = list.filter((r) => Date.now() - new Date(r.signed_up).getTime() < 7 * 864e5).length;
-  const fmt = (d) => d ? new Date(d).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "jamais";
+  const active = list.filter((r) => r.last_sign_in && Date.now() - new Date(r.last_sign_in).getTime() < 7 * 864e5).length;
   const hearts = (p) => typeof p.hearts === "number" ? p.hearts : HEART_MAX;
-  if (u.admTab === "msg") return adminMessages();
-  if (u.admTab === "lessons") return adminLessons();
-  return `<section>
-    ${admTabs("")}
-    <div class="adm-head">
-      <div><h1 class="h1">Espace admin</h1><p class="muted">Tous les comptes Verblyx, du plus récent au plus ancien.</p></div>
-      <button class="btn btn-secondary btn-sm" data-act="adm-refresh" ${u.admBusy ? "disabled" : ""}>${u.admBusy ? '<span class="spinner"></span>' : ""}Actualiser</button>
+  const body = `
+    <div class="adm-kpis">${admKpi("Comptes", list.length)}${admKpi("Nouveaux aujourd'hui", today)}${admKpi("Nouveaux sur 7 jours", week)}${admKpi("Actifs sur 7 jours", active)}</div>
+    <div class="adm-toolbar">
+      <label class="adm-search">${aic("search", 17)}<input id="admQ" placeholder="Rechercher par prénom, @pseudo, e-mail ou identifiant" value="${esc(u.admQ || "")}" autocomplete="off" aria-label="Rechercher un compte"></label>
+      <span class="small muted num">${rows.length} résultat${rows.length > 1 ? "s" : ""}</span>
     </div>
-    <div class="adm-stats">
-      <div class="adm-stat"><b>${list.length}</b><span class="small muted">comptes</span></div>
-      <div class="adm-stat"><b>${today}</b><span class="small muted">créés aujourd'hui</span></div>
-      <div class="adm-stat"><b>${week}</b><span class="small muted">sur 7 jours</span></div>
-    </div>
-    <input id="admQ" class="input" style="margin-bottom:12px" placeholder="Chercher un prénom, un e-mail ou un identifiant (VX-00001)" value="${esc(u.admQ || "")}" autocomplete="off">
     ${notice(u.admErr)}
-    <div class="adm-list">
-      ${!list.length && u.admBusy ? `<p class="muted">Chargement…</p>` : ""}
-      ${list.length && !rows.length ? `<p class="muted">Aucun compte ne correspond.</p>` : ""}
-      ${rows.map((r) => { const p = r.p, open = u.admOpen === r.id; return `<div class="adm-row">
-        <div class="adm-top">
-          ${avatarHTML(p, 40, r.vip)}<span class="adm-id">${r.account_no ? accId(r.account_no) : "—"}</span>
-          <div class="adm-who"><b>${esc(p.first_name || "(pas encore de prénom)")}${p.username ? ` <span class="small muted">@${esc(p.username)}</span>` : ""}${r.vip ? " " + vipTag() : ""}</b><span class="small muted">${esc(r.email || "")}</span><span class="small muted">Créé le ${fmt(r.signed_up)} · vu ${fmt(r.last_sign_in)}</span></div>
-          <div class="adm-nums"><span>Niveau ${esc(p.cefr_level || "?")}</span><span>${p.xp || 0} XP</span><span>${em("heart", 14)}${hearts(p)}/${HEART_MAX}</span><span>${em("coin", 14)}${p.coins || 0}</span><span>${em("fire", 14)}${p.streak || 0} j</span><span>${Object.keys((p.course && p.course.done) || {}).length} leçons</span></div>
-          ${r.account_no ? `<button class="btn btn-${open ? "primary" : "secondary"} btn-sm" data-act="adm-open" data-v="${r.id}">${open ? "Fermer" : "Gérer"}</button>` : `<span class="small muted">Inscription pas terminée</span>`}
+    <div class="adm-table">
+      <div class="adm-tr adm-th" aria-hidden="true"><span>Élève</span><span>Niveau</span><span>XP</span><span>Vies</span><span>Pièces</span><span>Pulse</span><span>Dernière visite</span><span></span></div>
+      ${!list.length && u.admBusy ? `<div class="adm-empty">Chargement des comptes…</div>` : ""}
+      ${list.length && !rows.length ? `<div class="adm-empty">Aucun compte ne correspond à « ${esc(u.admQ)} ».</div>` : ""}
+      ${rows.map((r) => { const p = r.p, open = u.admOpen === r.id; return `<div class="adm-acc ${open ? "is-open" : ""}">
+        <div class="adm-tr">
+          <span class="adm-cell-who">${avatarHTML(p, 38, r.vip)}<span class="adm-who"><b>${esc(p.first_name || "Sans prénom")}${r.vip ? " " + vipTag() : ""}${r.is_admin ? ` <span class="adm-badge is-admin">Admin</span>` : r.staff_perms && r.staff_perms.length ? ` <span class="adm-badge">Équipe</span>` : ""}</b><span class="small muted">${p.username ? "@" + esc(p.username) + " · " : ""}${r.account_no ? accId(r.account_no) : "inscription en cours"}</span><span class="small muted adm-mail">${esc(r.email || "")}</span></span></span>
+          <span data-l="Niveau"><span class="adm-lv">${esc(p.cefr_level || "—")}</span></span>
+          <span data-l="XP" class="num">${p.xp || 0}</span>
+          <span data-l="Vies" class="num">${hearts(p)}/${HEART_MAX}</span>
+          <span data-l="Pièces" class="num">${p.coins || 0}</span>
+          <span data-l="Pulse" class="num">${p.streak || 0} j</span>
+          <span data-l="Dernière visite" class="small muted">${admAgo(r.last_sign_in)}</span>
+          <span class="adm-cell-act">${r.account_no && (can("gifts") || can("profiles") || can("vip")) ? `<button class="btn btn-${open ? "primary" : "secondary"} btn-sm adm-btn adm-manage" data-act="adm-open" data-v="${r.id}" aria-expanded="${open}">${open ? "Fermer" : "Gérer"}${aic("chev", 15)}</button>` : ""}</span>
         </div>
-        ${r.pending ? `<p class="small" style="color:var(--warn);margin-top:8px">${plural(r.pending, "cadeau", "cadeaux")} en attente (déjà compté ci-dessus)</p>` : ""}
-        ${u.admMsg && u.admMsg.id === r.id ? notice(u.admMsg.text, /^Rien/.test(u.admMsg.text) ? "info" : "success", true) : ""}
-        ${open ? `<div class="adm-tools">
-          <div class="adm-tool adm-wide"><span class="label">Profil</span>
-            <div class="adm-edit">
-              <label><span class="small muted">Prénom</span><input id="admFn" class="input" maxlength="40" value="${esc(p.first_name || "")}"></label>
-              <label><span class="small muted">Pseudo</span><input id="admUn" class="input" maxlength="21" placeholder="(aucun)" value="${esc(p.username || "")}" autocapitalize="off" spellcheck="false"></label>
-              <label><span class="small muted">E-mail de connexion</span><input id="admEm" class="input" type="email" value="${esc(r.email || "")}" autocapitalize="off" spellcheck="false"></label>
-            </div>
-            <div class="row"><button class="btn btn-primary btn-sm" data-act="adm-save" data-v="${r.id}" ${u.admSaving ? "disabled" : ""}>${u.admSaving ? '<span class="spinner"></span>' : ""}Enregistrer</button>
-              <button class="btn ${r.vip ? "btn-ghost" : "btn-secondary"} btn-sm vip-btn" data-act="adm-vip" data-v="${r.id}" data-on="${r.vip ? 0 : 1}">${icon("i-crown")}${r.vip ? "Retirer le VIP" : "Donner le VIP"}</button></div>
-          </div>
-          <div class="adm-tool"><span class="label">Niveau</span><div class="row"><select id="admLv" class="input">${LEVEL_IDS.map((l) => `<option ${l === p.cefr_level ? "selected" : ""}>${l}</option>`).join("")}</select><button class="btn btn-secondary btn-sm" data-act="adm-level" data-v="${r.id}">Appliquer</button></div></div>
-          <div class="adm-tool"><span class="label">XP</span><div class="row"><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="xp" data-n="50">+50</button><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="xp" data-n="100">+100</button><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="xp" data-n="500">+500</button></div>
-            <div class="row"><input id="admXp" class="input" type="number" placeholder="Autre" aria-label="XP à ajouter"><button class="btn btn-secondary btn-sm" data-act="adm-xp" data-v="${r.id}">Ajouter</button></div></div>
-          <div class="adm-tool"><span class="label">Vies (${hearts(p)}/${HEART_MAX})</span><div class="row"><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="hearts" data-n="1">+1 vie</button><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="hearts" data-n="${HEART_MAX}">Tout remplir</button></div></div>
-          <div class="adm-tool"><span class="label">Pièces</span><div class="row"><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="coins" data-n="100">+100</button><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="coins" data-n="500">+500</button><button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="coins" data-n="1000">+1000</button></div></div>
-        </div>` : ""}
+        ${r.pending ? `<p class="adm-pending small">${plural(r.pending, "envoi", "envois")} en attente de réception, déjà compté${r.pending > 1 ? "s" : ""} dans les chiffres.</p>` : ""}
+        ${u.admMsg && u.admMsg.id === r.id ? `<div class="adm-pad">${notice(u.admMsg.text, /^Rien/.test(u.admMsg.text) ? "info" : "success", true)}</div>` : ""}
+        ${open ? adminPanel(r, p) : ""}
       </div>`; }).join("")}
-    </div>
-  </section>`;
+    </div>`;
+  return admShell("", "Comptes", "Tous les comptes Verblyx, du plus récent au plus ancien.", admRefresh("adm-refresh", u.admBusy), body);
+}
+function adminPanel(r, p) {
+  const u = S.ui, hearts = typeof p.hearts === "number" ? p.hearts : HEART_MAX;
+  const box = (title, sub, inner) => `<div class="adm-box"><div class="adm-box-h"><b>${title}</b>${sub ? `<span class="small muted">${sub}</span>` : ""}</div>${inner}</div>`;
+  const gb = (k, n, t) => `<button class="btn btn-secondary btn-sm" data-act="adm-gift" data-v="${r.id}" data-k="${k}" data-n="${n}">${t}</button>`;
+  const parts = [];
+  if (can("gifts")) parts.push(box("Récompenses", "Ajoutées au compte à la prochaine visite.", `
+      <div class="adm-grow"><span class="small muted">XP</span><div class="row">${gb("xp", 50, "+50")}${gb("xp", 100, "+100")}${gb("xp", 500, "+500")}</div></div>
+      <div class="adm-grow"><span class="small muted">Pièces</span><div class="row">${gb("coins", 100, "+100")}${gb("coins", 500, "+500")}${gb("coins", 1000, "+1 000")}</div></div>
+      <div class="adm-grow"><span class="small muted">Vies (${hearts}/${HEART_MAX})</span><div class="row">${gb("hearts", 1, "+1")}${gb("hearts", HEART_MAX, "Tout remplir")}</div></div>
+      <div class="adm-grow"><span class="small muted">Montant libre</span><div class="row adm-custom"><select id="admKind" class="input" aria-label="Type"><option value="coins">Pièces</option><option value="xp">XP</option><option value="hearts">Vies</option></select><input id="admAmt" class="input" type="number" inputmode="numeric" min="1" max="${S.isAdmin ? 100000 : 5000}" placeholder="Quantité" aria-label="Quantité"><button class="btn btn-primary btn-sm" data-act="adm-custom" data-v="${r.id}">${aic("gift", 16)}Envoyer</button></div></div>`));
+  if (can("profiles")) parts.push(box("Profil", S.isAdmin ? "" : "L'e-mail de connexion ne peut être changé que par l'administrateur.", `
+      <div class="adm-edit">
+        <label><span class="small muted">Prénom</span><input id="admFn" class="input" maxlength="40" value="${esc(p.first_name || "")}"></label>
+        <label><span class="small muted">Pseudo</span><input id="admUn" class="input" maxlength="21" placeholder="aucun" value="${esc(p.username || "")}" autocapitalize="off" spellcheck="false"></label>
+        ${S.isAdmin ? `<label><span class="small muted">E-mail de connexion</span><input id="admEm" class="input" type="email" value="${esc(r.email || "")}" autocapitalize="off" spellcheck="false"></label>` : ""}
+      </div>
+      <div class="row adm-actions"><button class="btn btn-primary btn-sm" data-act="adm-save" data-v="${r.id}" ${u.admSaving ? "disabled" : ""}>${u.admSaving ? '<span class="spinner"></span>' : ""}Enregistrer le profil</button></div>
+      <div class="adm-grow"><span class="small muted">Niveau CECRL</span><div class="row"><select id="admLv" class="input" aria-label="Niveau">${LEVEL_IDS.map((l) => `<option ${l === p.cefr_level ? "selected" : ""}>${l}</option>`).join("")}</select><button class="btn btn-secondary btn-sm" data-act="adm-level" data-v="${r.id}">Appliquer</button></div></div>`));
+  if (can("vip")) parts.push(box("Statut", "", `<div class="adm-vip-line"><span>${r.vip ? `${vipTag()} <span class="small muted">Ce compte est VIP.</span>` : `<span class="small muted">Ce compte n'est pas VIP.</span>`}</span>
+      <button class="btn ${r.vip ? "btn-ghost" : "btn-secondary"} btn-sm vip-btn" data-act="adm-vip" data-v="${r.id}" data-on="${r.vip ? 0 : 1}">${icon("i-crown")}${r.vip ? "Retirer le VIP" : "Donner le VIP"}</button></div>`));
+  return `<div class="adm-panel">${parts.join("")}<p class="small muted adm-foot">Inscrit le ${admDate(r.signed_up, true)} · ${Object.keys((p.course && p.course.done) || {}).length} leçons terminées${can("accounts") ? "" : ""}</p></div>`;
 }
 
-function admTabs(cur) {
-  const u = S.ui, unread = u.fbList ? ` (${u.fbList.filter((m) => !m.done).length})` : "";
-  return `<div class="adm-tabs">${[["", "Comptes"], ["lessons", "Leçons"], ["msg", "Messages" + unread]].map(([k, t]) => `<button class="${cur === k ? "is-on" : ""}" data-act="adm-tab" data-v="${k}">${t}</button>`).join("")}</div>`;
+/* ---------- Messages d'aide ---------- */
+async function adminFbLoad() {
+  const u = S.ui; u.fbBusy = true; u.fbErr = ""; if (S.view === "admin") render();
+  try { u.fbList = await S.store.adminFeedback(); }
+  catch (e) { u.fbErr = "Impossible de charger les messages : " + ((e && e.message) || "erreur"); u.fbList = u.fbList || []; }
+  u.fbBusy = false; if (S.view === "admin") render();
+}
+function adminMessages() {
+  const u = S.ui;
+  if (!u.fbList && !u.fbBusy && !u.fbErr) setTimeout(adminFbLoad, 0);
+  const all = u.fbList || [], filt = u.fbFilter || "open";
+  const open = all.filter((m) => !m.done), list = filt === "open" ? open : all;
+  const body = `
+    <div class="adm-kpis">${admKpi("À traiter", open.length)}${admKpi("Traités", all.length - open.length)}${admKpi("Total", all.length)}</div>
+    <div class="adm-toolbar"><div class="adm-seg">${[["open", "À traiter"], ["all", "Tous"]].map(([k, t]) => `<button class="${filt === k ? "is-on" : ""}" data-act="fb-filter" data-v="${k}">${t}</button>`).join("")}</div></div>
+    ${notice(u.fbErr)}
+    <div class="adm-msgs">
+      ${!list.length && u.fbBusy ? `<div class="adm-empty">Chargement des messages…</div>` : ""}
+      ${!list.length && !u.fbBusy ? `<div class="adm-empty">${filt === "open" ? "Aucun message à traiter." : "Aucun message pour l'instant."}</div>` : ""}
+      ${list.map((m) => `<article class="adm-msg ${m.done ? "is-done" : ""}">
+        <header><span class="adm-status ${m.done ? "done" : "new"}">${m.done ? "Traité" : "Nouveau"}</span><span class="adm-id">${m.account_no ? accId(m.account_no) : "—"}</span><span class="small muted adm-mail">${esc(m.email || "")}</span><span class="small muted adm-when">${admDate(m.created_at)}</span></header>
+        <p>${esc(m.message)}</p>
+        <footer>
+          ${can("messages") ? `<button class="btn btn-${m.done ? "ghost" : "secondary"} btn-sm adm-btn" data-act="fb-done" data-v="${m.id}" data-d="${m.done ? 0 : 1}">${aic(m.done ? "undo" : "check", 16)}${m.done ? "Rouvrir" : "Marquer comme traité"}</button>` : ""}
+          ${can("messages_delete") ? (u.fbDel === m.id
+            ? `<span class="adm-confirm"><span class="small">Supprimer définitivement ?</span><button class="btn btn-danger btn-sm" data-act="fb-del-do" data-v="${m.id}">Supprimer</button><button class="btn btn-ghost btn-sm" data-act="fb-del-no">Annuler</button></span>`
+            : `<button class="btn btn-ghost btn-sm adm-btn adm-danger" data-act="fb-del" data-v="${m.id}">${aic("trash", 16)}Supprimer</button>`) : ""}
+        </footer>
+      </article>`).join("")}
+    </div>`;
+  return admShell("msg", "Messages", "Les messages envoyés par les élèves depuis Paramètres > Aide.", admRefresh("fb-refresh", u.fbBusy), body);
+}
+
+/* ---------- Équipe (admin) ---------- */
+async function staffLoad() {
+  const u = S.ui; u.staffBusy = true; u.staffErr = ""; if (S.view === "admin") render();
+  try { u.staffList = await S.store.staffList(); }
+  catch (e) { const m = (e && e.message) || ""; u.staffErr = /function|schema cache|does not exist/i.test(m) ? "La gestion de l'équipe n'est pas encore activée : lance 009_staff.sql dans Supabase." : "Impossible de charger l'équipe : " + (m || "erreur"); u.staffList = u.staffList || []; }
+  u.staffBusy = false; if (S.view === "admin") render();
+}
+const permChecks = (prefix, on) => `<div class="adm-perms">${PERM_DEFS.map(([k, t, d]) => `<label class="adm-perm"><input type="checkbox" id="${prefix}-${k}" ${on.includes(k) ? "checked" : ""}><span class="adm-perm-box" aria-hidden="true">${aic("check", 13)}</span><span class="adm-perm-tx"><b>${t}</b><small>${d}</small></span></label>`).join("")}</div>`;
+const readPerms = (prefix) => PERM_DEFS.map(([k]) => k).filter((k) => { const el = document.getElementById(`${prefix}-${k}`); return el && el.checked; });
+function adminTeam() {
+  const u = S.ui;
+  if (!u.staffList && !u.staffBusy && !u.staffErr) setTimeout(staffLoad, 0);
+  const list = u.staffList || [];
+  const body = `
+    <div class="adm-card">
+      <div class="adm-box-h"><b>Ajouter un membre</b><span class="small muted">Le compte doit déjà exister sur Verblyx. Ses droits s'appliquent dès sa prochaine visite.</span></div>
+      <label class="adm-search adm-field">${aic("user", 17)}<input id="staffWho" placeholder="E-mail, @pseudo ou identifiant (VX-00012)" value="${esc(u.staffWho || "")}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Compte à ajouter"></label>
+      ${permChecks("np", u.staffNew || ["accounts", "messages"])}
+      ${notice(u.staffAddErr)}
+      <div class="row adm-actions"><button class="btn btn-primary btn-sm" data-act="staff-add" ${u.staffSaving ? "disabled" : ""}>${u.staffSaving ? '<span class="spinner"></span>' : aic("plus", 16)}Ajouter à l'équipe</button></div>
+    </div>
+    ${notice(u.staffErr)}${u.staffOk ? notice(u.staffOk, "success") : ""}
+    <div class="adm-section-h"><b>Membres de l'équipe</b><span class="small muted num">${list.length}</span></div>
+    <div class="adm-team">
+      ${!list.length && u.staffBusy ? `<div class="adm-empty">Chargement…</div>` : ""}
+      ${!list.length && !u.staffBusy ? `<div class="adm-empty">Personne dans l'équipe pour l'instant. Ajoute un premier modérateur ci-dessus.</div>` : ""}
+      ${list.map((m) => `<div class="adm-card adm-member">
+        <div class="adm-member-h">
+          <span class="adm-cell-who">${avatarHTML({ avatar_id: m.avatar_id, first_name: m.first_name }, 40)}<span class="adm-who"><b>${esc(m.first_name || "Sans prénom")} <span class="adm-badge">Modérateur</span></b><span class="small muted">${m.username ? "@" + esc(m.username) + " · " : ""}${m.account_no ? accId(m.account_no) : ""} · ${esc(m.email || "")}</span><span class="small muted">Dans l'équipe depuis le ${admDate(m.created_at, true)} · vu ${admAgo(m.last_sign_in)}</span></span></span>
+          <button class="btn btn-ghost btn-sm adm-btn" data-act="staff-logs" data-v="${m.user_id}">${aic("log", 16)}Voir ses actions</button>
+        </div>
+        ${permChecks("sp-" + m.user_id, m.perms || [])}
+        <div class="row adm-actions between">
+          <button class="btn btn-primary btn-sm" data-act="staff-save" data-v="${m.user_id}">Enregistrer les droits</button>
+          ${u.staffDel === m.user_id
+            ? `<span class="adm-confirm"><span class="small">Retirer de l'équipe ?</span><button class="btn btn-danger btn-sm" data-act="staff-del-do" data-v="${m.user_id}">Retirer</button><button class="btn btn-ghost btn-sm" data-act="staff-del-no">Annuler</button></span>`
+            : `<button class="btn btn-ghost btn-sm adm-btn adm-danger" data-act="staff-del" data-v="${m.user_id}">${aic("trash", 16)}Retirer de l'équipe</button>`}
+        </div>
+      </div>`).join("")}
+    </div>`;
+  return admShell("team", "Équipe", "Les modérateurs et ce qu'ils ont le droit de faire. Toi seul peux modifier cette liste.", admRefresh("staff-refresh", u.staffBusy), body);
+}
+async function staffSave(who, perms, isNew) {
+  const u = S.ui; u.staffOk = ""; u.staffErr = ""; u.staffAddErr = "";
+  if (!perms.length) { if (isNew) u.staffAddErr = "Coche au moins une permission."; else u.staffErr = "Coche au moins une permission, ou retire ce membre de l'équipe."; return render(); }
+  if (isNew && !String(who || "").trim()) { u.staffAddErr = "Indique l'e-mail, le @pseudo ou l'identifiant du compte."; return render(); }
+  u.staffSaving = true; render();
+  try {
+    await S.store.staffSet(who, perms);
+    u.staffOk = isNew ? "Membre ajouté à l'équipe." : "Droits enregistrés."; if (isNew) { u.staffWho = ""; u.staffNew = null; }
+    u.logs = null; SFX.play("select");
+    await staffLoad();
+  } catch (e) { const m = (e && e.message) || "Erreur"; if (isNew) u.staffAddErr = m; else u.staffErr = m; }
+  u.staffSaving = false; render();
+}
+
+/* ---------- Journal (admin) ---------- */
+async function logLoad() {
+  const u = S.ui; u.logBusy = true; u.logErr = ""; if (S.view === "admin") render();
+  try { u.logs = await S.store.staffLogs(300, u.logActor || null); }
+  catch (e) { const m = (e && e.message) || ""; u.logErr = /function|schema cache|does not exist/i.test(m) ? "Le journal n'est pas encore activé : lance 009_staff.sql dans Supabase." : "Impossible de charger le journal : " + (m || "erreur"); u.logs = u.logs || []; }
+  u.logBusy = false; if (S.view === "admin") render();
+}
+function logSentence(l) {
+  const d = l.details || {}, t = `<b>${esc(l.target_name || "un compte")}</b>`;
+  const unit = (k, n) => k === "xp" ? "XP" : k === "coins" ? (Math.abs(n) > 1 ? "pièces" : "pièce") : (Math.abs(n) > 1 ? "vies" : "vie");
+  const perms = (a) => (a || []).map((k) => PERM_LABEL[k] || k).join(", ") || "aucun droit";
+  switch (l.action) {
+    case "gift": return [`a envoyé <b class="num">${d.n > 0 ? "+" : ""}${d.n} ${unit(d.kind, d.n)}</b> à ${t}`, d.kind === "coins" ? "coin" : d.kind === "xp" ? "xp" : "heart"];
+    case "level": return [`a passé ${t} au niveau <b>${esc(d.level || "?")}</b>`, "level"];
+    case "vip_on": return [`a donné le VIP à ${t}`, "vip"];
+    case "vip_off": return [`a retiré le VIP de ${t}`, "vip"];
+    case "profile": return [`a modifié le profil de ${t} : ${Object.entries(d).map(([k, v]) => `${{ first_name: "prénom", username: "pseudo", email: "e-mail" }[k] || k} « ${esc((v && v[0]) || "vide")} » → « ${esc((v && v[1]) || "vide")} »`).join(", ")}`, "edit"];
+    case "msg_done": return [`a traité un message de ${t}`, "msg"];
+    case "msg_reopen": return [`a rouvert un message de ${t}`, "msg"];
+    case "msg_delete": return [`a supprimé un message de ${t}${d.extrait ? ` : <span class="muted">« ${esc(d.extrait)} »</span>` : ""}`, "del"];
+    case "staff_add": return [`a ajouté ${t} à l'équipe (${perms(d.apres)})`, "team"];
+    case "staff_perms": return [`a changé les droits de ${t} : ${perms(d.apres)}`, "team"];
+    case "staff_remove": return [`a retiré ${t} de l'équipe`, "del"];
+    default: return [`${esc(l.action)} sur ${t}`, "edit"];
+  }
+}
+function adminLogs() {
+  const u = S.ui;
+  if (!u.logs && !u.logBusy && !u.logErr) setTimeout(logLoad, 0);
+  if (!u.staffList && !u.staffBusy && !u.staffErr) setTimeout(staffLoad, 0);
+  const list = u.logs || [], weekAgo = Date.now() - 7 * 864e5;
+  const recent = list.filter((l) => new Date(l.created_at).getTime() > weekAgo);
+  const modRecent = recent.filter((l) => l.actor_role !== "admin");
+  const coins = modRecent.filter((l) => l.action === "gift" && l.details && l.details.kind === "coins").reduce((s, l) => s + (Number(l.details.n) || 0), 0);
+  const xp = modRecent.filter((l) => l.action === "gift" && l.details && l.details.kind === "xp").reduce((s, l) => s + (Number(l.details.n) || 0), 0);
+  // regroupement par jour
+  const groups = []; list.forEach((l) => { const k = new Date(l.created_at).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }); const g = groups[groups.length - 1]; if (g && g.k === k) g.items.push(l); else groups.push({ k, items: [l] }); });
+  const body = `
+    <div class="adm-kpis">${admKpi("Actions sur 7 jours", recent.length)}${admKpi("Par les modérateurs", modRecent.length)}${admKpi("Pièces données (modérateurs, 7 j)", coins)}${admKpi("XP donnée (modérateurs, 7 j)", xp)}</div>
+    <div class="adm-toolbar">
+      <label class="adm-select"><span class="small muted">Membre</span><select id="logActor" class="input" aria-label="Filtrer par membre"><option value="">Toute l'équipe</option>${S.authUser ? `<option value="${S.authUser.id}" ${u.logActor === S.authUser.id ? "selected" : ""}>Moi (administrateur)</option>` : ""}${(u.staffList || []).map((m) => `<option value="${m.user_id}" ${u.logActor === m.user_id ? "selected" : ""}>${esc(m.username ? "@" + m.username : m.first_name || m.email)}</option>`).join("")}</select></label>
+    </div>
+    ${notice(u.logErr)}
+    <div class="adm-log">
+      ${!list.length && u.logBusy ? `<div class="adm-empty">Chargement du journal…</div>` : ""}
+      ${!list.length && !u.logBusy && !u.logErr ? `<div class="adm-empty">Aucune action enregistrée${u.logActor ? " pour ce membre" : ""}.</div>` : ""}
+      ${groups.map((g) => `<div class="adm-log-day"><span class="adm-log-d">${esc(g.k)}</span>${g.items.map((l) => { const [txt, kind] = logSentence(l); return `<div class="adm-log-row k-${kind}">
+        <span class="adm-log-dot" aria-hidden="true"></span>
+        <span class="adm-log-tx"><b>${esc(l.actor_name || "Quelqu'un")}</b> <span class="adm-badge ${l.actor_role === "admin" ? "is-admin" : ""}">${l.actor_role === "admin" ? "Admin" : "Modérateur"}</span> ${txt}</span>
+        <time class="small muted num" datetime="${esc(l.created_at)}">${new Date(l.created_at).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}</time>
+      </div>`; }).join("")}</div>`).join("")}
+    </div>`;
+  return admShell("log", "Journal", "Chaque action de l'équipe est enregistrée ici : cadeaux, profils, VIP, messages et droits.", admRefresh("log-refresh", u.logBusy), body);
 }
 
 /* ---------- Préparer toutes les leçons à l'avance (admin) ---------- */
@@ -3610,15 +3961,9 @@ function adminLessons() {
   if (!PREP.ready && !PREP.loading) setTimeout(prepLoadReady, 0);
   const all = lessonSteps(), readyN = all.filter((s) => isReady(s.id)).length, missing = all.length - readyN;
   const perLevel = COURSE.levels.map((lv) => { const l = all.filter((s) => s.level === lv.id); return { id: lv.id, n: l.length, ok: l.filter((s) => isReady(s.id)).length }; });
-  return `<section>
-    ${admTabs("lessons")}
-    <div class="adm-head"><div><h1 class="h1">Leçons</h1><p class="muted">Prépare toutes les leçons une fois pour toutes : ensuite, chaque élève a les mêmes, instantanément, sans utiliser l'IA.</p></div></div>
-    <div class="adm-stats">
-      <div class="adm-stat"><b>${PREP.ready ? readyN : "…"}</b><span class="small muted">prêtes sur ${all.length}</span></div>
-      <div class="adm-stat"><b>${PREP.ready ? missing : "…"}</b><span class="small muted">à préparer</span></div>
-      <div class="adm-stat"><b>${PREP.ready ? "~" + Math.max(1, Math.round(missing * 10 / 60)) + " min" : "…"}</b><span class="small muted">temps estimé</span></div>
-    </div>
-    <div class="card pad stack" style="gap:12px">
+  return admShell("lessons", "Leçons", "Prépare toutes les leçons une fois pour toutes : chaque élève a ensuite les mêmes, instantanément, sans utiliser l'IA.", "", `
+    <div class="adm-kpis">${admKpi("Prêtes", PREP.ready ? `${readyN}/${all.length}` : "…")}${admKpi("À préparer", PREP.ready ? missing : "…")}${admKpi("Temps estimé", PREP.ready ? "~" + Math.max(1, Math.round(missing * 10 / 60)) + " min" : "…")}</div>
+    <div class="adm-card stack" style="gap:12px">
       ${PREP.running ? `<div class="row between"><b>Préparation en cours… ${PREP.done + PREP.fail}/${PREP.total}</b><button class="btn btn-secondary btn-sm" data-act="prep-stop">Mettre en pause</button></div>
         ${progress(PREP.total ? ((PREP.done + PREP.fail) / PREP.total) * 100 : 0)}
         <p class="small muted">En cours : ${esc(PREP.cur)}${PREP.fail ? ` · ${PREP.fail} échec(s), elles seront retentées au prochain lancement` : ""}</p>
@@ -3631,35 +3976,7 @@ function adminLessons() {
       <div class="row between" style="gap:12px;border-top:1px solid var(--line);padding-top:12px"><div><b>Sauvegarde</b><p class="small muted">Télécharge toutes les leçons prêtes dans un fichier sur ton ordinateur.</p>${S.ui.expMsg ? `<p class="small" style="color:var(--success)">${esc(S.ui.expMsg)}</p>` : ""}</div>
         <button class="btn btn-secondary btn-sm" data-act="prep-export" ${S.ui.expBusy ? "disabled" : ""}>${S.ui.expBusy ? '<span class="spinner"></span>' : ""}Télécharger toutes les leçons</button></div>
     </div>
-    <div class="adm-list" style="margin-top:14px">${perLevel.map((l) => `<div class="adm-row"><div class="row between"><b>${l.id} · ${esc(LEVEL_NAMES[l.id])}</b><span class="small muted num">${l.ok}/${l.n}</span></div><div style="margin-top:8px">${progress((l.ok / l.n) * 100, "thin")}</div></div>`).join("")}</div>
-  </section>`;
-}
-
-async function adminFbLoad() {
-  const u = S.ui; u.fbBusy = true; u.fbErr = ""; if (S.view === "admin") render();
-  try { u.fbList = await S.store.adminFeedback(); }
-  catch (e) { u.fbErr = "Impossible de charger les messages : " + ((e && e.message) || "erreur") + ". As-tu lancé 003_aide.sql ?"; u.fbList = u.fbList || []; }
-  u.fbBusy = false; if (S.view === "admin") render();
-}
-function adminMessages() {
-  const u = S.ui;
-  if (!u.fbList && !u.fbBusy && !u.fbErr) setTimeout(adminFbLoad, 0);
-  const list = u.fbList || [];
-  const fmt = (d) => new Date(d).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
-  return `<section>
-    ${admTabs("msg")}
-    <div class="adm-head"><div><h1 class="h1">Messages</h1><p class="muted">Ce que les élèves t'écrivent depuis Paramètres > Aide.</p></div>
-      <button class="btn btn-secondary btn-sm" data-act="fb-refresh" ${u.fbBusy ? "disabled" : ""}>${u.fbBusy ? '<span class="spinner"></span>' : ""}Actualiser</button></div>
-    ${notice(u.fbErr)}
-    <div class="adm-list">
-      ${!list.length && !u.fbBusy ? `<p class="muted">Aucun message pour l'instant.</p>` : ""}
-      ${list.map((m) => `<div class="fb-item ${m.done ? "done" : ""}">
-        <div class="row between" style="gap:8px"><span class="row" style="gap:8px"><span class="adm-id">${m.account_no ? accId(m.account_no) : "—"}</span><span class="small muted">${esc(m.email || "")} · ${fmt(m.created_at)}</span></span>
-        <button class="btn btn-${m.done ? "ghost" : "secondary"} btn-sm" data-act="fb-done" data-v="${m.id}" data-d="${m.done ? 0 : 1}">${m.done ? "Rouvrir" : "Marquer comme traité"}</button></div>
-        <p>${esc(m.message)}</p>
-      </div>`).join("")}
-    </div>
-  </section>`;
+    <div class="adm-levels">${perLevel.map((l) => `<div class="adm-card"><div class="row between"><b>${l.id} · ${esc(LEVEL_NAMES[l.id])}</b><span class="small muted num">${l.ok}/${l.n}</span></div><div style="margin-top:8px">${progress((l.ok / l.n) * 100, "thin")}</div></div>`).join("")}</div>`);
 }
 
 /* ---------- Compétition : classements ---------- */
@@ -4201,6 +4518,19 @@ $app.addEventListener("click", (ev) => {
     case "copy-id": try { navigator.clipboard.writeText(accId(S.accountNo)); } catch {} u.copied = true; render(); setTimeout(() => { if (S.ui.copied) { S.ui.copied = false; if (S.settingsOpen) render(); } }, 1500); break;
     case "adm-tab": u.admTab = v; SFX.play("tap"); render(); break;
     case "fb-refresh": adminFbLoad(); break;
+    case "fb-filter": u.fbFilter = v; SFX.play("tap"); render(); break;
+    case "fb-del": u.fbDel = Number(v); SFX.play("tap"); render(); break;
+    case "fb-del-no": u.fbDel = null; render(); break;
+    case "fb-del-do": { const id = Number(v); S.store.adminFeedbackDelete(id).then(() => { u.fbList = (u.fbList || []).filter((x) => x.id !== id); u.fbDel = null; u.logs = null; SFX.play("unselect"); render(); }).catch((e) => { u.fbErr = (e && e.message) || "Erreur"; u.fbDel = null; render(); }); break; }
+    case "staff-refresh": staffLoad(); break;
+    case "staff-add": u.staffWho = ((document.getElementById("staffWho") || {}).value || "").trim(); u.staffNew = readPerms("np"); staffSave(u.staffWho, u.staffNew, true); break;
+    case "staff-save": staffSave(v, readPerms("sp-" + v), false); break;
+    case "staff-del": u.staffDel = v; SFX.play("tap"); render(); break;
+    case "staff-del-no": u.staffDel = null; render(); break;
+    case "staff-del-do": S.store.staffRemove(v).then(() => { u.staffList = (u.staffList || []).filter((m) => m.user_id !== v); u.staffDel = null; u.staffOk = "Membre retiré de l'équipe."; u.logs = null; SFX.play("unselect"); render(); }).catch((e) => { u.staffErr = (e && e.message) || "Erreur"; u.staffDel = null; render(); }); break;
+    case "staff-logs": u.logActor = v; u.logs = null; u.admTab = "log"; SFX.play("tap"); render(); window.scrollTo(0, 0); break;
+    case "log-refresh": logLoad(); break;
+    case "adm-custom": { const k = (document.getElementById("admKind") || {}).value || "coins", n = Math.round(Number((document.getElementById("admAmt") || {}).value)); if (!n || n < 1) { u.admErr = "Indique une quantité positive."; render(); break; } adminGiftDo(v, k, k === "hearts" ? Math.min(n, HEART_MAX) : n); break; }
     case "lb-kind": u.lbKind = v; SFX.play("tap"); render(); lbLoad(v); break;
     case "lb-refresh": lbLoad(u.lbKind || "xp", true); break;
     case "lb-me": { const m = document.querySelector(".lb2-row.is-me"); if (m) { m.scrollIntoView({ block: "center", behavior: "smooth" }); vxAnim(m, [{ transform: "scale(1)" }, { transform: "scale(1.03)" }, { transform: "scale(1)" }], { duration: 600 }); } break; }
@@ -4215,18 +4545,18 @@ $app.addEventListener("click", (ev) => {
       S.giftPop = { items: [["i-coin", "+" + CHEST_COINS, "pièces", "coin"]], vip: false, chest: f ? f.un.title : "ce chapitre", raw: [], fresh: true };
       saveProfile(); render(); break;
     }
-    case "fb-done": { const id = Number(v), d = el.dataset.d === "1"; S.store.adminFeedbackDone(id, d).then(() => { const m = (S.ui.fbList || []).find((x) => x.id === id); if (m) m.done = d; render(); }).catch((e) => { S.ui.fbErr = (e && e.message) || "Erreur"; render(); }); break; }
+    case "fb-done": { const id = Number(v), d = el.dataset.d === "1"; S.store.adminFeedbackDone(id, d).then(() => { const m = (S.ui.fbList || []).find((x) => x.id === id); if (m) m.done = d; S.ui.logs = null; render(); }).catch((e) => { S.ui.fbErr = (e && e.message) || "Erreur"; render(); }); break; }
     case "adm-refresh": adminLoad(); break;
     case "adm-vip": {
       const on = el.dataset.on === "1";
-      S.store.adminSetVip(v, on).then(() => { const r = (u.admList || []).find((x) => x.id === v); if (r) r.vip = on; if (S.authUser && v === S.authUser.id) S.isVip = on; u.admMsg = { id: v, text: on ? "Badge VIP ajouté." : "Badge VIP retiré." }; SFX.play(on ? "fanfare" : "unselect"); render(); })
+      S.store.adminSetVip(v, on).then(() => { const r = (u.admList || []).find((x) => x.id === v); if (r) r.vip = on; if (S.authUser && v === S.authUser.id) S.isVip = on; u.admMsg = { id: v, text: on ? "Badge VIP ajouté." : "Badge VIP retiré." }; u.logs = null; SFX.play(on ? "fanfare" : "unselect"); render(); })
         .catch((e) => { u.admErr = (e && e.message) || "Erreur"; render(); });
       break;
     }
     case "adm-save": {
       const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
       const val = (id) => ((document.getElementById(id) || {}).value || "").trim();
-      const fn = val("admFn"), un = cleanPseudo(val("admUn")), em = val("admEm").toLowerCase();
+      const fn = val("admFn"), un = cleanPseudo(val("admUn")), em = S.isAdmin ? val("admEm").toLowerCase() : "";
       const cur = { ...(r.profile || {}) }; (r.gifts || []).forEach((g) => applyGift(cur, g));
       if (!fn) { u.admErr = "Le prénom ne peut pas être vide."; render(); break; }
       if (un && !PSEUDO_RE.test(un)) { u.admErr = "Pseudo invalide : 3 à 20 caractères (lettres minuscules, chiffres, point ou tiret bas)."; render(); break; }
@@ -4240,7 +4570,7 @@ $app.addEventListener("click", (ev) => {
         if (chUn !== null) { if (chUn) r.profile.username = chUn; else delete r.profile.username; }
         if (chEm) r.email = chEm;
         if (S.authUser && v === S.authUser.id) claimGifts();
-        u.admMsg = { id: v, text: "Profil mis à jour." + (chEm ? " L'élève se connecte maintenant avec " + chEm + "." : "") }; SFX.play("select");
+        u.logs = null; u.admMsg = { id: v, text: "Profil mis à jour." + (chEm ? " L'élève se connecte maintenant avec " + chEm + "." : "") }; SFX.play("select");
       }).catch((e) => { u.admErr = (e && e.message) || "Erreur"; }).finally(() => { u.admSaving = false; render(); });
       break;
     }
@@ -4373,6 +4703,7 @@ $app.addEventListener("input", (ev) => {
   if (t.id === "setHelp") { u.helpDraft = t.value; u.helpOk = ""; u.helpErr = ""; }
 });
 $app.addEventListener("change", (ev) => {
+  if (ev.target && ev.target.id === "logActor") { S.ui.logActor = ev.target.value || null; S.ui.logs = null; render(); return; }
   const t = ev.target;
   if (t.id === "setAvatar" && t.files && t.files[0]) {
     resizeImage(t.files[0]).then((url) => { S.profile.avatar = url; S.ui.avErr = ""; SFX.play("select"); render(); saveProfile(); })
@@ -4461,6 +4792,12 @@ function makeSupaStore(sb, uid) {
     async sendFeedback(message) { const { error } = await sb.rpc("send_feedback", { p_message: message }); if (error) throw error; },
     async adminFeedback() { const { data, error } = await sb.rpc("admin_feedback"); if (error) throw error; return data || []; },
     async adminFeedbackDone(id, done) { const { error } = await sb.rpc("admin_feedback_done", { p_id: id, p_done: done }); if (error) throw error; },
+    async adminFeedbackDelete(id) { const { error } = await sb.rpc("admin_feedback_delete", { p_id: id }); if (error) throw error; },
+    async myPerms() { const { data, error } = await sb.rpc("my_perms"); if (error) throw error; return data || null; },
+    async staffList() { const { data, error } = await sb.rpc("staff_list"); if (error) throw error; return data || []; },
+    async staffSet(who, perms) { const { data, error } = await sb.rpc("staff_set", { p_who: who, p_perms: perms }); if (error) throw error; return data; },
+    async staffRemove(id) { const { error } = await sb.rpc("staff_remove", { p_user: id }); if (error) throw error; },
+    async staffLogs(limit, actor) { const { data, error } = await sb.rpc("staff_logs", { p_limit: limit || 200, p_actor: actor || null }); if (error) throw error; return data || []; },
     async leaderboard(kind) { const { data, error } = await sb.rpc("leaderboard", { p_kind: kind }); if (error) throw error; return data || []; },
     async isVip() { const { data, error } = await sb.rpc("is_vip"); return !error && data === true; },
     async adminSetVip(target, on) { const { error } = await sb.rpc("admin_set_vip", { p_target: target, p_on: on }); if (error) throw error; },
@@ -4600,7 +4937,7 @@ async function boot() {
 }
 async function enterSession(session) {
   S.authUser = session ? session.user : null;
-  if (!session) { S.isAdmin = false; S.accountNo = null; S.giftNote = ""; }
+  if (!session) { S.isAdmin = false; S.perms = []; S.accountNo = null; S.giftNote = ""; }
   S.profile = null; S.vocab = {}; S.lessons = [];
   if (!session) {
     S.store = makeLocalStore();
@@ -4609,11 +4946,13 @@ async function enterSession(session) {
     S.ui = {}; render(); return;
   }
   S.store = makeSupaStore(SB, session.user.id);
-  S.accountNo = null; S.isAdmin = false; S.isVip = false; S.giftNote = "";
+  S.accountNo = null; S.isAdmin = false; S.perms = []; S.isVip = false; S.giftNote = "";
   try {
     const [profile, vocab] = await Promise.all([S.store.loadProfile(), S.store.loadVocab()]);
     S.accountNo = await S.store.accountNo().catch(() => null);
     S.isAdmin = await S.store.isAdmin().catch(() => false);
+    const mp = await S.store.myPerms().catch(() => null);
+    if (mp) { S.isAdmin = S.isAdmin || mp.admin === true; S.perms = Array.isArray(mp.perms) ? mp.perms : []; }
     S.isVip = await S.store.isVip().catch(() => false);
     S.profile = profile; S.vocab = vocab || {};
   } catch { $app.innerHTML = bootScreen("Impossible de charger tes données", "Vérifie ta connexion, puis recharge la page."); return; }
