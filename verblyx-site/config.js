@@ -1,3 +1,4 @@
+
 // =========================================================
 // VERBLYX — configuration
 // Remplace les deux valeurs ci-dessous par celles de TON projet Supabase :
