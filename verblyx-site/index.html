@@ -824,6 +824,20 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .qz-ex { font-size: 13.5px; color: var(--fg-2); }
 .quiz-end { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; padding-top: 4px; }
 .quiz-end b { font: 800 16px var(--f-display); }
+.em { display: inline-block; flex: none; vertical-align: -3px; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .35)); }
+.qcm-chip { display: inline-flex; align-items: center; gap: 7px; font-weight: 800; height: 38px; padding: 0 13px; }
+.msg.me { display: flex; align-items: center; gap: 8px; }
+.msg.me .em { filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .25)); }
+.qz-ex { display: flex; align-items: flex-start; gap: 7px; flex-wrap: wrap; }
+.qz-ex .em { margin-top: 1px; }
+.quiz-end b { display: inline-flex; align-items: center; gap: 8px; }
+.gp-sub .em, .btn .em { vertical-align: -4px; margin-left: 6px; }
+.adm-nums span { display: inline-flex; align-items: center; gap: 4px; }
+.msg.ai.err { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-color: rgba(255, 107, 129, .45); background: var(--danger-soft); color: #FFC3CD; }
+.coach-page { display: flex; flex-direction: column; gap: 20px; min-height: calc(100dvh - 52px); margin-bottom: -48px; }
+.coach-page .chat { flex: 1; }
+@media (max-width: 1023px) { .coach-page { min-height: calc(100dvh - 44px); margin-bottom: -40px; } }
+@media (max-width: 719px) { .coach-page { min-height: calc(100dvh - 184px - env(safe-area-inset-bottom, 0px)); margin-bottom: 0; } }
 .xp-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 9px; border-radius: 999px; background: rgba(0, 214, 181, .13); border: 1px solid rgba(0, 214, 181, .35); color: var(--success); font: 800 12.5px var(--f-body); white-space: nowrap; }
 .xp-chip .ico { width: 13px; height: 13px; }
 .goal-bonus { border-color: rgba(0, 214, 181, .45); background: radial-gradient(240px 120px at 100% 0%, rgba(0, 214, 181, .14), transparent 70%), var(--surface); }
@@ -1481,7 +1495,9 @@ const today = () => dayKey();
 const yesterday = () => dayKey(new Date(Date.now() - 864e5));
 const norm = (s) => String(s).toLowerCase().replace(/[’‘`]/g, "'").replace(/\s+/g, " ").replace(/[.!?,;:]+$/g, "").trim();
 const uid8 = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
-const rich = (t) => esc(t).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/^[*-] /gm, "• ").replace(/\n/g, "<br>");
+const EMOJI_MAP = [[/✅|✔️/g, "check"], [/❌|✖️/g, "cross"], [/🎉|🥳/g, "party"], [/🏆|🥇/g, "trophy"], [/⭐|🌟/g, "star"], [/🔥/g, "fire"], [/👑/g, "crown"], [/🎁/g, "gift"], [/❤️|❤/g, "heart"], [/💡|✨/g, "sparkle"], [/🎯/g, "target"], [/📚|📖/g, "books"], [/🚀|💪/g, "rocket"], [/⚡/g, "bolt"]];
+const emojify = (html) => EMOJI_MAP.reduce((s, [re, n]) => s.replace(re, () => em(n, 17)), html);
+const rich = (t) => emojify(esc(t).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/^[*-] /gm, "• ").replace(/\n/g, "<br>"));
 const blanked = (q, fill) => esc(q).split("___").join(`<span class="blank">${fill ? esc(fill) : "&nbsp;"}</span>`);
 const progress = (v, cls = "") => `<div class="progress ${cls}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(v)}"><span style="width:${Math.max(0, Math.min(100, v))}%"></span></div>`;
 const notice = (m, kind = "error") => m ? `<div class="notice notice-${kind}" role="alert">${esc(m)}</div>` : "";
@@ -2726,7 +2742,7 @@ function viewShell(inner) {
       </div>
     </aside>
     <header class="mtop">${logo()}<span class="row" style="gap:6px;flex-wrap:nowrap">${walletChips()}</span></header>
-    <main class="main"><div class="main-in">${S.saveError ? notice(S.saveError) : ""}${S.giftNote ? `<div class="gift-note" role="status"><span>🎁 ${esc(S.giftNote)}</span><button class="icon-btn" data-act="gift-close" aria-label="Fermer">${icon("i-close")}</button></div>` : ""}${inner}</div></main>
+    <main class="main"><div class="main-in">${S.saveError ? notice(S.saveError) : ""}${S.giftNote ? `<div class="gift-note" role="status"><span class="row" style="gap:8px;flex-wrap:nowrap">${em("gift", 20)}${esc(S.giftNote)}</span><button class="icon-btn" data-act="gift-close" aria-label="Fermer">${icon("i-close")}</button></div>` : ""}${inner}</div></main>
     ${rail ? `<aside class="rail" aria-label="Ta progression"><div class="row" style="gap:8px">${walletChips()}</div>${goalCard()}${streakCard()}${badgesCard(true)}${legalLinks()}</aside>` : ""}
     ${S.settingsOpen ? settingsModal() : ""}
     <nav class="tabbar" aria-label="Navigation">${NAV.map(([v, t, ic]) => `<button class="tab ${cur === v ? "is-active" : ""}" data-go="${v}" ${cur === v ? 'aria-current="page"' : ""}>${icon(ic)}${t}</button>`).join("")}</nav>
@@ -3306,10 +3322,10 @@ function giftModal() {
       <div class="gp-vex">${vx(vip ? "vip" : "party", 170, "gp-lead")}</div>
       <span class="gp-kicker">${vip ? "Statut VIP débloqué" : g.chest ? "Coffre du chapitre" : "Surprise !"}</span>
       <h2 class="gp-title" id="gp-title">${vip ? "Félicitations, tu es VIP !" : g.chest ? "Coffre ouvert !" : "Félicitations !"}</h2>
-      <p class="gp-sub">${g.chest && !vip ? `Bravo, tu as terminé le chapitre <b>« ${esc(g.chest)} »</b> ! Voici ton trésor :` : vip ? "L'équipe Vex t'offre le statut <b>VIP</b> : un badge doré à côté de ton nom et un cadre en or autour de ton personnage, partout sur Verblyx." : "L'équipe Vex t'a envoyé un cadeau 🎁"}</p>
+      <p class="gp-sub">${g.chest && !vip ? `Bravo, tu as terminé le chapitre <b>« ${esc(g.chest)} »</b> ! Voici ton trésor :` : vip ? "L'équipe Vex t'offre le statut <b>VIP</b> : un badge doré à côté de ton nom et un cadre en or autour de ton personnage, partout sur Verblyx." : "L'équipe Vex t'a envoyé un cadeau " + em("gift", 20)}</p>
       ${vip ? `<div class="gp-viptag">${avatarHTML(S.profile, 58, true)}<span><b>${esc(S.profile.first_name || "Toi")}</b> ${vipTag()}</span></div>` : ""}
       ${chips ? `<div class="gp-items">${chips}</div>` : ""}
-      <button class="btn ${vip ? "btn-gold" : "btn-primary"} btn-lg btn-block" data-act="gift-close">${vip ? "Merci l'équipe Vex ! 👑" : "Merci Vex ! 🎉"}</button>
+      <button class="btn ${vip ? "btn-gold" : "btn-primary"} btn-lg btn-block" data-act="gift-close">${vip ? "Merci l'équipe Vex !" + em("crown", 20) : "Merci Vex !" + em("party", 20)}</button>
     </div>
   </div>`;
 }
@@ -3328,7 +3344,7 @@ function levelModal() {
       <h2 class="gp-title" id="lv-title">${L.cefr ? `Bienvenue en ${esc(L.cefr)} !` : `Niveau ${L.n} atteint !`}</h2>
       <p class="gp-sub">${L.cefr ? `Tu as validé ton niveau : place au niveau <b>${esc(L.cefr)} · ${esc(LEVEL_NAMES[L.cefr] || "")}</b>. ${L.up ? `Et tu passes aussi au niveau ${L.n} d'expérience !` : ""}` : "Tes efforts paient : continue comme ça, Vex est fier de toi !"}</p>
       ${L.up ? `<div class="lv-next"><div class="row between small"><span class="muted">Prochain niveau</span><span class="num">${xp - cur} / ${next - cur} XP</span></div>${progress(((xp - cur) / (next - cur)) * 100)}</div>` : ""}
-      <button class="btn btn-primary btn-lg btn-block" data-act="level-close">Continuer ✨</button>
+      <button class="btn btn-primary btn-lg btn-block" data-act="level-close">Continuer${em("sparkle", 20)}</button>
     </div>
   </div>`;
 }
@@ -3422,7 +3438,7 @@ function viewAdmin() {
         <div class="adm-top">
           ${avatarHTML(p, 40, r.vip)}<span class="adm-id">${r.account_no ? accId(r.account_no) : "—"}</span>
           <div class="adm-who"><b>${esc(p.first_name || "(pas encore de prénom)")}${p.username ? ` <span class="small muted">@${esc(p.username)}</span>` : ""}${r.vip ? " " + vipTag() : ""}</b><span class="small muted">${esc(r.email || "")}</span><span class="small muted">Créé le ${fmt(r.signed_up)} · vu ${fmt(r.last_sign_in)}</span></div>
-          <div class="adm-nums"><span>Niveau ${esc(p.cefr_level || "?")}</span><span>${p.xp || 0} XP</span><span>❤ ${hearts(p)}/${HEART_MAX}</span><span>🪙 ${p.coins || 0}</span><span>🔥 ${p.streak || 0} j</span><span>${Object.keys((p.course && p.course.done) || {}).length} leçons</span></div>
+          <div class="adm-nums"><span>Niveau ${esc(p.cefr_level || "?")}</span><span>${p.xp || 0} XP</span><span>${em("heart", 14)}${hearts(p)}/${HEART_MAX}</span><span>${em("coin", 14)}${p.coins || 0}</span><span>${em("fire", 14)}${p.streak || 0} j</span><span>${Object.keys((p.course && p.course.done) || {}).length} leçons</span></div>
           ${r.account_no ? `<button class="btn btn-${open ? "primary" : "secondary"} btn-sm" data-act="adm-open" data-v="${r.id}">${open ? "Fermer" : "Gérer"}</button>` : `<span class="small muted">Inscription pas terminée</span>`}
         </div>
         ${r.pending ? `<p class="small" style="color:var(--warn);margin-top:8px">${plural(r.pending, "cadeau", "cadeaux")} en attente (déjà compté ci-dessus)</p>` : ""}
@@ -3617,7 +3633,7 @@ function viewCompetition() {
   const ahead = ranked && me.rank > 1 ? rows.find((r) => r.rank === Math.min(me.rank - 1, 100)) : null;
   const heroMsg = !LB.data[kind] ? "Chargement du classement…"
     : !ranked ? `Gagne tes premiers ${unit} pour entrer dans le classement !`
-    : me.rank === 1 ? "Tu es n°1 ! Garde ta couronne 👑"
+    : me.rank === 1 ? "Tu es n°1 ! Garde ta couronne " + em("crown", 20)
     : ahead ? `Encore <b>${ahead.score - me.score + 1} ${unit}</b> pour dépasser <b>${esc(who(ahead))}</b>` : "Continue comme ça !";
   const pod = (r) => !r ? `<div class="p2-col p2-empty"></div>` : `<div class="p2-col p2-${r.rank} ${r.is_me ? "is-me" : ""}">
       ${r.rank === 1 ? `<span class="p2-crown">${icon("i-crown")}</span>` : ""}
@@ -3645,6 +3661,27 @@ function viewCompetition() {
   ${me && (me.rank > 100 || !ranked) ? `<div class="lb2-row is-me lb2-sticky"><span class="lb2-rank num">${ranked ? me.rank : "—"}</span>${av(me, 42)}<span class="lb2-who"><b>Toi</b><span class="small muted">${ranked ? "Continue, tu remontes !" : "Pas encore classé"}</span></span><span class="lb2-score num">${icon(ico)}${me.score}</span></div>` : ""}
   <p class="small muted">${kind === "pulse" ? "Le Pulse compte les jours d'affilée où tu as appris." : kind === "coins" ? "Les pièces que tu as en ce moment." : "Toute l'expérience gagnée depuis ton inscription."}</p>`;
 }
+
+/* ---------- Icônes Verblyx (nos propres « émojis », en couleurs et bien épais) ---------- */
+const EMS = {
+  bolt: `<path d="M13.6 2.5 5 13.4h5.8L9.6 21.5l9.2-11.6h-6z" fill="#FFD45A" stroke="#F29D25" stroke-width="1.9" stroke-linejoin="round"/><path d="M12 6.5 8.6 11" stroke="#FFF3C4" stroke-width="1.6" stroke-linecap="round"/>`,
+  target: `<circle cx="11" cy="13" r="8.6" fill="#FF5C8A" stroke="#C8325E" stroke-width="1.8"/><circle cx="11" cy="13" r="5.4" fill="#fff"/><circle cx="11" cy="13" r="2.4" fill="#FF5C8A"/><path d="M11 13 20.5 3.5" stroke="#1677FF" stroke-width="2.4" stroke-linecap="round"/><path d="M17.5 3.2h3.3v3.3" fill="none" stroke="#1677FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`,
+  books: `<rect x="3" y="4" width="5.2" height="16" rx="1.4" fill="#1677FF" stroke="#0B4FB8" stroke-width="1.6"/><rect x="9" y="6.5" width="5" height="13.5" rx="1.4" fill="#00D6B5" stroke="#0A8C77" stroke-width="1.6"/><rect x="14.6" y="5.4" width="5" height="14.6" rx="1.4" fill="#FF5C8A" stroke="#C8325E" stroke-width="1.6" transform="rotate(10 17 13)"/><path d="M4.4 8h2.4M10.3 10h2.4M4.4 16h2.4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>`,
+  check: `<circle cx="12" cy="12" r="9.6" fill="#00D6B5" stroke="#0A8C77" stroke-width="1.8"/><path d="m7.4 12.4 3.1 3.1 6.2-6.6" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>`,
+  cross: `<circle cx="12" cy="12" r="9.6" fill="#FF5C8A" stroke="#C8325E" stroke-width="1.8"/><path d="m8.4 8.4 7.2 7.2m0-7.2-7.2 7.2" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/>`,
+  trophy: `<path d="M7 3.5h10v5.2a5 5 0 0 1-10 0z" fill="#FFD45A" stroke="#E0A21B" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 5.2H4.2v1.4A3.3 3.3 0 0 0 7.5 10M17 5.2h2.8v1.4a3.3 3.3 0 0 1-3.3 3.4" fill="none" stroke="#E0A21B" stroke-width="1.8" stroke-linecap="round"/><path d="M10.6 13.4h2.8v3.2h-2.8z" fill="#F2B230"/><rect x="7.4" y="16.4" width="9.2" height="4.2" rx="1.3" fill="#B97A06"/><path d="M9.3 5.6v2.6" stroke="#FFF3C4" stroke-width="1.6" stroke-linecap="round"/>`,
+  star: `<path d="m12 2.8 2.7 5.7 6.2.8-4.6 4.3 1.2 6.2L12 16.7l-5.5 3.1 1.2-6.2L3.1 9.3l6.2-.8z" fill="#B68CFF" stroke="#7C5CFF" stroke-width="1.8" stroke-linejoin="round"/><path d="M10.6 7.4 9.7 9.4" stroke="#EFE6FF" stroke-width="1.6" stroke-linecap="round"/>`,
+  rocket: `<path d="M14.5 3.2c3.6-.6 6.2.1 6.3.2.1.1.8 2.7.2 6.3l-6.9 6.9-6.5-6.5z" fill="#EAFBFF" stroke="#1677FF" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.4" cy="8.6" r="2" fill="#1677FF"/><path d="M7.6 10.1 4.3 10l-1.5 3.1 4 .6M13.9 16.4l.1 3.3-3.1 1.5-.6-4" fill="#FF5C8A" stroke="#C8325E" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.8 15.6c-1.6.5-2.6 2.4-2.8 4.4 2-.2 3.9-1.2 4.4-2.8" fill="#FFD45A" stroke="#F29D25" stroke-width="1.5" stroke-linejoin="round"/>`,
+  gift: `<rect x="3.2" y="9.5" width="17.6" height="11" rx="2" fill="#FF5C8A" stroke="#C8325E" stroke-width="1.8"/><rect x="2.4" y="7" width="19.2" height="4.4" rx="1.4" fill="#FF7AA2" stroke="#C8325E" stroke-width="1.8"/><path d="M12 7v13.5" stroke="#FFD45A" stroke-width="3"/><path d="M12 7c-1-3-4.6-4.2-5.4-2.4C5.9 6.2 9 7 12 7zm0 0c1-3 4.6-4.2 5.4-2.4.7 1.6-2.4 2.4-5.4 2.4z" fill="#FFD45A" stroke="#E0A21B" stroke-width="1.5" stroke-linejoin="round"/>`,
+  party: `<path d="M3.5 20.5 8.6 7.4l8 8z" fill="#FFD45A" stroke="#E0A21B" stroke-width="1.8" stroke-linejoin="round"/><path d="m6 14.2 3.6 3.6M7.4 10.6l5.8 5.8" stroke="#FF5C8A" stroke-width="1.8" stroke-linecap="round"/><circle cx="15.5" cy="4.5" r="1.4" fill="#00D6B5"/><circle cx="20" cy="9" r="1.4" fill="#1677FF"/><path d="M12.5 3.2c.6 1.6-.4 2.6.6 3.8M19.8 4.2l-2.6 2.6M21 13.5c-1.7-.4-2.6.7-3.9-.2" stroke="#B68CFF" stroke-width="1.7" stroke-linecap="round" fill="none"/>`,
+  crown: `<path d="M3.4 8.4 7.6 12 12 5l4.4 7 4.2-3.6-1.8 10.4H5.2z" fill="#FFD45A" stroke="#E0A21B" stroke-width="1.8" stroke-linejoin="round"/><rect x="5" y="17.6" width="14" height="2.8" rx="1" fill="#F2B230" stroke="#E0A21B" stroke-width="1.4"/><circle cx="12" cy="12.6" r="1.5" fill="#FF5C8A"/><circle cx="12" cy="4.6" r="1.4" fill="#FFF3C4"/>`,
+  sparkle: `<path d="m10 3 1.7 5.1L17 10l-5.3 1.9L10 17l-1.7-5.1L3 10l5.3-1.9z" fill="#FFD45A" stroke="#F29D25" stroke-width="1.6" stroke-linejoin="round"/><path d="m18 13.5.9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9z" fill="#5CF3DA" stroke="#0A8C77" stroke-width="1.3" stroke-linejoin="round"/>`,
+  heart: `<path d="M12 20.4 4.3 12.8A4.8 4.8 0 0 1 12 6.6a4.8 4.8 0 0 1 7.7 6.2z" fill="#FF4D6D" stroke="#C8325E" stroke-width="1.8" stroke-linejoin="round"/><path d="M7.4 9.6c.4-.9 1.2-1.4 2-1.4" stroke="#FFD0DA" stroke-width="1.6" stroke-linecap="round"/>`,
+  coin: `<circle cx="12" cy="12" r="9.2" fill="#FFD45A" stroke="#E0A21B" stroke-width="1.8"/><circle cx="12" cy="12" r="5.8" fill="none" stroke="#E0A21B" stroke-width="1.6"/><path d="M9.4 8.8A3.6 3.6 0 0 1 12 7.8" stroke="#FFF3C4" stroke-width="1.6" stroke-linecap="round"/>`,
+  fire: `<path d="M12 2.8c1.2 3.6 6.4 5.4 6.4 11a6.4 6.4 0 0 1-12.8 0c0-2.6 1.3-4.3 2.8-5.6.1 2 1 3.2 2.3 3.6-.7-3.4.1-6.6 1.3-9z" fill="#FF8A3D" stroke="#E0531B" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 12.4c1.4 1.4 2.8 2.4 2.8 4.2a2.8 2.8 0 0 1-5.6 0c0-1.5 1.4-2.6 2.8-4.2z" fill="#FFD45A"/>`,
+  unlock: `<rect x="4.5" y="10.6" width="15" height="10" rx="2.6" fill="#FFD45A" stroke="#E0A21B" stroke-width="1.8"/><path d="M8.2 10.6V7.4a4 4 0 0 1 7.6-1.8" fill="none" stroke="#9AA0AE" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="15.2" r="1.7" fill="#B97A06"/>`,
+};
+const em = (name, size = 18) => EMS[name] ? `<svg class="em" viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true">${EMS[name]}</svg>` : "";
 
 /* ---------- Plus de vies ---------- */
 function outView(ses) {
@@ -3865,7 +3902,7 @@ function resultView(ses) {
       </div>
       ${r.bonusGoals ? `<p class="chip chip-teal">Objectif bonus atteint · +${5 * r.bonusGoals} pièces</p>` : ""}
       ${r.goalReached ? `<p class="chip chip-teal">Objectif du jour atteint · +10 pièces</p>` : `<p class="small muted num">${todayXp() >= goalXp() ? `${todayXp()} / ${(Math.floor(todayXp() / goalXp()) + 1) * goalXp()} XP pour l'objectif bonus` : `${todayXp()} / ${goalXp()} XP pour l'objectif du jour`} · Pulse de ${plural(liveStreak(), "jour", "jours")}</p>`}
-      ${newB.length ? `<div class="stack" style="gap:8px;align-items:center"><span class="label">${newB.some((b) => b.secret) ? "🔓 Badge secret débloqué !" : "Nouveau succès"}</span><div class="row" style="justify-content:center">${newB.map((b) => `<div class="badge">${b.svg}<span>${b.name}</span></div>`).join("")}</div></div>` : ""}
+      ${newB.length ? `<div class="stack" style="gap:8px;align-items:center"><span class="label">${newB.some((b) => b.secret) ? em("unlock", 18) + " Badge secret débloqué !" : "Nouveau succès"}</span><div class="row" style="justify-content:center">${newB.map((b) => `<div class="badge">${b.svg}<span>${b.name}</span></div>`).join("")}</div></div>` : ""}
     </main>
     <footer class="flow-foot"><div class="flow-foot-in"><span></span><button class="btn btn-primary btn-lg" data-act="ses-quit">Continuer</button></div></footer>
   </div>`;
@@ -3873,7 +3910,8 @@ function resultView(ses) {
 
 /* ---------- Professeur IA ---------- */
 const SUGGESTIONS = ["Quelle est la différence entre « since » et « for » ?", "Corrige-moi : Yesterday I have went to the office.", "Donne-moi un QCM sur le present perfect", "Comment dire « j'ai hâte de te voir » naturellement ?"];
-const QCM_KINDS = [["quick", "⚡ QCM rapide"], ["weak", "🎯 Sur mes erreurs"], ["vocab", "📚 Vocabulaire"]];
+const QCM_KINDS = [["quick", "QCM rapide", "bolt"], ["weak", "Sur mes erreurs", "target"], ["vocab", "Vocabulaire", "books"]];
+const qcmChip = ([k, t, ic], dis) => `<button class="chip-btn sm qcm-chip" data-act="qcm" data-v="${k}" ${dis ? "disabled" : ""}>${em(ic, 18)}${t}</button>`;
 // Un QCM : 3 à 6 questions, une seule bonne réponse chacune
 function cleanQuiz(o) {
   if (!o || typeof o !== "object") return null;
@@ -3902,35 +3940,37 @@ function quizCard(m, mi) {
     ${z.questions.map((q, qi) => { const pk = picks[qi], done = pk != null; return `<div class="qz ${done ? (pk === q.answer ? "ok" : "ko") : ""}">
       <p class="qz-q"><span class="num">${qi + 1}.</span> ${blanked(q.q, done ? q.answer : "")}</p>
       <div class="qz-opts">${q.options.map((o) => `<button class="qz-opt ${done ? (o === q.answer ? "is-right" : o === pk ? "is-wrong" : "is-off") : ""}" data-act="qz" data-m="${mi}" data-q="${qi}" data-v="${esc(o)}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>
-      ${done ? `<p class="qz-ex">${pk === q.answer ? "✅ Exact !" : `❌ La bonne réponse : <b>${esc(q.answer)}</b>.`} ${esc(q.explain)}</p>` : ""}
+      ${done ? `<p class="qz-ex">${pk === q.answer ? em("check", 18) + "<b>Exact !</b>" : `${em("cross", 18)}<span>La bonne réponse : <b>${esc(q.answer)}</b>.</span>`} ${esc(q.explain)}</p>` : ""}
     </div>`; }).join("")}
-    ${answered === n ? `<div class="quiz-end"><b>${score === n ? "🏆 Parfait" : score >= n / 2 ? "👏 Bien joué" : "💪 Continue"} : ${score}/${n}</b><div class="row" style="gap:6px">${QCM_KINDS.map(([k, t]) => `<button class="chip-btn sm" data-act="qcm" data-v="${k}">${t}</button>`).join("")}</div></div>` : ""}
+    ${answered === n ? `<div class="quiz-end"><b>${score === n ? em("trophy", 22) + "Parfait" : score >= n / 2 ? em("star", 22) + "Bien joué" : em("rocket", 22) + "Continue"} : ${score}/${n}</b><div class="row" style="gap:6px">${QCM_KINDS.map((q) => qcmChip(q, false)).join("")}</div></div>` : ""}
   </div>`;
 }
 function viewCoach() {
   const u = S.ui, p = S.profile, busy = u.streaming != null;
   return `
+  <div class="coach-page">
   <header class="page-head enter"><div class="stack"><h1 class="h1">Professeur IA</h1><p class="muted">Vex connaît ton niveau (${esc(p.cefr_level)}) et tes difficultés.</p></div>${S.chat.length ? `<button class="btn btn-ghost" data-act="chat-clear">Nouvelle conversation</button>` : ""}</header>
   ${!S.sample ? notice("Vex n'est pas disponible pour le moment. Recharge la page.", "warn") : ""}
   <div class="chat">
     ${S.chat.length === 0 ? `${ask("talk", `Salut ${p.first_name || ""} ! Pose-moi une question, écris-moi en anglais pour que je te corrige, ou lance un QCM.`)}
       <div class="grid-2">${SUGGESTIONS.map((s) => `<button class="suggest" data-act="chat-sug" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>` : ""}
-    ${S.chat.map((m, mi) => m.role === "user" ? `<div class="msg me">${rich(m.content)}</div>` : `<div class="ai-row">${vx("st_wink", 36)}<div class="msg ai ${m.quiz ? "has-quiz" : ""}">${m.text != null ? (m.text ? `<div>${rich(m.text)}</div>` : "") : rich(m.content)}${m.quiz ? quizCard(m, mi) : ""}</div></div>`).join("")}
+    ${S.chat.map((m, mi) => m.role === "user" ? `<div class="msg me">${m.icon ? em(m.icon, 18) : ""}${rich(m.content)}</div>` : m.error ? `<div class="ai-row">${vx("st_sad", 36)}<div class="msg ai err"><span>${esc(m.content)}</span>${m.retry && mi === S.chat.length - 1 ? `<button class="btn btn-secondary btn-sm" data-act="chat-retry">Réessayer</button>` : ""}</div></div>` : `<div class="ai-row">${vx("st_wink", 36)}<div class="msg ai ${m.quiz ? "has-quiz" : ""}">${m.text != null ? (m.text ? `<div>${rich(m.text)}</div>` : "") : rich(m.content)}${m.quiz ? quizCard(m, mi) : ""}</div></div>`).join("")}
     ${busy ? `<div class="ai-row">${vx(u.streaming ? "st_wink" : "st_hmm", 36, "talking-vx")}<div class="msg ai" id="stream">${u.streaming ? streamView(u.streaming) : `<span class="row small muted" style="gap:8px"><span class="spinner"></span> ${u.quizBusy ? "Vex prépare ton QCM…" : "Vex réfléchit…"}</span>`}</div></div>` : ""}
     ${notice(u.chatError)}
     <div id="chat-end"></div>
   </div>
   <div class="coach-dock">
-    <div class="qcm-bar">${QCM_KINDS.map(([k, t]) => `<button class="chip-btn sm" data-act="qcm" data-v="${k}" ${busy || !S.sample ? "disabled" : ""}>${t}</button>`).join("")}</div>
+    <div class="qcm-bar">${QCM_KINDS.map((q) => qcmChip(q, busy || !S.sample)).join("")}</div>
     <form class="composer" data-form="chat">
       <input id="coachInput" placeholder="Écris ta question ou une phrase en anglais…" autocomplete="off" value="${esc(u.chatDraft || "")}" ${S.sample ? "" : "disabled"} aria-label="Message pour Vex">
       <button class="btn btn-primary" style="height:44px;padding:0 16px" aria-label="Envoyer" ${busy || !S.sample ? "disabled" : ""}>${icon("i-send")}</button>
     </form>
+  </div>
   </div>`;
 }
 const saveChat = () => { try { sessionStorage.setItem("verblyx:chat", JSON.stringify(S.chat.slice(-30))); } catch {} };
 // Ce que l'IA « voit » de la conversation (un QCM est résumé en une ligne)
-const chatTurns = () => S.chat.slice(-12).map((m) => ({ role: m.role, content: m.quiz ? `${m.text || ""}\n[QCM « ${m.quiz.title} » : ${m.quiz.questions.map((q) => q.q).join(" | ")}]`.trim() : m.content }));
+const chatTurns = () => S.chat.filter((m) => !m.error).slice(-12).map((m) => ({ role: m.role, content: m.quiz ? `${m.text || ""}\n[QCM « ${m.quiz.title} » : ${m.quiz.questions.map((q) => q.q).join(" | ")}]`.trim() : m.content }));
 function coachRules(p) {
   return `Tu es Vex, le professeur d'anglais personnel de ${p.first_name || "l'élève"} sur Verblyx.
 Niveau CECRL : ${p.cefr_level}. Objectifs : ${p.goals.map((g) => GOALS_FR[g] || g).join(", ") || "général"}.
@@ -3962,7 +4002,7 @@ async function sendChat(text) {
     SFX.play("pop");
   } catch (e) {
     if (e && e.text) S.chat.push({ role: "assistant", content: e.text + "\n\n(réponse interrompue)" });
-    u.chatError = aiError(e);
+    else S.chat.push({ role: "assistant", error: true, content: aiError(e) || "Vex n'a pas pu répondre.", retry: { type: "chat", text: t } });
   }
   u.streaming = null; S.chatScroll = true;
   saveChat(); render();
@@ -3972,12 +4012,12 @@ async function sendChat(text) {
 async function quickQuiz(kind) {
   const u = S.ui, p = S.profile;
   if (!S.sample || (u.streaming != null && Date.now() - (u.streamAt || 0) < 100000)) return;
-  const label = (QCM_KINDS.find((k) => k[0] === kind) || QCM_KINDS[0])[1];
+  const qk = QCM_KINDS.find((k) => k[0] === kind) || QCM_KINDS[0], label = qk[1];
   const weak = [...weakSkills().map(skillLabel), ...p.difficulties];
   const topic = kind === "weak" ? (weak.length ? `les notions où l'élève fait des erreurs : ${weak.slice(0, 3).join(", ")}` : "les pièges les plus fréquents à ce niveau")
     : kind === "vocab" ? `le vocabulaire utile du niveau ${p.cefr_level}${p.goals.length ? " (thèmes : " + p.goals.map((g) => GOALS_FR[g] || g).join(", ") + ")" : ""} : sens des mots, traductions, mots qui vont ensemble`
     : "un mélange de grammaire et de vocabulaire du niveau";
-  S.chat.push({ role: "user", content: label }); SFX.play("tap");
+  S.chat.push({ role: "user", content: label, icon: qk[2] }); SFX.play("tap");
   u.streamAt = Date.now(); u.streaming = ""; u.quizBusy = true; u.chatError = ""; S.chatScroll = true; render();
   try {
     const raw = await S.sample.json(`Crée un QCM d'anglais pour un élève francophone de niveau ${p.cefr_level}. Thème : ${topic}.
@@ -3987,7 +4027,7 @@ Réponds UNIQUEMENT avec ce JSON : {"title":"titre court en français","question
     if (!quiz) throw { message: "Le QCM reçu était incomplet. Réessaie." };
     S.chat.push({ role: "assistant", content: `QCM : ${quiz.title}`, text: "À toi de jouer ! Clique sur la bonne réponse.", quiz });
     SFX.play("pop");
-  } catch (e) { u.chatError = aiError(e) || "Le QCM n'a pas pu être créé. Réessaie."; }
+  } catch (e) { S.chat.push({ role: "assistant", error: true, content: aiError(e) || "Le QCM n'a pas pu être créé.", retry: { type: "qcm", kind } }); }
   u.streaming = null; u.quizBusy = false; S.chatScroll = true;
   saveChat(); render();
 }
@@ -4176,6 +4216,12 @@ $app.addEventListener("click", (ev) => {
     case "retry-open": { const st = S.session && S.session.st; if (st) openStep(st); break; }
     case "chat-sug": sendChat(v); break;
     case "qcm": quickQuiz(v); break;
+    case "chat-retry": {
+      const last = S.chat[S.chat.length - 1]; if (!last || !last.error || !last.retry) break;
+      S.chat.splice(S.chat.length - 2, 2); saveChat();
+      if (last.retry.type === "qcm") quickQuiz(last.retry.kind); else sendChat(last.retry.text);
+      break;
+    }
     case "qz": {
       const m = S.chat[Number(el.dataset.m)], qi = Number(el.dataset.q); if (!m || !m.quiz || m.quiz.picks[qi] != null) break;
       const q = m.quiz.questions[qi]; m.quiz.picks[qi] = v; const ok = v === q.answer;
