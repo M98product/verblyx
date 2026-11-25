@@ -766,6 +766,7 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
 .adm-tool select { width: auto; flex: 1; }
 .adm-tool input { width: 100px; }
 .modal-panel .h2 .ico { color: var(--primary-text); }
+.modal:not(.opening) .modal-bg, .modal:not(.opening) .modal-panel { animation: none; }
 @keyframes modal-in { from { opacity: 0; transform: translateY(10px) scale(.96); } }
 .set-sec { display: flex; flex-direction: column; gap: 8px; padding: 12px 0; border-top: 1px solid var(--line); }
 .set-sec:first-of-type { border-top: 0; }
@@ -1508,7 +1509,11 @@ function render() {
   const fresh = key !== render.lastKey;
   $app.classList.toggle("static", !fresh);
   render.lastKey = key;
+  const keepEls = [".set-main", ".set-panel"].map((s) => { const e = document.querySelector(s); return e ? e.scrollTop : 0; });
+  const keepFaq = [...document.querySelectorAll(".faq details")].map((d) => d.open);
   $app.innerHTML = html;
+  [".set-main", ".set-panel"].forEach((s, k) => { const e = document.querySelector(s); if (e && keepEls[k]) e.scrollTop = keepEls[k]; });
+  document.querySelectorAll(".faq details").forEach((d, k) => { if (keepFaq[k]) d.open = true; });
   if (active) { const el = document.getElementById(active); if (el) { el.focus(); if (el.setSelectionRange && typeof el.value === "string") { try { el.setSelectionRange(el.value.length, el.value.length); } catch {} } } }
   if (fresh) { document.querySelectorAll(".vx").forEach((el, i) => vxEnter(el, i)); typeSpeech(); }
   if (S.fx) {
@@ -2637,7 +2642,8 @@ function settingsModal() {
     <p class="small" style="color:var(--faint);margin-top:18px">Verblyx · version 1.2</p>`;
   const tabs = SET_TABS.map(([k, t, ic]) => `<button class="set-tab ${tab === k ? "is-on" : ""}" data-act="set-tab" data-v="${k}">${icon(ic)}<span>${t}</span></button>`).join("")
     + (S.isAdmin ? `<button class="set-tab" data-go="admin">${icon("i-gear")}<span>Espace admin</span></button>` : "");
-  return `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="set-title">
+  const opening = S.setAnim; S.setAnim = false;
+  return `<div class="modal ${opening ? "opening" : ""}" role="dialog" aria-modal="true" aria-labelledby="set-title">
     <div class="modal-bg" data-act="settings-close"></div>
     <div class="modal-panel set-panel">
       <div class="set-top"><h2 class="h2" id="set-title">${icon("i-gear")} Paramètres</h2><button class="icon-btn" data-act="settings-close" aria-label="Fermer">${icon("i-close")}</button></div>
@@ -3131,7 +3137,7 @@ $app.addEventListener("click", (ev) => {
       if (ses && ses.pre) openStep(ses.st); else if (ses) { ses.out = false; nextItem(); }
       break;
     }
-    case "settings-open": S.settingsOpen = true; S.setTab = S.setTab || "profil"; u.userOk = ""; u.userErr = ""; u.helpOk = ""; u.helpErr = ""; u.avErr = ""; u.saved = ""; u.setErr = ""; u.passOk = ""; u.passErr = ""; u.confirmReset = false; SFX.play("tap"); if (!S.accountNo && S.store.accountNo) S.store.accountNo().then((n) => { if (n) { S.accountNo = n; if (S.settingsOpen) render(); } }).catch(() => {}); render(); setTimeout(() => { const i = document.getElementById("setName"); if (i) i.focus(); }, 50); break;
+    case "settings-open": S.settingsOpen = true; S.setAnim = true; S.setTab = S.setTab || "profil"; u.userOk = ""; u.userErr = ""; u.helpOk = ""; u.helpErr = ""; u.avErr = ""; u.saved = ""; u.setErr = ""; u.passOk = ""; u.passErr = ""; u.confirmReset = false; SFX.play("tap"); if (!S.accountNo && S.store.accountNo) S.store.accountNo().then((n) => { if (n) { S.accountNo = n; if (S.settingsOpen) render(); } }).catch(() => {}); render(); setTimeout(() => { const i = document.getElementById("setName"); if (i) i.focus(); }, 50); break;
     case "settings-close": S.settingsOpen = false; u.confirmReset = false; render(); break;
     case "gift-close": S.giftNote = ""; render(); break;
     case "set-tab": S.setTab = v; u.confirmReset = false; SFX.play("tap"); render(); { const m = document.querySelector(".set-main"); if (m) m.scrollTop = 0; } break;
