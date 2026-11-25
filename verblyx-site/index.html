@@ -845,7 +845,15 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .quiz-end b { display: inline-flex; align-items: center; gap: 8px; }
 .gp-sub .em, .btn .em { vertical-align: -4px; margin-left: 6px; }
 .adm-nums span { display: inline-flex; align-items: center; gap: 4px; }
-.msg.ai.err { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-color: rgba(255, 107, 129, .45); background: var(--danger-soft); color: #FFC3CD; }
+.msg.me { background: #1F6FE5; border-radius: 16px 16px 6px 16px; padding: 10px 15px; }
+.msg.me.req { padding: 7px 13px 7px 10px; gap: 7px; background: var(--surface-2); color: var(--fg-2); border: 1px solid var(--line-2); border-radius: 999px; font: 700 13px var(--f-body); }
+.chat-err { align-self: stretch; display: flex; align-items: center; gap: 12px; padding: 12px 14px 12px 12px; border-radius: 14px; background: linear-gradient(90deg, rgba(255, 107, 129, .1), rgba(255, 255, 255, .015)); border: 1px solid var(--line-2); border-left: 3px solid var(--danger); animation: noticeIn .28s cubic-bezier(.2, .8, .3, 1.2); }
+.chat-err .n-ic { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: var(--danger); color: #14161C; }
+.chat-err .n-ic svg { width: 16px; height: 16px; }
+.chat-err .ce-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font-size: 14px; color: var(--fg-2); }
+.chat-err .ce-tx b { color: var(--fg); font: 700 14.5px var(--f-body); }
+.chat-err small { color: var(--faint); font-size: 12px; overflow-wrap: anywhere; }
+@media (max-width: 519px) { .chat-err { flex-wrap: wrap; align-items: flex-start; } .chat-err .ce-tx { flex: 1 1 calc(100% - 44px); } .chat-err .btn { margin-left: 40px; } }
 .coach-page { display: flex; flex-direction: column; gap: 20px; min-height: calc(100dvh - 52px); margin-bottom: -48px; }
 .coach-page .chat { flex: 1; }
 @media (max-width: 1023px) { .coach-page { min-height: calc(100dvh - 44px); margin-bottom: -40px; } }
@@ -1521,7 +1529,7 @@ function aiError(e) {
   const c = e && e.code;
   if (c === "rate_limited" && e.message) return e.message;
   if (c === "rate_limited") return "Vex a beaucoup travaillé. Patiente un peu avant de réessayer.";
-  if (c === "session_expired") return "Ta session a expiré. Reconnecte-toi à Claude puis réessaie.";
+  if (c === "session_expired") return "Ta session a expiré. Reconnecte-toi puis réessaie.";
   if (c === "invalid_json") return "La réponse de Vex était incomplète. Réessaie.";
   if (c === "cancelled") return "";
   if (e && e.message && !c) return e.message;
@@ -1826,7 +1834,7 @@ function render() {
   if (showLevel && S.levelPop.fresh) { S.levelPop.fresh = false; setTimeout(() => { giftFx(); const r = document.querySelector(".lv-ring"); if (r) vxAnim(r, [{ transform: "scale(.4) rotate(-20deg)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: .6 }, { transform: "none" }], { duration: 700, easing: "ease-out" }); }, 80); }
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
-  if (v === "coach" && (fresh || S.chatScroll)) { S.chatScroll = false; const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" }); }
+  if (v === "coach" && (fresh || S.chatScroll)) { S.chatScroll = false; scrollChatEnd(); }
   if (v === "dashboard" && fresh) { setTimeout(scrollToCurrent, 0); setTimeout(prefetchNext, 400); }
 }
 // Vex parle : le texte s'écrit pendant qu'il bouge la bouche
@@ -2316,10 +2324,12 @@ function addHearts(n) {
   p.hearts = Math.min(HEART_MAX, p.hearts + n);
   if (p.hearts >= HEART_MAX) p.heartsAt = null;
 }
+// Recharge : 85 pièces la vie comme le pack, mais jamais moins chère qu'une vie seule
+const refillPrice = () => { const miss = Math.max(1, HEART_MAX - S.profile.hearts); return miss === 1 ? HEART_COST : miss * 85; };
 const SHOP = [
   { id: "h1", name: "1 vie", desc: "Récupère une vie tout de suite.", n: 1, price: () => HEART_COST },
-  { id: "h3", name: "3 vies", desc: "Le pack malin : 30 pièces d'économie.", n: 3, price: () => 270 },
-  { id: "hfull", name: "Recharge complète", desc: "Toutes tes vies d'un coup, à prix réduit.", n: 0, price: () => Math.max(1, HEART_MAX - S.profile.hearts) * 90 },
+  { id: "h3", name: "3 vies", desc: "85 pièces la vie au lieu de 100, soit 45 pièces d'économie.", n: 3, price: () => 255 },
+  { id: "hfull", name: "Recharge complète", desc: "Toutes tes vies d'un coup, à 85 pièces la vie dès 2 vies manquantes.", n: 0, price: () => refillPrice() },
 ];
 function buyItem(id) {
   const p = S.profile, it = SHOP.find((x) => x.id === id); if (!it) return false;
@@ -3986,7 +3996,7 @@ function viewCoach() {
   <div class="chat">
     ${S.chat.length === 0 ? `${ask("talk", `Bonjour ${p.first_name || ""}. Pose-moi une question, écris en anglais pour être corrigé, ou lance un QCM.`)}
       <div class="grid-2">${SUGGESTIONS.map((s) => `<button class="suggest" data-act="chat-sug" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>` : ""}
-    ${S.chat.map((m, mi) => m.role === "user" ? `<div class="msg me">${m.icon ? em(m.icon, 18) : ""}${rich(m.content)}</div>` : m.error ? `<div class="ai-row">${vx("st_sad", 36)}<div class="msg ai err"><span>${esc(m.content)}</span>${m.retry && mi === S.chat.length - 1 ? `<button class="btn btn-secondary btn-sm" data-act="chat-retry">Réessayer</button>` : ""}</div></div>` : `<div class="ai-row">${vx("st_wink", 36)}<div class="msg ai ${m.quiz ? "has-quiz" : ""}">${m.text != null ? (m.text ? `<div>${rich(m.text)}</div>` : "") : rich(m.content)}${m.quiz ? quizCard(m, mi) : ""}</div></div>`).join("")}
+    ${S.chat.map((m, mi) => m.role === "user" ? (m.icon ? `<div class="msg me req">${em(m.icon, 16)}<span>${esc(m.content)}</span></div>` : `<div class="msg me">${rich(m.content)}</div>`) : m.error ? chatErr(m, mi === S.chat.length - 1) : `<div class="ai-row">${vx("st_wink", 36)}<div class="msg ai ${m.quiz ? "has-quiz" : ""}">${m.text != null ? (m.text ? `<div>${rich(m.text)}</div>` : "") : rich(m.content)}${m.quiz ? quizCard(m, mi) : ""}</div></div>`).join("")}
     ${busy ? `<div class="ai-row">${vx(u.streaming ? "st_wink" : "st_hmm", 36, "talking-vx")}<div class="msg ai" id="stream">${u.streaming ? streamView(u.streaming) : `<span class="row small muted" style="gap:8px"><span class="spinner"></span> ${u.quizBusy ? "Vex prépare ton QCM…" : "Vex réfléchit…"}</span>`}</div></div>` : ""}
     ${notice(u.chatError)}
     <div id="chat-end"></div>
@@ -4002,6 +4012,21 @@ function viewCoach() {
 }
 const saveChat = () => { try { sessionStorage.setItem("verblyx:chat", JSON.stringify(S.chat.slice(-30))); } catch {} };
 // Ce que l'IA « voit » de la conversation (un QCM est résumé en une ligne)
+// bas de la page : la barre de saisie reste par-dessus, donc on va tout en bas (pas seulement à la fin du chat)
+function scrollChatEnd(smooth) { const go = () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: smooth ? "smooth" : "auto" }); go(); requestAnimationFrame(go); }
+function chatErr(m, last) {
+  const raw = String(m.content || ""), detail = raw.replace(/^Erreur serveur\s*:\s*/i, "").replace(/\s*Réessaie[^.]*\.?\s*$/i, "");
+  const [title, sub] = /quota|patiente|beaucoup travaillé/i.test(raw) ? ["Limite d'utilisation atteinte", "Le professeur a atteint sa limite pour le moment. Réessaie dans quelques minutes."]
+    : /session/i.test(raw) ? ["Session expirée", "Reconnecte-toi puis réessaie."]
+    : /surcharg|ne répond pas|503|502/i.test(raw) ? ["Service momentanément indisponible", "Les serveurs sont très sollicités. Réessaie dans un instant."]
+    : /QCM/i.test(raw) ? ["Le QCM n'a pas pu être créé", "Une erreur est survenue pendant la préparation. Réessaie."]
+    : ["Réponse indisponible", "Une erreur technique est survenue. Réessaie dans un instant."];
+  return `<div class="chat-err" role="alert"><span class="n-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true">${N_IC.error}</svg></span>
+    <div class="ce-tx"><b>${title}</b><span>${sub}</span>${S.isAdmin && detail ? `<small>Détail technique : ${esc(detail)}</small>` : ""}</div>
+    ${m.retry && last ? `<button class="btn btn-secondary btn-sm" data-act="chat-retry">Réessayer</button>` : ""}</div>`;
+}
+// une erreur restée en bas de la discussion n'a plus de sens quand on relance une demande
+const dropErrors = () => { while (S.chat.length && S.chat[S.chat.length - 1].error) S.chat.pop(); };
 const chatTurns = () => S.chat.filter((m) => !m.error).slice(-12).map((m) => ({ role: m.role, content: m.quiz ? `${m.text || ""}\n[QCM « ${m.quiz.title} » : ${m.quiz.questions.map((q) => q.q).join(" | ")}]`.trim() : m.content }));
 function coachRules(p) {
   return `Tu es Vex, le professeur d'anglais personnel de ${p.first_name || "l'élève"} sur Verblyx.
@@ -4022,13 +4047,13 @@ async function sendChat(text) {
   if (!t || !S.sample) return;
   if (u.streaming != null && Date.now() - (u.streamAt || 0) < 100000) return;
   u.streamAt = Date.now();
-  S.chat.push({ role: "user", content: t.slice(0, 2000) }); SFX.play("tap");
+  dropErrors(); S.chat.push({ role: "user", content: t.slice(0, 2000) }); SFX.play("tap");
   u.chatDraft = ""; u.chatError = ""; u.streaming = ""; S.chatScroll = true; render();
   const turns = [{ role: "user", content: coachRules(S.profile) }, ...chatTurns()];
   try {
     const { text: reply } = await S.sample(turns, { modelTier: "quick", cache: false, onText: ({ text }) => {
       u.streaming = text; const av = document.querySelector(".talking-vx"); if (av && !av.classList.contains("talking")) { av.classList.add("talking"); vxSetMood(av, "wave"); } const el = document.getElementById("stream"); if (el) el.innerHTML = streamView(text);
-      const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" });
+      scrollChatEnd();
     } });
     const { text: rest, quiz } = splitQuiz(reply);
     S.chat.push(quiz ? { role: "assistant", content: reply, text: rest, quiz } : { role: "assistant", content: reply });
@@ -4050,7 +4075,7 @@ async function quickQuiz(kind) {
   const topic = kind === "weak" ? (weak.length ? `les notions où l'élève fait des erreurs : ${weak.slice(0, 3).join(", ")}` : "les pièges les plus fréquents à ce niveau")
     : kind === "vocab" ? `le vocabulaire utile du niveau ${p.cefr_level}${p.goals.length ? " (thèmes : " + p.goals.map((g) => GOALS_FR[g] || g).join(", ") + ")" : ""} : sens des mots, traductions, mots qui vont ensemble`
     : "un mélange de grammaire et de vocabulaire du niveau";
-  S.chat.push({ role: "user", content: label, icon: qk[2] }); SFX.play("tap");
+  dropErrors(); S.chat.push({ role: "user", content: label, icon: qk[2] }); SFX.play("tap");
   u.streamAt = Date.now(); u.streaming = ""; u.quizBusy = true; u.chatError = ""; S.chatScroll = true; render();
   try {
     const raw = await S.sample.json(`Crée un QCM d'anglais pour un élève francophone de niveau ${p.cefr_level}. Thème : ${topic}.
@@ -4260,7 +4285,7 @@ $app.addEventListener("click", (ev) => {
       const q = m.quiz.questions[qi]; m.quiz.picks[qi] = v; const ok = v === q.answer;
       SFX.play(ok ? "correct" : "wrong");
       saveChat(); render();
-      if (m.quiz.picks.filter((x) => x != null).length === m.quiz.questions.length) { SFX.play("fanfare"); S.chatScroll = true; setTimeout(() => { const e = document.getElementById("chat-end"); if (e) e.scrollIntoView({ block: "end", behavior: "smooth" }); }, 50); }
+      if (m.quiz.picks.filter((x) => x != null).length === m.quiz.questions.length) { SFX.play("fanfare"); S.chatScroll = true; setTimeout(() => { scrollChatEnd(true); }, 50); }
       break;
     }
     case "chat-clear": S.chat = []; try { sessionStorage.removeItem("verblyx:chat"); } catch {} u.chatError = ""; render(); break;
