@@ -823,7 +823,7 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .lb2-list .lb2-row.rk-1 .lb2-rank { color: #FFC94A; } .lb2-list .lb2-row.rk-2 .lb2-rank { color: #C9CED6; } .lb2-list .lb2-row.rk-3 .lb2-rank { color: #E09A5C; }
 .coach-dock { position: sticky; bottom: 0; display: flex; flex-direction: column; gap: 8px; z-index: 5; margin: 0 -8px; padding: 10px 8px 16px; background: var(--bg); box-shadow: 0 -22px 18px -4px var(--bg); }
 .coach-dock .composer { position: static; }
-@media (max-width: 719px) { .coach-dock { bottom: calc(var(--tabh, 61px) - 1px); padding: 8px 8px 6px; gap: 6px; box-shadow: 0 -16px 14px -4px var(--bg); } body.typing .tabbar { display: none; } body.typing .coach-dock { bottom: env(safe-area-inset-bottom, 0px); } body.typing .main:has(.coach-page) { padding-bottom: env(safe-area-inset-bottom, 0px); } body.typing .coach-page { min-height: calc(100dvh - var(--mtoph, 53px) - env(safe-area-inset-top, 0px) - 20px - env(safe-area-inset-bottom, 0px)); } .coach-dock .qcm-bar { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .coach-dock .qcm-bar::-webkit-scrollbar { display: none; } .coach-dock .qcm-bar .chip-btn { flex: none; } }
+@media (max-width: 719px) { .coach-dock { bottom: calc(var(--tabh, 61px) - 1px); padding: 8px 8px 6px; gap: 6px; box-shadow: 0 -16px 14px -4px var(--bg); } body.typing .tabbar { display: none; } body.typing .coach-dock { bottom: env(safe-area-inset-bottom, 0px); } body.typing .main:has(.coach-page), body.typing .main:has(.coach2) { padding-bottom: env(safe-area-inset-bottom, 0px) !important; } body.typing .coach-page, body.typing .c2-main { min-height: calc(100dvh - var(--mtoph, 53px) - env(safe-area-inset-top, 0px) - 20px - env(safe-area-inset-bottom, 0px)); } .coach-dock .qcm-bar { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; } .coach-dock .qcm-bar::-webkit-scrollbar { display: none; } .coach-dock .qcm-bar .chip-btn { flex: none; } }
 .qcm-bar { display: flex; gap: 6px; flex-wrap: wrap; }
 .qcm-bar .chip-btn { background: var(--surface); box-shadow: 0 8px 20px -12px rgba(0, 0, 0, .8); }
 .qcm-bar .chip-btn:hover:not(:disabled) { border-color: var(--primary); color: var(--fg); }
@@ -878,10 +878,11 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .chat-err .ce-tx b { color: var(--fg); font: 700 14.5px var(--f-body); }
 .chat-err small { color: var(--faint); font-size: 12px; overflow-wrap: anywhere; }
 @media (max-width: 519px) { .chat-err { flex-wrap: wrap; align-items: flex-start; } .chat-err .ce-tx { flex: 1 1 calc(100% - 44px); } .chat-err .btn { margin-left: 40px; } }
-.coach-page { display: flex; flex-direction: column; gap: 20px; min-height: calc(100dvh - 52px); margin-bottom: -48px; }
-.coach-page .chat { flex: 1; }
-@media (max-width: 1023px) { .coach-page { min-height: calc(100dvh - 44px); margin-bottom: -40px; } }
-@media (max-width: 719px) { .coach-page { min-height: calc(100dvh - var(--mtoph, 53px) - env(safe-area-inset-top, 0px) - 20px - var(--tabh, 61px) + 1px); margin-bottom: 0; } .main:has(.coach-page) { padding-bottom: calc(var(--tabh, 61px) - 1px); } }
+.coach-page, .c2-main { display: flex; flex-direction: column; gap: 20px; min-height: calc(100dvh - 52px); margin-bottom: -48px; }
+.c2-main { gap: 16px; }
+.coach-page .chat, .c2-chat { flex: 1; }
+@media (max-width: 1023px) { .coach-page, .c2-main { min-height: calc(100dvh - 44px); margin-bottom: -40px; } }
+@media (max-width: 719px) { .coach-page, .c2-main { min-height: calc(100dvh - var(--mtoph, 53px) - env(safe-area-inset-top, 0px) - 20px - var(--tabh, 61px) + 1px); margin-bottom: 0; } .main:has(.coach-page), .main:has(.coach2) { padding-bottom: calc(var(--tabh, 61px) - 1px); } }
 .xp-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 9px; border-radius: 999px; background: rgba(0, 214, 181, .13); border: 1px solid rgba(0, 214, 181, .35); color: var(--success); font: 800 12.5px var(--f-body); white-space: nowrap; }
 .xp-chip .ico { width: 13px; height: 13px; }
 .goal-bonus { border-color: rgba(0, 214, 181, .45); background: radial-gradient(240px 120px at 100% 0%, rgba(0, 214, 181, .14), transparent 70%), var(--surface); }
@@ -1285,6 +1286,272 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
   .btn, .option, .qz-opt, .chip-btn, .pnode { transition: transform .12s ease, background .15s, border-color .15s, color .15s; }
   .btn:active:not(:disabled), .option:active:not(:disabled), .qz-opt:active:not(:disabled), .chip-btn:active:not(:disabled) { transform: scale(.97); }
 }
+/* =========================================================
+   PROF IA — ambiance bleu nuit
+   ========================================================= */
+body.v-coach {
+  --bg: #071A2D; --bg-raise: #0A2036; --surface: #0D2540; --surface-2: #112C4B; --surface-3: #183A5E;
+  --line: #16324F; --line-2: #22476E; --muted: #93A6BD; --faint: #627A95; --fg-2: #C6D3E3;
+  background: #071A2D;
+}
+body.v-coach .mtop { background: rgba(7, 26, 45, .94); }
+body.v-coach .tabbar { background: rgba(7, 26, 45, .92); }
+body.v-coach .side { background: rgba(5, 19, 34, .55); }
+.main-in:has(> .coach2) { max-width: 1140px; }
+.pic { flex: none; display: block; }
+.coach2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: start; }
+.c2-main { width: 100%; max-width: 780px; margin-inline: auto; }
+/* en-tête : Vex et l'état de la séance */
+.c2-top { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; padding: 4px 0 6px; }
+.coach-top { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1 1 320px; }
+.ct-vex { position: relative; flex: none; width: 64px; height: 64px; display: grid; place-items: center; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 10px 24px -14px rgba(0, 0, 0, .7); }
+.ct-vex .vx { transition: transform .4s cubic-bezier(.2, .8, .3, 1.2); }
+.ct-vex.is-think .vx { animation: ctBob 1.6s ease-in-out infinite; }
+.ct-vex.is-talk .vx { animation: ctTalk .9s ease-in-out infinite; }
+.ct-vex.is-joy { border-color: rgba(0, 214, 181, .5); box-shadow: 0 0 0 4px rgba(0, 214, 181, .1); }
+.ct-vex.is-listen { border-color: rgba(22, 119, 255, .6); box-shadow: 0 0 0 4px rgba(22, 119, 255, .14); }
+.ct-dots { position: absolute; right: -6px; top: -6px; display: none; gap: 3px; padding: 5px 7px; border-radius: 999px; background: var(--surface-3); border: 1px solid var(--line-2); }
+.ct-dots i { width: 5px; height: 5px; border-radius: 50%; background: var(--fg-2); animation: dotUp 1.2s ease-in-out infinite; }
+.ct-dots i:nth-child(2) { animation-delay: .15s; } .ct-dots i:nth-child(3) { animation-delay: .3s; }
+.ct-vex.is-think .ct-dots { display: flex; }
+@keyframes ctBob { 50% { transform: translateY(-3px) rotate(-3deg); } }
+@keyframes ctTalk { 50% { transform: scale(1.04); } }
+@keyframes dotUp { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-3px); opacity: 1; } }
+.ct-id { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ct-id b { display: inline-flex; align-items: center; gap: 8px; font: 800 20px var(--f-display); letter-spacing: -.01em; }
+.ct-lv { font: 800 11.5px var(--f-body); height: 22px; padding: 0 8px; border-radius: 7px; display: inline-grid; place-items: center; color: #8CC2FF; background: rgba(22, 119, 255, .16); }
+.ct-status { font-size: 13.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-left: auto; }
+.ct-chip { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--fg-2); font: 700 12.5px var(--f-body); font-variant-numeric: tabular-nums; }
+.ct-chip.is-low { color: #FFD08A; border-color: rgba(255, 196, 92, .35); }
+.ct-chip.is-toast { color: #6FF0DA; border-color: rgba(0, 214, 181, .4); background: rgba(0, 214, 181, .1); animation: noticeIn .3s ease; }
+.ct-chip.is-timer { cursor: pointer; }
+.ct-chip.is-timer.on { color: #6FF0DA; border-color: rgba(0, 214, 181, .35); }
+.c2-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.c2-btn { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg-2); font: 600 13.5px var(--f-body); cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.c2-btn:hover { border-color: var(--line-2); color: var(--fg); }
+.c2-btn.is-on { background: rgba(22, 119, 255, .16); border-color: rgba(22, 119, 255, .5); color: #CFE4FF; }
+.role-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 12px 10px 14px; border-radius: 14px; background: rgba(0, 214, 181, .08); border: 1px solid rgba(0, 214, 181, .3); color: var(--fg-2); font-size: 14px; }
+.role-bar .btn { margin-left: auto; }
+/* discussion */
+.c2-chat { display: flex; flex-direction: column; gap: 18px; flex: 1; padding-bottom: 8px; }
+.cm { display: flex; gap: 10px; align-items: flex-start; animation: cmIn .32s cubic-bezier(.2, .8, .3, 1); }
+@keyframes cmIn { from { opacity: 0; transform: translateY(6px); } }
+.cm-me { flex-direction: column; align-items: flex-end; }
+.cm-av { flex: none; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); margin-top: 2px; }
+.cm-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.bub { max-width: 100%; padding: 12px 16px; font-size: 15.5px; line-height: 1.65; overflow-wrap: anywhere; }
+.bub p { margin: 0 0 8px; } .bub p:last-child { margin-bottom: 0; }
+.bub ul { margin: 6px 0; padding-left: 20px; }
+.bub-me { max-width: min(82%, 560px); background: #1677FF; color: #fff; border-radius: 20px 20px 6px 20px; box-shadow: 0 8px 20px -12px rgba(22, 119, 255, .8); }
+.bub-me b, .bub-me strong { color: #fff; }
+.bub-tag { display: block; font: 700 10.5px var(--f-body); letter-spacing: .06em; text-transform: uppercase; opacity: .75; margin-bottom: 2px; }
+.bub-ai { background: var(--surface); border: 1px solid var(--line); border-radius: 6px 20px 20px 20px; box-shadow: 0 10px 26px -20px rgba(0, 0, 0, .9); }
+.bub-ai.is-wide { width: 100%; }
+.bub-ai.is-praise { border-color: rgba(0, 214, 181, .35); }
+.bub-ai b, .bub-ai strong { color: #fff; }
+.bub-tr { max-width: min(82%, 600px); padding: 10px 14px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); border-left: 3px solid var(--success); font-size: 14.5px; color: var(--fg-2); }
+.cm-me .bub-tr { border-left: 1px solid var(--line); border-right: 3px solid #1677FF; }
+.req-pill { display: inline-flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line-2); color: var(--fg-2); font: 600 13px var(--f-body); max-width: 90%; }
+.req-pill span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m-acts { display: flex; flex-wrap: wrap; gap: 2px; margin-left: -6px; }
+.mact { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 9px; border: 0; border-radius: 9px; background: none; color: var(--muted); font: 600 12.5px var(--f-body); cursor: pointer; transition: background .15s, color .15s; }
+.mact:hover:not(:disabled) { background: var(--surface-2); color: var(--fg); }
+.mact:disabled { opacity: .45; cursor: default; }
+.mact.is-on { color: #8CC2FF; background: rgba(22, 119, 255, .14); }
+.mact.is-done { color: var(--success); }
+.mact.icon { width: 32px; padding: 0; justify-content: center; }
+.mact .spinner { width: 14px; height: 14px; }
+@media (hover: hover) { .cm-ai .m-acts { opacity: .7; transition: opacity .15s; } .cm-ai:hover .m-acts, .cm-ai .m-acts:focus-within { opacity: 1; } }
+.w-pick { width: 100%; padding: 10px 12px; border-radius: 14px; background: var(--bg-raise); border: 1px dashed var(--line-2); display: flex; flex-direction: column; gap: 8px; }
+.w-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.w-chip { height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); color: var(--fg); font: 600 13px var(--f-body); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.w-chip:hover:not(:disabled) { border-color: #1677FF; }
+.w-chip.is-have { color: var(--success); border-color: rgba(0, 214, 181, .35); }
+.w-chip .spinner { width: 13px; height: 13px; }
+.typing { display: inline-flex; gap: 4px; margin-right: 8px; vertical-align: middle; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: dotUp 1.2s ease-in-out infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; } .typing i:nth-child(3) { animation-delay: .3s; }
+.co-note { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); color: var(--fg-2); width: 100%; }
+.co-note div { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.co-note b { color: var(--fg); }
+/* vocabulaire */
+.voc-card { margin-top: 10px; display: flex; flex-direction: column; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-raise); overflow: hidden; }
+.voc-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.voc-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.4; }
+.voc-tx b { font-size: 15.5px; }
+.voc-tx span { color: var(--fg-2); font-size: 14px; }
+.voc-tx small { color: var(--muted); font-size: 13px; font-style: italic; }
+.voc-acts { display: flex; gap: 2px; flex: none; }
+.voc-foot { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 12px; }
+/* accueil de la conversation */
+.co-welcome { display: flex; flex-direction: column; gap: 20px; padding: 18px 0 8px; }
+.cw-hero { display: flex; align-items: center; gap: 18px; }
+.cw-title { font: 800 28px/1.15 var(--f-display); letter-spacing: -.02em; margin: 0 0 6px; }
+.cw-hero .muted { max-width: 460px; }
+.cw-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cw-card { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); text-align: left; cursor: pointer; transition: transform .2s ease, border-color .2s, background .2s; }
+.cw-card:hover { transform: translateY(-2px); border-color: var(--line-2); background: var(--surface-2); }
+.cw-card b { font: 700 15px var(--f-body); }
+.cw-card > span:last-child { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+.cw-ic { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: rgba(22, 119, 255, .15); color: #8CC2FF; margin-bottom: 4px; }
+.cw-card:nth-child(2) .cw-ic { background: rgba(0, 214, 181, .13); color: #5CF3DA; }
+.cw-card:nth-child(3) .cw-ic { background: rgba(255, 196, 92, .12); color: #FFD08A; }
+.cw-sugs { display: flex; flex-wrap: wrap; gap: 8px; }
+.cw-sug { padding: 8px 13px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg-2); font: 500 13.5px var(--f-body); cursor: pointer; transition: border-color .15s, color .15s; }
+.cw-sug:hover { border-color: #1677FF; color: var(--fg); }
+.cw-foot { margin: 0; }
+/* barre de saisie */
+.c2-dock { gap: 8px; }
+.c2-composer { display: flex; align-items: flex-end; gap: 4px; padding: 6px; border-radius: 22px; background: var(--surface); border: 1.5px solid var(--line-2); box-shadow: 0 18px 40px -22px rgba(0, 0, 0, .9); transition: border-color .15s, box-shadow .15s; }
+.c2-composer:focus-within { border-color: #1677FF; box-shadow: 0 0 0 4px rgba(22, 119, 255, .12), 0 18px 40px -22px rgba(0, 0, 0, .9); }
+.c2-composer textarea { flex: 1; min-width: 0; min-height: 44px; max-height: 160px; resize: none; padding: 11px 8px; border: 0; background: transparent; color: var(--fg); font: 400 15.5px/1.45 var(--f-body); }
+.c2-composer textarea:focus { outline: none; }
+.c2-composer textarea::placeholder { color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cc-btn { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 14px; background: none; color: var(--muted); cursor: pointer; transition: background .15s, color .15s; }
+.cc-btn:hover:not(:disabled), .cc-btn.is-on { background: var(--surface-2); color: var(--fg); }
+.cc-btn.is-rec { color: #fff; background: #E0485F; animation: recPulse 1.4s ease-in-out infinite; }
+@keyframes recPulse { 50% { box-shadow: 0 0 0 6px rgba(224, 72, 95, .18); } }
+.cc-send { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 15px; background: #1677FF; color: #fff; cursor: pointer; transition: background .15s, transform .12s, opacity .15s; }
+.cc-send:hover:not(:disabled) { background: #2E87FF; }
+.cc-send:disabled { opacity: .4; cursor: default; }
+.c2-hint { text-align: center; color: var(--faint); margin: 0; font-size: 12px; }
+.tool-chip { align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 6px 0 11px; border-radius: 10px; background: rgba(22, 119, 255, .14); border: 1px solid rgba(22, 119, 255, .4); color: #CFE4FF; font: 600 13px var(--f-body); }
+.tool-chip button { display: grid; place-items: center; width: 22px; height: 22px; border: 0; border-radius: 6px; background: none; color: inherit; cursor: pointer; }
+.tool-chip button:hover { background: rgba(255, 255, 255, .08); }
+.tools-pop { padding: 12px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line-2); box-shadow: 0 24px 50px -24px rgba(0, 0, 0, .95); animation: cmIn .2s ease; }
+.tp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding-left: 4px; }
+.tp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 6px; }
+.tp-item { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 12px; border-radius: 12px; border: 1px solid transparent; background: var(--bg-raise); color: var(--fg); font: 600 14px var(--f-body); text-align: left; cursor: pointer; transition: border-color .15s, background .15s; }
+.tp-item .pic { color: #8CC2FF; }
+.tp-item:hover { border-color: var(--line-2); background: var(--surface-2); }
+.tp-sub { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.tp-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.tp-chip { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-2); background: none; color: var(--fg-2); font: 600 13px var(--f-body); cursor: pointer; }
+.tp-chip:hover { border-color: #1677FF; color: var(--fg); }
+.voice-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 12px; border-radius: 16px; background: var(--surface); border: 1px solid rgba(22, 119, 255, .4); font-size: 14px; color: var(--fg-2); }
+.voice-bar .btn-ghost { margin-left: auto; }
+.vb-wave { display: inline-flex; align-items: center; gap: 3px; height: 20px; }
+.vb-wave i { width: 3px; height: 6px; border-radius: 2px; background: #1677FF; }
+.voice-bar.is-listening .vb-wave i { animation: vbWave 1s ease-in-out infinite; }
+.vb-wave i:nth-child(2) { animation-delay: .1s; } .vb-wave i:nth-child(3) { animation-delay: .2s; } .vb-wave i:nth-child(4) { animation-delay: .3s; } .vb-wave i:nth-child(5) { animation-delay: .4s; }
+@keyframes vbWave { 50% { height: 18px; background: #00D6B5; } }
+/* panneau latéral : concentration, progrès, historique */
+.c2-side { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 24px 60px -30px rgba(0, 0, 0, .9); overflow: hidden; }
+.side-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 10px 10px 12px; border-bottom: 1px solid var(--line); }
+.side-tabs { display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: var(--bg-raise); }
+.side-tabs button { height: 32px; padding: 0 11px; border: 0; border-radius: 9px; background: none; color: var(--muted); font: 600 13px var(--f-body); cursor: pointer; }
+.side-tabs button.is-on { background: var(--surface-3); color: var(--fg); }
+.side-body { overflow-y: auto; padding: 4px 16px 18px; scrollbar-width: thin; }
+.side-sec { display: flex; flex-direction: column; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.side-sec:last-child { border-bottom: 0; }
+.ss-h { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ss-h b { font: 700 15px var(--f-body); }
+.co-switch { display: inline-flex; align-items: center; gap: 8px; font: 600 13px var(--f-body); color: var(--fg-2); cursor: pointer; user-select: none; }
+.co-switch input { position: absolute; opacity: 0; pointer-events: none; }
+.co-switch span { position: relative; width: 34px; height: 20px; border-radius: 999px; background: var(--surface-3); transition: background .2s; flex: none; }
+.co-switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform .2s; }
+.co-switch input:checked + span { background: #1677FF; }
+.co-switch input:checked + span::after { transform: translateX(14px); }
+.co-switch input:focus-visible + span { box-shadow: 0 0 0 3px rgba(22, 119, 255, .4); }
+.co-switch.small { font-weight: 500; color: var(--muted); }
+.fx-modes { display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: var(--bg-raise); }
+.fx-modes button { flex: 1; height: 34px; border: 0; border-radius: 9px; background: none; color: var(--muted); font: 600 13px var(--f-body); cursor: pointer; }
+.fx-modes button.is-on { background: var(--surface-3); color: var(--fg); }
+.fx-desc { margin: -4px 0 0; }
+.fx-clock { position: relative; width: 168px; height: 168px; margin: 4px auto; display: grid; place-items: center; }
+.fx-clock svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fx-clock .bg { fill: none; stroke: var(--surface-3); stroke-width: 7; }
+.fx-clock .fg { fill: none; stroke: #00D6B5; stroke-width: 7; stroke-linecap: round; transition: stroke-dasharray .9s linear; }
+.fx-clock .fg.brk { stroke: #1677FF; }
+.fx-clock span { font: 800 36px var(--f-display); letter-spacing: -.02em; }
+.fx-ctrl { justify-content: center; gap: 8px; }
+.fx-ctrl .btn-primary { min-width: 150px; gap: 8px; }
+.fx-reset { width: 44px; padding: 0; justify-content: center; }
+.fx-done { display: flex; flex-direction: column; gap: 6px; padding: 14px; border-radius: 16px; background: rgba(0, 214, 181, .08); border: 1px solid rgba(0, 214, 181, .3); font-size: 14px; color: var(--fg-2); }
+.fx-done b { color: var(--fg); }
+.fx-done .row { gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+.fx-goalbox { display: flex; flex-direction: column; gap: 8px; }
+.fx-bar { height: 6px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.fx-bar i { display: block; height: 100%; border-radius: inherit; background: #00D6B5; transition: width .6s ease; }
+.fx-goals { display: flex; gap: 6px; flex-wrap: wrap; }
+.fx-goals button { height: 30px; padding: 0 11px; border-radius: 9px; border: 1px solid var(--line-2); background: none; color: var(--fg-2); font: 600 12.5px var(--f-body); cursor: pointer; }
+.fx-goals button.is-on { border-color: #1677FF; background: rgba(22, 119, 255, .14); color: #CFE4FF; }
+.snd-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.snd { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 12px 6px 10px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-raise); color: var(--fg-2); font: 600 12.5px var(--f-body); cursor: pointer; transition: border-color .15s, background .15s; }
+.snd:hover { border-color: var(--line-2); }
+.snd.is-on { border-color: #1677FF; background: rgba(22, 119, 255, .12); color: var(--fg); }
+.snd-ic { width: 26px; height: 26px; border-radius: 9px; background: var(--surface-3); position: relative; }
+.snd-rain { background: #1B4E86; } .snd-cafe { background: #6B4A2E; } .snd-forest { background: #1E5C45; } .snd-white { background: #4A5568; } .snd-music { background: #4B3A86; } .snd-silence { background: var(--surface-3); }
+.snd-ic::after { content: ""; position: absolute; inset: 8px; border-radius: 3px; background: rgba(255, 255, 255, .55); }
+.snd-silence::after { inset: 12px 6px; border-radius: 2px; }
+.vol { display: flex; align-items: center; gap: 12px; }
+.vol input { flex: 1; accent-color: #1677FF; }
+.pt-list { display: flex; flex-direction: column; gap: 8px; }
+.pt-item { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); }
+.pt-item .btn { align-self: flex-start; }
+.pt-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.pt-top b { font-size: 14.5px; }
+.pt-n { min-width: 26px; height: 22px; padding: 0 7px; border-radius: 7px; display: inline-grid; place-items: center; background: rgba(255, 196, 92, .14); color: #FFD08A; font: 700 12px var(--f-body); }
+.pt-ex { margin: 0; font-size: 13.5px; color: var(--muted); }
+.pt-ex s { color: #FF9AAA; text-decoration-color: rgba(255, 107, 129, .6); }
+.pt-ex b { color: #6FF0DA; font-weight: 600; }
+.pg-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pg { display: flex; flex-direction: column; gap: 2px; padding: 12px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); }
+.pg span { font: 600 12px var(--f-body); color: var(--muted); }
+.pg b { font: 800 22px var(--f-display); }
+.pg small { color: var(--faint); font-size: 12px; }
+.pg-xp { display: flex; flex-direction: column; gap: 8px; }
+.pg-xp p { margin: 0; }
+.hist { display: flex; flex-direction: column; gap: 4px; }
+.hist-row { display: flex; align-items: center; gap: 4px; border-radius: 12px; transition: background .15s; }
+.hist-row:hover { background: var(--bg-raise); }
+.hist-open { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 9px 10px; border: 0; background: none; color: var(--fg); text-align: left; cursor: pointer; }
+.hist-open b { font: 600 14px var(--f-body); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.c2-scrim { display: none; }
+/* grand écran : le panneau s'affiche à côté de la discussion */
+@media (min-width: 1280px) {
+  .coach2.has-panel { grid-template-columns: minmax(0, 1fr) 340px; }
+  .coach2.has-panel .c2-main { max-width: none; }
+  .c2-side { position: sticky; top: 24px; max-height: calc(100dvh - 48px); }
+}
+/* écran moyen : le panneau glisse par-dessus, à droite */
+@media (max-width: 1279px) {
+  .c2-side { position: fixed; z-index: 61; top: 16px; right: 16px; bottom: 16px; width: min(380px, calc(100vw - 32px)); animation: sideIn .28s cubic-bezier(.2, .8, .3, 1); }
+  .c2-scrim { display: block; position: fixed; inset: 0; z-index: 60; background: rgba(2, 10, 20, .55); animation: fadeIn .2s ease; }
+  @keyframes sideIn { from { transform: translateX(24px); opacity: 0; } }
+  @keyframes fadeIn { from { opacity: 0; } }
+}
+/* téléphone : le panneau monte du bas de l'écran */
+@media (max-width: 719px) {
+  .c2-side { top: auto; left: 0; right: 0; bottom: 0; width: 100%; max-height: 84dvh; border-radius: 22px 22px 0 0; padding-bottom: env(safe-area-inset-bottom, 0px); animation: sheetIn .3s cubic-bezier(.2, .8, .3, 1); }
+  @keyframes sheetIn { from { transform: translateY(40px); opacity: 0; } }
+  .c2-top { gap: 10px; }
+  .coach-top { flex-basis: 100%; gap: 12px; }
+  .ct-vex { width: 52px; height: 52px; border-radius: 18px; }
+  .ct-vex .vx { width: 46px !important; }
+  .ct-id b { font-size: 18px; }
+  .c2-btns { width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .c2-btns::-webkit-scrollbar { display: none; }
+  .c2-btn { flex: none; height: 36px; padding: 0 11px; }
+  .cw-grid { grid-template-columns: 1fr; }
+  .cw-card { flex-direction: row; align-items: center; gap: 12px; padding: 12px 14px; }
+  .cw-card .cw-ic { margin: 0; }
+  .cw-card > b { flex: none; }
+  .cw-card > span:last-child { display: none; }
+  .cw-hero .vx { width: 84px !important; }
+  .cw-title { font-size: 23px; }
+  .bub { font-size: 15px; padding: 11px 14px; }
+  .bub-me { max-width: 88%; }
+  .cm-av { display: none; }
+  .mact span { display: none; }
+  .mact { width: 34px; padding: 0; justify-content: center; }
+  .c2-hint { display: none; }
+  .tp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tp-item { font-size: 13px; padding: 8px 10px; }
+}
+@media (max-width: 1023px) and (min-width: 720px) { .c2-btn span { display: none; } .c2-btn { width: 38px; padding: 0; justify-content: center; } }
+body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-wave i, body.calm .cc-btn.is-rec { animation: none !important; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -1789,6 +2056,7 @@ const S = {
   chat: [], busy: false, saveError: "",
 };
 try { S.chat = JSON.parse(sessionStorage.getItem("verblyx:chat") || "[]"); } catch {}
+try { sessionStorage.removeItem("verblyx:chat"); } catch {}
 
 function newProfile(firstName) {
   return { first_name: firstName, self_level: "", goals: [], daily_minutes: 10, difficulties: [],
@@ -2028,9 +2296,11 @@ function render() {
   if (showLevel && S.levelPop.fresh) { S.levelPop.fresh = false; setTimeout(() => { giftFx(); const r = document.querySelector(".lv-ring"); if (r) vxAnim(r, [{ transform: "scale(.4) rotate(-20deg)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: .6 }, { transform: "none" }], { duration: 700, easing: "ease-out" }); }, 80); }
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
-  if (v === "coach" && (fresh || S.chatScroll)) { S.chatScroll = false; scrollChatEnd(); }
+  if (v === "coach" && ((fresh && S.chat.length) || S.chatScroll)) { S.chatScroll = false; scrollChatEnd(); } else if (v === "coach" && fresh) window.scrollTo(0, 0);
   if (v === "dashboard" && fresh) { setTimeout(scrollToCurrent, 0); setTimeout(prefetchNext, 400); }
   mountCaptcha(); mountGsi();
+  document.body.classList.toggle("v-coach", v === "coach");
+  if (v !== "coach" && (CO.voice || CO.listening)) stopVoice();
 }
 // Vex parle : le texte s'écrit pendant qu'il bouge la bouche
 function typeSpeech() {
@@ -3810,6 +4080,8 @@ function adminPanel(r, p) {
       </div>
       <div class="row adm-actions"><button class="btn btn-primary btn-sm" data-act="adm-save" data-v="${r.id}" ${u.admSaving ? "disabled" : ""}>${u.admSaving ? '<span class="spinner"></span>' : ""}Enregistrer le profil</button></div>
       <div class="adm-grow"><span class="small muted">Niveau CECRL</span><div class="row"><select id="admLv" class="input" aria-label="Niveau">${LEVEL_IDS.map((l) => `<option ${l === p.cefr_level ? "selected" : ""}>${l}</option>`).join("")}</select><button class="btn btn-secondary btn-sm" data-act="adm-level" data-v="${r.id}">Appliquer</button></div></div>`));
+  if (can("profiles") && r.ai_limit !== undefined) parts.push(box("Prof IA", r.is_admin ? "Les administrateurs ne sont pas limités." : `Utilisé aujourd'hui : ${r.ai_used || 0} échange${(r.ai_used || 0) > 1 ? "s" : ""}${r.ai_limit != null ? ` sur ${r.ai_limit}` : ""}.`, r.is_admin ? "" : `
+      <div class="adm-grow"><span class="small muted">Limite par jour ${r.ai_custom ? "(personnalisée)" : `(normale : ${r.vip ? "150, VIP" : "80"})`}</span><div class="row adm-custom"><input id="admAi" class="input" type="number" inputmode="numeric" min="0" max="2000" value="${r.ai_limit != null ? r.ai_limit : ""}" aria-label="Limite d'échanges par jour"><button class="btn btn-primary btn-sm" data-act="adm-ai" data-v="${r.id}">Appliquer</button>${r.ai_custom ? `<button class="btn btn-ghost btn-sm" data-act="adm-ai-reset" data-v="${r.id}">Limite normale</button>` : ""}</div></div>`));
   if (can("vip")) parts.push(box("Statut", "", `<div class="adm-vip-line"><span>${r.vip ? `${vipTag()} <span class="small muted">Ce compte est VIP.</span>` : `<span class="small muted">Ce compte n'est pas VIP.</span>`}</span>
       <button class="btn ${r.vip ? "btn-ghost" : "btn-secondary"} btn-sm vip-btn" data-act="adm-vip" data-v="${r.id}" data-on="${r.vip ? 0 : 1}">${icon("i-crown")}${r.vip ? "Retirer le VIP" : "Donner le VIP"}</button></div>`));
   return `<div class="adm-panel">${parts.join("")}<p class="small muted adm-foot">Inscrit le ${admDate(r.signed_up, true)} · ${Object.keys((p.course && p.course.done) || {}).length} leçons terminées${can("accounts") ? "" : ""}</p></div>`;
@@ -3927,6 +4199,7 @@ function logSentence(l) {
     case "staff_add": return [`a ajouté ${t} à l'équipe (${perms(d.apres)})`, "team"];
     case "staff_perms": return [`a changé les droits de ${t} : ${perms(d.apres)}`, "team"];
     case "staff_remove": return [`a retiré ${t} de l'équipe`, "del"];
+    case "ai_limit": return [d.apres == null ? `a remis la limite IA de ${t} à la valeur normale` : `a fixé la limite IA de ${t} à <b class="num">${d.apres}</b> échanges par jour`, "edit"];
     default: return [`${esc(l.action)} sur ${t}`, "edit"];
   }
 }
@@ -4418,112 +4691,759 @@ function quizCard(m, mi) {
     ${answered === n ? `<div class="quiz-end"><b>${score === n ? em("trophy", 22) + "Parfait" : score >= n / 2 ? em("star", 22) + "Bien joué" : em("rocket", 22) + "Continue"} : ${score}/${n}</b><div class="row" style="gap:6px">${QCM_KINDS.map((q) => qcmChip(q, false)).join("")}</div></div>` : ""}
   </div>`;
 }
-function viewCoach() {
-  const u = S.ui, p = S.profile, busy = u.streaming != null;
-  return `
-  <div class="coach-page">
-  <header class="page-head enter"><div class="stack"><h1 class="h1">Professeur IA</h1><p class="muted">Vex connaît ton niveau (${esc(p.cefr_level)}) et tes difficultés.</p></div>${S.chat.length ? `<button class="btn btn-ghost" data-act="chat-clear">Nouvelle conversation</button>` : ""}</header>
-  ${!S.sample ? notice("Vex n'est pas disponible pour le moment. Recharge la page.", "warn") : ""}
-  <div class="chat">
-    ${S.chat.length === 0 ? `${ask("talk", `Bonjour ${p.first_name || ""}. Pose-moi une question, écris en anglais pour être corrigé, ou lance un QCM.`)}
-      <div class="grid-2">${SUGGESTIONS.map((s) => `<button class="suggest" data-act="chat-sug" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>` : ""}
-    ${S.chat.map((m, mi) => m.role === "user" ? (m.icon ? `<div class="msg me req">${em(m.icon, 16)}<span>${esc(m.content)}</span></div>` : `<div class="msg me">${rich(m.content)}</div>`) : m.error ? chatErr(m, mi === S.chat.length - 1) : `<div class="ai-row">${vx("st_wink", 36)}<div class="msg ai ${m.quiz ? "has-quiz" : ""}">${m.text != null ? (m.text ? `<div>${rich(m.text)}</div>` : "") : rich(m.content)}${m.quiz ? quizCard(m, mi) : ""}</div></div>`).join("")}
-    ${busy ? `<div class="ai-row">${vx(u.streaming ? "st_wink" : "st_hmm", 36, "talking-vx")}<div class="msg ai" id="stream">${u.streaming ? streamView(u.streaming) : `<span class="row small muted" style="gap:8px"><span class="spinner"></span> ${u.quizBusy ? "Vex prépare ton QCM…" : "Vex réfléchit…"}</span>`}</div></div>` : ""}
-    ${notice(u.chatError)}
-    <div id="chat-end"></div>
-  </div>
-  <div class="coach-dock">
-    <div class="qcm-bar">${QCM_KINDS.map((q) => qcmChip(q, busy || !S.sample)).join("")}</div>
-    <form class="composer" data-form="chat">
-      <input id="coachInput" placeholder="Écris ta question ou une phrase en anglais…" autocomplete="off" value="${esc(u.chatDraft || "")}" ${S.sample ? "" : "disabled"} aria-label="Message pour Vex">
-      <button class="btn btn-primary" style="height:44px;padding:0 16px" aria-label="Envoyer" ${busy || !S.sample ? "disabled" : ""}>${icon("i-send")}</button>
-    </form>
-  </div>
+/* =========================================================
+   PROF IA — le cœur de Verblyx
+   Conversation, outils, voix, concentration, suivi des progrès.
+   ========================================================= */
+const COACH_XP_CAP = 60, COACH_COIN_CAP = 30;
+const ERR_CATS = { conj: "Conjugaison", temps: "Temps des verbes", vocab: "Vocabulaire", comp: "Compréhension", struct: "Construction de phrase" };
+const ERR_HINT = { conj: "accords et formes des verbes (he goes, they were…)", temps: "choix du temps (present perfect, prétérit, futur…)", vocab: "sens et choix des mots, faux amis", comp: "compréhension de phrases et de textes en anglais", struct: "ordre des mots, questions, négations, prépositions" };
+const SCENARIOS = [
+  ["cafe", "Au café", "Tu es serveur dans un café de Londres. L'élève commande."],
+  ["airport", "À l'aéroport", "Tu es agent d'enregistrement à l'aéroport. L'élève prend un vol."],
+  ["hotel", "À l'hôtel", "Tu es réceptionniste dans un hôtel de New York. L'élève arrive."],
+  ["job", "Entretien d'embauche", "Tu es recruteur pour un poste adapté à l'élève. Tu poses des questions d'entretien."],
+  ["friend", "Faire connaissance", "Tu es un étudiant anglophone sympathique qui rencontre l'élève."],
+  ["free", "Sujet libre", "Tu discutes avec l'élève du sujet de son choix, comme un ami anglophone."],
+];
+const TOOLS = [
+  ["fix", "Corriger une phrase", "check", "Écris la phrase anglaise à corriger…", "Corrige cette phrase anglaise. Pour chaque erreur : ❌ forme fautive → ✅ forme correcte, puis la règle en une ligne. Termine par la phrase entière corrigée :"],
+  ["tr", "Traduire un texte", "globe", "Colle le texte à traduire (français ou anglais)…", "Traduis ce texte (du français vers l'anglais, ou de l'anglais vers le français). Donne la traduction, puis 1 ou 2 expressions utiles à retenir :"],
+  ["rule", "Expliquer une règle", "book", "Quelle règle ? (ex. : le present perfect)", "Explique clairement cette règle de grammaire anglaise, avec 3 exemples de mon niveau et le piège le plus fréquent :"],
+  ["ex", "Créer un exercice", "bolt", "Sur quel thème ? (vide = un mélange)", null],
+  ["voc", "Apprendre du vocabulaire", "books", "Quel thème ? (ex. : le voyage, le travail…)", null],
+  ["sim", "Simuler une conversation", "chat", "", null],
+  ["read", "Comprendre un texte", "read", "Colle un texte en anglais…", "Aide-moi à comprendre ce texte anglais : résumé en 2 phrases en français, puis les 5 mots ou expressions clés expliqués, puis 2 questions de compréhension :"],
+];
+// petites icônes au trait de l'espace Prof IA
+const PIC = {
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+  send: '<path d="M5 12h13M13 6l6 6-6 6"/>',
+  speaker: '<path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3Z"/>',
+  bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.2h5c0-.9.4-1.7 1.1-2.2A6 6 0 0 0 12 3Z"/>',
+  bookmark: '<path d="M6 4h12v17l-6-4-6 4V4Z"/>',
+  grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>',
+  check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  book: '<path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5Z"/><path d="M12 6.5V19.5"/>',
+  books: '<rect x="4" y="4" width="4" height="16" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><path d="m16 5.5 3.5-1 3 14.5-3.5 1Z"/>',
+  bolt: '<path d="M13 3 5 13.5h6L10 21l8-10.5h-6L13 3Z"/>',
+  chat: '<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4V6Z"/>',
+  read: '<path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5c3.5-2 6.5-2 9-1V19c-2.5-1-5.5-1-9 1-3.5-2-6.5-2-9-1V5.5Z"/><path d="M12 6.5V20"/>',
+  focus: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
+  chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  play: '<path d="M7 5v14l11-7L7 5Z"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
+  reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5"/><path d="M4 4v4.5h4.5"/>',
+  wave: '<path d="M3 12h2M7 8v8M11 5v14M15 9v6M19 7v10M21 12h0"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>',
+  target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
+  stop: '<rect x="6" y="6" width="12" height="12" rx="2"/>',
+};
+const pic = (k, s = 18) => `<svg class="pic" viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PIC[k] || ""}</svg>`;
+
+/* ---------- Données de l'élève (dans son profil, donc synchronisées) ---------- */
+function coachData() {
+  const p = S.profile; p.coach = p.coach || {};
+  const c = p.coach;
+  c.err = c.err || {}; c.okDays = c.okDays || {}; c.quiz = c.quiz || { n: 0, ok: 0 }; c.min = c.min || {}; c.xp = c.xp || {}; c.coins = c.coins || {};
+  c.set = Object.assign({ sound: "silence", vol: 0.5, timer: true, autoBreak: true, goalMin: 25, mode: "pomodoro" }, c.set || {});
+  return c;
+}
+const sumDays = (o, n) => { let s = 0; for (let i = 0; i < n; i++) s += Number(o[addDays(-i)] || 0); return s; };
+const pruneDays = (o) => Object.keys(o).sort().slice(0, -45).forEach((k) => delete o[k]);
+let coachSaveT = null;
+const coachSaveSoon = () => { clearTimeout(coachSaveT); coachSaveT = setTimeout(() => saveProfile(), 1500); };
+
+// Récompenses : seulement pour des compétences démontrées, avec un plafond par jour
+function coachReward(xp, coins, why) {
+  const p = S.profile, c = coachData(), t = today();
+  const xpLeft = Math.max(0, COACH_XP_CAP - (c.xp[t] || 0)), coinLeft = Math.max(0, COACH_COIN_CAP - (c.coins[t] || 0));
+  xp = Math.min(xp, xpLeft); coins = Math.min(coins, coinLeft);
+  if (!xp && !coins) return;
+  c.xp[t] = (c.xp[t] || 0) + xp; c.coins[t] = (c.coins[t] || 0) + coins; pruneDays(c.xp); pruneDays(c.coins);
+  if (xp) {
+    const y = yesterday();
+    p.streak = p.last_active === t ? p.streak : p.last_active === y ? (p.streak || 0) + 1 : 1;
+    p.last_active = t; p.best_streak = Math.max(p.best_streak || 0, p.streak);
+    p.days = p.days || {}; const before = p.days[t] || 0; p.days[t] = before + xp;
+    if (before < goalXp() && p.days[t] >= goalXp()) { p.goal_days = (p.goal_days || 0) + 1; coins += 10; }
+    const lvB = xpLevel(p.xp || 0); p.xp = (p.xp || 0) + xp;
+    const lvA = xpLevel(p.xp); if (lvA > lvB) S.levelPop = { n: lvA, up: true, cefr: null, fresh: true };
+  }
+  p.coins = (p.coins || 0) + coins;
+  p.badges = unlockedBadges();
+  CO.toast = { text: [xp ? `+${xp} XP` : "", coins ? `+${coins} pièces` : ""].filter(Boolean).join(" · "), why, at: Date.now() };
+  setTimeout(() => { if (CO.toast && Date.now() - CO.toast.at >= 2900) { CO.toast = null; if (S.view === "coach") paintCoachTop(); } }, 3000);
+  coachSaveSoon();
+}
+
+/* ---------- Conversations (sur cet appareil, par compte) ---------- */
+const CO = { loaded: false, uid: null, cur: null, hist: [], panel: null, tool: null, toolsOpen: false, role: null, voice: false, vstate: "", toast: null, ai: null, aiBusy: false, wordsFor: null, trBusy: null, histOpen: false };
+const coKey = () => "verblyx:coach:" + (S.authUser ? S.authUser.id : "local");
+function coLoad() {
+  const uid = S.authUser ? S.authUser.id : "local";
+  if (CO.loaded && CO.uid === uid) return;
+  CO.loaded = true; CO.uid = uid; CO.hist = []; CO.cur = null;
+  try { const d = JSON.parse(localStorage.getItem(coKey()) || "null"); if (d) { CO.hist = Array.isArray(d.hist) ? d.hist : []; CO.cur = d.cur || null; } } catch {}
+  if (!CO.cur) CO.cur = { id: "c" + Date.now(), started: new Date().toISOString(), msgs: Array.isArray(S.chat) ? S.chat : [] };
+  S.chat = CO.cur.msgs; CO.role = CO.cur.role || null;
+  loadAiUsage();
+}
+function coSave() {
+  if (!CO.cur) return;
+  CO.cur.msgs = S.chat.slice(-60); CO.cur.updated = new Date().toISOString(); CO.cur.role = CO.role;
+  try { localStorage.setItem(coKey(), JSON.stringify({ cur: CO.cur, hist: CO.hist.slice(0, 20) })); }
+  catch { CO.hist = CO.hist.slice(0, 8); try { localStorage.setItem(coKey(), JSON.stringify({ cur: CO.cur, hist: CO.hist })); } catch {} }
+}
+const saveChat = coSave;
+const convTitle = (c) => { const m = (c.msgs || []).find((x) => x.role === "user"); const sc = c.role && SCENARIOS.find((s) => s[0] === c.role); return sc ? "Simulation : " + sc[1] : m ? String(m.label || m.content).slice(0, 60) : "Conversation"; };
+function coNew() {
+  stopVoice();
+  if (S.chat.some((m) => !m.error)) CO.hist.unshift({ ...CO.cur, msgs: S.chat.slice(-60), title: convTitle(CO.cur) });
+  CO.hist = CO.hist.slice(0, 20);
+  CO.cur = { id: "c" + Date.now(), started: new Date().toISOString(), msgs: [] }; S.chat = CO.cur.msgs; CO.role = null; CO.tool = null; CO.wordsFor = null;
+  coSave();
+}
+function coOpen(id) {
+  const i = CO.hist.findIndex((c) => c.id === id); if (i < 0) return;
+  stopVoice();
+  const c = CO.hist.splice(i, 1)[0];
+  if (S.chat.some((m) => !m.error)) CO.hist.unshift({ ...CO.cur, msgs: S.chat.slice(-60), title: convTitle(CO.cur) });
+  CO.cur = c; S.chat = c.msgs || []; CO.role = c.role || null; CO.tool = null; CO.panel = null;
+  coSave();
+}
+
+/* ---------- Limite d'échanges avec l'IA ---------- */
+async function loadAiUsage() {
+  if (!S.store || !S.store.myAiUsage) return;
+  try { const d = await S.store.myAiUsage(); if (d) { const was = aiBlocked(); CO.ai = { used: Number(d.used) || 0, limit: d.limit == null ? null : Number(d.limit) }; if (S.view === "coach") { if (aiBlocked() !== was) render(); else { paintCoachTop(); const h = document.querySelector(".c2-hint"); if (h && aiLeft() != null) h.textContent = `${aiLeft()} échange${aiLeft() > 1 ? "s" : ""} avec Vex restant${aiLeft() > 1 ? "s" : ""} aujourd'hui · Entrée pour envoyer, Maj + Entrée pour aller à la ligne`; } } } } catch {}
+}
+const aiLeft = () => CO.ai && CO.ai.limit != null ? Math.max(0, CO.ai.limit - CO.ai.used) : null;
+const aiSpent = () => { if (CO.ai) CO.ai.used++; };
+const aiBlocked = () => aiLeft() === 0;
+
+/* ---------- Ce que l'IA sait de l'élève ---------- */
+function topErrors(n = 3) {
+  const c = coachData();
+  return Object.entries(c.err).filter(([k]) => ERR_CATS[k]).sort((a, b) => (b[1].n || 0) - (a[1].n || 0)).slice(0, n);
+}
+function coachRules(p) {
+  const errs = topErrors().map(([k, v]) => `${ERR_CATS[k]} (${v.n} erreur${v.n > 1 ? "s" : ""})`);
+  const sc = CO.role && SCENARIOS.find((s) => s[0] === CO.role);
+  const lv = p.cefr_level || "A2";
+  const simple = /A1|A2/.test(lv);
+  return `Tu es Vex, le professeur d'anglais personnel de ${p.first_name || "l'élève"} sur Verblyx. Tu es chaleureux, patient et précis, comme un vrai professeur particulier.
+Niveau CECRL de l'élève : ${lv}. Objectifs : ${(p.goals || []).map((g) => GOALS_FR[g] || g).join(", ") || "général"}.
+Points faibles connus : ${[...errs, ...weakSkills().map(skillLabel), ...(p.difficulties || [])].join(", ") || "aucun identifié pour l'instant"}.
+${sc ? `MODE SIMULATION : ${sc[2]} Joue ce rôle en anglais, avec des phrases courtes et naturelles${simple ? " très simples" : ""}, et pose une question à la fois pour faire avancer la scène. Si l'élève fait une erreur, ajoute après ta réplique une ligne « 💡 » en français avec la correction (❌ → ✅). Reste dans la scène.` : ""}${CO.voice ? `MODE VOCAL : ta réponse sera lue à voix haute. Réponds surtout en anglais, en 1 à 3 phrases courtes et faciles à prononcer, sans listes ni mise en forme. Les corrections restent très brèves.` : ""}
+Règles :
+- L'élève peut parler de n'importe quel sujet pour pratiquer : s'il écrit en anglais, réponds en anglais ${simple ? "simple (phrases courtes, mots courants)" : "naturel adapté à son niveau"} ; s'il écrit en français, réponds en français avec des exemples en anglais.
+- S'il écrit en anglais, commence par corriger ses erreurs : une ligne par erreur (❌ forme fautive → ✅ forme correcte, puis la règle en quelques mots en français). Si sa phrase est correcte, dis-le en une courte phrase sincère, puis réponds.
+- Adapte le vocabulaire et la difficulté au niveau ${lv}. 2 à 6 phrases, 130 mots maximum, sauf si l'élève demande plus.
+- Si l'élève demande un QCM, un quiz ou un exercice : une phrase d'introduction, puis un bloc \`\`\`qcm contenant uniquement ce JSON : {"title":"titre court","questions":[{"q":"phrase avec ___ ou question courte","options":["a","b","c"],"answer":"a","explain":"pourquoi, en une phrase en français"}]} (5 questions, 3 options, une seule bonne réponse), puis \`\`\`.
+- Pas de titres Markdown ; **gras** et listes « - » autorisés. Tutoie l'élève. Pas d'emoji (sauf ❌ ✅ 💡), pas de formules creuses, pas de résumé final, une seule question de relance au maximum.
+- Si l'élève semble découragé ou fatigué, rassure-le simplement et propose une pause ou un exercice plus facile.
+- TOUT À LA FIN de ta réponse, ajoute une dernière ligne de bilan invisible pour l'élève, exactement sous cette forme :
+  [[bilan: ok]] si l'élève a écrit au moins une phrase en anglais sans erreur ;
+  [[bilan: conj, temps]] (catégories séparées par des virgules, parmi : conj, temps, vocab, comp, struct) s'il a fait des erreurs ;
+  [[bilan: -]] s'il n'a pas écrit d'anglais.
+Les messages suivants sont la conversation avec l'élève.`;
+}
+// Retire la ligne de bilan (et ce qui pourrait en être le début pendant l'écriture)
+const stripBilan = (t) => String(t || "").replace(/\s*\[\[bilan:[^\]]*\]\]\s*$/i, "").replace(/\s*\[\[[^\]]*$/, "").replace(/\s*\[\[bilan:[^\]]*\]\]/gi, "");
+function readBilan(reply, userText) {
+  const m = String(reply).match(/\[\[bilan:\s*([^\]]*)\]\]/i); if (!m) return null;
+  const v = m[1].trim().toLowerCase(), c = coachData(), t = today();
+  if (v === "ok") {
+    const words = String(userText).trim().split(/\s+/).length;
+    c.ok = (c.ok || 0) + 1; c.okDays[t] = (c.okDays[t] || 0) + 1; pruneDays(c.okDays);
+    if (words >= 4) coachReward(2, 0, "phrase correcte");
+    else coachSaveSoon();
+    return { ok: true };
+  }
+  const cats = v.split(/[,\s]+/).filter((k) => ERR_CATS[k]);
+  if (!cats.length) return null;
+  const pair = String(reply).match(/❌\s*([^→\n]{1,80}?)\s*→\s*✅\s*([^\n]{1,90})/);
+  cats.forEach((k) => {
+    const e = c.err[k] = c.err[k] || { n: 0, ex: [] };
+    e.n++; e.last = t;
+    if (pair) { e.ex = [{ bad: pair[1].trim().replace(/[*«»"]/g, ""), good: pair[2].trim().replace(/\s*[,(].*$/, "").replace(/[*«»"]/g, "") }, ...(e.ex || [])].slice(0, 3); }
+  });
+  coachSaveSoon();
+  return { ok: false, cats };
+}
+// Ce que l'IA « voit » de la conversation
+const chatTurns = () => S.chat.filter((m) => !m.error && !m.local).slice(-14).map((m) => ({ role: m.role, content: m.quiz ? `${m.text || ""}\n[QCM « ${m.quiz.title} » : ${m.quiz.questions.map((q) => q.q).join(" | ")}]`.trim() : m.vocab ? `[Liste de vocabulaire : ${m.vocab.words.map((w) => w.w).join(", ")}]` : stripBilan(m.content) }));
+const dropErrors = () => { while (S.chat.length && S.chat[S.chat.length - 1].error) S.chat.pop(); };
+const coachBusy = () => S.ui.streaming != null && Date.now() - (S.ui.streamAt || 0) < 100000;
+
+/* ---------- Envoyer un message ---------- */
+async function sendChat(text, opts = {}) {
+  const t = String(text || "").trim();
+  const u = S.ui;
+  if (!t || !S.sample || coachBusy()) return;
+  if (aiBlocked()) { S.chat.push({ role: "assistant", error: true, content: "quota", local: true }); render(); return; }
+  stopSpeaking();
+  const tool = CO.tool && TOOLS.find((x) => x[0] === CO.tool);
+  const sent = tool && tool[4] ? `${tool[4]}\n${t}` : t;
+  u.streamAt = Date.now();
+  dropErrors();
+  S.chat.push({ role: "user", content: sent.slice(0, 2400), ...(opts.label ? { label: opts.label, icon: opts.icon } : tool && tool[4] ? { label: t.slice(0, 2000), tag: tool[1] } : {}) });
+  CO.tool = null; CO.toolsOpen = false; CO.wordsFor = null;
+  SFX.play("tap");
+  u.chatDraft = ""; u.chatError = ""; u.streaming = ""; S.chatScroll = true; CO.vstate = "think"; render();
+  const turns = [{ role: "user", content: coachRules(S.profile) }, ...chatTurns()];
+  let reply = "";
+  try {
+    ({ text: reply } = await S.sample(turns, { modelTier: "quick", cache: false, onText: ({ text: tx }) => {
+      u.streaming = tx; if (CO.vstate !== "talk") { CO.vstate = "talk"; paintCoachTop(); }
+      const el = document.getElementById("stream"); if (el) el.innerHTML = streamView(stripBilan(tx));
+      scrollChatEnd();
+    } }));
+    aiSpent();
+    const res = readBilan(reply, opts.label ? "" : t);
+    const { text: rest, quiz } = splitQuiz(stripBilan(reply));
+    S.chat.push(quiz ? { role: "assistant", content: stripBilan(reply), text: rest, quiz } : { role: "assistant", content: stripBilan(reply), ...(res && res.ok ? { praise: true } : {}) });
+    CO.vstate = res ? (res.ok ? "joy" : "encourage") : "";
+    SFX.play("pop");
+  } catch (e) {
+    if (e && e.text) { aiSpent(); S.chat.push({ role: "assistant", content: stripBilan(e.text) + "\n\n(réponse interrompue)" }); }
+    else S.chat.push({ role: "assistant", error: true, content: aiError(e) || "Vex n'a pas pu répondre.", retry: { type: "chat", text: t, opts } });
+    if (e && e.code === "rate_limited") loadAiUsage();
+    CO.vstate = "";
+  }
+  u.streaming = null; S.chatScroll = true;
+  coSave(); render();
+  if (CO.vstate) setTimeout(() => { if (S.view === "coach" && !coachBusy()) { CO.vstate = ""; paintCoachTop(); } }, 2600);
+  if (CO.voice && reply) voiceReply(stripBilan(reply));
+  else { const inp = document.getElementById("coachInput"); if (inp && matchMedia("(hover: hover)").matches) inp.focus(); }
+}
+// QCM et listes de mots en un clic (réponse JSON directe)
+async function quickQuiz(kind, theme) {
+  const u = S.ui, p = S.profile;
+  if (!S.sample || coachBusy()) return;
+  if (aiBlocked()) { S.chat.push({ role: "assistant", error: true, content: "quota", local: true }); render(); return; }
+  const qk = QCM_KINDS.find((k) => k[0] === kind) || (kind === "cat" ? ["cat", "Exercice ciblé", "target"] : QCM_KINDS[0]);
+  const weak = [...topErrors().map(([k]) => ERR_HINT[k]), ...weakSkills().map(skillLabel), ...(p.difficulties || [])];
+  const topic = theme ? `le thème « ${theme} »`
+    : kind === "cat" ? `la notion suivante, où l'élève fait souvent des erreurs : ${ERR_HINT[theme] || "les pièges fréquents"}`
+    : kind === "weak" ? (weak.length ? `les notions où l'élève fait des erreurs : ${weak.slice(0, 3).join(", ")}` : "les pièges les plus fréquents à ce niveau")
+    : kind === "vocab" ? `le vocabulaire utile du niveau ${p.cefr_level}${(p.goals || []).length ? " (thèmes : " + p.goals.map((g) => GOALS_FR[g] || g).join(", ") + ")" : ""} : sens des mots, traductions, mots qui vont ensemble`
+    : "un mélange de grammaire et de vocabulaire du niveau";
+  dropErrors(); S.chat.push({ role: "user", content: qk[1] + (theme && kind !== "cat" ? " : " + theme : ""), icon: qk[2], label: qk[1] + (theme && kind !== "cat" ? " : " + theme : "") }); SFX.play("tap");
+  CO.tool = null; CO.toolsOpen = false;
+  u.streamAt = Date.now(); u.streaming = ""; u.quizBusy = true; u.chatError = ""; S.chatScroll = true; CO.vstate = "think"; render();
+  try {
+    const raw = kind === "reading" ? await S.sample.json(`Tu es professeur d'anglais. L'élève francophone (niveau ${p.cefr_level}) veut apprendre à lire un texte en anglais plus rapidement.
+1. "tips" : 3 ou 4 conseils de méthode concrets et courts en français (lire d'abord le titre et les questions, repérer les mots-clés, lire par groupes de mots, ne pas traduire mot à mot, deviner un mot inconnu grâce au contexte). Une phrase chacun, tutoiement, sans emoji.
+2. "passage" : un texte original en anglais de 120 à 180 mots, adapté au niveau ${p.cefr_level}, sur un sujet de la vie courante${(p.goals || []).length ? " lié à : " + p.goals.map((g) => GOALS_FR[g] || g).join(", ") : ""}, avec un titre en anglais. 2 ou 3 paragraphes séparés par une ligne vide.
+3. "questions" : 4 questions de compréhension EN ANGLAIS sur ce texte, 3 options chacune, une seule bonne réponse certaine, "explain" en une phrase en français qui cite le passage utile.
+Réponds UNIQUEMENT avec ce JSON : {"title":"Lecture rapide : titre court en français","tips":["..."],"passage":{"title":"...","text":"..."},"questions":[{"q":"...","options":["...","...","..."],"answer":"...","explain":"..."}]}`, { modelTier: "quick" })
+    : await S.sample.json(`Crée un QCM d'anglais pour un élève francophone de niveau ${p.cefr_level}. Thème : ${topic}.
+5 questions variées. Chaque question : une phrase avec ___ ou une question courte, 3 options plausibles, UNE seule bonne réponse certaine, une explication d'une phrase en français.
+Réponds UNIQUEMENT avec ce JSON : {"title":"titre court en français","questions":[{"q":"...","options":["...","...","..."],"answer":"...","explain":"..."}]}`, { modelTier: "quick" });
+    aiSpent();
+    const quiz = cleanQuiz(raw);
+    if (!quiz) throw { message: "Le QCM n'a pas pu être créé. Réessaie." };
+    if (kind === "cat") quiz.cat = theme;
+    S.chat.push({ role: "assistant", content: quiz.passage ? `Lecture rapide : ${quiz.title}\n${quiz.passage.text}` : `QCM : ${quiz.title}`, text: quiz.passage ? "Voici une méthode pour lire plus vite en anglais. Applique-la sur le texte ci-dessous, puis réponds aux questions." : kind === "cat" ? `Un exercice ciblé sur ce qui te pose le plus de difficultés : ${(ERR_CATS[theme] || "").toLowerCase()}.` : "Choisis la bonne réponse à chaque question.", quiz });
+    SFX.play("pop");
+  } catch (e) { S.chat.push({ role: "assistant", error: true, content: aiError(e) || "Le QCM n'a pas pu être créé.", retry: { type: "qcm", kind, theme } }); }
+  u.streaming = null; u.quizBusy = false; S.chatScroll = true; CO.vstate = "";
+  coSave(); render();
+}
+async function vocabList(theme) {
+  const u = S.ui, p = S.profile;
+  if (!S.sample || coachBusy()) return;
+  if (aiBlocked()) { S.chat.push({ role: "assistant", error: true, content: "quota", local: true }); render(); return; }
+  const th = String(theme || "").trim() || ((p.goals || []).map((g) => GOALS_FR[g] || g)[0] || "la vie quotidienne");
+  dropErrors(); S.chat.push({ role: "user", content: "Vocabulaire : " + th, icon: "books", label: "Apprendre du vocabulaire : " + th }); SFX.play("tap");
+  CO.tool = null; CO.toolsOpen = false;
+  u.streamAt = Date.now(); u.streaming = ""; u.quizBusy = true; S.chatScroll = true; CO.vstate = "think"; render();
+  try {
+    const raw = await S.sample.json(`Donne 8 mots ou expressions anglais utiles sur le thème « ${th} » pour un élève francophone de niveau ${p.cefr_level}, adaptés à son niveau. Évite les mots trop évidents. Pour chacun : la traduction française et une phrase d'exemple courte en anglais.
+Réponds UNIQUEMENT avec ce JSON : {"title":"titre court en français","words":[{"w":"mot anglais","t":"traduction","ex":"exemple en anglais"}]}`, { modelTier: "quick" });
+    aiSpent();
+    const words = (Array.isArray(raw && raw.words) ? raw.words : []).map((x) => ({ w: String(x.w || "").trim().slice(0, 60), t: String(x.t || "").trim().slice(0, 80), ex: String(x.ex || "").trim().slice(0, 160) })).filter((x) => x.w && x.t).slice(0, 10);
+    if (!words.length) throw { message: "La liste n'a pas pu être créée. Réessaie." };
+    S.chat.push({ role: "assistant", content: "Vocabulaire : " + th, text: `Voici ${words.length} mots utiles sur ce thème. Écoute-les, puis ajoute ceux que tu veux retenir à tes mots.`, vocab: { title: String(raw.title || th), words } });
+    SFX.play("pop");
+  } catch (e) { S.chat.push({ role: "assistant", error: true, content: aiError(e) || "La liste n'a pas pu être créée.", retry: { type: "voc", theme: th } }); }
+  u.streaming = null; u.quizBusy = false; S.chatScroll = true; CO.vstate = "";
+  coSave(); render();
+}
+function startRole(id) {
+  const sc = SCENARIOS.find((s) => s[0] === id); if (!sc) return;
+  if (S.chat.some((m) => !m.error)) coNew();
+  CO.role = id; CO.toolsOpen = false; CO.tool = null;
+  sendChat(`Commence la simulation « ${sc[1]} » : présente la situation en une phrase en français, puis dis ta première réplique en anglais.`, { label: "Simulation : " + sc[1], icon: "chat" });
+}
+function endRole() {
+  if (!CO.role) return;
+  sendChat("La simulation est terminée. Fais-moi un bilan en français : ce que j'ai bien réussi, puis mes 3 erreurs principales avec la correction, et une expression utile à retenir.", { label: "Terminer la simulation et voir le bilan", icon: "check" });
+  CO.role = null; coSave();
+}
+
+/* ---------- Écouter, traduire, expliquer, sauvegarder un mot ---------- */
+const STOP_EN = new Set("the a an and or but to of in on at for with from by is are was were be been am i you he she it we they me him her us them my your his its our their this that these those do does did have has had not no yes so if as than then there here what who how why when where which can could will would should may might must just very too also about into over up down out more most some any all one two get got go went".split(" "));
+const isEnglish = (t) => { const w = String(t).toLowerCase().match(/[a-z']+/g) || []; if (w.length < 3) return /^[a-z' ,.?!-]+$/i.test(t); const hits = w.filter((x) => STOP_EN.has(x)).length; return hits / w.length > 0.18 && !/[éèêàùçôîâ]/i.test(t); };
+function speakable(text) {
+  const t = String(text || "").replace(/```[\s\S]*?```/g, "");
+  if (isEnglish(t.replace(/[*_]/g, ""))) return { text: t.replace(/[*_#>`]/g, "").replace(/❌|✅|💡/g, ""), lang: "en-US" };
+  const bits = [...t.matchAll(/✅\s*([^\n(—-]{2,120})/g)].map((m) => m[1]).concat([...t.matchAll(/\*\*([^*]{2,80})\*\*/g)].map((m) => m[1]).filter(isEnglish)).concat([...t.matchAll(/[«"]\s*([A-Za-z][^»"]{2,120})\s*[»"]/g)].map((m) => m[1]).filter(isEnglish));
+  if (bits.length) return { text: [...new Set(bits.map((b) => b.trim().replace(/[*_]/g, "")))].join(". "), lang: "en-US" };
+  return { text: t.replace(/[*_#>`]/g, "").replace(/❌|✅|💡/g, ""), lang: "fr-FR" };
+}
+let speakingId = null;
+function stopSpeaking() { try { if (S.tts) S.tts.stop(); } catch {} speakingId = null; document.querySelectorAll(".mact.is-on[data-act='m-say']").forEach((b) => b.classList.remove("is-on")); }
+async function sayMessage(i) {
+  const m = S.chat[i]; if (!m || !S.tts) return;
+  if (speakingId === i) { stopSpeaking(); return; }
+  stopSpeaking(); speakingId = i;
+  const b = document.querySelector(`[data-act="m-say"][data-v="${i}"]`); if (b) b.classList.add("is-on");
+  const sp = speakable(m.role === "user" ? (m.label || m.content) : m.text || m.content);
+  CO.vstate = "talk"; paintCoachTop();
+  try { await S.tts.speak(sp.text.slice(0, 900), { lang: sp.lang, rate: /A1|A2/.test(S.profile.cefr_level) ? 0.9 : 1 }); } catch {}
+  if (speakingId === i) { speakingId = null; if (b) b.classList.remove("is-on"); }
+  CO.vstate = ""; if (S.view === "coach") paintCoachTop();
+}
+async function translateMessage(i) {
+  const m = S.chat[i]; if (!m || !S.sample) return;
+  if (m.tr) { m.trOpen = !m.trOpen; coSave(); render(); return; }
+  if (aiBlocked()) { S.chat.push({ role: "assistant", error: true, content: "quota", local: true }); render(); return; }
+  CO.trBusy = i; render();
+  const src = stripBilan(m.role === "user" ? (m.label || m.content) : m.text || m.content).slice(0, 2000);
+  try {
+    const r = await S.sample.json(`Traduis ce message pour un élève francophone : si le texte est surtout en anglais, traduis-le en français ; s'il est surtout en français, traduis-le en anglais. Garde les sauts de ligne et ne traduis pas les symboles ❌ ✅.
+Texte : """${src}"""
+Réponds UNIQUEMENT avec ce JSON : {"translation":"..."}`, { modelTier: "quick" });
+    aiSpent();
+    m.tr = String((r && r.translation) || "").slice(0, 3000); m.trOpen = true;
+  } catch (e) { S.chat.push({ role: "assistant", error: true, content: aiError(e) || "La traduction n'a pas pu être faite.", local: true }); }
+  CO.trBusy = null; coSave(); render();
+}
+function explainMessage(i) {
+  const m = S.chat[i]; if (!m) return;
+  const src = stripBilan(m.text || m.content).slice(0, 1200);
+  sendChat(`Explique-moi plus simplement ce que tu viens de dire, avec un autre exemple concret de mon niveau : """${src}"""`, { label: "Explique-moi ce message plus simplement", icon: "bulb" });
+}
+function wordCandidates(m) {
+  const t = stripBilan(m.text || m.content || "").replace(/```[\s\S]*?```/g, "");
+  const bold = [...t.matchAll(/\*\*([A-Za-z][A-Za-z' -]{1,30})\*\*/g)].map((x) => x[1].trim());
+  const good = [...t.matchAll(/✅\s*([^\n]{2,80})/g)].flatMap((x) => x[1].match(/[A-Za-z']{4,}/g) || []);
+  const all = (t.match(/\b[A-Za-z][a-z']{3,}\b/g) || []).filter((w) => !STOP_EN.has(w.toLowerCase()));
+  const englishOnly = (w) => !/[éèêàùç]/.test(w) && isEnglish(w + " the");
+  return [...new Set([...bold, ...good, ...all].map((w) => w.toLowerCase().replace(/^'|'$/g, "")))].filter((w) => w.length > 2 && englishOnly(w) && !FR_COMMON.has(w) && (!EN_COMMON.has(w) || bold.map((b) => b.toLowerCase()).includes(w))).slice(0, 14);
+}
+const EN_COMMON = new Set("that's it's i'm don't doesn't didn't can't won't you're we're they're well done correct good great nice right really okay thanks please then now today here there very much many lot lots thing things something anything nothing everything people time year day way make made take took come came know think say said tell told want like need look see really also still even only just".split(" "));
+const FR_COMMON = new Set("pour avec dans sont mais plus tout bien fait faire dire elle elles nous vous leur leurs cette cela comme quand phrase règle exemple verbe temps passé présent forme correcte bonne réponse question erreur erreurs".split(" "));
+async function saveWord(word, ctx) {
+  const w = String(word || "").trim().toLowerCase().slice(0, 60); if (!w) return;
+  if (S.vocab[w]) { CO.toast = { text: `« ${w} » est déjà dans tes mots`, at: Date.now() }; paintCoachTop(); return; }
+  if (aiBlocked()) { S.chat.push({ role: "assistant", error: true, content: "quota", local: true }); render(); return; }
+  CO.savingWord = w; render();
+  try {
+    const r = await S.sample.json(`Mot ou expression anglais : « ${w} ». Contexte : """${String(ctx || "").slice(0, 400)}""". Donne sa traduction française la plus utile dans ce contexte et une phrase d'exemple simple en anglais (niveau ${S.profile.cefr_level}).
+Réponds UNIQUEMENT avec ce JSON : {"t":"traduction","ex":"exemple"}`, { modelTier: "quick" });
+    aiSpent();
+    addWord(w, String((r && r.t) || "").slice(0, 80), String((r && r.ex) || "").slice(0, 160));
+  } catch (e) { S.chat.push({ role: "assistant", error: true, content: aiError(e) || "Le mot n'a pas pu être ajouté.", local: true }); }
+  CO.savingWord = null; render();
+}
+function addWord(w, t, ex) {
+  w = String(w).trim(); if (!w || S.vocab[w]) return false;
+  S.vocab[w] = { t, ex, learned: false, at: new Date().toISOString(), box: 1, due: addDays(1) };
+  const c = coachData(); c.words = (c.words || 0) + 1; coachSaveSoon();
+  S.store.saveVocab(S.vocab).catch(() => { S.saveError = "Le vocabulaire n'a pas pu être enregistré. Vérifie ta connexion."; render(); });
+  CO.toast = { text: `« ${w} » ajouté à tes mots`, at: Date.now() }; SFX.play("select");
+  setTimeout(() => { if (CO.toast && Date.now() - CO.toast.at >= 2400) { CO.toast = null; if (S.view === "coach") paintCoachTop(); } }, 2500);
+  return true;
+}
+
+/* ---------- Voix : dictée et conversation vocale ---------- */
+const canVoice = () => !!(S.dict && S.tts);
+async function startListening() {
+  if (!S.dict) return;
+  stopSpeaking();
+  CO.listening = true; CO.vstate = "listen"; CO.heard = ""; render();
+  try { await S.dict.start(); } catch { CO.listening = false; CO.vstate = ""; render(); }
+}
+function stopVoice() { CO.voice = false; CO.listening = false; CO.vstate = ""; try { S.dict && S.dict.stop(); } catch {} stopSpeaking(); }
+async function voiceReply(text) {
+  if (!S.tts || !CO.voice) return;
+  CO.vstate = "talk"; paintCoachTop();
+  const sp = speakable(text);
+  try { await S.tts.speak(sp.text.slice(0, 700), { lang: sp.lang, rate: /A1|A2/.test(S.profile.cefr_level) ? 0.9 : 1 }); } catch {}
+  CO.vstate = "";
+  if (CO.voice && S.view === "coach" && S.dict) startListening(); else paintCoachTop();
+}
+function onDictFinal(text) {
+  if (S.view !== "coach") return false;
+  const t = String(text || "").trim(); if (!t) return true;
+  if (CO.voice) { CO.listening = false; sendChat(t); return true; }
+  const inp = document.getElementById("coachInput");
+  if (inp) { inp.value = (inp.value ? inp.value.trimEnd() + " " : "") + t; S.ui.chatDraft = inp.value; autoGrow(inp); }
+  return true;
+}
+function onDictState(on) {
+  if (S.view !== "coach") return false;
+  if (!on && CO.listening) { CO.listening = false; if (CO.vstate === "listen") CO.vstate = ""; render(); }
+  return true;
+}
+const autoGrow = (el) => { if (!el) return; el.style.height = "auto"; el.style.height = Math.min(160, el.scrollHeight) + "px"; };
+
+/* ---------- Ambiances sonores (générées dans le navigateur, sans fichier) ---------- */
+const AMB = { ctx: null, master: null, nodes: [], timers: [], kind: "silence" };
+function ambNoise(ctx, type) {
+  const len = ctx.sampleRate * 3, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+  let last = 0, b0 = 0, b1 = 0, b2 = 0;
+  for (let i = 0; i < len; i++) {
+    const w = Math.random() * 2 - 1;
+    if (type === "brown") { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.2; }
+    else if (type === "pink") { b0 = 0.997 * b0 + w * 0.029; b1 = 0.985 * b1 + w * 0.032; b2 = 0.95 * b2 + w * 0.048; d[i] = (b0 + b1 + b2 + w * 0.02) * 1.6; }
+    else d[i] = w * 0.5;
+  }
+  const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true; return src;
+}
+function ambChain(ctx, ...nodes) { for (let i = 0; i < nodes.length - 1; i++) nodes[i].connect(nodes[i + 1]); return nodes[nodes.length - 1]; }
+function ambFilter(ctx, type, f, q = 0.7) { const n = ctx.createBiquadFilter(); n.type = type; n.frequency.value = f; n.Q.value = q; return n; }
+function ambGain(ctx, v) { const g = ctx.createGain(); g.gain.value = v; return g; }
+function ambEvery(min, max, fn) { const loop = () => { fn(); AMB.timers.push(setTimeout(loop, min + Math.random() * (max - min))); }; AMB.timers.push(setTimeout(loop, min * Math.random())); }
+function ambStop() {
+  AMB.timers.forEach(clearTimeout); AMB.timers = [];
+  AMB.nodes.forEach((n) => { try { n.stop && n.stop(); } catch {} try { n.disconnect(); } catch {} }); AMB.nodes = [];
+  AMB.kind = "silence";
+}
+function ambPlay(kind, vol) {
+  ambStop();
+  if (!kind || kind === "silence") return;
+  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+  if (!AMB.ctx) { AMB.ctx = new AC(); AMB.master = AMB.ctx.createGain(); AMB.master.connect(AMB.ctx.destination); }
+  const ctx = AMB.ctx; ctx.resume && ctx.resume();
+  AMB.master.gain.setTargetAtTime(Math.max(0, Math.min(1, vol)) * 0.6, ctx.currentTime, 0.4);
+  AMB.kind = kind;
+  const keep = (...n) => { AMB.nodes.push(...n); return n[0]; };
+  const out = AMB.master;
+  if (kind === "white") { const s = keep(ambNoise(ctx, "white")); ambChain(ctx, s, keep(ambFilter(ctx, "lowpass", 6000)), keep(ambGain(ctx, 0.35)), out); s.start(); }
+  if (kind === "rain") {
+    const s = keep(ambNoise(ctx, "pink")); ambChain(ctx, s, keep(ambFilter(ctx, "highpass", 400)), keep(ambFilter(ctx, "lowpass", 2600)), keep(ambGain(ctx, 0.55)), out); s.start();
+    const d = keep(ambNoise(ctx, "white")); const bp = keep(ambFilter(ctx, "bandpass", 3000, 1.2)); const g = keep(ambGain(ctx, 0)); ambChain(ctx, d, bp, g, out); d.start();
+    ambEvery(40, 160, () => { const t = ctx.currentTime; bp.frequency.setValueAtTime(1800 + Math.random() * 3000, t); g.gain.setValueAtTime(0.08 + Math.random() * 0.12, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05 + Math.random() * 0.05); });
+  }
+  if (kind === "cafe") {
+    const s = keep(ambNoise(ctx, "brown")); ambChain(ctx, s, keep(ambFilter(ctx, "lowpass", 700)), keep(ambGain(ctx, 0.5)), out); s.start();
+    const m = keep(ambNoise(ctx, "pink")); const bp = keep(ambFilter(ctx, "bandpass", 520, 1.4)); const g = keep(ambGain(ctx, 0.12)); ambChain(ctx, m, bp, g, out); m.start();
+    const lfo = keep(ctx.createOscillator()); lfo.frequency.value = 0.35; const lg = keep(ambGain(ctx, 0.06)); lfo.connect(lg); lg.connect(g.gain); lfo.start();
+    ambEvery(2500, 7000, () => { const t = ctx.currentTime, o = ctx.createOscillator(), og = ctx.createGain(); o.type = "sine"; o.frequency.value = 2200 + Math.random() * 1800; og.gain.setValueAtTime(0.05, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.35); o.connect(og); og.connect(out); o.start(t); o.stop(t + 0.4); });
+  }
+  if (kind === "forest") {
+    const s = keep(ambNoise(ctx, "pink")); const lp = keep(ambFilter(ctx, "lowpass", 500)); const g = keep(ambGain(ctx, 0.35)); ambChain(ctx, s, lp, g, out); s.start();
+    const lfo = keep(ctx.createOscillator()); lfo.frequency.value = 0.08; const lg = keep(ambGain(ctx, 0.18)); lfo.connect(lg); lg.connect(g.gain); lfo.start();
+    ambEvery(1800, 6000, () => { const t = ctx.currentTime, n = 2 + Math.floor(Math.random() * 3), base = 2400 + Math.random() * 1600;
+      for (let i = 0; i < n; i++) { const o = ctx.createOscillator(), og = ctx.createGain(), st = t + i * 0.13; o.type = "sine"; o.frequency.setValueAtTime(base, st); o.frequency.exponentialRampToValueAtTime(base * (1.25 + Math.random() * 0.3), st + 0.08); og.gain.setValueAtTime(0.0001, st); og.gain.exponentialRampToValueAtTime(0.045, st + 0.02); og.gain.exponentialRampToValueAtTime(0.0001, st + 0.11); o.connect(og); og.connect(out); o.start(st); o.stop(st + 0.13); } });
+  }
+  if (kind === "music") {
+    const lp = keep(ambFilter(ctx, "lowpass", 1400)); const bus = keep(ambGain(ctx, 0.5)); lp.connect(bus); bus.connect(out);
+    const CH = [[261.63, 329.63, 392, 493.88], [220, 261.63, 329.63, 392], [174.61, 220, 261.63, 329.63], [196, 246.94, 293.66, 392]];
+    let k = 0;
+    const chord = () => { const t = ctx.currentTime, c = CH[k++ % CH.length];
+      c.forEach((f, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = i % 2 ? "triangle" : "sine"; o.frequency.value = f / (i === 0 ? 2 : 1); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.06, t + 2.2); g.gain.setValueAtTime(0.06, t + 6.5); g.gain.exponentialRampToValueAtTime(0.0001, t + 9); o.connect(g); g.connect(lp); o.start(t); o.stop(t + 9.2); });
+      [0, 2, 4, 6].forEach((d, j) => { if (Math.random() < 0.55) { const n = c[(j + k) % 4] * 2, st = t + d + 0.2, o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.value = n; g.gain.setValueAtTime(0.0001, st); g.gain.exponentialRampToValueAtTime(0.035, st + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, st + 1.8); o.connect(g); g.connect(lp); o.start(st); o.stop(st + 2); } }); };
+    chord(); AMB.timers.push(setInterval(chord, 8000));
+  }
+}
+function ambVolume(v) { if (AMB.ctx && AMB.master) AMB.master.gain.setTargetAtTime(Math.max(0, Math.min(1, v)) * 0.6, AMB.ctx.currentTime, 0.15); }
+const SOUNDS = [["silence", "Silence"], ["rain", "Pluie"], ["cafe", "Café"], ["forest", "Forêt"], ["white", "Bruit blanc"], ["music", "Musique calme"]];
+
+/* ---------- Concentration : minuteur ---------- */
+const FOCUS = { mode: "pomodoro", phase: "focus", running: false, left: 25 * 60, elapsed: 0, total: 25 * 60, timer: null, started: 0, sessionSec: 0, done: false, lastTick: 0 };
+const FMODES = [["pomodoro", "Pomodoro", "25 min de travail, puis une pause"], ["libre", "Étude libre", "Un chronomètre, sans limite"], ["detente", "Détente", "5 min pour souffler"]];
+function focusReset(mode) {
+  const c = coachData(); mode = mode || FOCUS.mode;
+  clearInterval(FOCUS.timer);
+  Object.assign(FOCUS, { mode, phase: mode === "detente" ? "break" : "focus", running: false, elapsed: 0, done: false, timer: null });
+  FOCUS.total = mode === "pomodoro" ? 25 * 60 : mode === "detente" ? 5 * 60 : 0; FOCUS.left = FOCUS.total;
+  c.set.mode = mode;
+}
+function focusStart() {
+  if (FOCUS.running) return;
+  FOCUS.running = true; FOCUS.done = false; FOCUS.lastTick = Date.now();
+  const c = coachData(); if (c.set.sound !== "silence") ambPlay(c.set.sound, c.set.vol);
+  FOCUS.timer = setInterval(focusTick, 1000);
+  paintFocus(); paintCoachTop();
+}
+function focusPause() { FOCUS.running = false; clearInterval(FOCUS.timer); FOCUS.timer = null; paintFocus(); paintCoachTop(); }
+function focusTick() {
+  const now = Date.now(), dt = Math.max(1, Math.round((now - FOCUS.lastTick) / 1000)); FOCUS.lastTick = now;
+  FOCUS.elapsed += dt;
+  if (FOCUS.phase === "focus") {
+    FOCUS.sessionSec += dt;
+    const c = coachData(), t = today();
+    c.minSec = (c.minSec || 0) + dt;
+    if (c.minSec >= 60) { c.min[t] = (c.min[t] || 0) + Math.floor(c.minSec / 60); c.minSec %= 60; pruneDays(c.min); coachSaveSoon(); }
+  }
+  if (FOCUS.total) {
+    FOCUS.left = Math.max(0, FOCUS.total - FOCUS.elapsed);
+    if (!FOCUS.left) { focusPause(); FOCUS.done = true; SFX.play("fanfare"); paintFocus(); paintCoachTop(); if (S.view === "coach") render(); return; }
+  }
+  paintFocus(); paintCoachTop();
+}
+function focusBreak() { focusReset("detente"); FOCUS.mode = "pomodoro"; FOCUS.phase = "break"; FOCUS.total = 5 * 60; FOCUS.left = FOCUS.total; focusStart(); render(); }
+const fmt = (s) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+const focusShown = () => FOCUS.total ? FOCUS.left : FOCUS.elapsed;
+function paintFocus() {
+  const el = document.getElementById("fx-time"); if (el) el.textContent = fmt(focusShown());
+  const ring = document.getElementById("fx-ring"); if (ring) ring.setAttribute("stroke-dasharray", `${FOCUS.total ? (1 - FOCUS.left / FOCUS.total) * 100 : (FOCUS.elapsed % 60) / 60 * 100} 100`);
+  const g = document.getElementById("fx-goal"); if (g) { const c = coachData(), m = Math.floor(FOCUS.sessionSec / 60); g.textContent = `${Math.min(m, c.set.goalMin)} / ${c.set.goalMin} min`; const bar = document.getElementById("fx-goalbar"); if (bar) bar.style.width = Math.min(100, (m / c.set.goalMin) * 100) + "%"; }
+  const b = document.getElementById("fx-play"); if (b) { b.innerHTML = pic(FOCUS.running ? "pause" : "play", 20) + `<span>${FOCUS.running ? "Pause" : FOCUS.elapsed ? "Reprendre" : "Démarrer"}</span>`; }
+}
+
+/* ---------- Affichage ---------- */
+const VEX_STATE = { "": ["Prêt quand tu veux", "st_wink"], think: ["Vex réfléchit…", "think"], talk: ["Vex te répond…", "talk"], listen: ["Je t'écoute…", "surprise"], joy: ["Bien joué, c'était correct", "joy"], encourage: ["On corrige ensemble", "encourage"] };
+function coachTopHTML() {
+  const p = S.profile, c = coachData(), st = VEX_STATE[CO.vstate] || VEX_STATE[""], left = aiLeft(), xpToday = c.xp[today()] || 0;
+  return `<div class="ct-vex ${CO.vstate ? "is-" + CO.vstate : ""}">${vx(st[1], 58, "ct-avatar")}<span class="ct-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+    <div class="ct-id"><b>Vex <span class="ct-lv">${esc(p.cefr_level || "A1")}</span></b><span class="ct-status" aria-live="polite">${esc(st[0])}</span></div>
+    <div class="ct-meta">
+      ${CO.toast ? `<span class="ct-chip is-toast">${esc(CO.toast.text)}</span>` : ""}
+      ${FOCUS.running || FOCUS.elapsed ? `<button class="ct-chip is-timer ${FOCUS.running ? "on" : ""}" data-act="co-panel" data-v="focus" aria-label="Minuteur">${pic("clock", 15)}<span id="fx-time-mini">${fmt(focusShown())}</span></button>` : ""}
+      <span class="ct-chip" title="XP gagnée avec Vex aujourd'hui (maximum ${COACH_XP_CAP})">${pic("bolt", 15)}${xpToday} XP</span>
+      ${left != null ? `<span class="ct-chip ${left <= 5 ? "is-low" : ""}" title="Échanges avec Vex restants aujourd'hui">${pic("chat", 15)}${left}</span>` : ""}
+    </div>`;
+}
+function paintCoachTop() {
+  const el = document.getElementById("coach-top"); if (el) el.innerHTML = coachTopHTML();
+  const mini = document.getElementById("fx-time-mini"); if (mini) mini.textContent = fmt(focusShown());
+}
+function msgActions(m, i) {
+  const can = S.sample && !coachBusy();
+  return `<div class="m-acts">
+    ${S.tts ? `<button class="mact ${speakingId === i ? "is-on" : ""}" data-act="m-say" data-v="${i}" aria-label="Écouter">${pic("speaker", 16)}<span>Écouter</span></button>` : ""}
+    <button class="mact" data-act="m-tr" data-v="${i}" ${CO.trBusy === i || !can ? "disabled" : ""}>${CO.trBusy === i ? '<span class="spinner"></span>' : pic("globe", 16)}<span>${m.tr && m.trOpen ? "Masquer" : "Traduire"}</span></button>
+    ${m.role === "assistant" ? `<button class="mact" data-act="m-ex" data-v="${i}" ${can ? "" : "disabled"}>${pic("bulb", 16)}<span>Expliquer</span></button>
+    <button class="mact ${CO.wordsFor === i ? "is-on" : ""}" data-act="m-words" data-v="${i}">${pic("bookmark", 16)}<span>Sauver un mot</span></button>` : ""}
   </div>`;
 }
-const saveChat = () => { try { sessionStorage.setItem("verblyx:chat", JSON.stringify(S.chat.slice(-30))); } catch {} };
-// Ce que l'IA « voit » de la conversation (un QCM est résumé en une ligne)
+function vocabCard(m, i) {
+  return `<div class="voc-card">${m.vocab.words.map((w, k) => { const have = !!S.vocab[w.w]; return `<div class="voc-row">
+    <div class="voc-tx"><b lang="en">${esc(w.w)}</b><span>${esc(w.t)}</span>${w.ex ? `<small lang="en">${esc(w.ex)}</small>` : ""}</div>
+    <div class="voc-acts">${S.tts ? `<button class="mact icon" data-act="voc-say" data-v="${esc(w.w)}" aria-label="Écouter ${esc(w.w)}">${pic("speaker", 16)}</button>` : ""}
+    <button class="mact ${have ? "is-done" : ""}" data-act="voc-add" data-m="${i}" data-v="${k}" ${have ? "disabled" : ""}>${pic(have ? "check" : "plus", 16)}<span>${have ? "Ajouté" : "Ajouter"}</span></button></div>
+  </div>`; }).join("")}
+  <div class="voc-foot"><button class="btn btn-secondary btn-sm" data-act="voc-all" data-m="${i}">${pic("plus", 16)}Tout ajouter</button><button class="btn btn-primary btn-sm" data-act="qcm-theme" data-v="${esc(m.vocab.title)}">${pic("bolt", 16)}M'entraîner sur ces mots</button></div></div>`;
+}
+function wordsPicker(m, i) {
+  const ws = wordCandidates(m);
+  return `<div class="w-pick">${ws.length ? `<span class="small muted">Touche un mot pour l'ajouter à tes mots :</span><div class="w-chips">${ws.map((w) => `<button class="w-chip ${S.vocab[w] ? "is-have" : ""}" data-act="w-save" data-m="${i}" data-v="${esc(w)}" ${S.vocab[w] || CO.savingWord ? "disabled" : ""}>${CO.savingWord === w ? '<span class="spinner"></span>' : ""}${esc(w)}${S.vocab[w] ? " ✓" : ""}</button>`).join("")}</div>` : `<span class="small muted">Aucun mot anglais à sauvegarder dans ce message.</span>`}</div>`;
+}
+function chatMsgHTML(m, i) {
+  if (m.role === "user") {
+    if (m.icon) return `<div class="cm cm-me"><div class="req-pill">${pic(m.icon === "books" ? "books" : m.icon === "read" ? "read" : m.icon === "target" ? "target" : m.icon === "chat" ? "chat" : m.icon === "check" ? "check" : m.icon === "bulb" ? "bulb" : "bolt", 15)}<span>${esc(m.label || m.content)}</span></div></div>`;
+    return `<div class="cm cm-me"><div class="bub bub-me">${m.tag ? `<span class="bub-tag">${esc(m.tag)}</span>` : ""}${rich(m.label || m.content)}</div>${m.tr && m.trOpen ? `<div class="bub-tr">${rich(m.tr)}</div>` : ""}</div>`;
+  }
+  if (m.error) return m.content === "quota" ? `<div class="cm"><div class="co-note">${pic("clock", 18)}<div><b>Tu as utilisé tous tes échanges avec Vex aujourd'hui</b><span>Ils reviennent demain. En attendant, tu peux réviser tes mots ou continuer ton parcours.</span></div></div></div>` : `<div class="cm">${chatErr(m, i === S.chat.length - 1)}</div>`;
+  const body = m.text != null ? (m.text ? rich(m.text) : "") : rich(m.content);
+  return `<div class="cm cm-ai">
+    <div class="cm-av">${vx("st_wink", 30)}</div>
+    <div class="cm-col">
+      <div class="bub bub-ai ${m.quiz || m.vocab ? "is-wide" : ""} ${m.praise ? "is-praise" : ""}">${body}${m.quiz ? quizCard(m, i) : ""}${m.vocab ? vocabCard(m, i) : ""}</div>
+      ${m.tr && m.trOpen ? `<div class="bub-tr">${rich(m.tr)}</div>` : ""}
+      ${m.quiz || m.vocab ? "" : msgActions(m, i)}
+      ${CO.wordsFor === i ? wordsPicker(m, i) : ""}
+    </div>
+  </div>`;
+}
+function coachWelcome() {
+  const p = S.profile, errs = topErrors(1), c = coachData();
+  const starters = [
+    ["free", "Discuter en anglais", "Parle de ce que tu veux, je te corrige au fil de l'eau.", "chat"],
+    ["sim", "Simuler une situation", "Au café, à l'aéroport, en entretien…", "target"],
+    errs.length ? ["cat:" + errs[0][0], "Travailler : " + ERR_CATS[errs[0][0]].toLowerCase(), `${errs[0][1].n} erreur${errs[0][1].n > 1 ? "s" : ""} relevée${errs[0][1].n > 1 ? "s" : ""} dans nos échanges.`, "target"] : ["ex", "Un exercice rapide", "5 questions adaptées à ton niveau.", "bolt"],
+  ];
+  return `<div class="co-welcome">
+    <div class="cw-hero">${vx("wave", 112, "lead")}<div><h2 class="cw-title">Bonjour ${esc(p.first_name || "")}</h2><p class="muted">Je suis Vex, ton professeur. Écris-moi en anglais ou en français, je m'adapte à ton niveau ${esc(p.cefr_level || "")}.</p></div></div>
+    <div class="cw-grid">${starters.map(([k, t, d, ic]) => `<button class="cw-card" data-act="co-start" data-v="${k}"><span class="cw-ic">${pic(ic, 20)}</span><b>${esc(t)}</b><span>${esc(d)}</span></button>`).join("")}</div>
+    <div class="cw-sugs">${["How do I use “since” and “for”?", "Corrige : Yesterday I have went to the office.", "Explique-moi le present perfect", "Let's talk about my weekend"].map((s) => `<button class="cw-sug" data-act="chat-sug" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>
+    ${c.ok || c.quiz.n ? "" : `<p class="small muted cw-foot">Tes progrès avec Vex apparaîtront dans « Progrès » au fil de tes échanges.</p>`}
+  </div>`;
+}
+function toolsPanel() {
+  return `<div class="tools-pop" role="dialog" aria-label="Outils">
+    <div class="tp-head"><b>Outils</b><button class="mact icon" data-act="tools" aria-label="Fermer">${pic("x", 16)}</button></div>
+    ${CO.toolsOpen === "sim" ? `<p class="small muted" style="margin:0 2px 8px">Choisis une situation. Vex joue un rôle, tu réponds en anglais.</p><div class="tp-grid">${SCENARIOS.map(([k, t]) => `<button class="tp-item" data-act="role" data-v="${k}">${pic("chat", 18)}<span>${t}</span></button>`).join("")}</div>`
+    : `<div class="tp-grid">${TOOLS.map(([k, t, ic]) => `<button class="tp-item" data-act="tool" data-v="${k}">${pic(ic, 18)}<span>${t}</span></button>`).join("")}</div>
+    <div class="tp-sub"><span class="small muted">Exercices rapides</span><div class="tp-row">${QCM_KINDS.map(([k, t, ic]) => `<button class="tp-chip" data-act="qcm" data-v="${k}">${pic(ic === "target" ? "target" : ic === "books" ? "books" : ic === "read" ? "read" : "bolt", 15)}${t}</button>`).join("")}</div></div>`}
+  </div>`;
+}
+function focusPanel() {
+  const c = coachData(), s = c.set;
+  return `<div class="side-sec">
+    <div class="ss-h"><b>Concentration</b><label class="co-switch"><input type="checkbox" data-act="set-timer" ${s.timer ? "checked" : ""}><span></span>Minuteur</label></div>
+    ${s.timer ? `<div class="fx-modes" role="radiogroup">${FMODES.map(([k, t]) => `<button role="radio" aria-checked="${FOCUS.mode === k}" class="${FOCUS.mode === k ? "is-on" : ""}" data-act="fx-mode" data-v="${k}">${t}</button>`).join("")}</div>
+    <p class="small muted fx-desc">${(FMODES.find((x) => x[0] === FOCUS.mode) || FMODES[0])[2]}${FOCUS.phase === "break" && FOCUS.mode === "pomodoro" ? " · pause en cours" : ""}</p>
+    <div class="fx-clock"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="bg"/><circle id="fx-ring" cx="60" cy="60" r="52" class="fg ${FOCUS.phase === "break" ? "brk" : ""}" pathLength="100" stroke-dasharray="${FOCUS.total ? (1 - FOCUS.left / FOCUS.total) * 100 : 0} 100" transform="rotate(-90 60 60)"/></svg><span id="fx-time" class="num">${fmt(focusShown())}</span></div>
+    ${FOCUS.done ? `<div class="fx-done">${FOCUS.phase === "focus" ? `<b>25 minutes de concentration, bravo.</b><span>${s.autoBreak ? "Une pause de 5 minutes te fera du bien." : "Tu peux continuer ou t'arrêter ici."}</span><div class="row">${s.autoBreak ? `<button class="btn btn-primary btn-sm" data-act="fx-break">Prendre une pause</button>` : ""}<button class="btn btn-secondary btn-sm" data-act="fx-again">Continuer</button></div>` : `<b>Pause terminée.</b><span>Reprends quand tu te sens prêt.</span><div class="row"><button class="btn btn-primary btn-sm" data-act="fx-again">Reprendre</button></div>`}</div>`
+    : `<div class="row fx-ctrl"><button id="fx-play" class="btn btn-primary" data-act="fx-play">${pic(FOCUS.running ? "pause" : "play", 20)}<span>${FOCUS.running ? "Pause" : FOCUS.elapsed ? "Reprendre" : "Démarrer"}</span></button><button class="btn btn-ghost fx-reset" data-act="fx-reset" aria-label="Remettre à zéro">${pic("reset", 18)}</button></div>`}
+    <div class="fx-goalbox"><div class="row between small"><span class="muted">Objectif de la session</span><span id="fx-goal" class="num">${Math.min(Math.floor(FOCUS.sessionSec / 60), s.goalMin)} / ${s.goalMin} min</span></div><div class="fx-bar"><i id="fx-goalbar" style="width:${Math.min(100, (Math.floor(FOCUS.sessionSec / 60) / s.goalMin) * 100)}%"></i></div>
+      <div class="fx-goals">${[15, 25, 45, 60].map((g) => `<button class="${s.goalMin === g ? "is-on" : ""}" data-act="fx-goalmin" data-v="${g}">${g} min</button>`).join("")}</div></div>
+    <label class="co-switch small"><input type="checkbox" data-act="set-break" ${s.autoBreak ? "checked" : ""}><span></span>Me proposer une pause après 25 min</label>` : `<p class="small muted">Le minuteur est désactivé. Tu apprends à ton rythme.</p>`}
+  </div>
+  <div class="side-sec">
+    <div class="ss-h"><b>Ambiance sonore</b></div>
+    <div class="snd-grid">${SOUNDS.map(([k, t]) => `<button class="snd ${s.sound === k ? "is-on" : ""}" data-act="snd" data-v="${k}" aria-pressed="${s.sound === k}"><span class="snd-ic snd-${k}" aria-hidden="true"></span>${t}</button>`).join("")}</div>
+    ${s.sound !== "silence" ? `<label class="vol"><span class="small muted">Volume</span><input type="range" id="snd-vol" min="0" max="100" value="${Math.round(s.vol * 100)}" aria-label="Volume de l'ambiance"></label>
+    <p class="small muted">${AMB.kind === s.sound ? "En lecture." : `<button class="link" data-act="snd" data-v="${s.sound}">Lancer l'ambiance</button>`}</p>` : ""}
+  </div>`;
+}
+function progressPanel() {
+  const c = coachData(), errs = topErrors(5), lessonWeak = weakSkills();
+  const okW = sumDays(c.okDays, 7), minW = sumDays(c.min, 7), xpW = sumDays(c.xp, 7);
+  const acc = c.quiz.n ? Math.round((c.quiz.ok / c.quiz.n) * 100) : null;
+  return `<div class="side-sec">
+    <div class="ss-h"><b>Tes points à améliorer</b></div>
+    ${errs.length || lessonWeak.length ? `<div class="pt-list">${errs.map(([k, v]) => `<div class="pt-item"><div class="pt-top"><b>${ERR_CATS[k]}</b><span class="pt-n num">${v.n}</span></div>${v.ex && v.ex[0] ? `<p class="pt-ex"><s>${esc(v.ex[0].bad)}</s> → <b>${esc(v.ex[0].good)}</b></p>` : ""}<button class="btn btn-secondary btn-sm" data-act="qcm-cat" data-v="${k}" ${S.sample && !coachBusy() ? "" : "disabled"}>${pic("target", 15)}M'entraîner</button></div>`).join("")}
+      ${lessonWeak.filter((s) => !errs.length || errs.length < 3).slice(0, 2).map((s) => `<div class="pt-item"><div class="pt-top"><b>${esc(skillLabel(s))}</b><span class="small muted">dans tes leçons</span></div><button class="btn btn-secondary btn-sm" data-act="qcm" data-v="weak">${pic("target", 15)}M'entraîner</button></div>`).join("")}</div>`
+    : `<p class="small muted">Rien à signaler pour l'instant. Écris-moi en anglais : je repérerai tes erreurs fréquentes et te proposerai des exercices ciblés.</p>`}
+  </div>
+  <div class="side-sec">
+    <div class="ss-h"><b>Tes progrès</b><span class="small muted">7 derniers jours</span></div>
+    <div class="pg-grid">
+      <div class="pg"><span>Phrases correctes</span><b class="num">${okW}</b><small>${c.ok || 0} au total</small></div>
+      <div class="pg"><span>Réussite aux QCM</span><b class="num">${acc == null ? "—" : acc + " %"}</b><small>${c.quiz.n ? `${c.quiz.ok}/${c.quiz.n} réponses` : "aucun QCM"}</small></div>
+      <div class="pg"><span>Mots sauvegardés</span><b class="num">${Object.keys(S.vocab || {}).length}</b><small>${c.words || 0} avec Vex</small></div>
+      <div class="pg"><span>Temps de concentration</span><b class="num">${minW} min</b><small>avec le minuteur</small></div>
+    </div>
+    <div class="pg-xp"><div class="row between small"><span class="muted">XP gagnée avec Vex aujourd'hui</span><span class="num">${c.xp[today()] || 0} / ${COACH_XP_CAP}</span></div><div class="fx-bar"><i style="width:${Math.min(100, ((c.xp[today()] || 0) / COACH_XP_CAP) * 100)}%"></i></div>
+      <p class="small muted">Vex récompense ce que tu réussis : 2 XP par phrase anglaise correcte, 2 XP par bonne réponse aux QCM, 5 pièces pour un QCM parfait. ${xpW} XP cette semaine.</p></div>
+  </div>`;
+}
+function historyPanel() {
+  const list = CO.hist;
+  return `<div class="side-sec">
+    <div class="ss-h"><b>Conversations</b><button class="btn btn-secondary btn-sm" data-act="co-new">${pic("plus", 15)}Nouvelle</button></div>
+    <p class="small muted" style="margin-top:-4px">Enregistrées sur cet appareil.</p>
+    ${list.length ? `<div class="hist">${list.map((c) => `<div class="hist-row"><button class="hist-open" data-act="co-open" data-v="${esc(c.id)}"><b>${esc(c.title || convTitle(c))}</b><span class="small muted">${new Date(c.updated || c.started).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })} · ${plural((c.msgs || []).filter((m) => !m.error).length, "message", "messages")}</span></button><button class="mact icon" data-act="co-del" data-v="${esc(c.id)}" aria-label="Supprimer">${pic("trash", 16)}</button></div>`).join("")}</div>` : `<p class="small muted">Tes anciennes conversations apparaîtront ici.</p>`}
+  </div>`;
+}
+const PANELS = [["focus", "Concentration", "focus"], ["progress", "Progrès", "chart"], ["history", "Historique", "clock"]];
+function viewCoach() {
+  coLoad();
+  const u = S.ui, busy = coachBusy(), tool = CO.tool && TOOLS.find((x) => x[0] === CO.tool), sc = CO.role && SCENARIOS.find((s) => s[0] === CO.role);
+  const blocked = aiBlocked();
+  const panel = CO.panel;
+  return `<div class="coach2 ${panel ? "has-panel" : ""}">
+    <div class="c2-main">
+      <header class="c2-top">
+        <div id="coach-top" class="coach-top">${coachTopHTML()}</div>
+        <div class="c2-btns">
+          ${canVoice() ? `<button class="c2-btn ${CO.voice ? "is-on" : ""}" data-act="voice" aria-pressed="${CO.voice}" title="Conversation vocale">${pic("wave", 18)}<span>Vocal</span></button>` : ""}
+          ${PANELS.map(([k, t, ic]) => `<button class="c2-btn ${panel === k ? "is-on" : ""}" data-act="co-panel" data-v="${k}" aria-pressed="${panel === k}" title="${t}">${pic(ic, 18)}<span>${t}</span></button>`).join("")}
+          ${S.chat.length ? `<button class="c2-btn" data-act="co-new" title="Nouvelle conversation">${pic("plus", 18)}<span>Nouvelle</span></button>` : ""}
+        </div>
+      </header>
+      ${sc ? `<div class="role-bar">${pic("chat", 16)}<span>Simulation : <b>${esc(sc[1])}</b></span><button class="btn btn-secondary btn-sm" data-act="role-end" ${busy ? "disabled" : ""}>Terminer et voir le bilan</button></div>` : ""}
+      ${!S.sample ? notice("Vex n'est pas disponible pour le moment. Recharge la page.", "warn") : ""}
+      <div class="c2-chat">
+        ${S.chat.length === 0 ? coachWelcome() : S.chat.map(chatMsgHTML).join("")}
+        ${busy ? `<div class="cm cm-ai"><div class="cm-av">${vx("think", 30, "talking-vx")}</div><div class="cm-col"><div class="bub bub-ai" id="stream">${u.streaming ? streamView(stripBilan(u.streaming)) : `<span class="typing" aria-label="${u.quizBusy ? "Vex prépare l'exercice" : "Vex réfléchit"}"><i></i><i></i><i></i></span><span class="small muted">${u.quizBusy ? "Vex prépare l'exercice…" : "Vex réfléchit…"}</span>`}</div></div></div>` : ""}
+        <div id="chat-end"></div>
+      </div>
+      <div class="coach-dock c2-dock">
+        ${CO.toolsOpen ? toolsPanel() : ""}
+        ${CO.voice ? `<div class="voice-bar ${CO.listening ? "is-listening" : ""}"><span class="vb-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>${CO.listening ? "Parle en anglais, je t'écoute…" : CO.vstate === "talk" ? "Vex parle…" : busy ? "Vex réfléchit…" : "Mode vocal activé"}</span>${!CO.listening && !busy ? `<button class="btn btn-primary btn-sm" data-act="mic">${pic("mic", 16)}Parler</button>` : ""}<button class="btn btn-ghost btn-sm" data-act="voice">Quitter</button></div>` : ""}
+        ${tool ? `<div class="tool-chip">${pic(tool[2], 15)}<span>${esc(tool[1])}</span><button data-act="tool-off" aria-label="Annuler l'outil">${pic("x", 14)}</button></div>` : ""}
+        <form class="c2-composer" data-form="chat">
+          <button type="button" class="cc-btn ${CO.toolsOpen ? "is-on" : ""}" data-act="tools" aria-label="Outils" aria-expanded="${!!CO.toolsOpen}">${pic("grid", 20)}</button>
+          <textarea id="coachInput" rows="1" placeholder="${esc(blocked ? "Plus d'échanges pour aujourd'hui" : tool ? tool[3] : sc ? "Réponds en anglais…" : "Écris à Vex…")}" ${S.sample && !blocked ? "" : "disabled"} aria-label="Message pour Vex">${esc(u.chatDraft || "")}</textarea>
+          ${S.dict ? `<button type="button" class="cc-btn ${CO.listening ? "is-rec" : ""}" data-act="mic" aria-label="${CO.listening ? "Arrêter la dictée" : "Dicter un message"}" ${blocked ? "disabled" : ""}>${pic(CO.listening ? "stop" : "mic", 20)}</button>` : ""}
+          <button class="cc-send" aria-label="Envoyer" ${busy || !S.sample || blocked ? "disabled" : ""}>${pic("send", 20)}</button>
+        </form>
+        <p class="c2-hint small">${aiLeft() != null ? `${aiLeft()} échange${aiLeft() > 1 ? "s" : ""} avec Vex restant${aiLeft() > 1 ? "s" : ""} aujourd'hui · ` : ""}Entrée pour envoyer, Maj + Entrée pour aller à la ligne</p>
+      </div>
+    </div>
+    ${panel ? `<aside class="c2-side" aria-label="${(PANELS.find((x) => x[0] === panel) || [])[1] || ""}">
+      <div class="side-head"><div class="side-tabs">${PANELS.map(([k, t]) => `<button class="${panel === k ? "is-on" : ""}" data-act="co-panel" data-v="${k}">${t}</button>`).join("")}</div><button class="mact icon" data-act="co-panel" data-v="" aria-label="Fermer">${pic("x", 18)}</button></div>
+      <div class="side-body">${panel === "focus" ? focusPanel() : panel === "progress" ? progressPanel() : historyPanel()}</div>
+    </aside><div class="c2-scrim" data-act="co-panel" data-v=""></div>` : ""}
+  </div>`;
+}
 // bas de la page : la barre de saisie reste par-dessus, donc on va tout en bas (pas seulement à la fin du chat)
 function scrollChatEnd(smooth) { const go = () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: smooth ? "smooth" : "auto" }); go(); requestAnimationFrame(go); }
 function chatErr(m, last) {
   const raw = String(m.content || ""), detail = raw.replace(/^Erreur serveur\s*:\s*/i, "").replace(/\s*Réessaie[^.]*\.?\s*$/i, "");
-  const [title, sub] = /quota|patiente|beaucoup travaillé/i.test(raw) ? ["Limite d'utilisation atteinte", "Le professeur a atteint sa limite pour le moment. Réessaie dans quelques minutes."]
+  const [title, sub] = /échanges avec Vex|limite de/i.test(raw) ? ["Tu as utilisé tous tes échanges du jour", "Ils reviennent demain. Tu peux continuer ton parcours ou réviser tes mots en attendant."]
+    : /quota|patiente|beaucoup travaillé/i.test(raw) ? ["Vex fait une courte pause", "Le service d'IA est très demandé. Réessaie dans quelques minutes."]
     : /session/i.test(raw) ? ["Session expirée", "Reconnecte-toi puis réessaie."]
     : /surcharg|ne répond pas|503|502/i.test(raw) ? ["Service momentanément indisponible", "Les serveurs sont très sollicités. Réessaie dans un instant."]
-    : /QCM/i.test(raw) ? ["Le QCM n'a pas pu être créé", "Une erreur est survenue pendant la préparation. Réessaie."]
+    : /QCM|liste/i.test(raw) ? ["L'exercice n'a pas pu être créé", "Une erreur est survenue pendant la préparation. Réessaie."]
     : ["Réponse indisponible", "Une erreur technique est survenue. Réessaie dans un instant."];
   return `<div class="chat-err" role="alert"><span class="n-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true">${N_IC.error}</svg></span>
     <div class="ce-tx"><b>${title}</b><span>${sub}</span>${S.isAdmin && detail ? `<small>Détail technique : ${esc(detail)}</small>` : ""}</div>
     ${m.retry && last ? `<button class="btn btn-secondary btn-sm" data-act="chat-retry">Réessayer</button>` : ""}</div>`;
 }
-// une erreur restée en bas de la discussion n'a plus de sens quand on relance une demande
-const dropErrors = () => { while (S.chat.length && S.chat[S.chat.length - 1].error) S.chat.pop(); };
-const chatTurns = () => S.chat.filter((m) => !m.error).slice(-12).map((m) => ({ role: m.role, content: m.quiz ? `${m.text || ""}\n[QCM « ${m.quiz.title} » : ${m.quiz.questions.map((q) => q.q).join(" | ")}]`.trim() : m.content }));
-function coachRules(p) {
-  return `Tu es Vex, le professeur d'anglais personnel de ${p.first_name || "l'élève"} sur Verblyx.
-Niveau CECRL : ${p.cefr_level}. Objectifs : ${p.goals.map((g) => GOALS_FR[g] || g).join(", ") || "général"}.
-Difficultés connues : ${[...weakSkills().map(skillLabel), ...p.difficulties].join(", ") || "aucune identifiée"}.
-Règles :
-- Va droit au but : 2 à 6 phrases, 120 mots maximum. Explications en français, exemples en anglais du niveau ${p.cefr_level}.
-- Si l'élève écrit en anglais, corrige d'abord ses erreurs sur une ligne par erreur (❌ forme fautive → ✅ forme correcte, puis la règle en quelques mots), puis réponds.
-- Si l'élève demande un QCM, un quiz, un test ou des exercices : écris UNE phrase d'introduction, puis un bloc qui commence par \`\`\`qcm et finit par \`\`\`, contenant uniquement ce JSON : {"title":"titre court","questions":[{"q":"phrase avec ___ ou question courte","options":["a","b","c"],"answer":"a","explain":"pourquoi, en une phrase en français"}]} — 5 questions, 3 options chacune, une seule bonne réponse.
-- Pas de titres Markdown ; tu peux utiliser **gras** et des listes avec "- ".
-- Style : celui d'un vrai professeur, naturel, posé et précis. Tutoie l'élève. Pas d'emoji (sauf ❌ et ✅ pour les corrections), pas de formules creuses (« Excellente question », « Super », « N'hésite pas »), pas de point d'exclamation à chaque phrase, pas de résumé final. Une seule question de relance au maximum.
-- Tu ne parles que d'apprentissage de l'anglais.
-Les messages suivants sont la conversation avec l'élève.`;
-}
-async function sendChat(text) {
-  const t = String(text || "").trim();
-  const u = S.ui;
-  if (!t || !S.sample) return;
-  if (u.streaming != null && Date.now() - (u.streamAt || 0) < 100000) return;
-  u.streamAt = Date.now();
-  dropErrors(); S.chat.push({ role: "user", content: t.slice(0, 2000) }); SFX.play("tap");
-  u.chatDraft = ""; u.chatError = ""; u.streaming = ""; S.chatScroll = true; render();
-  const turns = [{ role: "user", content: coachRules(S.profile) }, ...chatTurns()];
-  try {
-    const { text: reply } = await S.sample(turns, { modelTier: "quick", cache: false, onText: ({ text }) => {
-      u.streaming = text; const av = document.querySelector(".talking-vx"); if (av && !av.classList.contains("talking")) { av.classList.add("talking"); vxSetMood(av, "wave"); } const el = document.getElementById("stream"); if (el) el.innerHTML = streamView(text);
-      scrollChatEnd();
-    } });
-    const { text: rest, quiz } = splitQuiz(reply);
-    S.chat.push(quiz ? { role: "assistant", content: reply, text: rest, quiz } : { role: "assistant", content: reply });
-    SFX.play("pop");
-  } catch (e) {
-    if (e && e.text) S.chat.push({ role: "assistant", content: e.text + "\n\n(réponse interrompue)" });
-    else S.chat.push({ role: "assistant", error: true, content: aiError(e) || "Vex n'a pas pu répondre.", retry: { type: "chat", text: t } });
+// actions de la page Prof IA (appelées par le gestionnaire de clics général)
+function coachAction(act, v, el) {
+  const u = S.ui, c = () => coachData();
+  switch (act) {
+    case "co-panel": CO.panel = v && CO.panel !== v ? v : v && CO.panel === v && !el.closest(".c2-side") ? null : v || null; if (CO.panel === "focus") { const k = c().set.mode; if (k && FOCUS.mode !== k && !FOCUS.running && !FOCUS.elapsed) focusReset(k); } render(); return true;
+    case "co-new": coNew(); SFX.play("tap"); render(); return true;
+    case "co-open": coOpen(v); SFX.play("tap"); S.chatScroll = true; render(); return true;
+    case "co-del": CO.hist = CO.hist.filter((x) => x.id !== v); coSave(); render(); return true;
+    case "co-start": {
+      if (v === "free") { const i = document.getElementById("coachInput"); if (i) { i.placeholder = "Say something in English…"; i.focus(); } return true; }
+      if (v === "sim") { CO.toolsOpen = "sim"; render(); return true; }
+      if (v === "ex") { quickQuiz("quick"); return true; }
+      if (v.startsWith("cat:")) { quickQuiz("cat", v.slice(4)); return true; }
+      return true;
+    }
+    case "tools": CO.toolsOpen = CO.toolsOpen ? false : true; SFX.play("tap"); render(); return true;
+    case "tool": {
+      if (v === "sim") { CO.toolsOpen = "sim"; render(); return true; }
+      CO.tool = v; CO.toolsOpen = false; render();
+      const i = document.getElementById("coachInput"); if (i) i.focus();
+      return true;
+    }
+    case "tool-off": CO.tool = null; render(); return true;
+    case "role": startRole(v); return true;
+    case "role-end": endRole(); return true;
+    case "qcm-cat": CO.panel = matchMedia("(min-width: 1100px)").matches ? CO.panel : null; quickQuiz("cat", v); return true;
+    case "qcm-theme": quickQuiz("quick", v); return true;
+    case "m-say": sayMessage(Number(v)); return true;
+    case "m-tr": translateMessage(Number(v)); return true;
+    case "m-ex": explainMessage(Number(v)); return true;
+    case "m-words": CO.wordsFor = CO.wordsFor === Number(v) ? null : Number(v); render(); return true;
+    case "w-save": { const m = S.chat[Number(el.dataset.m)]; saveWord(v, m ? stripBilan(m.text || m.content) : ""); return true; }
+    case "voc-say": if (S.tts) S.tts.speak(v, { lang: "en-US", rate: 0.9 }).catch(() => {}); return true;
+    case "voc-add": { const m = S.chat[Number(el.dataset.m)]; const w = m && m.vocab && m.vocab.words[Number(v)]; if (w && addWord(w.w, w.t, w.ex)) render(); return true; }
+    case "voc-all": { const m = S.chat[Number(el.dataset.m)]; let n = 0; if (m && m.vocab) m.vocab.words.forEach((w) => { if (addWord(w.w, w.t, w.ex)) n++; }); if (n) CO.toast = { text: `${n} mot${n > 1 ? "s" : ""} ajouté${n > 1 ? "s" : ""} à tes mots`, at: Date.now() }; render(); return true; }
+    case "mic": {
+      if (CO.listening) { try { S.dict.stop(); } catch {} CO.listening = false; CO.vstate = ""; render(); return true; }
+      startListening(); return true;
+    }
+    case "voice": {
+      if (CO.voice) { stopVoice(); render(); return true; }
+      CO.voice = true; SFX.play("select"); render(); startListening(); return true;
+    }
+    case "fx-mode": focusReset(v); coachSaveSoon(); render(); return true;
+    case "fx-play": if (FOCUS.running) focusPause(); else focusStart(); return true;
+    case "fx-reset": focusReset(); FOCUS.sessionSec = 0; render(); return true;
+    case "fx-break": focusBreak(); return true;
+    case "fx-again": focusReset("pomodoro"); focusStart(); render(); return true;
+    case "fx-goalmin": c().set.goalMin = Number(v) || 25; coachSaveSoon(); render(); return true;
+    case "snd": { const s = c().set; s.sound = v; coachSaveSoon(); if (v === "silence") ambStop(); else ambPlay(v, s.vol); SFX.play("tap"); render(); return true; }
   }
-  u.streaming = null; S.chatScroll = true;
-  saveChat(); render();
-  const inp = document.getElementById("coachInput"); if (inp) inp.focus();
+  return false;
 }
-// QCM en un clic (réponse JSON directe, plus rapide que la discussion)
-async function quickQuiz(kind) {
-  const u = S.ui, p = S.profile;
-  if (!S.sample || (u.streaming != null && Date.now() - (u.streamAt || 0) < 100000)) return;
-  const qk = QCM_KINDS.find((k) => k[0] === kind) || QCM_KINDS[0], label = qk[1];
-  const weak = [...weakSkills().map(skillLabel), ...p.difficulties];
-  const topic = kind === "weak" ? (weak.length ? `les notions où l'élève fait des erreurs : ${weak.slice(0, 3).join(", ")}` : "les pièges les plus fréquents à ce niveau")
-    : kind === "vocab" ? `le vocabulaire utile du niveau ${p.cefr_level}${p.goals.length ? " (thèmes : " + p.goals.map((g) => GOALS_FR[g] || g).join(", ") + ")" : ""} : sens des mots, traductions, mots qui vont ensemble`
-    : "un mélange de grammaire et de vocabulaire du niveau";
-  dropErrors(); S.chat.push({ role: "user", content: label, icon: qk[2] }); SFX.play("tap");
-  u.streamAt = Date.now(); u.streaming = ""; u.quizBusy = true; u.chatError = ""; S.chatScroll = true; render();
-  try {
-    const raw = kind === "reading" ? await S.sample.json(`Tu es professeur d'anglais. L'élève francophone (niveau ${p.cefr_level}) veut apprendre à lire un texte en anglais plus rapidement.
-1. "tips" : 3 ou 4 conseils de méthode concrets et courts en français (ex. : lire d'abord le titre et les questions, repérer les mots-clés, lire par groupes de mots, ne pas traduire mot à mot, deviner un mot inconnu grâce au contexte). Une phrase chacun, tutoiement, sans emoji.
-2. "passage" : un texte original en anglais de 120 à 180 mots, adapté au niveau ${p.cefr_level}, sur un sujet de la vie courante${p.goals.length ? " lié à : " + p.goals.map((g) => GOALS_FR[g] || g).join(", ") : ""}, avec un titre en anglais. 2 ou 3 paragraphes séparés par une ligne vide.
-3. "questions" : 4 questions de compréhension EN ANGLAIS sur ce texte (idée générale, détail précis, déduction, sens d'un mot d'après le contexte), 3 options chacune, une seule bonne réponse certaine, "explain" en une phrase en français qui cite le passage utile.
-Réponds UNIQUEMENT avec ce JSON : {"title":"Lecture rapide : titre court en français","tips":["..."],"passage":{"title":"...","text":"..."},"questions":[{"q":"...","options":["...","...","..."],"answer":"...","explain":"..."}]}`, { modelTier: "quick" })
-    : await S.sample.json(`Crée un QCM d'anglais pour un élève francophone de niveau ${p.cefr_level}. Thème : ${topic}.
-5 questions variées et différentes de d'habitude. Chaque question : une phrase avec ___ ou une question courte, 3 options plausibles, UNE seule bonne réponse certaine, une explication d'une phrase en français.
-Réponds UNIQUEMENT avec ce JSON : {"title":"titre court en français","questions":[{"q":"...","options":["...","...","..."],"answer":"...","explain":"..."}]}`, { modelTier: "quick" });
-    const quiz = cleanQuiz(raw);
-    if (!quiz) throw { message: "Le QCM n'a pas pu être créé. Réessaie." };
-    S.chat.push({ role: "assistant", content: quiz.passage ? `Lecture rapide : ${quiz.title}\n${quiz.passage.text}` : `QCM : ${quiz.title}`, text: quiz.passage ? "Voici une méthode pour lire plus vite en anglais. Applique-la sur le texte ci-dessous, puis réponds aux questions." : "Choisis la bonne réponse à chaque question.", quiz });
-    SFX.play("pop");
-  } catch (e) { S.chat.push({ role: "assistant", error: true, content: aiError(e) || "Le QCM n'a pas pu être créé.", retry: { type: "qcm", kind } }); }
-  u.streaming = null; u.quizBusy = false; S.chatScroll = true;
-  saveChat(); render();
+function coachChange(t) {
+  const d = t.dataset && t.dataset.act, s = S.profile && coachData().set;
+  if (d === "set-timer") { s.timer = t.checked; if (!t.checked) { focusPause(); focusReset(); } coachSaveSoon(); render(); return true; }
+  if (d === "set-break") { s.autoBreak = t.checked; coachSaveSoon(); return true; }
+  if (t.id === "snd-vol") { s.vol = Number(t.value) / 100; ambVolume(s.vol); coachSaveSoon(); return true; }
+  return false;
 }
 
 /* ---------- Vocabulaire ---------- */
@@ -4558,6 +5478,7 @@ $app.addEventListener("click", (ev) => {
   if (ch && !el) { SFX.play("boing"); return vxReact(ch, ["cheer", "love", "surprise", "wave"][Math.floor(Math.random() * 4)]); }
   if (!el || el.disabled) return;
   const a = el.dataset.act, v = el.dataset.v, u = S.ui;
+  if (S.view === "coach" && el.type !== "checkbox" && coachAction(a, v, el)) return;
   const toggle = (arr, x) => arr.includes(x) ? arr.filter((y) => y !== x) : [...arr, x];
   const lead = () => document.querySelector(".vx.lead");
   switch (a) {
@@ -4610,6 +5531,14 @@ $app.addEventListener("click", (ev) => {
     case "staff-del-do": S.store.staffRemove(v).then(() => { u.staffList = (u.staffList || []).filter((m) => m.user_id !== v); u.staffDel = null; u.staffOk = "Membre retiré de l'équipe."; u.logs = null; SFX.play("unselect"); render(); }).catch((e) => { u.staffErr = (e && e.message) || "Erreur"; u.staffDel = null; render(); }); break;
     case "staff-logs": u.logActor = v; u.logs = null; u.admTab = "log"; SFX.play("tap"); render(); window.scrollTo(0, 0); break;
     case "log-refresh": logLoad(); break;
+    case "adm-ai": case "adm-ai-reset": {
+      const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
+      let lim = null;
+      if (a === "adm-ai") { const n = Math.round(Number((document.getElementById("admAi") || {}).value)); if (!Number.isFinite(n) || n < 0 || n > 2000) { u.admErr = "La limite doit être un nombre entre 0 et 2000."; render(); break; } lim = n; }
+      S.store.adminSetAiLimit(v, lim).then(() => { u.logs = null; u.admMsg = { id: v, text: lim == null ? "Limite IA remise à la valeur normale." : `Limite IA fixée à ${lim} échanges par jour.` }; SFX.play("select"); adminLoad(); })
+        .catch((e) => { const m = (e && e.message) || ""; u.admErr = /function|schema cache|does not exist/i.test(m) ? "Lance d'abord 010_prof_ia.sql dans Supabase." : m || "Erreur"; render(); });
+      break;
+    }
     case "adm-custom": { const k = (document.getElementById("admKind") || {}).value || "coins", n = Math.round(Number((document.getElementById("admAmt") || {}).value)); if (!n || n < 1) { u.admErr = "Indique une quantité positive."; render(); break; } adminGiftDo(v, k, k === "hearts" ? Math.min(n, HEART_MAX) : n); break; }
     case "lb-kind": u.lbKind = v; SFX.play("tap"); render(); lbLoad(v); break;
     case "lb-refresh": lbLoad(u.lbKind || "xp", true); break;
@@ -4664,7 +5593,7 @@ $app.addEventListener("click", (ev) => {
     case "reset-do": {
       const old = S.profile;
       S.profile = Object.assign(newProfile(old.first_name), { onboarded: true, self_level: old.self_level, goals: old.goals, daily_minutes: old.daily_minutes, difficulties: old.difficulties, created_at: old.created_at });
-      S.vocab = {}; S.chat = []; try { sessionStorage.removeItem("verblyx:chat"); } catch {}
+      S.vocab = {}; S.chat = []; try { sessionStorage.removeItem("verblyx:chat"); localStorage.removeItem(coKey()); } catch {} CO.loaded = false;
       saveProfile(); S.store.saveVocab({}).catch(() => {});
       SFX.play("next"); go("test"); break;
     }
@@ -4726,18 +5655,31 @@ $app.addEventListener("click", (ev) => {
     case "chat-retry": {
       const last = S.chat[S.chat.length - 1]; if (!last || !last.error || !last.retry) break;
       S.chat.splice(S.chat.length - 2, 2); saveChat();
-      if (last.retry.type === "qcm") quickQuiz(last.retry.kind); else sendChat(last.retry.text);
+      if (last.retry.type === "qcm") quickQuiz(last.retry.kind, last.retry.theme);
+      else if (last.retry.type === "voc") vocabList(last.retry.theme);
+      else sendChat(last.retry.text, last.retry.opts || {});
       break;
     }
     case "qz": {
       const m = S.chat[Number(el.dataset.m)], qi = Number(el.dataset.q); if (!m || !m.quiz || m.quiz.picks[qi] != null) break;
       const q = m.quiz.questions[qi]; m.quiz.picks[qi] = v; const ok = v === q.answer;
       SFX.play(ok ? "correct" : "wrong");
+      const cd = coachData(); cd.quiz.n++; if (ok) cd.quiz.ok++;
+      if (ok) coachReward(2, 0, "bonne réponse"); else coachSaveSoon();
+      const all = m.quiz.picks.filter((x) => x != null).length === m.quiz.questions.length;
+      if (all) {
+        const sc = m.quiz.questions.reduce((n, qq, k) => n + (m.quiz.picks[k] === qq.answer ? 1 : 0), 0);
+        if (sc === m.quiz.questions.length && m.quiz.questions.length >= 4 && !m.quiz.rewarded) { m.quiz.rewarded = true; coachReward(0, 5, "QCM parfait"); }
+        // un exercice ciblé réussi fait baisser le compteur d'erreurs de cette notion
+        if (m.quiz.cat && sc / m.quiz.questions.length >= 0.8 && cd.err[m.quiz.cat]) { cd.err[m.quiz.cat].n = Math.max(0, cd.err[m.quiz.cat].n - 2); if (!cd.err[m.quiz.cat].n) delete cd.err[m.quiz.cat]; }
+        CO.vstate = sc / m.quiz.questions.length >= 0.8 ? "joy" : "encourage";
+        setTimeout(() => { if (S.view === "coach") { CO.vstate = ""; paintCoachTop(); } }, 2600);
+      }
       saveChat(); render();
-      if (m.quiz.picks.filter((x) => x != null).length === m.quiz.questions.length) { SFX.play("fanfare"); S.chatScroll = true; setTimeout(() => { scrollChatEnd(true); }, 50); }
+      if (all) { SFX.play("fanfare"); S.chatScroll = true; setTimeout(() => { scrollChatEnd(true); }, 50); }
       break;
     }
-    case "chat-clear": S.chat = []; try { sessionStorage.removeItem("verblyx:chat"); } catch {} u.chatError = ""; render(); break;
+    case "chat-clear": coNew(); u.chatError = ""; render(); break;
     case "vf": u.filter = v; render(); break;
     case "vt": if (S.vocab[v]) { S.vocab[v].learned = !S.vocab[v].learned; SFX.play(S.vocab[v].learned ? "select" : "unselect"); render(); S.store.saveVocab(S.vocab).catch(() => { S.saveError = "Le vocabulaire n'a pas pu être enregistré. Vérifie ta connexion."; render(); }); } break;
   }
@@ -4771,7 +5713,8 @@ $app.addEventListener("input", (ev) => {
     const wc = document.getElementById("wc"); if (wc) wc.textContent = `${plural(n, "mot", "mots")}${n < 8 ? " · au moins 8 mots pour que Vex puisse évaluer" : ""}`;
     const b = document.querySelector('[data-act="t-submit"]'); if (b) b.disabled = n < 8;
   }
-  if (t.id === "coachInput") u.chatDraft = t.value;
+  if (t.id === "coachInput") { u.chatDraft = t.value; autoGrow(t); }
+  if (t.id === "snd-vol" && coachChange(t)) return;
   if (t.id === "setName") { u.nameDraft = t.value; u.saved = ""; }
   if (t.id === "ses-text") { u.text = t.value; const b = document.querySelector('[data-act="check"]'); if (b && !u.busy) b.disabled = !t.value.trim(); }
   if (t.id && t.id.startsWith("ans-")) { u.drafts = u.drafts || {}; u.drafts[t.id.split("-").pop()] = t.value; const b = document.querySelector('[data-act="l-check"]'); if (b && !u.busyEx) b.disabled = !t.value.trim(); }
@@ -4783,6 +5726,7 @@ $app.addEventListener("input", (ev) => {
   if (t.id === "setHelp") { u.helpDraft = t.value; u.helpOk = ""; u.helpErr = ""; }
 });
 $app.addEventListener("change", (ev) => {
+  if (S.view === "coach" && coachChange(ev.target)) return;
   if (ev.target && ev.target.id === "logActor") { S.ui.logActor = ev.target.value || null; S.ui.logs = null; render(); return; }
   const t = ev.target;
   if (t.id === "setAvatar" && t.files && t.files[0]) {
@@ -4803,12 +5747,14 @@ $app.addEventListener("submit", (ev) => {
     S.profile.first_name = v.slice(0, 40); S.ui.setErr = ""; S.ui.saved = "Prénom enregistré."; S.ui.nameDraft = null;
     SFX.play("select"); saveProfile(); render();
   }
-  if (f === "chat") sendChat(document.getElementById("coachInput").value);
+  if (f === "chat") { const tx = document.getElementById("coachInput").value; if (CO.tool === "ex") { CO.tool = null; quickQuiz("quick", tx.trim()); } else if (CO.tool === "voc") { CO.tool = null; vocabList(tx); } else sendChat(tx); }
   if (f === "settings-pass") changePass();
   if (f === "settings-user") saveMyPseudo();
   if (f === "settings-help") sendHelp();
 });
 document.addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter" && ev.target.id === "coachInput" && !ev.shiftKey && !ev.isComposing) { ev.preventDefault(); if (ev.target.value.trim() || CO.tool === "ex" || CO.tool === "voc") ev.target.form.requestSubmit(); return; }
+  if (ev.key === "Escape" && S.view === "coach" && (CO.toolsOpen || CO.panel)) { CO.toolsOpen = false; CO.panel = null; render(); return; }
   if (ev.key === "Enter" && (ev.metaKey || ev.ctrlKey) && ev.target.tagName === "TEXTAREA" && ev.target.form) { ev.target.form.requestSubmit(); return; }
   if (S.view === "session" && S.session && !S.session.loading) {
     if (ev.key === "Escape" && (S.ui.sheet || S.ui.guide)) { S.ui.sheet = false; render(); return; }
@@ -4873,6 +5819,8 @@ function makeSupaStore(sb, uid) {
     async adminFeedback() { const { data, error } = await sb.rpc("admin_feedback"); if (error) throw error; return data || []; },
     async adminFeedbackDone(id, done) { const { error } = await sb.rpc("admin_feedback_done", { p_id: id, p_done: done }); if (error) throw error; },
     async adminFeedbackDelete(id) { const { error } = await sb.rpc("admin_feedback_delete", { p_id: id }); if (error) throw error; },
+    async myAiUsage() { const { data, error } = await sb.rpc("my_ai_usage"); if (error) throw error; return data || null; },
+    async adminSetAiLimit(target, limit) { const { error } = await sb.rpc("admin_set_ai_limit", { p_target: target, p_limit: limit }); if (error) throw error; },
     async myPerms() { const { data, error } = await sb.rpc("my_perms"); if (error) throw error; return data || null; },
     async staffList() { const { data, error } = await sb.rpc("staff_list"); if (error) throw error; return data || []; },
     async staffSet(who, perms) { const { data, error } = await sb.rpc("staff_set", { p_who: who, p_perms: perms }); if (error) throw error; return data; },
@@ -4965,8 +5913,9 @@ function browserTTS() {
       try {
         speechSynthesis.cancel();
         const ut = new SpeechSynthesisUtterance(text);
-        ut.lang = "en-US"; ut.rate = o.rate || 1;
-        const v = speechSynthesis.getVoices().find((x) => /^en[-_](US|GB)/i.test(x.lang)); if (v) ut.voice = v;
+        const lang = o.lang || "en-US"; ut.lang = lang; ut.rate = o.rate || 1;
+        const vs = speechSynthesis.getVoices(), base = lang.slice(0, 2);
+        const v = vs.find((x) => x.lang.replace("_", "-") === lang && /Google|Natural|Premium|Enhanced/i.test(x.name)) || vs.find((x) => x.lang.replace("_", "-") === lang) || vs.find((x) => x.lang.slice(0, 2) === base); if (v) ut.voice = v;
         ut.onend = () => res({ playedMs: 0 }); ut.onerror = () => rej({ code: "failed" });
         speechSynthesis.speak(ut);
       } catch { rej({ code: "failed" }); }
@@ -5000,8 +5949,8 @@ async function boot() {
   GSI.id = String(cfg.googleClientId || "").trim();
   S.tts = browserTTS(); S.dict = browserDictation();
   if (S.dict) {
-    S.dict.onFinal(({ text }) => { if (S.view !== "session") return; S.ui.spoken = ((S.ui.spoken || "") + text).trim(); const el = document.getElementById("spoken"); if (el) el.textContent = `Tu as dit : « ${S.ui.spoken} »`; const b = document.querySelector('[data-act="check"]'); if (b) b.disabled = !S.ui.spoken; });
-    S.dict.onState(({ state }) => { const on = state !== "idle"; if (S.ui.listening !== on) { S.ui.listening = on; if (S.view === "session") render(); } });
+    S.dict.onFinal(({ text }) => { if (onDictFinal(text)) return; if (S.view !== "session") return; S.ui.spoken = ((S.ui.spoken || "") + text).trim(); const el = document.getElementById("spoken"); if (el) el.textContent = `Tu as dit : « ${S.ui.spoken} »`; const b = document.querySelector('[data-act="check"]'); if (b) b.disabled = !S.ui.spoken; });
+    S.dict.onState(({ state }) => { const on = state !== "idle"; if (onDictState(on)) return; if (S.ui.listening !== on) { S.ui.listening = on; if (S.view === "session") render(); } });
   }
   try { const res = await fetch("course.json", { cache: "no-cache" }); COURSE = await res.json(); }
   catch { $app.innerHTML = bootScreen("Le programme ne s'est pas chargé", "Vérifie ta connexion, puis recharge la page."); return; }
@@ -5287,6 +6236,7 @@ async function sendHelp() {
 async function doLogout() {
   try { await SB.auth.signOut(); } catch {}
   S.settingsOpen = false; S.chat = []; try { sessionStorage.removeItem("verblyx:chat"); } catch {}
+  stopVoice(); ambStop(); focusPause(); focusReset("pomodoro"); FOCUS.sessionSec = 0; CO.loaded = false; CO.ai = null; CO.panel = null;
   await enterSession(null);
   go("home");
 }
