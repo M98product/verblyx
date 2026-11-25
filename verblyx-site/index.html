@@ -1295,7 +1295,8 @@ body.calm *, body.calm *::before, body.calm *::after { animation-duration: .001m
 .c2-main { width: 100%; max-width: 780px; margin-inline: auto; }
 /* en-tête : Vex et l'état de la séance */
 .c2-top { display: flex; align-items: center; justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; padding: 4px 0 6px; }
-.coach-top { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1 1 320px; }
+.coach-top { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1 1 100%; }
+.ct-meta { flex-wrap: nowrap; }
 .ct-vex { position: relative; flex: none; width: 64px; height: 64px; display: grid; place-items: center; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 10px 24px -14px rgba(0, 0, 0, .7); }
 .ct-vex .vx { transition: transform .4s cubic-bezier(.2, .8, .3, 1.2); }
 .ct-vex.is-think .vx { animation: ctBob 1.6s ease-in-out infinite; }
@@ -1663,6 +1664,13 @@ body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-
 .tok-bar { display: inline-block; width: 34px; height: 5px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
 .tok-bar b { display: block; height: 100%; border-radius: inherit; background: #00D6B5; }
 .tok-chip.is-low .tok-bar b { background: #FFC45C; }
+
+/* réponses à toucher proposées par Vex */
+.qr { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; animation: cmIn .3s ease .1s both; }
+.qr-btn { min-height: 38px; padding: 8px 15px; border-radius: 999px; border: 1.5px solid rgba(22, 119, 255, .5); background: rgba(22, 119, 255, .08); color: #CFE4FF; font: 600 14px var(--f-body); cursor: pointer; transition: background .15s, border-color .15s, transform .12s; text-align: left; }
+.qr-btn:hover:not(:disabled) { background: rgba(22, 119, 255, .18); border-color: #1677FF; }
+.qr-btn:active:not(:disabled) { transform: scale(.97); }
+.qr-btn:disabled { opacity: .5; cursor: default; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -4902,6 +4910,7 @@ const SCENARIOS = [
 const TOOLS = [
   ["fix", "Corriger une phrase", "check", "Écris la phrase anglaise à corriger…", "Corrige cette phrase anglaise. Pour chaque erreur : ❌ forme fautive → ✅ forme correcte, puis la règle en une ligne. Termine par la phrase entière corrigée :"],
   ["tr", "Traduire un texte", "globe", "Colle le texte à traduire (français ou anglais)…", "Traduis ce texte (du français vers l'anglais, ou de l'anglais vers le français). Donne la traduction, puis 1 ou 2 expressions utiles à retenir :"],
+  ["explain", "Expliquer une phrase", "bulb", "Colle la phrase anglaise à expliquer…", "Explique-moi cette phrase anglaise : son sens en français, la grammaire utilisée, et comment la réutiliser dans une autre phrase :"],
   ["rule", "Expliquer une règle", "book", "Quelle règle ? (ex. : le present perfect)", "Explique clairement cette règle de grammaire anglaise, avec 3 exemples de mon niveau et le piège le plus fréquent :"],
   ["ex", "Créer un exercice", "bolt", "Sur quel thème ? (vide = un mélange)", null],
   ["voc", "Apprendre du vocabulaire", "books", "Quel thème ? (ex. : le voyage, le travail…)", null],
@@ -5039,7 +5048,7 @@ function coachRules(p) {
   return `Tu es Vex, le professeur d'anglais personnel de ${p.first_name || "l'élève"} sur Verblyx. Tu es chaleureux, patient et précis, comme un vrai professeur particulier.
 Niveau CECRL de l'élève : ${lv}. Objectifs : ${(p.goals || []).map((g) => GOALS_FR[g] || g).join(", ") || "général"}.
 Points faibles connus : ${[...errs, ...weakSkills().map(skillLabel), ...(p.difficulties || [])].join(", ") || "aucun identifié pour l'instant"}.
-${sc ? `MODE SIMULATION : ${sc[2]} Joue ce rôle en anglais, avec des phrases courtes et naturelles${simple ? " très simples" : ""}, et pose une question à la fois pour faire avancer la scène. Si l'élève fait une erreur, ajoute après ta réplique une ligne « 💡 » en français avec la correction (❌ → ✅). Reste dans la scène.` : ""}${CO.voice ? `MODE VOCAL : ta réponse sera lue à voix haute. Réponds surtout en anglais, en 1 à 3 phrases courtes et faciles à prononcer, sans listes ni mise en forme. Les corrections restent très brèves.` : ""}
+${CO.mood === "tired" || CO.mood === "bad" ? "L'élève est fatigué aujourd'hui : séance courte, phrases simples, encouragements sincères.\n" : ""}${CO.topic && CO.topic.label ? `Thème choisi pour cette séance : ${CO.topic.label}.\n` : ""}${sc ? `MODE SIMULATION : ${sc[2]} Joue ce rôle en anglais, avec des phrases courtes et naturelles${simple ? " très simples" : ""}, et pose une question à la fois pour faire avancer la scène. Si l'élève fait une erreur, ajoute après ta réplique une ligne « 💡 » en français avec la correction (❌ → ✅). Reste dans la scène.` : ""}${CO.voice ? `MODE VOCAL : ta réponse sera lue à voix haute. Réponds surtout en anglais, en 1 à 3 phrases courtes et faciles à prononcer, sans listes ni mise en forme. Les corrections restent très brèves.` : ""}
 Règles :
 - L'élève peut parler de n'importe quel sujet pour pratiquer : s'il écrit en anglais, réponds en anglais ${simple ? "simple (phrases courtes, mots courants)" : "naturel adapté à son niveau"} ; s'il écrit en français, réponds en français avec des exemples en anglais.
 - S'il écrit en anglais, commence par corriger ses erreurs : une ligne par erreur (❌ forme fautive → ✅ forme correcte, puis la règle en quelques mots en français). Si sa phrase est correcte, dis-le en une courte phrase sincère, puis réponds.
@@ -5117,6 +5126,7 @@ async function sendChat(text, opts = {}) {
     CO.vstate = "";
   }
   u.streaming = null; S.chatScroll = true;
+  if (opts.next && reply) askNext(opts.next);
   coSave(); render();
   if (CO.vstate) setTimeout(() => { if (S.view === "coach" && !coachBusy()) { CO.vstate = ""; paintCoachTop(); } }, 2600);
   if (CO.voice && reply) voiceReply(stripBilan(reply));
@@ -5176,15 +5186,84 @@ Réponds UNIQUEMENT avec ce JSON : {"title":"titre court en français","words":[
   u.streaming = null; u.quizBusy = false; S.chatScroll = true; CO.vstate = "";
   coSave(); render();
 }
+/* ---------- Séance guidée : c'est Vex qui mène ----------
+   Messages préparés dans la page (aucun jeton consommé), avec des réponses à toucher. */
+const vexSay = (text, choices, extra = {}) => { S.chat.push({ role: "assistant", local: true, text, choices: choices || null, ...extra }); };
+const meSay = (label) => { S.chat.push({ role: "user", local: true, content: label, label }); };
+function strongLabel() { const s = strongSkills()[0]; return s ? skillLabel(s) : null; }
+function weakTopic() {
+  const e = topErrors(1)[0]; if (e) return { cat: e[0], label: ERR_CATS[e[0]].toLowerCase(), hint: ERR_HINT[e[0]] };
+  const w = weakSkills()[0]; if (w) return { cat: null, label: skillLabel(w).toLowerCase(), hint: skillLabel(w) };
+  return null;
+}
+function coGreet() {
+  const p = S.profile, h = new Date().getHours(), hi = h >= 18 || h < 5 ? "Bonsoir" : "Bonjour";
+  CO.flow = { step: "mood" }; CO.mood = null; CO.topic = null;
+  vexSay(`${hi} ${p.first_name || ""} ! Comment tu vas aujourd'hui ?`, [["mood:great", "Très bien"], ["mood:ok", "Ça va"], ["mood:tired", "Un peu fatigué"], ["mood:bad", "Pas terrible"]]);
+  coSave();
+}
+function askFocus() {
+  const w = weakTopic(), st = strongLabel();
+  const info = w ? `J'ai remarqué que tu as surtout du mal avec : **${w.label}**.` : "Je n'ai pas encore assez d'informations sur tes points faibles : on va les découvrir ensemble.";
+  vexSay(`${info}\nSur quoi tu veux travailler ?`, [["focus:weak", "Mes points faibles"], ["focus:strong", st ? `Mes points forts (${st.toLowerCase()})` : "Mes points forts"], ["focus:auto", "Choisis pour moi"]]);
+  CO.flow = { step: "focus" };
+}
+function askMode(intro) {
+  vexSay(`${intro ? intro + "\n" : ""}Comment tu préfères travailler ?`, [["mode:sim", "Simuler une situation"], ["mode:quiz", "Un exercice rapide"], ["mode:talk", "Discuter en anglais"], ["mode:help", "Traduire ou expliquer une phrase"]]);
+  CO.flow = { step: "mode" };
+}
+function askNext(text) {
+  vexSay(text || "On continue ?", [["next:again", "Encore un exercice"], ["next:other", "Une autre activité"], ["next:stop", "On s'arrête là"]]);
+  CO.flow = { step: "next" };
+}
+function startMode(mode) {
+  const t = CO.topic || {};
+  if (mode === "quiz") { if (t.cat) quickQuiz("cat", t.cat); else quickQuiz("quick", t.label || ""); CO.lastMode = "quiz"; return; }
+  if (mode === "sim") { vexSay("Quelle situation veux-tu jouer ? Je joue un rôle, tu me réponds en anglais.", SCENARIOS.map(([k, l]) => ["role:" + k, l])); CO.flow = { step: "role" }; return; }
+  if (mode === "talk") { CO.lastMode = "talk"; sendChat(`Lance une conversation en anglais adaptée à mon niveau${t.label ? `, qui me fait pratiquer ${t.label}` : ""}. Pose-moi une première question simple sur ma vie ou mes goûts.`, { label: "Discuter en anglais", icon: "chat" }); return; }
+  if (mode === "help") { vexSay("Qu'est-ce que tu veux faire ?", [["tool:tr", "Traduire un texte"], ["tool:explain", "Expliquer une phrase"], ["tool:fix", "Corriger une phrase"], ["tool:rule", "Expliquer une règle"]]); CO.flow = { step: "tool" }; }
+}
+function coChoice(v, label) {
+  const last = [...S.chat].reverse().find((m) => m.choices && !m.chosen); if (last) last.chosen = v;
+  meSay(label); SFX.play("tap");
+  const [k, x] = v.split(":");
+  if (k === "mood") {
+    CO.mood = x;
+    const r = { great: "Super, alors on avance bien aujourd'hui.", ok: "D'accord, on y va à ton rythme.", tired: "Je comprends. On fera quelque chose de court et léger.", bad: "Courage. On va faire simple, et tu peux t'arrêter quand tu veux." }[x];
+    vexSay(r); askFocus();
+  } else if (k === "focus") {
+    if (x === "weak") { const w = weakTopic(); CO.topic = w ? { ...w, kind: "weak" } : { kind: "weak", label: "les pièges les plus fréquents à ton niveau" }; askMode(w ? `Très bien, on travaille **${w.label}**.` : "Très bien, on va chercher tes pièges ensemble."); }
+    else if (x === "strong") { const st = strongLabel(); CO.topic = { kind: "strong", label: st ? st.toLowerCase() + " (niveau supérieur)" : "ce que tu maîtrises déjà, en allant un peu plus loin" }; askMode(st ? `Bonne idée, on consolide **${st.toLowerCase()}** et on va un peu plus loin.` : "Bonne idée, on va consolider ce que tu sais déjà."); }
+    else {
+      const w = weakTopic(), light = CO.mood === "tired" || CO.mood === "bad";
+      CO.topic = w ? { ...w, kind: "auto" } : { kind: "auto", label: "un mélange de grammaire et de vocabulaire" };
+      const mode = light ? "quiz" : w ? "quiz" : "sim";
+      CO.flow = { step: "auto", mode };
+      vexSay(`Je te propose ${mode === "quiz" ? "un exercice rapide" : "une simulation"} sur **${CO.topic.label}**${light ? ", court et facile" : ""}.`, [["auto:go", "C'est parti"], ["auto:other", "Autre chose"]]);
+    }
+  } else if (k === "auto") {
+    if (x === "go") { startMode(CO.flow.mode || "quiz"); coSave(); render(); return; }
+    askMode();
+  } else if (k === "mode") { startMode(x); coSave(); render(); return; }
+  else if (k === "role") { startRole(x); return; }
+  else if (k === "tool") {
+    CO.tool = x; CO.lastMode = "help";
+    vexSay({ tr: "Écris ou colle le texte à traduire, en français ou en anglais.", explain: "Colle la phrase anglaise que tu veux comprendre.", fix: "Écris ta phrase en anglais, je la corrige.", rule: "Quelle règle veux-tu revoir ? Par exemple : le present perfect." }[x]);
+  } else if (k === "next") {
+    if (x === "again") { startMode(CO.lastMode === "talk" || CO.lastMode === "help" ? "quiz" : CO.lastMode || "quiz"); coSave(); render(); return; }
+    if (x === "other") askMode();
+    else { const xp = coachData().xp[today()] || 0; vexSay(`Merci pour cette séance${xp ? `, tu as gagné ${xp} XP avec moi aujourd'hui` : ""}. À bientôt, et repose-toi bien.`); CO.flow = { step: "done" }; }
+  }
+  S.chatScroll = true; coSave(); render();
+}
 function startRole(id) {
   const sc = SCENARIOS.find((s) => s[0] === id); if (!sc) return;
-  if (S.chat.some((m) => !m.error)) coNew();
-  CO.role = id; CO.toolsOpen = false; CO.tool = null;
+  CO.role = id; CO.toolsOpen = false; CO.tool = null; CO.lastMode = "sim";
   sendChat(`Commence la simulation « ${sc[1]} » : présente la situation en une phrase en français, puis dis ta première réplique en anglais.`, { label: "Simulation : " + sc[1], icon: "chat" });
 }
 function endRole() {
   if (!CO.role) return;
-  sendChat("La simulation est terminée. Fais-moi un bilan en français : ce que j'ai bien réussi, puis mes 3 erreurs principales avec la correction, et une expression utile à retenir.", { label: "Terminer la simulation et voir le bilan", icon: "check" });
+  sendChat("La simulation est terminée. Fais-moi un bilan en français : ce que j'ai bien réussi, puis mes 3 erreurs principales avec la correction, et une expression utile à retenir.", { label: "Terminer la simulation et voir le bilan", icon: "check", next: "Bravo pour cette simulation. On continue ?" });
   CO.role = null; coSave();
 }
 
@@ -5410,7 +5489,6 @@ function coachTopHTML() {
     <div class="ct-id"><b>Vex <span class="ct-lv">${esc(p.cefr_level || "A1")}</span></b><span class="ct-status" aria-live="polite">${esc(st[0])}</span></div>
     <div class="ct-meta">
       ${CO.toast ? `<span class="ct-chip is-toast">${esc(CO.toast.text)}</span>` : ""}
-      ${FOCUS.running || FOCUS.elapsed ? `<button class="ct-chip is-timer ${FOCUS.running ? "on" : ""}" data-act="co-panel" data-v="focus" aria-label="Minuteur">${pic("clock", 15)}<span id="fx-time-mini">${fmt(focusShown())}</span></button>` : ""}
       <span class="ct-chip" title="XP gagnée avec Vex aujourd'hui (maximum ${COACH_XP_CAP})">${pic("bolt", 15)}${xpToday} XP</span>
       ${left != null ? `<span class="ct-chip tok-chip ${left < TOK_PER_MSG * 3 ? "is-low" : ""}" title="Jetons IA restants aujourd'hui : ${tokNum(left)} sur ${tokNum(CO.ai.limit)} (environ ${Math.floor(left / TOK_PER_MSG)} échanges)">${pic("chat", 15)}<span>${fmtTok(left)}</span><i class="tok-bar"><b style="width:${Math.round((left / Math.max(1, CO.ai.limit)) * 100)}%"></b></i></span>` : ""}
     </div>`;
@@ -5447,6 +5525,8 @@ function chatMsgHTML(m, i) {
   }
   if (m.error) return m.content === "quota" ? `<div class="cm"><div class="co-note">${pic("clock", 18)}<div><b>Tu as utilisé tes jetons IA du jour</b><span>Ils reviennent demain. En attendant, tu peux réviser tes mots ou continuer ton parcours.</span></div></div></div>` : `<div class="cm">${chatErr(m, i === S.chat.length - 1)}</div>`;
   const body = m.text != null ? (m.text ? rich(m.text) : "") : rich(m.content);
+  const qr = m.choices && !m.chosen ? `<div class="qr" role="group" aria-label="Réponses possibles">${m.choices.map(([v, l]) => `<button class="qr-btn" data-act="co-choice" data-v="${esc(v)}" data-l="${esc(l)}" ${coachBusy() ? "disabled" : ""}>${esc(l)}</button>`).join("")}</div>` : "";
+  if (m.local) return `<div class="cm cm-ai"><div class="cm-av">${vx("st_wink", 30)}</div><div class="cm-col"><div class="bub bub-ai">${body}</div>${qr}</div></div>`;
   return `<div class="cm cm-ai">
     <div class="cm-av">${vx("st_wink", 30)}</div>
     <div class="cm-col">
@@ -5516,7 +5596,7 @@ function progressPanel() {
       <div class="pg"><span>Phrases correctes</span><b class="num">${okW}</b><small>${c.ok || 0} au total</small></div>
       <div class="pg"><span>Réussite aux QCM</span><b class="num">${acc == null ? "—" : acc + " %"}</b><small>${c.quiz.n ? `${c.quiz.ok}/${c.quiz.n} réponses` : "aucun QCM"}</small></div>
       <div class="pg"><span>Mots sauvegardés</span><b class="num">${Object.keys(S.vocab || {}).length}</b><small>${c.words || 0} avec Vex</small></div>
-      <div class="pg"><span>Temps de concentration</span><b class="num">${minW} min</b><small>avec le minuteur</small></div>
+      <div class="pg"><span>Échanges avec Vex</span><b class="num">${sumDays(c.xp, 7) ? Math.round(sumDays(c.xp, 7) / 2) : 0}</b><small>réussites récompensées</small></div>
     </div>
     <div class="pg-xp"><div class="row between small"><span class="muted">XP gagnée avec Vex aujourd'hui</span><span class="num">${c.xp[today()] || 0} / ${COACH_XP_CAP}</span></div><div class="fx-bar"><i style="width:${Math.min(100, ((c.xp[today()] || 0) / COACH_XP_CAP) * 100)}%"></i></div>
       <p class="small muted">Vex récompense ce que tu réussis : 2 XP par phrase anglaise correcte, 2 XP par bonne réponse aux QCM, 5 pièces pour un QCM parfait. ${xpW} XP cette semaine.</p></div>
@@ -5530,10 +5610,11 @@ function historyPanel() {
     ${list.length ? `<div class="hist">${list.map((c) => `<div class="hist-row"><button class="hist-open" data-act="co-open" data-v="${esc(c.id)}"><b>${esc(c.title || convTitle(c))}</b><span class="small muted">${new Date(c.updated || c.started).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })} · ${plural((c.msgs || []).filter((m) => !m.error).length, "message", "messages")}</span></button><button class="mact icon" data-act="co-del" data-v="${esc(c.id)}" aria-label="Supprimer">${pic("trash", 16)}</button></div>`).join("")}</div>` : `<p class="small muted">Tes anciennes conversations apparaîtront ici.</p>`}
   </div>`;
 }
-const PANELS = [["focus", "Concentration", "focus"], ["progress", "Progrès", "chart"], ["history", "Historique", "clock"]];
+const PANELS = [["progress", "Progrès", "chart"], ["history", "Historique", "clock"]];
 const lockedBtn = (f, ic, t) => `<button class="c2-btn is-locked has-tip tip-below" data-act="plus-locked" data-v="${f}" data-tip="${esc(plusTip(f))}" aria-label="${esc(t)} : réservé à Verblyx Plus">${pic(ic, 18)}<span>${t}</span>${pic("lock", 14)}</button>`;
 function viewCoach() {
   coLoad();
+  if (!S.chat.length) coGreet();
   const u = S.ui, busy = coachBusy(), tool = CO.tool && TOOLS.find((x) => x[0] === CO.tool), sc = CO.role && SCENARIOS.find((s) => s[0] === CO.role);
   const blocked = aiBlocked();
   const panel = CO.panel;
@@ -5550,7 +5631,7 @@ function viewCoach() {
       ${sc ? `<div class="role-bar">${pic("chat", 16)}<span>Simulation : <b>${esc(sc[1])}</b></span><button class="btn btn-secondary btn-sm" data-act="role-end" ${busy ? "disabled" : ""}>Terminer et voir le bilan</button></div>` : ""}
       ${!S.sample ? notice("Vex n'est pas disponible pour le moment. Recharge la page.", "warn") : ""}
       <div class="c2-chat">
-        ${S.chat.length === 0 ? coachWelcome() : S.chat.map(chatMsgHTML).join("")}
+        ${S.chat.map(chatMsgHTML).join("")}
         ${busy ? `<div class="cm cm-ai"><div class="cm-av">${vx("think", 30, "talking-vx")}</div><div class="cm-col"><div class="bub bub-ai" id="stream">${u.streaming ? streamView(stripBilan(u.streaming)) : `<span class="typing" aria-label="${u.quizBusy ? "Vex prépare l'exercice" : "Vex réfléchit"}"><i></i><i></i><i></i></span><span class="small muted">${u.quizBusy ? "Vex prépare l'exercice…" : "Vex réfléchit…"}</span>`}</div></div></div>` : ""}
         <div id="chat-end"></div>
       </div>
@@ -5569,7 +5650,7 @@ function viewCoach() {
     </div>
     ${panel ? `<aside class="c2-side" aria-label="${(PANELS.find((x) => x[0] === panel) || [])[1] || ""}">
       <div class="side-head"><div class="side-tabs">${PANELS.map(([k, t]) => plusLocked(k) ? `<button class="is-locked has-tip tip-below" data-act="plus-locked" data-v="${k}" data-tip="${esc(plusTip(k))}">${pic("lock", 13)}${t}</button>` : `<button class="${panel === k ? "is-on" : ""}" data-act="co-panel" data-v="${k}">${t}</button>`).join("")}</div><button class="mact icon" data-act="co-panel" data-v="" aria-label="Fermer">${pic("x", 18)}</button></div>
-      <div class="side-body">${panel === "focus" ? focusPanel() : panel === "progress" ? progressPanel() : historyPanel()}</div>
+      <div class="side-body">${panel === "progress" ? progressPanel() : historyPanel()}</div>
     </aside><div class="c2-scrim" data-act="co-panel" data-v=""></div>` : ""}
   </div>`;
 }
@@ -5595,8 +5676,9 @@ function coachAction(act, v, el) {
   if ((act === "co-panel" && plusLocked(v)) || (act === "voice" && plusLocked("voice")) || ((act === "role" || (act === "tool" && v === "sim") || (act === "co-start" && v === "sim")) && plusLocked("sim"))) { S.plusModal = act === "co-panel" ? v : act === "voice" ? "voice" : "sim"; S.plusAnim = true; CO.toolsOpen = false; render(); return true; }
   CO.lockInfo = null;
   switch (act) {
-    case "co-panel": CO.panel = v && CO.panel !== v ? v : v && CO.panel === v && !el.closest(".c2-side") ? null : v || null; if (CO.panel === "focus") { const k = c().set.mode; if (k && FOCUS.mode !== k && !FOCUS.running && !FOCUS.elapsed) focusReset(k); } render(); return true;
+    case "co-panel": if (v === "focus") return true; CO.panel = v && CO.panel !== v ? v : v && CO.panel === v && !el.closest(".c2-side") ? null : v || null; if (CO.panel === "focus") { const k = c().set.mode; if (k && FOCUS.mode !== k && !FOCUS.running && !FOCUS.elapsed) focusReset(k); } render(); return true;
     case "co-new": coNew(); SFX.play("tap"); render(); return true;
+    case "co-choice": coChoice(v, el.dataset.l || v); return true;
     case "co-open": coOpen(v); SFX.play("tap"); S.chatScroll = true; render(); return true;
     case "co-del": CO.hist = CO.hist.filter((x) => x.id !== v); coSave(); render(); return true;
     case "co-start": {
@@ -5882,6 +5964,7 @@ $app.addEventListener("click", (ev) => {
         // un exercice ciblé réussi fait baisser le compteur d'erreurs de cette notion
         if (m.quiz.cat && sc / m.quiz.questions.length >= 0.8 && cd.err[m.quiz.cat]) { cd.err[m.quiz.cat].n = Math.max(0, cd.err[m.quiz.cat].n - 2); if (!cd.err[m.quiz.cat].n) delete cd.err[m.quiz.cat]; }
         CO.vstate = sc / m.quiz.questions.length >= 0.8 ? "joy" : "encourage";
+        askNext(sc === m.quiz.questions.length ? "Parfait, tout est juste. On continue ?" : sc / m.quiz.questions.length >= 0.6 ? `${sc}/${m.quiz.questions.length}, c'est bien. On continue ?` : `${sc}/${m.quiz.questions.length}. Ce n'est pas grave, c'est comme ça qu'on progresse. On continue ?`);
         setTimeout(() => { if (S.view === "coach") { CO.vstate = ""; paintCoachTop(); } }, 2600);
       }
       saveChat(); render();
