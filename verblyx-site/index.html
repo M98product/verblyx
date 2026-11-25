@@ -723,6 +723,7 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .avatar.av-char { background: #163659; overflow: hidden; padding: 0; box-shadow: inset 0 0 0 1px rgba(234, 251, 255, .08); }
 .avatar.av-char svg { width: 100%; height: 100%; display: block; }
 .av-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 10px; margin-top: 14px; }
+.ob-me { display: flex; align-items: center; gap: 14px; }
 .av-pick { aspect-ratio: 1; padding: 0; border: 2px solid transparent; border-radius: 50%; background: #163659; overflow: hidden; cursor: pointer; transition: transform .15s var(--spring), border-color .15s; }
 .av-pick svg { width: 100%; height: 100%; display: block; }
 .av-pick:hover { transform: scale(1.07); }
@@ -1592,8 +1593,12 @@ function viewHome() {
 const OB_LEVELS = [["A1", "Je pars de zéro", "Ou presque : quelques mots"], ["A2", "J'ai des bases", "Je comprends des phrases courantes"], ["B1", "Je me débrouille", "Je tiens une conversation simple"], ["B2", "Je suis à l'aise", "J'échange sur beaucoup de sujets"], ["C1", "Je suis avancé", "Je travaille ou j'étudie en anglais"], ["unknown", "Je ne sais pas", "Le test me situera"]];
 const OB_GOAL_SUB = { work: "Réunions, e-mails, entretiens", travel: "Aéroport, hôtel, rencontres", exam: "TOEIC, IELTS, Cambridge", conversation: "Parler sans bloquer", media: "Sans sous-titres", studies: "Cours et lectures" };
 const OB_TIME_LBL = { 5: "Express", 10: "Équilibré", 15: "Régulier", 20: "Ambitieux", 30: "Immersion", 45: "Intensif" };
-const OB_STEPS = ["level", "goals", "time", "diffs", "name"];
-const OB_POSE = { level: "think", goals: "go", time: "chart", diffs: "heart", name: "wave" };
+const OB_BASE = ["level", "goals", "time", "diffs", "name", "pseudo"];
+const obSteps = () => S.authUser ? OB_BASE : [...OB_BASE, "account"];
+const OB_POSE = { level: "think", goals: "go", time: "chart", diffs: "heart", name: "wave", pseudo: "pro", account: "go" };
+const PSEUDO_RE = /^[A-Za-z0-9._]{3,20}$/;
+const obName = () => (S.ui.firstName ?? obDraft().first_name ?? "").trim();
+const obUser = () => String(S.ui.username ?? obDraft().username ?? "").trim().replace(/^@+/, "");
 function obDraft() {
   if (S.profile) return S.profile;
   if (!S.draft) S.draft = newProfile("");
@@ -1604,26 +1609,39 @@ function obReaction(step, p) {
   if (step === "goals") return p.goals.length ? "Noté ! Tes leçons parleront de ça." : "";
   if (step === "time") return ({ 5:"Petit à petit, ça marche !", 10:"Le bon rythme pour une vraie habitude.", 15:"Super rythme !", 20:"Sérieux ! Tu vas progresser vite.", 30:"Intense ! J'adore ta motivation.", 45:"Mode champion activé !" })[p.daily_minutes] || "";
   if (step === "diffs") return p.difficulties.length ? "Je vais surtout t'entraîner là-dessus." : "Rien en tête ? Le test m'aidera à voir.";
-  if (step === "name") { const n = (S.ui.firstName ?? p.first_name ?? "").trim(); return n ? `Enchanté, ${n} !` : ""; }
+  if (step === "name") { const n = obName(); return n ? `Enchanté, ${n} !` : ""; }
+  if (step === "pseudo") return PSEUDO_RE.test(obUser()) ? `Trop bien, @${obUser()} !` : "";
+  if (step === "account") return "Dernière étape !";
   return "";
 }
 function obReady() {
-  const u = S.ui, p = obDraft();
-  const name = (u.firstName ?? p.first_name ?? "").trim();
-  if (!name) return false;
-  if (S.authUser) return true;
-  return okEmail(u.email) && String(u.pass || "").length >= 8;
+  const u = S.ui, step = obSteps()[u.step || 0];
+  if (step === "name") return !!obName();
+  if (step === "pseudo") return PSEUDO_RE.test(obUser()) && avValid(obDraft().avatar_id);
+  if (step === "account") return okEmail(u.email) && String(u.pass || "").length >= 8;
+  return true;
 }
 async function obNext() {
   const u = S.ui, p = obDraft();
-  const i = u.step || 0, step = OB_STEPS[i];
+  const steps = obSteps(), i = u.step || 0, step = steps[i];
+  if (step === "name") {
+    if (!obName()) { u.error = "Indique ton prénom."; return render(); }
+    p.first_name = obName().slice(0, 40);
+  }
+  if (step === "pseudo") {
+    if (!PSEUDO_RE.test(obUser())) { u.error = "Ton pseudo : 3 à 20 caractères (lettres, chiffres, point ou tiret bas)."; return render(); }
+    if (!avValid(p.avatar_id)) { u.error = "Choisis ton personnage."; return render(); }
+    p.username = obUser();
+  }
+  if (step === "account") {
+    if (!okEmail(u.email)) { u.error = "Cette adresse e-mail ne semble pas valide."; return render(); }
+    if (String(u.pass || "").length < 8) { u.error = "Ton mot de passe doit faire au moins 8 caractères."; return render(); }
+  }
   SFX.play("next");
-  if (step !== "name") { u.step = i + 1; if (S.profile) saveProfile(); render(); window.scrollTo(0, 0); return; }
-  const name = (u.firstName ?? p.first_name ?? S.suggestedName ?? "").trim();
-  if (!name) { u.error = "Indique ton prénom."; return render(); }
-  if (!S.authUser && !okEmail(u.email)) { u.error = "Cette adresse e-mail ne semble pas valide."; return render(); }
-  if (!S.authUser && String(u.pass || "").length < 8) { u.error = "Ton mot de passe doit faire au moins 8 caractères."; return render(); }
-  u.saving = true; u.error = ""; render();
+  u.error = "";
+  if (i < steps.length - 1) { u.step = i + 1; if (S.profile) saveProfile(); render(); window.scrollTo(0, 0); return; }
+  const name = p.first_name || obName();
+  u.saving = true; render();
   p.first_name = name.slice(0, 40); p.onboarded = true; if (!avValid(p.avatar_id)) p.avatar_id = avRandom();
   if (!S.authUser) {
     const { data, error } = await SB.auth.signUp({ email: u.email.trim(), password: u.pass, options: { data: { first_name: p.first_name }, emailRedirectTo: location.origin + location.pathname } });
@@ -1660,7 +1678,8 @@ function optRow(act, value, emoSvg, title, sub, on, multi) {
 }
 function viewOnboarding() {
   const p = obDraft(), u = S.ui;
-  const i = u.step || 0, step = OB_STEPS[i];
+  const steps = obSteps(), i = u.step || 0, step = steps[i];
+  if (step === "pseudo" && !avValid(p.avatar_id)) p.avatar_id = avRandom();
   const local = S.store.kind === "local";
   let body = "", canNext = true, nextLabel = "Continuer";
   if (step === "level") {
@@ -1681,16 +1700,35 @@ function viewOnboarding() {
     body = `${ask(OB_POSE.diffs, "Qu'est-ce qui te pose le plus de difficultés ?", "Facultatif : Vex en tiendra compte dès ta première leçon.")}
       <div class="options">${DIFFS.map(([v, t]) => optRow("ob-diff", v, EMO.diff[v], t, "", p.difficulties.includes(v), true)).join("")}</div>`;
   }
+  const last = i === steps.length - 1;
+  if (last) nextLabel = S.authUser ? "Continuer" : "Créer mon compte";
   if (step === "name") {
-    const name = u.firstName ?? p.first_name ?? "";
     canNext = obReady();
-    nextLabel = S.authUser ? "Continuer" : "Créer mon compte";
-    body = `${ask(OB_POSE.name, "Dernière étape : créons ton compte !")}
+    body = `${ask(OB_POSE.name, "Comment tu t'appelles ?", "Ton vrai prénom : c'est comme ça que Vex t'appellera.")}
       <form class="stack" data-form="ob-name" novalidate style="gap:10px">
-        <label class="option" style="cursor:text">${emo(EMO.name)}<input id="firstName" class="name-input" autocomplete="given-name" placeholder="Ton prénom" value="${esc(name)}" maxlength="40" aria-label="Ton prénom"></label>
-        ${S.authUser ? "" : `<input id="obEmail" class="input" type="email" autocomplete="email" placeholder="Ton adresse e-mail" value="${esc(u.email || "")}" aria-label="Ton adresse e-mail">
-        <input id="obPass" class="input" type="password" autocomplete="new-password" placeholder="Un mot de passe (8 caractères minimum)" aria-label="Ton mot de passe">
-        <p class="small muted">Déjà inscrit ? <button type="button" class="link" data-go="login">Connecte-toi</button>. En créant ton compte, tu acceptes que tes réponses soient analysées par l'IA pour personnaliser tes leçons.</p>`}
+        <label class="option" style="cursor:text">${emo(EMO.name)}<input id="firstName" class="name-input" autocomplete="given-name" placeholder="Ton prénom" value="${esc(u.firstName ?? p.first_name ?? "")}" maxlength="40" aria-label="Ton prénom"></label>
+        ${notice(u.error)}
+        <button type="submit" hidden></button>
+      </form>`;
+  }
+  if (step === "pseudo") {
+    canNext = obReady();
+    body = `${ask(OB_POSE.pseudo, "Choisis ton pseudo et ton personnage !", "C'est ce que les autres verront de toi.")}
+      <form class="stack" data-form="ob-name" novalidate style="gap:14px">
+        <div class="ob-me">${avatarHTML(p, 76)}<div class="user-in" style="flex:1"><span>@</span><input id="obUser" class="input big-input" style="padding-left:32px" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ton_pseudo" value="${esc(u.username ?? p.username ?? "")}" maxlength="21" aria-label="Ton pseudo"></div></div>
+        <p class="small muted" style="margin-top:-6px">3 à 20 caractères : lettres, chiffres, point ou tiret bas.</p>
+        <div class="av-grid" role="radiogroup" aria-label="Personnages">${AVATAR.LIST.map((o, k) => `<button type="button" class="av-pick ${p.avatar_id === k ? "is-on" : ""}" data-act="ob-av" data-v="${k}" role="radio" aria-checked="${p.avatar_id === k}" aria-label="Personnage ${k + 1}">${AVATAR.svg(o, true)}</button>`).join("")}</div>
+        ${notice(u.error)}
+        <button type="submit" hidden></button>
+      </form>`;
+  }
+  if (step === "account") {
+    canNext = obReady();
+    body = `${ask(OB_POSE.account, "Dernière étape : sécurise ton compte !", "Pour retrouver ta progression sur tous tes appareils.")}
+      <form class="stack" data-form="ob-name" novalidate style="gap:10px">
+        <input id="obEmail" class="input big-input" type="email" autocomplete="email" placeholder="Ton adresse e-mail" value="${esc(u.email || "")}" aria-label="Ton adresse e-mail">
+        <input id="obPass" class="input big-input" type="password" autocomplete="new-password" placeholder="Un mot de passe (8 caractères minimum)" aria-label="Ton mot de passe">
+        <p class="small muted">Déjà inscrit ? <button type="button" class="link" data-go="login">Connecte-toi</button>. En créant ton compte, tu acceptes que tes réponses soient analysées par l'IA pour personnaliser tes leçons.</p>
         ${notice(u.error)}
         <button type="submit" hidden></button>
       </form>`;
@@ -1698,7 +1736,7 @@ function viewOnboarding() {
   const reaction = obReaction(step, p);
   return `
   <div class="flow">
-    ${flowTop("ob-prev", ((i + 1) / OB_STEPS.length) * 100, `${i + 1}/${OB_STEPS.length}`, i === 0 ? "Retour à l'accueil" : "Question précédente")}
+    ${flowTop("ob-prev", ((i + 1) / steps.length) * 100, `${i + 1}/${steps.length}`, i === 0 ? "Retour à l'accueil" : "Question précédente")}
     <main class="flow-body enter" data-step="${i}">${body}</main>
     <footer class="flow-foot"><div class="flow-foot-in">
       <span class="foot-msg" aria-live="polite">${reaction ? vx("st_joy", 34) + `<span>${esc(reaction)}</span>` : ""}</span>
@@ -3310,6 +3348,7 @@ $app.addEventListener("click", (ev) => {
     case "ob-diff": { const d = obDraft(); d.difficulties = toggle(d.difficulties, v); const on = d.difficulties.includes(v); SFX.play(on ? "select" : "unselect"); render(); if (on) vxReact(lead(), "nod"); break; }
     case "ob-prev": SFX.play("back"); swapScreen(() => { if (!(u.step > 0)) { go("home"); return; } u.step -= 1; u.error = ""; render(); }); break;
     case "ob-next": swapScreen(() => obNext()); break;
+    case "ob-av": obDraft().avatar_id = Number(v); SFX.play("select"); render(); { const l = document.querySelector(".ob-me .avatar"); if (l) vxAnim(l, [{ transform: "scale(.8)" }, { transform: "scale(1.08)" }, { transform: "scale(1)" }], { duration: 380, easing: "ease-out" }); } break;
     case "cheer-go": SFX.play("tap"); endCheer(); break;
     case "buy": { const done = buyItem(v); u.shopMsg = done ? "Achat effectué : tes vies sont rechargées." : ""; if (done) { render(); const l = document.querySelector(".vx.lead"); if (l) vxReact(l, "love"); } break; }
     case "buy-heart-go": {
@@ -3416,6 +3455,12 @@ $app.addEventListener("pointerenter", (ev) => {
 $app.addEventListener("input", (ev) => {
   const t = ev.target, u = S.ui;
   if (t.id === "obEmail") { u.email = t.value; const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady(); }
+  if (t.id === "obUser") {
+    u.username = t.value; u.error = "";
+    const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady();
+    const rx = document.querySelector(".foot-msg"); const v = obUser();
+    if (rx) rx.innerHTML = PSEUDO_RE.test(v) ? vx("st_joy", 34) + `<span>${esc("Trop bien, @" + v + " !")}</span>` : "";
+  }
   if (t.id === "obPass") { u.pass = t.value; const b = document.querySelector('[data-act="ob-next"]'); if (b) b.disabled = !obReady(); }
   if (t.id === "firstName") {
     u.firstName = t.value;
