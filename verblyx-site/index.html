@@ -724,6 +724,11 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .avatar.av-char svg { width: 100%; height: 100%; display: block; }
 .av-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 10px; margin-top: 14px; }
 .ob-me { display: flex; align-items: center; gap: 14px; }
+.btn-google { background: #fff; color: #1F1F1F; box-shadow: 0 1px 0 rgba(0, 0, 0, .25); font-weight: 600; }
+.btn-google:hover:not(:disabled) { background: #F1F3F4; }
+.btn-google .spinner { border-color: rgba(0, 0, 0, .15); border-top-color: #1F1F1F; }
+.or-line { display: flex; align-items: center; gap: 12px; color: var(--faint); font-size: 13px; margin: 6px 0; }
+.or-line::before, .or-line::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 .lb-tabs { align-self: flex-start; }
 .vip-tag { display: inline-flex; align-items: center; gap: 3px; height: 19px; padding: 0 7px 0 5px; border-radius: 999px; vertical-align: middle; background: linear-gradient(135deg, #FFE7A0, #F6BE3B 45%, #C98A0B); color: #3A2600; font: 800 10.5px/1 var(--f-body); letter-spacing: .06em; box-shadow: 0 0 12px -3px rgba(246, 190, 59, .8), inset 0 1px 0 rgba(255, 255, 255, .6); white-space: nowrap; }
 .vip-tag .ico { width: 11px; height: 11px; color: #3A2600; }
@@ -1461,7 +1466,7 @@ Object.assign(FROM_HASH, { classement: "competition", inscription: "onboarding",
 function allowed(view) {
   const p = S.profile;
   if (view === "newpass") return view;
-  if (view === "login" || view === "checkmail") return S.authUser && p ? "dashboard" : view;
+  if (view === "login" || view === "checkmail") return S.authUser ? (p && p.onboarded ? "dashboard" : "onboarding") : view;
   if (view === "home") return "home";
   if (!p || !p.onboarded) return "onboarding";
   if (!p.placement_done) return view === "celebrate" ? "celebrate" : "test";
@@ -1663,7 +1668,7 @@ const OB_BASE = ["level", "goals", "time", "diffs", "name", "pseudo"];
 const obSteps = () => S.authUser ? OB_BASE : [...OB_BASE, "account"];
 const OB_POSE = { level: "think", goals: "go", time: "chart", diffs: "heart", name: "wave", pseudo: "pro", account: "go" };
 const PSEUDO_RE = /^[A-Za-z0-9._]{3,20}$/;
-const obName = () => (S.ui.firstName ?? obDraft().first_name ?? "").trim();
+const obName = () => (S.ui.firstName ?? (obDraft().first_name || S.suggestedName || "")).trim();
 const obUser = () => String(S.ui.username ?? obDraft().username ?? "").trim().replace(/^@+/, "");
 function obDraft() {
   if (S.profile) return S.profile;
@@ -1772,7 +1777,7 @@ function viewOnboarding() {
     canNext = obReady();
     body = `${ask(OB_POSE.name, "Comment tu t'appelles ?", "Ton vrai prénom : c'est comme ça que Vex t'appellera.")}
       <form class="stack" data-form="ob-name" novalidate style="gap:10px">
-        <label class="option" style="cursor:text">${emo(EMO.name)}<input id="firstName" class="name-input" autocomplete="given-name" placeholder="Ton prénom" value="${esc(u.firstName ?? p.first_name ?? "")}" maxlength="40" aria-label="Ton prénom"></label>
+        <label class="option" style="cursor:text">${emo(EMO.name)}<input id="firstName" class="name-input" autocomplete="given-name" placeholder="Ton prénom" value="${esc(u.firstName ?? (p.first_name || S.suggestedName || ""))}" maxlength="40" aria-label="Ton prénom"></label>
         ${notice(u.error)}
         <button type="submit" hidden></button>
       </form>`;
@@ -1794,6 +1799,7 @@ function viewOnboarding() {
       <form class="stack" data-form="ob-name" novalidate style="gap:10px">
         <input id="obEmail" class="input big-input" type="email" autocomplete="email" placeholder="Ton adresse e-mail" value="${esc(u.email || "")}" aria-label="Ton adresse e-mail">
         <input id="obPass" class="input big-input" type="password" autocomplete="new-password" placeholder="Un mot de passe (8 caractères minimum)" aria-label="Ton mot de passe">
+        ${orLine()}${googleBtn("S'inscrire avec Google")}
         <p class="small muted">Déjà inscrit ? <button type="button" class="link" data-go="login">Connecte-toi</button>. En créant ton compte, tu acceptes que tes réponses soient analysées par l'IA pour personnaliser tes leçons.</p>
         ${notice(u.error)}
         <button type="submit" hidden></button>
@@ -3483,6 +3489,7 @@ $app.addEventListener("click", (ev) => {
     case "forgot-on": u.forgot = true; u.error = ""; render(); break;
     case "forgot-off": u.forgot = false; u.error = ""; u.info = ""; render(); break;
     case "logout": doLogout(); break;
+    case "google": googleSignIn(); break;
     case "sound": SFX.toggle(); render(); break;
     case "strip": { const st = document.getElementById("strip"); if (st) st.scrollBy({ left: Number(v) * 260, behavior: "smooth" }); break; }
     case "ob-level": obDraft().self_level = v; SFX.play("select"); render(); vxReact(lead(), v === "unknown" ? "nod" : "cheer"); break;
@@ -3903,9 +3910,12 @@ async function enterSession(session) {
     S.profile = profile; S.vocab = vocab || {};
   } catch { $app.innerHTML = bootScreen("Impossible de charger tes données", "Vérifie ta connexion, puis recharge la page."); return; }
   // Inscription confirmée par e-mail : on récupère le profil préparé avant la confirmation
+  let joined = false;
+  const meta = session.user.user_metadata || {};
+  S.suggestedName = String(meta.given_name || meta.first_name || String(meta.full_name || meta.name || "").split(" ")[0] || "").slice(0, 40);
   if (!S.profile) {
-    try { const pend = JSON.parse(localStorage.getItem("verblyx:pending") || "null"); if (pend) { S.profile = pend; await S.store.saveProfile(pend); localStorage.removeItem("verblyx:pending"); } } catch {}
-  }
+    try { const pend = JSON.parse(localStorage.getItem("verblyx:pending") || "null"); if (pend) { S.profile = pend; await S.store.saveProfile(pend); localStorage.removeItem("verblyx:pending"); joined = true; } } catch {}
+  } else { try { localStorage.removeItem("verblyx:pending"); } catch {} }
   if (S.profile) {
     const p = S.profile;
     p.course = p.course || newCourse(p.cefr_level || "A1"); p.coins = p.coins || 0; if (typeof p.hearts !== "number") p.hearts = HEART_MAX; p.freezes = p.freezes || 0;
@@ -3917,7 +3927,8 @@ async function enterSession(session) {
     p.skills = p.skills || {}; p.goals = p.goals || []; p.difficulties = p.difficulties || []; p.days = p.days || {}; p.xp = p.xp || 0; p.streak = p.streak || 0;
   }
   const fromHash = FROM_HASH[location.hash.slice(1)];
-  S.view = fromHash ? allowed(fromHash) : allowed("dashboard");
+  S.view = joined && !S.profile.placement_done ? "celebrate" : fromHash ? allowed(fromHash) : allowed("dashboard");
+  if (/access_token|refresh_token|error_description/.test(location.hash)) { try { history.replaceState(null, "", location.pathname + "#" + (HASH[S.view] || "")); } catch {} }
   S.ui = {};
   applyMotion();
   render();
@@ -3931,6 +3942,7 @@ const frAuth = (m) => {
   if (/password should be at least|weak password/i.test(m)) return "Ton mot de passe doit faire au moins 8 caractères.";
   if (/rate limit|too many/i.test(m)) return "Trop de tentatives. Patiente une minute avant de réessayer.";
   if (/invalid email|valid email/i.test(m)) return "Cette adresse e-mail ne semble pas valide.";
+  if (/provider is not enabled|unsupported provider/i.test(m)) return "La connexion avec Google n'est pas encore activée sur Verblyx.";
   return m || "Une erreur est survenue. Réessaie.";
 };
 const okEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(e || "").trim());
@@ -3956,7 +3968,8 @@ function viewLogin() {
       ${notice(u.error)}
       <button class="btn btn-primary btn-lg btn-block" ${u.busy ? "disabled" : ""}>${u.busy ? '<span class="spinner"></span>' : ""}Se connecter</button>
       <div class="row between"><button type="button" class="link" data-act="forgot-on">Mot de passe oublié ?</button><button type="button" class="link" data-act="start">Créer un compte</button></div>
-    </form>`);
+    </form>
+    ${orLine()}${googleBtn()}`);
 }
 function viewCheckMail() {
   return authShell(`${ask("love", "Presque fini ! Confirme ton adresse e-mail.", "", 120)}
@@ -3971,6 +3984,22 @@ function viewNewPass() {
       ${notice(u.error)}
       <button class="btn btn-primary btn-lg btn-block" ${u.busy ? "disabled" : ""}>Enregistrer</button>
     </form>`);
+}
+const GOOGLE_G = `<svg viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>`;
+const googleBtn = (label = "Continuer avec Google") => `<button type="button" class="btn btn-google btn-lg btn-block" data-act="google" ${S.ui.gBusy ? "disabled" : ""}>${S.ui.gBusy ? '<span class="spinner"></span>' : GOOGLE_G}${label}</button>`;
+const orLine = () => `<div class="or-line"><span>ou</span></div>`;
+async function googleSignIn() {
+  const u = S.ui;
+  // Inscription : on garde le profil préparé (questionnaire, prénom, pseudo, personnage) pendant le passage chez Google
+  if (S.view === "onboarding") {
+    const p = obDraft();
+    p.first_name = (p.first_name || obName()).slice(0, 40); p.onboarded = true;
+    if (!avValid(p.avatar_id)) p.avatar_id = avRandom();
+    try { localStorage.setItem("verblyx:pending", JSON.stringify(p)); } catch {}
+  }
+  u.gBusy = true; u.error = ""; render();
+  const { error } = await SB.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } });
+  if (error) { u.gBusy = false; u.error = frAuth(error.message); render(); }
 }
 async function doLogin() {
   const u = S.ui, email = (document.getElementById("loginEmail").value || "").trim(), pass = document.getElementById("loginPass").value || "";
