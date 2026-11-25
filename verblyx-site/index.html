@@ -730,6 +730,13 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .legal-links.on-land { padding: 12px 4px 0; }
 .gift-modal { z-index: 90; }
 .badge span { overflow-wrap: anywhere; hyphens: auto; font-size: 11px; line-height: 1.2; max-width: 100%; }
+.side-lv { margin-top: auto; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; width: 100%; padding: 4px 6px 2px; border: 0; background: none; color: var(--fg); text-align: left; cursor: pointer; }
+.side-lv b { font: 800 19px var(--f-display); letter-spacing: -.01em; }
+.side-lv .progress { height: 9px; }
+.side-lv span { font-size: 12.5px; color: var(--muted); }
+.side-lv:hover b { color: var(--success); }
+.side-lv + .side-foot { margin-top: 0; }
+@media (max-width: 1023px) { .side-lv { display: none; } .side-lv + .side-foot { margin-top: auto; } }
 .xp-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 9px; border-radius: 999px; background: rgba(0, 214, 181, .13); border: 1px solid rgba(0, 214, 181, .35); color: var(--success); font: 800 12.5px var(--f-body); white-space: nowrap; }
 .xp-chip .ico { width: 13px; height: 13px; }
 .goal-bonus { border-color: rgba(0, 214, 181, .45); background: radial-gradient(240px 120px at 100% 0%, rgba(0, 214, 181, .14), transparent 70%), var(--surface); }
@@ -1492,7 +1499,8 @@ const strongSkills = () => skillList().filter((s) => s.mastery >= 0.8 && s.attem
 
 
 /* ---------- Objectifs, séries et récompenses ---------- */
-const GOAL_XP = { 5: 20, 10: 30, 15: 40, 20: 50, 30: 70, 45: 100 };
+// environ 10 XP pour 5 minutes (une leçon)
+const GOAL_XP = { 5: 10, 10: 20, 15: 30, 20: 40, 30: 60, 45: 90 };
 const goalXp = () => GOAL_XP[S.profile.daily_minutes] || 30;
 const todayXp = () => (S.profile.days || {})[today()] || 0;
 function liveStreak() {
@@ -2109,8 +2117,8 @@ function levelProgress(levelId) {
 }
 
 /* ---------- Récompenses : XP, pièces, gemmes ---------- */
-const xpLevel = (xp) => { let n = 1; while (50 * (n + 1) * n <= xp) n++; return n; };
-const xpLevelFloor = (n) => 50 * n * (n - 1);
+const xpLevel = (xp) => { let n = 1; while (20 * (n + 1) * n <= xp) n++; return n; };
+const xpLevelFloor = (n) => 20 * n * (n - 1);
 const FREEZE_COST = 100;
 const SRS_DAYS = [0, 1, 2, 4, 7, 15, 30];
 const addDays = (n) => dayKey(new Date(Date.now() + n * 864e5));
@@ -2454,6 +2462,10 @@ function say(text, slow) {
   if (!S.tts || !text) return;
   S.tts.speak(String(text), { language: "en", rate: slow ? .72 : 1 }).catch(() => {});
 }
+function sessionXpMax(ses) {
+  if (ses.kind === "lesson" || ses.kind === "focus") return (ses.items || []).filter((x) => x.t === "ex" && !x.retry).length > 9 ? 15 : 10;
+  return ses.kind === "unit" ? 20 : ses.kind === "exam" ? 30 : 5;
+}
 async function finishSession() {
   const ses = S.session, p = S.profile, st = ses.stats, c = course();
   const score = st.n ? st.ok / st.n : 1;
@@ -2471,18 +2483,21 @@ async function finishSession() {
   } else if (ses.kind === "unit") {
     const prev = c.tests[ses.st.unit];
     r.passed = score >= .7;
-    if (r.passed && !(prev && prev.passed)) { r.coins = 30 + (score === 1 ? 10 : 0); r.xp += 20; }
+    if (r.passed && !(prev && prev.passed)) { r.coins = 30 + (score === 1 ? 10 : 0); }
     c.tests[ses.st.unit] = { best: Math.max(score, prev ? prev.best : 0), passed: r.passed || !!(prev && prev.passed), at: t };
   } else if (ses.kind === "exam") {
     const prev = c.exams[ses.st.level];
     r.passed = score >= .8;
     if (r.passed && !(prev && prev.passed)) {
-      r.coins = 60; r.xp += 50;
+      r.coins = 60;
       const nxt = LEVELS[lvIdx(ses.st.level) + 1];
       if (nxt && lvIdx(p.cefr_level) <= lvIdx(ses.st.level)) { p.cefr_level = nxt; r.levelUp = nxt; p.levelups = (p.levelups || 0) + 1; }
     }
     c.exams[ses.st.level] = { best: Math.max(score, prev ? prev.best : 0), passed: r.passed || !!(prev && prev.passed), at: t };
   } else { r.coins = 5; p.reviews = (p.reviews || 0) + (ses.kind === "review" ? 1 : 0); if (ses.kind === "review" && p.hearts < HEART_MAX) { addHearts(1); r.heart = 1; } }
+  // XP : 10 par leçon (15 si elle est longue), 20 pour un point de contrôle, 30 pour une certification, 5 pour une révision
+  const xpMax = sessionXpMax(ses);
+  r.xp = Math.round(xpMax * (st.n ? st.ok / st.n : 0));
   // Série, objectif du jour, portefeuille, badges
   const y = yesterday();
   p.streak = p.last_active === t ? p.streak : p.last_active === y ? (p.streak || 0) + 1 : 1;
@@ -2555,6 +2570,7 @@ function viewShell(inner) {
     <aside class="side">
       ${logo()}
       ${(S.isAdmin ? [...NAV, ["admin", "Admin", "i-gear"]] : NAV).map(([v, t, ic]) => `<button class="nav-item ${cur === v ? "is-active" : ""}" data-go="${v}" aria-label="${t}" ${cur === v ? 'aria-current="page"' : ""}>${icon(ic)}<span>${t}</span></button>`).join("")}
+      ${(() => { const xp = p.xp || 0, n = xpLevel(xp), lo = xpLevelFloor(n), hi = xpLevelFloor(n + 1); return `<button class="side-lv" data-go="profile" aria-label="Niveau ${n}, ${hi - xp} XP avant le niveau ${n + 1}"><b>Niveau ${n}</b>${progress(((xp - lo) / (hi - lo)) * 100, "thin")}<span>${hi - xp} XP avant le niveau ${n + 1}</span></button>`; })()}
       <div class="side-foot">
         ${avatarHTML(p, 36, S.isVip)}
         <span class="who"><b>${esc(p.first_name || "Élève")}</b><span class="small muted" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${S.isVip ? vipTag() + " " : ""}${p.username ? "@" + esc(p.username) + " · " : ""}Niveau ${esc(p.cefr_level)}</span>${S.store.kind === "local" ? `<span class="small" style="display:block;color:var(--warn)">Mode démo</span>` : ""}</span>
@@ -2704,9 +2720,8 @@ function viewMap() {
 }
 // XP maximum qu'une étape rapporte (toutes les réponses justes du premier coup)
 function stepXp(s) {
-  if (s.kind === "lesson") { const c = COURSE.content && COURSE.content[s.id]; const pr = c ? Math.min(7, (c.practice || []).length) : 6, ms = c ? Math.min(4, (c.master || []).length) : 3; return pr * 2 + ms * 3; }
-  if (s.kind === "unit") return 12 * 3 + 20;
-  return 19 * 3 + 50;
+  if (s.kind === "lesson") { const c = COURSE.content && COURSE.content[s.id]; return c && ((c.practice || []).length + (c.master || []).length) > 9 ? 15 : 10; }
+  return s.kind === "unit" ? 20 : 30;
 }
 function stationCard(s, st, label, best) {
   const kindLabel = s.kind === "lesson" ? `Leçon ${s.li + 1} sur ${s.n}` : s.kind === "unit" ? "70 % pour valider le chapitre" : `80 % pour valider le niveau ${s.level}`;
@@ -3504,7 +3519,7 @@ function viewSession() {
           ${r.explain ? `<span class="soft small">${esc(r.explain)}</span>` : ""}
         </div>
       </div>`;
-      foot = `<span class="foot-note">${r.ok ? icon("i-pulse") + " +" + (it.retry ? 1 : it.phase === "practice" || it.phase === "review" ? (it.phase === "review" ? 1 : 2) : 3) + " XP" : ""}</span><button class="btn btn-primary btn-lg" data-act="next">Continuer</button>`;
+      foot = `<span class="foot-note">${r.ok ? icon("i-check") + " Bien joué" : ""}</span><button class="btn btn-primary btn-lg" data-act="next">Continuer</button>`;
     } else {
       const ready = it.ex.type === "match" ? false : !!String(answerOf(it)).trim();
       foot = `${it.ex.type === "speak" ? `<button class="btn btn-ghost" data-act="skip">Je ne peux pas parler</button>` : "<span></span>"}
