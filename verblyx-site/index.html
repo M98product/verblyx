@@ -729,6 +729,20 @@ img.avatar { object-fit: cover; padding: 0; background: var(--surface-3); }
 .legal-links button:hover { color: #93A8B1; }
 .legal-links.on-land { padding: 12px 4px 0; }
 .gift-modal { z-index: 90; }
+.badge span { overflow-wrap: anywhere; hyphens: auto; font-size: 11px; line-height: 1.2; max-width: 100%; }
+.xp-chip { flex: none; display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 9px; border-radius: 999px; background: rgba(0, 214, 181, .13); border: 1px solid rgba(0, 214, 181, .35); color: var(--success); font: 800 12.5px var(--f-body); white-space: nowrap; }
+.xp-chip .ico { width: 13px; height: 13px; }
+.goal-bonus { border-color: rgba(0, 214, 181, .45); background: radial-gradient(240px 120px at 100% 0%, rgba(0, 214, 181, .14), transparent 70%), var(--surface); }
+.secret-hint { display: flex; align-items: center; gap: 6px; margin-top: 14px; font-size: 12.5px; color: var(--faint); }
+.secret-hint .ico { width: 14px; height: 14px; }
+.secret-mini { display: flex; align-items: center; gap: 6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); color: #FFD56B; font-weight: 700; }
+.secret-mini .medal { width: 30px; height: 30px; }
+.badge.secret-on .medal { filter: drop-shadow(0 0 10px rgba(246, 190, 59, .55)); }
+.lv-ring { width: 128px; height: 128px; border-radius: 50%; padding: 6px; background: conic-gradient(#5CF3DA, #1677FF, #B68CFF, #FF5C8A, #FFD45A, #5CF3DA); box-shadow: 0 0 40px -6px rgba(92, 243, 218, .6); margin: 2px 0 4px; }
+.lv-ring-in { width: 100%; height: 100%; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #1F2129; }
+.lv-ring-in small { font: 700 11px var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.lv-ring-in b { font: 800 50px/1 var(--f-display); background: linear-gradient(180deg, #fff, #5CF3DA); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lv-next { width: 100%; display: flex; flex-direction: column; gap: 6px; margin: 4px 0 8px; }
 .gift-modal .modal-bg { background: radial-gradient(600px 420px at 50% 40%, rgba(22, 119, 255, .28), rgba(3, 6, 12, .78)); }
 .gift-modal.is-vip .modal-bg { background: radial-gradient(600px 420px at 50% 40%, rgba(246, 190, 59, .32), rgba(8, 6, 2, .8)); }
 .gp-panel { max-width: 430px; align-items: center; text-align: center; gap: 10px; padding: 26px 26px 22px; overflow: visible; background: linear-gradient(180deg, #2A2D3A, #1F2129); border-color: rgba(92, 243, 218, .35); animation: gp-in .6s var(--spring) both; }
@@ -1492,6 +1506,9 @@ function weekActivity() {
   return out;
 }
 const MEDAL = (glyph, a = "#1677FF", b = "#00D6B5") => `<svg class="medal" viewBox="0 0 52 52" aria-hidden="true"><defs><linearGradient id="m-${a.slice(1)}${b.slice(1)}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><circle cx="26" cy="26" r="24" fill="url(#m-${a.slice(1)}${b.slice(1)})"/><circle cx="26" cy="26" r="19" fill="none" stroke="#EAFBFF" stroke-opacity=".28" stroke-width="2"/><g fill="none" stroke="#EAFBFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${glyph}</g></svg>`;
+const GOLD = ["#F6BE3B", "#B37A08"], ROSE = ["#7C5CFF", "#FF5C8A"], NIGHT = ["#1B2A6B", "#7C5CFF"];
+const lvGlyph = (n) => `<text x="26" y="${n >= 100 ? 31 : 32}" text-anchor="middle" font-family="Plus Jakarta Sans,Inter,sans-serif" font-weight="800" font-size="${n >= 100 ? 13 : 16}" fill="#fff" stroke="none">${n}</text>`;
+const fire = `<path d="M26 13c4 5 9 8 9 15a9 9 0 0 1-18 0c0-4 2-6 4-8 0 3 2 5 4 5-2-4-1-8 1-12z" fill="#EAFBFF" stroke="none"/>`;
 const BADGES = [
   { id: "first", name: "Premier pas", desc: "Terminer une leçon", test: (c) => c.done >= 1, svg: MEDAL(`<path d="M20 33V19l12 7z" fill="#EAFBFF" stroke="none"/>`) },
   { id: "streak3", name: "En rythme", desc: "Pulse de 3 jours", test: (c) => c.bestStreak >= 3, svg: MEDAL(`<path d="M27 15l-7 12h7l-2 10 8-13h-7z" fill="#EAFBFF" stroke="none"/>`, "#0E9F8A", "#00D6B5") },
@@ -1503,14 +1520,31 @@ const BADGES = [
   { id: "review10", name: "Mémoire d'acier", desc: "10 séances de révision", test: (c) => c.reviews >= 10, svg: MEDAL(`<path d="M18 26a8 8 0 1 0 2.5-5.8M18 18v5h5"/>`, "#0E9F8A", "#00D6B5") },
   { id: "level", name: "Niveau validé", desc: "Réussir un examen de niveau", test: (c) => c.exams >= 1, svg: MEDAL(`<path d="M17 31l3-11 6 6 6-6 3 11z" fill="#EAFBFF" stroke="none"/>`, "#0B4DB5", "#00D6B5") },
   { id: "streak30", name: "Légende", desc: "Pulse de 30 jours", test: (c) => c.bestStreak >= 30, svg: MEDAL(`<path d="M26 15l3 7 7 .5-5.5 4.5 2 7-6.5-4-6.5 4 2-7L16 22.5l7-.5z" fill="#EAFBFF" stroke="none"/>`, "#0E9F8A", "#1677FF") },
+  // Badges secrets : cachés tant qu'ils ne sont pas débloqués
+  { id: "lv10", secret: true, name: "Niveau 10", desc: "Atteindre le niveau d'expérience 10", test: (c) => c.xpLv >= 10, svg: MEDAL(lvGlyph(10), ...GOLD) },
+  { id: "lv25", secret: true, name: "Niveau 25", desc: "Atteindre le niveau d'expérience 25", test: (c) => c.xpLv >= 25, svg: MEDAL(lvGlyph(25), ...GOLD) },
+  { id: "lv50", secret: true, name: "Niveau 50", desc: "Atteindre le niveau d'expérience 50", test: (c) => c.xpLv >= 50, svg: MEDAL(lvGlyph(50), ...ROSE) },
+  { id: "lv100", secret: true, name: "Niveau 100", desc: "Atteindre le niveau d'expérience 100", test: (c) => c.xpLv >= 100, svg: MEDAL(lvGlyph(100), ...ROSE) },
+  { id: "pulse50", secret: true, name: "50 jours de feu", desc: "Pulse de 50 jours d'affilée", test: (c) => c.bestStreak >= 50, svg: MEDAL(fire, ...GOLD) },
+  { id: "pulse100", secret: true, name: "Centenaire", desc: "Pulse de 100 jours d'affilée", test: (c) => c.bestStreak >= 100, svg: MEDAL(fire + `<circle cx="26" cy="26" r="15"/>`, ...ROSE) },
+  { id: "pulse365", secret: true, name: "Un an de Pulse", desc: "Pulse de 365 jours d'affilée", test: (c) => c.bestStreak >= 365, svg: MEDAL(`<path d="M17 31l3-11 6 6 6-6 3 11z" fill="#FFE9A6" stroke="none"/>` + `<path d="M18 35h16"/>`, ...ROSE) },
+  { id: "rich", secret: true, name: "Trésorier", desc: "Avoir 1 000 pièces en même temps", test: (c) => c.coins >= 1000, svg: MEDAL(`<circle cx="26" cy="26" r="8" fill="#FFE9A6" stroke="none"/><circle cx="26" cy="26" r="5" fill="none" stroke="#B37A08" stroke-width="1.6"/>`, ...GOLD) },
+  { id: "lessons100", secret: true, name: "Centurion", desc: "Terminer 100 leçons", test: (c) => c.done >= 100, svg: MEDAL(`<path d="M18 17h16v18H18z"/><path d="M22 22h8M22 26h8M22 30h5"/>`, ...GOLD) },
+  { id: "perfect10", secret: true, name: "Perfectionniste", desc: "Réussir 10 leçons sans faute", test: (c) => c.perfects >= 10, svg: MEDAL(`<path d="M16 26.5l5 5L36 17"/><path d="M16 33.5l5 5" opacity=".5"/>`, ...ROSE) },
+  { id: "night", secret: true, name: "Oiseau de nuit", desc: "Finir une leçon entre minuit et 5 h", test: (c) => c.night, svg: MEDAL(`<path d="M31 15a11 11 0 1 0 6 18 9 9 0 0 1-6-18z" fill="#EAFBFF" stroke="none"/>`, ...NIGHT) },
+  { id: "early", secret: true, name: "Lève-tôt", desc: "Finir une leçon entre 5 h et 7 h", test: (c) => c.early, svg: MEDAL(`<circle cx="26" cy="29" r="6" fill="#FFE9A6" stroke="none"/><path d="M26 16v3M16 29h-3M39 29h-3M19 21l2 2M33 21l-2 2M14 36h24"/>`, "#FF8A3D", "#F6BE3B") },
+  { id: "c2", secret: true, name: "Maître de l'anglais", desc: "Atteindre le niveau C2", test: (c) => c.c2, svg: MEDAL(`<text x="26" y="31" text-anchor="middle" font-family="Plus Jakarta Sans,Inter,sans-serif" font-weight="800" font-size="14" fill="#fff" stroke="none">C2</text>`, ...GOLD) },
 ];
 function badgeCtx() {
   const p = S.profile, c = course();
   return { done: Object.keys(c.done).length, bestStreak: Math.max(p.best_streak || 0, p.streak || 0), goals: p.goal_days || 0,
     perfect: Object.values(c.done).some((d) => d.gem), words: Object.keys(S.vocab).length, reviews: p.reviews || 0,
-    units: Object.values(c.tests).filter((t) => t.passed).length, exams: Object.values(c.exams).filter((t) => t.passed).length };
+    units: Object.values(c.tests).filter((t) => t.passed).length, exams: Object.values(c.exams).filter((t) => t.passed).length,
+    xpLv: xpLevel(p.xp || 0), coins: p.coins || 0, perfects: Object.values(c.done).filter((d) => d.gem).length,
+    night: !!p.night_owl, early: !!p.early_bird, c2: p.cefr_level === "C2" };
 }
-const unlockedBadges = () => { const c = badgeCtx(); return BADGES.filter((b) => b.test(c)).map((b) => b.id); };
+// un badge gagné reste gagné pour toujours (même si on dépense ses pièces ensuite)
+const unlockedBadges = () => { const c = badgeCtx(), had = (S.profile && S.profile.badges) || []; return BADGES.filter((b) => had.includes(b.id) || b.test(c)).map((b) => b.id); };
 
 /* ============================================================
    Navigation
@@ -1649,6 +1683,8 @@ function render() {
   if (S.doc) { html += docModal(); S.docAnim = false; }
   const showGift = S.giftPop && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
   if (showGift) html += giftModal();
+  const showLevel = S.levelPop && !showGift && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
+  if (showLevel) html += levelModal();
   $app.innerHTML = html;
   [".set-main", ".set-panel"].forEach((s, k) => { const e = document.querySelector(s); if (e && keepEls[k]) e.scrollTop = keepEls[k]; });
   document.querySelectorAll(".faq details").forEach((d, k) => { if (keepFaq[k]) d.open = true; });
@@ -1660,6 +1696,7 @@ function render() {
     if (el) setTimeout(() => vxReact(el, f.react), fresh ? 380 : 0);
   }
   if (showGift && S.giftPop.fresh) { S.giftPop.fresh = false; setTimeout(giftFx, 80); }
+  if (showLevel && S.levelPop.fresh) { S.levelPop.fresh = false; setTimeout(() => { giftFx(); const r = document.querySelector(".lv-ring"); if (r) vxAnim(r, [{ transform: "scale(.4) rotate(-20deg)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: .6 }, { transform: "none" }], { duration: 700, easing: "ease-out" }); }, 80); }
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
   if (v === "coach") { const end = document.getElementById("chat-end"); if (end) end.scrollIntoView({ block: "end" }); }
@@ -2454,7 +2491,15 @@ async function finishSession() {
   Object.keys(p.days).sort().slice(0, -60).forEach((k) => delete p.days[k]);
   r.goalReached = before < goalXp() && p.days[t] >= goalXp();
   if (r.goalReached) { p.goal_days = (p.goal_days || 0) + 1; r.coins += 10; }
+  // objectifs bonus : chaque palier supplémentaire rapporte 5 pièces
+  r.bonusGoals = Math.max(0, Math.floor(p.days[t] / goalXp()) - Math.max(1, Math.floor(before / goalXp())));
+  if (r.bonusGoals) r.coins += 5 * r.bonusGoals;
+  const hr = new Date().getHours(); if (hr < 5) p.night_owl = true; else if (hr < 7) p.early_bird = true;
+  r.lvBefore = xpLevel(p.xp || 0);
   p.xp = (p.xp || 0) + r.xp; p.coins = (p.coins || 0) + r.coins; p.gems = (p.gems || 0) + r.gems;
+  // passage de niveau : la fenêtre de fête s'ouvre en sortant de la séance
+  const lvAfter = xpLevel(p.xp);
+  if (lvAfter > r.lvBefore || r.levelUp) S.levelPop = { n: lvAfter, up: lvAfter > r.lvBefore, cefr: r.levelUp || null, fresh: true };
   const had = p.badges || [], nowB = unlockedBadges();
   r.newBadges = nowB.filter((b) => !had.includes(b)); p.badges = nowB;
   ses.done = r; ses.cheer = r.passed !== false && prefs().cheer;
@@ -2532,12 +2577,12 @@ function streakCard() {
   </section>`;
 }
 function goalCard() {
-  const g = goalXp(), x = todayXp(), pct = Math.min(100, (x / g) * 100);
-  return `<section class="card pad">
-    <span class="label">Objectif du jour</span>
+  const g = goalXp(), x = todayXp(), tier = Math.floor(x / g) + 1, target = tier * g, pct = Math.min(100, ((x - (tier - 1) * g) / g) * 100);
+  return `<section class="card pad ${tier > 1 ? "goal-bonus" : ""}">
+    <div class="row between" style="flex-wrap:nowrap"><span class="label">${tier === 1 ? "Objectif du jour" : `Objectif bonus ${tier > 2 ? "×" + tier : ""}`}</span>${tier > 1 ? `<span class="chip chip-teal" style="height:22px">${icon("i-check")}${tier - 1} atteint${tier > 2 ? "s" : ""}</span>` : ""}</div>
     <div class="goal" style="margin-top:12px">
       <svg class="ring" viewBox="0 0 72 72" aria-hidden="true"><circle class="bg" cx="36" cy="36" r="30" fill="none" stroke-width="8"/>${pct > 0 ? `<circle class="fg" cx="36" cy="36" r="30" fill="none" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="${pct} 100" transform="rotate(-90 36 36)"/>` : ""}</svg>
-      <div><p class="h3 num">${Math.min(x, g)} / ${g} XP</p><p class="small muted">${x >= g ? "Objectif atteint, bravo !" : `Encore ${g - x} XP aujourd'hui.`}</p></div>
+      <div><p class="h3 num">${x} / ${target} XP</p><p class="small muted">${tier === 1 ? `Encore ${g - x} XP aujourd'hui.` : `Objectif du jour atteint ! Bonus : encore ${target - x} XP pour +5 pièces.`}</p></div>
     </div>
   </section>`;
 }
@@ -2588,12 +2633,19 @@ function docModal() {
   </div>`;
 }
 
+const SECRET_MEDAL = `<svg class="medal" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="#2B2E3A"/><circle cx="26" cy="26" r="19" fill="none" stroke="#565B6B" stroke-width="2" stroke-dasharray="3 3"/><text x="26" y="33" text-anchor="middle" font-family="Plus Jakarta Sans,Inter,sans-serif" font-weight="800" font-size="20" fill="#6B7180">?</text></svg>`;
 function badgesCard(short) {
   const got = unlockedBadges();
-  const list = short ? BADGES.slice(0, 8) : BADGES;
+  const normal = BADGES.filter((b) => !b.secret), secret = BADGES.filter((b) => b.secret);
+  const secretGot = secret.filter((b) => got.includes(b.id));
+  const list = short ? [...normal.filter((b) => got.includes(b.id)), ...normal.filter((b) => !got.includes(b.id))].slice(0, 8) : normal;
+  const tile = (b) => `<div class="badge ${got.includes(b.id) ? "" : "locked"}" title="${esc(b.desc)}">${b.svg}<span>${b.name}</span></div>`;
   return `<section class="card pad">
-    <div class="row between"><span class="label">Succès</span><span class="small muted num">${got.length}/${BADGES.length}</span></div>
-    <div class="badges" style="margin-top:14px">${list.map((b) => `<div class="badge ${got.includes(b.id) ? "" : "locked"}" title="${esc(b.desc)}">${b.svg}<span>${b.name}</span></div>`).join("")}</div>
+    <div class="row between"><span class="label">Succès</span><span class="small muted num">${normal.filter((b) => got.includes(b.id)).length}/${normal.length}</span></div>
+    <div class="badges" style="margin-top:14px">${list.map(tile).join("")}</div>
+    ${short ? (secretGot.length ? `<div class="secret-mini">${secretGot.slice(0, 4).map((b) => `<span title="${esc(b.name)}">${b.svg}</span>`).join("")}<span class="small">${secretGot.length} badge${secretGot.length > 1 ? "s" : ""} secret${secretGot.length > 1 ? "s" : ""}</span></div>` : `<p class="secret-hint">${icon("i-lock")} ${secret.length} badges secrets à découvrir…</p>`)
+      : `<div class="row between" style="margin-top:22px"><span class="label">Badges secrets</span><span class="small muted num">${secretGot.length}/${secret.length}</span></div>
+    <div class="badges" style="margin-top:14px">${secret.map((b) => got.includes(b.id) ? `<div class="badge secret-on" title="${esc(b.desc)}">${b.svg}<span>${b.name}</span></div>` : `<div class="badge locked" title="Badge secret : continue d'apprendre pour le découvrir">${SECRET_MEDAL}<span>???</span></div>`).join("")}</div>`}
   </section>`;
 }
 
@@ -2650,6 +2702,12 @@ function viewMap() {
   return `${S.ui.err ? notice(S.ui.err) : ""}<div class="map">${html}</div>
     ${u.guide ? guideSheet(u.guide) : ""}`;
 }
+// XP maximum qu'une étape rapporte (toutes les réponses justes du premier coup)
+function stepXp(s) {
+  if (s.kind === "lesson") { const c = COURSE.content && COURSE.content[s.id]; const pr = c ? Math.min(7, (c.practice || []).length) : 6, ms = c ? Math.min(4, (c.master || []).length) : 3; return pr * 2 + ms * 3; }
+  if (s.kind === "unit") return 12 * 3 + 20;
+  return 19 * 3 + 50;
+}
 function stationCard(s, st, label, best) {
   const kindLabel = s.kind === "lesson" ? `Leçon ${s.li + 1} sur ${s.n}` : s.kind === "unit" ? "70 % pour valider le chapitre" : `80 % pour valider le niveau ${s.level}`;
   const again = st === "done" || st === "skipped";
@@ -2657,7 +2715,7 @@ function stationCard(s, st, label, best) {
   const dots = s.kind === "lesson" ? `<div class="mdots" aria-label="Méthode en 4 étapes">${METHOD.map((m) => `<span class="${again ? "on" : ""}" title="${m}">${m}</span>`).join("")}</div>` : "";
   return `<div class="stn-card ${st}">
     <div class="stn-body">
-      <span class="label">${kindLabel}</span>
+      <div class="row between" style="gap:8px;flex-wrap:nowrap"><span class="label">${kindLabel}</span><span class="xp-chip" title="XP gagnés si tu réponds juste du premier coup">${icon("i-bolt")}+${stepXp(s)} XP</span></div>
       <b class="h3">${esc(label)}</b>
       <p class="small soft">${esc(s.goal)}</p>
       ${dots}
@@ -3042,6 +3100,25 @@ function giftModal() {
     </div>
   </div>`;
 }
+function levelModal() {
+  const L = S.levelPop; if (!L) return "";
+  const next = xpLevelFloor(L.n + 1), cur = xpLevelFloor(L.n), xp = S.profile.xp || 0;
+  const conf = Array.from({ length: 30 }, (_, k) => `<i style="left:${(k * 41) % 100}%;background:${CONFETTI[k % 6]};--d:${(k % 8) * .3}s;--t:${2.6 + (k % 5) * .45}s;--r:${(k * 47) % 360}deg;--x:${((k % 7) - 3) * 22}px"></i>`).join("");
+  return `<div class="modal gift-modal lv-modal" role="dialog" aria-modal="true" aria-labelledby="lv-title">
+    <div class="modal-bg" data-act="level-close"></div>
+    <div class="confetti" aria-hidden="true">${conf}</div>
+    <div class="modal-panel gp-panel">
+      <div class="gp-glow" aria-hidden="true"></div>
+      <div class="gp-vex">${vx("trophy", 160, "gp-lead")}</div>
+      <span class="gp-kicker">${L.cefr ? "Nouveau palier" : "Niveau supérieur"}</span>
+      ${L.up ? `<div class="lv-ring"><span class="lv-ring-in"><small>Niveau</small><b class="num">${L.n}</b></span></div>` : ""}
+      <h2 class="gp-title" id="lv-title">${L.cefr ? `Bienvenue en ${esc(L.cefr)} !` : `Niveau ${L.n} atteint !`}</h2>
+      <p class="gp-sub">${L.cefr ? `Tu as validé ton niveau : place au niveau <b>${esc(L.cefr)} · ${esc(LEVEL_NAMES[L.cefr] || "")}</b>. ${L.up ? `Et tu passes aussi au niveau ${L.n} d'expérience !` : ""}` : "Tes efforts paient : continue comme ça, Vex est fier de toi !"}</p>
+      ${L.up ? `<div class="lv-next"><div class="row between small"><span class="muted">Prochain niveau</span><span class="num">${xp - cur} / ${next - cur} XP</span></div>${progress(((xp - cur) / (next - cur)) * 100)}</div>` : ""}
+      <button class="btn btn-primary btn-lg btn-block" data-act="level-close">Continuer ✨</button>
+    </div>
+  </div>`;
+}
 function giftFx() {
   const lead = document.querySelector(".gp-lead");
   SFX.play("fanfare");
@@ -3054,7 +3131,10 @@ async function claimGifts() {
   try {
     const gs = await S.store.claimGifts();
     if (gs.length) {
+      const lvB = xpLevel(S.profile.xp || 0);
       gs.forEach((g) => applyGift(S.profile, g));
+      const lvA = xpLevel(S.profile.xp || 0); if (lvA > lvB) S.levelPop = { n: lvA, up: true, cefr: null, fresh: true };
+      const nb = unlockedBadges(); S.profile.badges = nb;
       STEPS_CACHE = null;
       await saveProfile();
       const sm = giftSummary(gs);
@@ -3536,8 +3616,9 @@ function resultView(ses) {
         <div class="rw"><span class="small muted">Pièces</span><b class="num" style="color:var(--warn)">+${r.coins}</b></div>
         ${r.heart ? `<div class="rw"><span class="small muted">Vie</span><b class="num" style="color:#FF3B5C">+1</b></div>` : ""}
       </div>
-      ${r.goalReached ? `<p class="chip chip-teal">Objectif du jour atteint · +10 pièces</p>` : `<p class="small muted num">${Math.min(todayXp(), goalXp())} / ${goalXp()} XP pour l'objectif du jour · Pulse de ${plural(liveStreak(), "jour", "jours")}</p>`}
-      ${newB.length ? `<div class="stack" style="gap:8px;align-items:center"><span class="label">Nouveau succès</span><div class="row" style="justify-content:center">${newB.map((b) => `<div class="badge">${b.svg}<span>${b.name}</span></div>`).join("")}</div></div>` : ""}
+      ${r.bonusGoals ? `<p class="chip chip-teal">Objectif bonus atteint · +${5 * r.bonusGoals} pièces</p>` : ""}
+      ${r.goalReached ? `<p class="chip chip-teal">Objectif du jour atteint · +10 pièces</p>` : `<p class="small muted num">${todayXp() >= goalXp() ? `${todayXp()} / ${(Math.floor(todayXp() / goalXp()) + 1) * goalXp()} XP pour l'objectif bonus` : `${todayXp()} / ${goalXp()} XP pour l'objectif du jour`} · Pulse de ${plural(liveStreak(), "jour", "jours")}</p>`}
+      ${newB.length ? `<div class="stack" style="gap:8px;align-items:center"><span class="label">${newB.some((b) => b.secret) ? "🔓 Badge secret débloqué !" : "Nouveau succès"}</span><div class="row" style="justify-content:center">${newB.map((b) => `<div class="badge">${b.svg}<span>${b.name}</span></div>`).join("")}</div></div>` : ""}
     </main>
     <footer class="flow-foot"><div class="flow-foot-in"><span></span><button class="btn btn-primary btn-lg" data-act="ses-quit">Continuer</button></div></footer>
   </div>`;
@@ -3666,6 +3747,7 @@ $app.addEventListener("click", (ev) => {
     case "settings-open": S.settingsOpen = true; S.setAnim = true; S.setTab = S.setTab || "profil"; u.userOk = ""; u.userErr = ""; u.helpOk = ""; u.helpErr = ""; u.avErr = ""; u.saved = ""; u.setErr = ""; u.passOk = ""; u.passErr = ""; u.confirmReset = false; SFX.play("tap"); if (!S.accountNo && S.store.accountNo) S.store.accountNo().then((n) => { if (n) { S.accountNo = n; if (S.settingsOpen) render(); } }).catch(() => {}); render(); setTimeout(() => { const i = document.getElementById("setName"); if (i) i.focus(); }, 50); break;
     case "settings-close": S.settingsOpen = false; u.confirmReset = false; render(); break;
     case "gift-close": S.giftNote = ""; if (S.giftPop) { S.giftPop = null; SFX.play("select"); } render(); break;
+    case "level-close": S.levelPop = null; SFX.play("select"); render(); break;
     case "set-tab": S.setTab = v; u.confirmReset = false; SFX.play("tap"); render(); { const m = document.querySelector(".set-main"); if (m) m.scrollTop = 0; } break;
     case "pref": { const p = S.profile; p.prefs = { ...prefs(), [v]: !prefs()[v] }; SFX.play(p.prefs[v] ? "select" : "unselect"); if (v === "anim") applyMotion(); render(); saveProfile(); break; }
     case "av-pick": S.profile.avatar_id = Number(v); delete S.profile.avatar; delete S.profile.avatar_color; SFX.play("select"); render(); saveProfile(); break;
@@ -3862,6 +3944,7 @@ document.addEventListener("keydown", (ev) => {
   }
   if (ev.key === "Escape" && S.doc) { S.doc = null; render(); return; }
   if (ev.key === "Escape" && S.giftPop) { S.giftPop = null; render(); return; }
+  if (ev.key === "Escape" && S.levelPop) { S.levelPop = null; render(); return; }
   if (ev.key === "Escape" && S.settingsOpen) { S.settingsOpen = false; S.ui.confirmReset = false; render(); return; }
   if (ev.key === "Escape" && S.ui.guide) { S.ui.guide = null; render(); return; }
   if (ev.target.closest && ev.target.closest("input,textarea")) return;
@@ -4081,6 +4164,7 @@ async function enterSession(session) {
       if (gap >= 1 && gap <= p.freezes) { p.freezes -= gap; p.last_active = yesterday(); saveProfile(); }
     }
     if (!avValid(p.avatar_id)) { p.avatar_id = avRandom(); delete p.avatar; saveProfile(); }
+    if (p.placement_done) { const nb = unlockedBadges(); if (nb.length !== (p.badges || []).length) { p.badges = nb; saveProfile(); } }
     p.skills = p.skills || {}; p.goals = p.goals || []; p.difficulties = p.difficulties || []; p.days = p.days || {}; p.xp = p.xp || 0; p.streak = p.streak || 0;
   }
   const fromHash = FROM_HASH[location.hash.slice(1)];
