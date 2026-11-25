@@ -2736,8 +2736,9 @@ function viewAdmin() {
   const fmt = (d) => d ? new Date(d).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "jamais";
   const hearts = (p) => typeof p.hearts === "number" ? p.hearts : HEART_MAX;
   if (u.admTab === "msg") return adminMessages();
+  if (u.admTab === "lessons") return adminLessons();
   return `<section>
-    <div class="adm-tabs"><button class="is-on" data-act="adm-tab" data-v="">Comptes</button><button data-act="adm-tab" data-v="msg">Messages${u.fbList ? ` (${u.fbList.filter((m) => !m.done).length})` : ""}</button></div>
+    ${admTabs("")}
     <div class="adm-head">
       <div><h1 class="h1">Espace admin</h1><p class="muted">Tous les comptes Verblyx, du plus récent au plus ancien.</p></div>
       <button class="btn btn-secondary btn-sm" data-act="adm-refresh" ${u.admBusy ? "disabled" : ""}>${u.admBusy ? '<span class="spinner"></span>' : ""}Actualiser</button>
@@ -2773,6 +2774,83 @@ function viewAdmin() {
   </section>`;
 }
 
+function admTabs(cur) {
+  const u = S.ui, unread = u.fbList ? ` (${u.fbList.filter((m) => !m.done).length})` : "";
+  return `<div class="adm-tabs">${[["", "Comptes"], ["lessons", "Leçons"], ["msg", "Messages" + unread]].map(([k, t]) => `<button class="${cur === k ? "is-on" : ""}" data-act="adm-tab" data-v="${k}">${t}</button>`).join("")}</div>`;
+}
+
+/* ---------- Préparer toutes les leçons à l'avance (admin) ---------- */
+const PREP = { running: false, stop: false, done: 0, total: 0, fail: 0, cur: "", ready: null, err: "", loading: false };
+const lessonSteps = () => allSteps().filter((s) => s.kind === "lesson");
+const isReady = (id) => !!(COURSE.content && COURSE.content[id]) || !!(PREP.ready && PREP.ready.has(id));
+const prepSleep = async (sec) => { for (let i = 0; i < sec * 4 && !PREP.stop; i++) await new Promise((r) => setTimeout(r, 250)); };
+async function prepLoadReady() {
+  PREP.loading = true;
+  try { PREP.ready = new Set(await S.store.contentIds()); PREP.err = ""; }
+  catch (e) { PREP.err = "Impossible de lire les leçons enregistrées : " + ((e && e.message) || "erreur"); PREP.ready = PREP.ready || new Set(); }
+  PREP.loading = false; if (S.view === "admin") render();
+}
+async function prepRun() {
+  if (PREP.running) return;
+  if (!PREP.ready) await prepLoadReady();
+  const todo = lessonSteps().filter((s) => !isReady(s.id));
+  Object.assign(PREP, { running: true, stop: false, done: 0, fail: 0, total: todo.length, err: "" });
+  if (S.view === "admin") render();
+  let limited = 0;
+  for (const st of todo) {
+    if (PREP.stop) break;
+    PREP.cur = `${st.level} · ${st.title}`; if (S.view === "admin") render();
+    let ok = false;
+    for (let attempt = 0; attempt < 3 && !ok && !PREP.stop; attempt++) {
+      try {
+        const c = cleanContent(await S.sample.json(genPrompt(st), { modelTier: "default" }));
+        await S.store.saveContent(st.id, c);
+        PREP.ready.add(st.id); ok = true; limited = 0;
+      } catch (e) {
+        if (e && e.code === "session_expired") { PREP.err = "Ta session a expiré : reconnecte-toi puis relance."; PREP.stop = true; }
+        else if (e && e.code === "rate_limited") {
+          limited++;
+          if (limited >= 3) { PREP.err = "Le quota du jour de Gemini semble atteint. Les leçons déjà prêtes sont gardées : relance demain pour finir."; PREP.stop = true; break; }
+          PREP.err = "Gemini demande une pause : reprise dans une minute…"; if (S.view === "admin") render();
+          await prepSleep(60); PREP.err = "";
+        }
+      }
+    }
+    if (ok) PREP.done++; else if (!PREP.stop) PREP.fail++;
+    if (S.view === "admin") render();
+    if (!PREP.stop) await prepSleep(4);
+  }
+  PREP.running = false; PREP.cur = "";
+  if (S.view === "admin") render();
+}
+window.addEventListener("beforeunload", (e) => { if (PREP.running) { e.preventDefault(); e.returnValue = ""; } });
+function adminLessons() {
+  if (!PREP.ready && !PREP.loading) setTimeout(prepLoadReady, 0);
+  const all = lessonSteps(), readyN = all.filter((s) => isReady(s.id)).length, missing = all.length - readyN;
+  const perLevel = COURSE.levels.map((lv) => { const l = all.filter((s) => s.level === lv.id); return { id: lv.id, n: l.length, ok: l.filter((s) => isReady(s.id)).length }; });
+  return `<section>
+    ${admTabs("lessons")}
+    <div class="adm-head"><div><h1 class="h1">Leçons</h1><p class="muted">Prépare toutes les leçons une fois pour toutes : ensuite, chaque élève a les mêmes, instantanément, sans utiliser l'IA.</p></div></div>
+    <div class="adm-stats">
+      <div class="adm-stat"><b>${PREP.ready ? readyN : "…"}</b><span class="small muted">prêtes sur ${all.length}</span></div>
+      <div class="adm-stat"><b>${PREP.ready ? missing : "…"}</b><span class="small muted">à préparer</span></div>
+      <div class="adm-stat"><b>${PREP.ready ? "~" + Math.max(1, Math.round(missing * 10 / 60)) + " min" : "…"}</b><span class="small muted">temps estimé</span></div>
+    </div>
+    <div class="card pad stack" style="gap:12px">
+      ${PREP.running ? `<div class="row between"><b>Préparation en cours… ${PREP.done + PREP.fail}/${PREP.total}</b><button class="btn btn-secondary btn-sm" data-act="prep-stop">Mettre en pause</button></div>
+        ${progress(PREP.total ? ((PREP.done + PREP.fail) / PREP.total) * 100 : 0)}
+        <p class="small muted">En cours : ${esc(PREP.cur)}${PREP.fail ? ` · ${PREP.fail} échec(s), elles seront retentées au prochain lancement` : ""}</p>
+        <p class="small" style="color:var(--warn)">Garde cet onglet ouvert pendant la préparation. Tu peux naviguer dans le site.</p>`
+      : missing ? `<div class="row between" style="gap:12px"><div><b>${missing} leçon${missing > 1 ? "s" : ""} à préparer</b><p class="small muted">Une leçon toutes les ~10 secondes, pour respecter les limites gratuites de Gemini.</p></div>
+        <button class="btn btn-primary" data-act="prep-go" ${PREP.ready ? "" : "disabled"}>Préparer les leçons</button></div>`
+      : PREP.ready ? `<p><b>Toutes les leçons sont prêtes ✓</b></p><p class="small muted">Pour refaire une leçon, supprime-la dans Supabase (Table Editor → content) : elle sera recréée.</p>` : `<p class="muted">Chargement…</p>`}
+      ${PREP.done && !PREP.running ? `<p class="small" style="color:var(--success)">${PREP.done} leçon${PREP.done > 1 ? "s" : ""} préparée${PREP.done > 1 ? "s" : ""} lors du dernier lancement.</p>` : ""}
+      ${notice(PREP.err, "warn")}
+    </div>
+    <div class="adm-list" style="margin-top:14px">${perLevel.map((l) => `<div class="adm-row"><div class="row between"><b>${l.id} · ${esc(LEVEL_NAMES[l.id])}</b><span class="small muted num">${l.ok}/${l.n}</span></div><div style="margin-top:8px">${progress((l.ok / l.n) * 100, "thin")}</div></div>`).join("")}</div>
+  </section>`;
+}
+
 async function adminFbLoad() {
   const u = S.ui; u.fbBusy = true; u.fbErr = ""; if (S.view === "admin") render();
   try { u.fbList = await S.store.adminFeedback(); }
@@ -2785,7 +2863,7 @@ function adminMessages() {
   const list = u.fbList || [];
   const fmt = (d) => new Date(d).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
   return `<section>
-    <div class="adm-tabs"><button data-act="adm-tab" data-v="">Comptes</button><button class="is-on" data-act="adm-tab" data-v="msg">Messages (${list.filter((m) => !m.done).length})</button></div>
+    ${admTabs("msg")}
     <div class="adm-head"><div><h1 class="h1">Messages</h1><p class="muted">Ce que les élèves t'écrivent depuis Paramètres > Aide.</p></div>
       <button class="btn btn-secondary btn-sm" data-act="fb-refresh" ${u.fbBusy ? "disabled" : ""}>${u.fbBusy ? '<span class="spinner"></span>' : ""}Actualiser</button></div>
     ${notice(u.fbErr)}
@@ -3148,6 +3226,8 @@ $app.addEventListener("click", (ev) => {
     case "copy-id": try { navigator.clipboard.writeText(accId(S.accountNo)); } catch {} u.copied = true; render(); setTimeout(() => { if (S.ui.copied) { S.ui.copied = false; if (S.settingsOpen) render(); } }, 1500); break;
     case "adm-tab": u.admTab = v; SFX.play("tap"); render(); break;
     case "fb-refresh": adminFbLoad(); break;
+    case "prep-go": SFX.play("next"); prepRun(); break;
+    case "prep-stop": PREP.stop = true; SFX.play("unselect"); render(); break;
     case "fb-done": { const id = Number(v), d = el.dataset.d === "1"; S.store.adminFeedbackDone(id, d).then(() => { const m = (S.ui.fbList || []).find((x) => x.id === id); if (m) m.done = d; render(); }).catch((e) => { S.ui.fbErr = (e && e.message) || "Erreur"; render(); }); break; }
     case "adm-refresh": adminLoad(); break;
     case "adm-open": u.admOpen = u.admOpen === v ? null : v; u.admMsg = ""; SFX.play("tap"); render(); break;
@@ -3332,7 +3412,8 @@ function makeSupaStore(sb, uid) {
     saveVocab(w) { return queued("profile", async () => { const { error } = await sb.from("learners").update({ vocab: clone(w), updated_at: new Date().toISOString() }).eq("id", uid); if (error) throw error; }); },
     async listLessons() { return []; },
     async loadContent(id) { const { data, error } = await sb.from("content").select("data").eq("id", id).maybeSingle(); if (error) throw error; return data ? data.data : null; },
-    async saveContent(id, data) { await sb.from("content").insert({ id, data }); },
+    async saveContent(id, data) { const { error } = await sb.from("content").insert({ id, data }); if (error && error.code !== "23505") throw error; },
+    async contentIds() { const { data, error } = await sb.from("content").select("id"); if (error) throw error; return (data || []).map((r) => r.id); },
     async accountNo() {
       if (row && row.account_no) return row.account_no;
       const { data } = await sb.from("learners").select("account_no").eq("id", uid).maybeSingle();
