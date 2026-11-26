@@ -1740,6 +1740,73 @@ body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-
 .stn-card .stn-go.btn-primary { background: var(--primary); }
 .stn-card .stn-go.btn-primary:hover:not(:disabled) { background: var(--primary-hi); }
 .stn-card .stn-body { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+
+/* ---------- Paramètres (refonte) ---------- */
+.set-title { font: 800 21px/1.2 var(--f-display); }
+.set-panel .set-top { padding: 16px 20px; }
+.set-panel .set-nav { background: transparent; }
+.set-panel .set-tab.is-on { background: var(--primary-soft); color: var(--primary-text); }
+.set-panel .set-main { padding: 6px 26px 26px; }
+.set-sec2 { margin-top: 20px; }
+.set-cap { font: 700 12px/1.2 var(--f-body); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px 4px; }
+.set-card { border-radius: 16px; background: var(--bg-raise); border: 1px solid var(--line); overflow: hidden; }
+.set-card > * + * { border-top: 1px solid var(--line) !important; }
+.set-sec2.danger .set-card { border-color: rgba(255, 59, 92, .28); }
+.set-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 13px 16px; min-height: 62px; background: none; border: 0; color: inherit; font: inherit; text-align: left; }
+button.set-item { cursor: pointer; }
+@media (hover: hover) { button.set-item:hover { background: rgba(255, 255, 255, .03); } }
+.set-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.set-tx b { font: 600 14.5px var(--f-body); color: var(--fg); }
+.set-tx span { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.set-act { display: flex; gap: 6px; flex: none; }
+.set-chev { color: var(--faint); display: grid; }
+.set-chev .ico { width: 18px; height: 18px; }
+.set-ic { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--primary-soft); color: var(--primary-text); }
+.set-ic .ico { width: 19px; height: 19px; }
+.set-ic.violet { background: rgba(155, 109, 255, .16); color: #B79CFF; }
+.set-ic.gold { background: rgba(246, 190, 59, .15); color: #F6BE3B; }
+.set-ic.teal { background: rgba(0, 214, 181, .14); color: #2FE0C2; }
+.set-ic.pink { background: rgba(255, 92, 138, .15); color: #FF7DA3; }
+.set-ic.red { background: rgba(255, 59, 92, .14); color: #FF5C77; }
+.set-ic.gray { background: var(--surface-3); color: var(--fg-2); }
+.set-panel .switch.on { background: var(--primary); }
+.set-field { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
+.set-field > label { display: flex; align-items: center; justify-content: space-between; gap: 8px; font: 600 13px var(--f-body); color: var(--fg-2); }
+.set-inline { display: flex; gap: 8px; align-items: center; }
+.set-inline .input, .set-inline .user-in { flex: 1; min-width: 0; }
+.set-inline .input { height: 44px; }
+.set-inline .btn { height: 44px; flex: none; box-shadow: none; }
+.set-field .btn-primary, .set-panel .set-item .btn { box-shadow: none; }
+.set-hint { font-size: 12.5px; color: var(--faint); line-height: 1.45; }
+.set-pad { padding: 14px 16px 16px; }
+.set-b { font: 600 14.5px var(--f-body); }
+.set-pad .pf-times { margin-top: 12px; }
+.set-av { grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); gap: 10px; margin-top: 0; }
+.set-av .av-pick.is-on { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+.set-me { display: flex; align-items: center; gap: 14px; margin-top: 18px; padding: 16px; border-radius: 16px; background: linear-gradient(135deg, rgba(22, 119, 255, .14), rgba(22, 119, 255, .03)); border: 1px solid rgba(22, 119, 255, .25); }
+.set-me-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.set-me-tx b { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font: 800 18px/1.2 var(--f-display); }
+.set-me-tx span { color: var(--muted); font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.set-idchip { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 1px; padding: 6px 10px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--bg-raise); color: var(--fg-2); font: 700 12px ui-monospace, monospace; cursor: pointer; }
+.set-idchip em { font: 600 10.5px var(--f-body); font-style: normal; color: var(--primary-text); }
+.set-faq { gap: 0; }
+.set-faq details { border: 0; border-radius: 0; background: none; }
+.set-faq details + details { border-top: 1px solid var(--line); }
+.set-ver { margin-top: 8px; text-align: center; font-size: 12px; color: var(--faint); }
+@media (max-width: 680px) {
+  .set-modal { padding: 0 !important; place-items: stretch; }
+  .set-modal .modal-panel.set-panel { max-width: none; width: 100%; height: 100dvh; max-height: 100dvh; border-radius: 0; border: 0; display: flex; flex-direction: column; overflow: hidden; animation: sheet-up .28s var(--ease) both; }
+  .set-panel .set-top { padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px; }
+  .set-panel .set-wrap { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+  .set-panel .set-nav { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; margin: 10px 16px 0; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-raise); overflow: visible; }
+  .set-panel .set-tab { flex-direction: column; justify-content: center; gap: 3px; height: 54px; padding: 0 2px; border-radius: 9px; font-size: 11.5px; text-align: center; }
+  .set-panel .set-tab .ico { width: 19px; height: 19px; }
+  .set-panel .set-tab.is-on { background: var(--primary); color: #fff; }
+  .set-panel .set-main { flex: 1; min-height: 0; max-height: none; overflow-y: auto; overscroll-behavior: contain; padding: 0 16px calc(28px + env(safe-area-inset-bottom, 0px)); }
+  .set-me { padding: 14px; }
+  .set-item .btn-sm { padding: 0 12px; }
+}
+@media (max-width: 359px) { .set-inline { flex-wrap: wrap; } .set-inline .btn { width: 100%; } .set-idchip { display: none; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -3999,82 +4066,75 @@ const FAQ = [
   ["Le son ou le micro ne marche pas", "Utilise Chrome ou Edge et autorise le micro quand le navigateur le demande. Tu peux aussi désactiver les exercices d'écoute ou de prononciation dans Paramètres > Leçons."],
   ["Comment changer mon mot de passe ?", "Dans Paramètres > Compte. Si tu l'as oublié, déconnecte-toi puis clique sur « Mot de passe oublié ? » sur la page de connexion."],
 ];
-const setToggle = (title, sub, act, v, on) => `<div class="set-row2"><div><b>${title}</b><span class="small muted">${sub}</span></div><button class="switch ${on ? "on" : ""}" data-act="${act}" data-v="${v}" role="switch" aria-checked="${on}" aria-label="${title}"><i></i></button></div>`;
+const setIco = (ic, tone) => `<span class="set-ic ${tone || ""}">${icon(ic)}</span>`;
+const setToggle = (title, sub, act, v, on, ic, tone) => `<div class="set-item">${ic ? setIco(ic, tone) : ""}<div class="set-tx"><b>${title}</b><span>${sub}</span></div><button class="switch ${on ? "on" : ""}" data-act="${act}" data-v="${v}" role="switch" aria-checked="${on}" aria-label="${title}"><i></i></button></div>`;
 const setMsg = (ok, err) => `${notice(ok, "success", true)}${notice(err, "error", true)}`;
 function settingsModal() {
   const p = S.profile, u = S.ui, online = S.store.kind === "supabase", pr = prefs();
   const tab = S.setTab || "profil";
+  const grp = (title, inner, cls = "") => `<section class="set-sec2 ${cls}">${title ? `<h3 class="set-cap">${title}</h3>` : ""}<div class="set-card">${inner}</div></section>`;
   let body = "";
   if (tab === "profil") body = `
-    <section class="set-group"><h3>Ton personnage</h3>
-      <div class="av-edit" style="margin-top:6px">${avatarHTML(p, 84, S.isVip)}<p class="small muted" style="max-width:260px">Choisis le personnage qui te ressemble. Il s'affiche sur ton profil et dans le menu.</p></div>
-      <div class="av-grid" role="radiogroup" aria-label="Personnages">${AVATAR.LIST.map((o, i) => `<button class="av-pick ${p.avatar_id === i ? "is-on" : ""}" data-act="av-pick" data-v="${i}" role="radio" aria-checked="${p.avatar_id === i}" aria-label="Personnage ${i + 1}">${AVATAR.svg(o, true)}</button>`).join("")}</div>
-    </section>
-    <section class="set-group"><h3>Prénom</h3>
-      <form class="row" data-form="settings-name" style="gap:8px;flex-wrap:nowrap" novalidate>
-        <input id="setName" class="input" style="height:44px" value="${esc(u.nameDraft ?? p.first_name ?? "")}" maxlength="40" aria-label="Ton prénom" placeholder="Ton prénom" autocomplete="given-name">
-        <button class="btn btn-secondary btn-sm" style="height:44px">OK</button>
-      </form>${setMsg(u.saved, u.setErr)}
-    </section>
-    <section class="set-group"><h3>Pseudo</h3>
-      <form class="row" data-form="settings-user" style="gap:8px;flex-wrap:nowrap" novalidate>
-        <div class="user-in"><span>@</span><input id="setUser" class="input" style="height:44px" value="${esc(u.userDraft ?? p.username ?? "")}" maxlength="20" placeholder="ton_pseudo" aria-label="Ton pseudo" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
-        <button class="btn btn-secondary btn-sm" style="height:44px">OK</button>
+    <div class="set-me">
+      ${avatarHTML(p, 64, S.isVip)}
+      <div class="set-me-tx"><b>${esc(p.first_name || "Élève")}${S.isVip ? " " + vipTag() : ""}</b><span>${p.username ? "@" + esc(p.username) : "Pas encore de pseudo"} · Niveau ${esc(p.cefr_level)}</span></div>
+      ${S.accountNo ? `<button class="set-idchip" data-act="copy-id" title="Copier ton identifiant">ID ${accId(S.accountNo)}<em>${u.copied ? "copié" : "copier"}</em></button>` : ""}
+    </div>
+    ${grp("Identité", `
+      <form class="set-field" data-form="settings-name" novalidate>
+        <label for="setName">Prénom</label>
+        <div class="set-inline"><input id="setName" class="input" value="${esc(u.nameDraft ?? p.first_name ?? "")}" maxlength="40" placeholder="Ton prénom" autocomplete="given-name"><button class="btn btn-primary btn-sm">Enregistrer</button></div>
+        ${setMsg(u.saved, u.setErr)}
       </form>
-      <div class="row between" style="margin-top:6px;gap:8px"><p class="small muted">3 à 20 caractères : lettres minuscules, chiffres, point ou tiret bas. Chaque pseudo est unique.</p><span id="setUserState" class="pseudo-state"></span></div>${setMsg(u.userOk, u.userErr)}
-      ${S.accountNo ? `<div class="set-idline">ID <code>${accId(S.accountNo)}</code><button data-act="copy-id">${u.copied ? "copié" : "copier"}</button></div>` : ""}
-    </section>`;
+      <form class="set-field" data-form="settings-user" novalidate>
+        <label for="setUser">Pseudo <span id="setUserState" class="pseudo-state"></span></label>
+        <div class="set-inline"><div class="user-in"><span>@</span><input id="setUser" class="input" value="${esc(u.userDraft ?? p.username ?? "")}" maxlength="20" placeholder="ton_pseudo" autocomplete="off" autocapitalize="off" spellcheck="false"></div><button class="btn btn-primary btn-sm">Enregistrer</button></div>
+        <p class="set-hint">3 à 20 caractères : lettres minuscules, chiffres, point ou tiret bas. Chaque pseudo est unique.</p>
+        ${setMsg(u.userOk, u.userErr)}
+      </form>`)}
+    ${grp("Personnage", `<div class="set-pad"><p class="set-hint" style="margin:0 0 12px">Il s'affiche sur ton profil, dans le menu et dans le classement.</p>
+      <div class="av-grid set-av" role="radiogroup" aria-label="Personnages">${AVATAR.LIST.map((o, i) => `<button class="av-pick ${p.avatar_id === i ? "is-on" : ""}" data-act="av-pick" data-v="${i}" role="radio" aria-checked="${p.avatar_id === i}" aria-label="Personnage ${i + 1}">${AVATAR.svg(o, true)}</button>`).join("")}</div></div>`)}
+    ${setMsg("", u.avErr)}`;
   if (tab === "compte") body = `
-    <section class="set-group"><h3>Connexion</h3>
-      <div class="set-row2"><div><b>Adresse e-mail</b><span class="small muted">${esc((S.authUser && S.authUser.email) || "—")}</span></div></div>
-    </section>
-    ${online ? `<section class="set-group"><h3>Mot de passe</h3>
-      <form class="row" data-form="settings-pass" style="gap:8px;flex-wrap:nowrap" novalidate>
-        <input id="setPass" class="input" style="height:44px" type="password" autocomplete="new-password" placeholder="Nouveau mot de passe (8 caractères min.)" aria-label="Nouveau mot de passe">
-        <button class="btn btn-secondary btn-sm" style="height:44px" ${u.passBusy ? "disabled" : ""}>${u.passBusy ? '<span class="spinner"></span>' : "Changer"}</button>
-      </form>${setMsg(u.passOk, u.passErr)}
-    </section>` : ""}
-    <section class="set-group"><h3>Progression</h3>
-      <div class="set-row2">
+    ${grp("Connexion", `
+      <div class="set-item">${setIco("i-send", "blue")}<div class="set-tx"><b>Adresse e-mail</b><span>${esc((S.authUser && S.authUser.email) || "—")}</span></div></div>
+      ${online ? `<form class="set-field" data-form="settings-pass" novalidate>
+        <label for="setPass">Nouveau mot de passe</label>
+        <div class="set-inline"><input id="setPass" class="input" type="password" autocomplete="new-password" placeholder="8 caractères minimum"><button class="btn btn-primary btn-sm" ${u.passBusy ? "disabled" : ""}>${u.passBusy ? '<span class="spinner"></span>' : "Changer"}</button></div>
+        ${setMsg(u.passOk, u.passErr)}
+      </form>` : ""}`)}
+    ${grp("Session", `<button class="set-item set-link" data-act="logout">${setIco("i-back", "gray")}<div class="set-tx"><b>Se déconnecter</b><span>Tu pourras te reconnecter à tout moment.</span></div><span class="set-chev">${icon("i-arrow")}</span></button>`)}
+    ${grp("Zone sensible", `<div class="set-item">${setIco("i-flag", "red")}
         ${u.confirmReset
-          ? `<div><b>Tout effacer ?</b><span class="small muted">Leçons, pièces et mots seront perdus.</span></div><div class="row" style="gap:6px;flex-wrap:nowrap"><button class="btn btn-ghost btn-sm" data-act="reset-cancel">Annuler</button><button class="btn btn-danger btn-sm" data-act="reset-do">Effacer</button></div>`
-          : `<div><b>Recommencer de zéro</b><span class="small muted">Efface ta progression.</span></div><button class="btn btn-ghost btn-sm danger-txt" data-act="reset-ask">Effacer</button>`}
-      </div>
-    </section>
-    <button class="btn btn-secondary btn-block set-logout" style="margin-top:22px" data-act="logout">Se déconnecter</button>`;
+          ? `<div class="set-tx"><b>Tout effacer ?</b><span>Leçons, pièces et mots seront perdus. C'est définitif.</span></div><div class="set-act"><button class="btn btn-ghost btn-sm" data-act="reset-cancel">Annuler</button><button class="btn btn-danger btn-sm" data-act="reset-do">Effacer</button></div>`
+          : `<div class="set-tx"><b>Recommencer de zéro</b><span>Efface toute ta progression.</span></div><button class="btn btn-ghost btn-sm danger-txt" data-act="reset-ask">Effacer</button>`}
+      </div>`, "danger")}`;
   if (tab === "lecons") body = `
-    <section class="set-group"><h3>Pendant les leçons</h3>
-      ${setToggle("Effets sonores", "Petits sons quand tu réponds", "sound", "", SFX.on)}
-      ${setToggle("Animations", "Vex bouge, saute et fait la fête", "pref", "anim", pr.anim)}
-      ${setToggle("Messages d'encouragement", "La petite fête de Vex en fin de leçon", "pref", "cheer", pr.cheer)}
-      ${setToggle("Exercices d'écoute", "Écouter une phrase et la reconstruire", "pref", "listen", pr.listen)}
-      ${setToggle("Exercices de prononciation", "Lire une phrase au micro", "pref", "speak", pr.speak)}
-    </section>
-    <section class="set-group"><h3>Objectif quotidien · ${goalXp()} XP</h3>
-      <div class="set-times" style="margin-top:10px">${TIMES.map((m) => `<button class="chip-btn sm ${p.daily_minutes === m ? "is-on" : ""}" data-act="set-time" data-v="${m}">${m} min</button>`).join("")}</div>
-    </section>
-    <section class="set-group"><h3>Niveau</h3>
-      <div class="set-row2"><div><b>Niveau ${esc(p.cefr_level)} · ${esc(LEVEL_NAMES[p.cefr_level] || "")}</b><span class="small muted">Ta progression est conservée.</span></div><button class="btn btn-secondary btn-sm" data-act="redo-test">Repasser le test</button></div>
-    </section>`;
+    ${grp("Pendant les leçons", `
+      ${setToggle("Effets sonores", "Petits sons quand tu réponds", "sound", "", SFX.on, "i-sound", "blue")}
+      ${setToggle("Animations", "Vex bouge, saute et fait la fête", "pref", "anim", pr.anim, "i-spark", "violet")}
+      ${setToggle("Encouragements", "La petite fête de Vex en fin de leçon", "pref", "cheer", pr.cheer, "i-star", "gold")}`)}
+    ${grp("Types d'exercices", `
+      ${setToggle("Écoute", "Écouter une phrase et la reconstruire", "pref", "listen", pr.listen, "i-play", "teal")}
+      ${setToggle("Prononciation", "Lire une phrase au micro", "pref", "speak", pr.speak, "i-mic", "pink")}`)}
+    ${grp("Objectif quotidien", `<div class="set-pad"><div class="row between" style="gap:8px"><b class="set-b">Temps par jour</b><span class="set-hint" style="margin:0">${goalXp()} XP par jour</span></div>
+      <div class="pf-times">${TIMES.map((m) => `<button class="${p.daily_minutes === m ? "is-on" : ""}" data-act="set-time" data-v="${m}">${m} min</button>`).join("")}</div></div>`)}
+    ${grp("Niveau", `<div class="set-item">${setIco("i-cert", "blue")}<div class="set-tx"><b>${esc(p.cefr_level)} · ${esc(LEVEL_NAMES[p.cefr_level] || "")}</b><span>Ta progression est conservée.</span></div><button class="btn btn-secondary btn-sm" data-act="redo-test">Repasser le test</button></div>`)}`;
   if (tab === "aide") body = `
-    <section class="set-group"><h3>Questions fréquentes</h3>
-      <div class="faq" style="margin-top:10px">${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</div>
-    </section>
-    ${online ? `<section class="set-group"><h3>Écrire à l'équipe</h3>
-      <form class="stack" data-form="settings-help" style="gap:10px;margin-top:10px" novalidate>
-        <textarea id="setHelp" class="input" style="min-height:100px" maxlength="2000" placeholder="Une question, un bug, une idée ? Dis-nous tout.">${esc(u.helpDraft || "")}</textarea>
-        <button class="btn btn-primary btn-sm" style="align-self:flex-start" ${u.helpBusy ? "disabled" : ""}>${u.helpBusy ? '<span class="spinner"></span>' : ""}Envoyer</button>
-      </form>${setMsg(u.helpOk, u.helpErr)}
-    </section>` : ""}
+    ${grp("Questions fréquentes", `<div class="faq set-faq">${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</div>`)}
+    ${online ? grp("Écrire à l'équipe", `<form class="set-field" data-form="settings-help" novalidate>
+        <textarea id="setHelp" class="input" style="min-height:110px" maxlength="2000" placeholder="Une question, un bug, une idée ? Dis-nous tout.">${esc(u.helpDraft || "")}</textarea>
+        <div class="row between" style="gap:10px"><span class="set-hint" style="margin:0">Réponse par e-mail, en général sous 48 h.</span><button class="btn btn-primary btn-sm" ${u.helpBusy ? "disabled" : ""}>${u.helpBusy ? '<span class="spinner"></span>' : ""}Envoyer</button></div>
+      </form>${setMsg(u.helpOk, u.helpErr)}`) : ""}
     ${legalLinks("in-set")}
-    <p class="small" style="color:var(--faint);margin-top:6px;text-align:center">Verblyx · version 1.3</p>`;
+    <p class="set-ver">Verblyx · version 1.3</p>`;
   const tabs = SET_TABS.map(([k, t, ic]) => `<button class="set-tab ${tab === k ? "is-on" : ""}" data-act="set-tab" data-v="${k}">${icon(ic)}<span>${t}</span></button>`).join("")
-    + (isStaff() ? `<button class="set-tab" data-go="admin">${icon("i-gear")}<span>${S.isAdmin ? "Espace admin" : "Modération"}</span></button>` : "");
+    + (isStaff() ? `<button class="set-tab" data-go="admin">${icon("i-gear")}<span>${S.isAdmin ? "Admin" : "Modération"}</span></button>` : "");
   const opening = S.setAnim; S.setAnim = false;
-  return `<div class="modal ${opening ? "opening" : ""}" role="dialog" aria-modal="true" aria-labelledby="set-title">
+  return `<div class="modal set-modal ${opening ? "opening" : ""}" role="dialog" aria-modal="true" aria-labelledby="set-title">
     <div class="modal-bg" data-act="settings-close"></div>
     <div class="modal-panel set-panel">
-      <div class="set-top"><h2 class="h2" id="set-title">${icon("i-gear")} Paramètres</h2><button class="icon-btn" data-act="settings-close" aria-label="Fermer">${icon("i-close")}</button></div>
+      <div class="set-top"><h2 class="set-title" id="set-title">Paramètres</h2><button class="icon-btn" data-act="settings-close" aria-label="Fermer">${icon("i-close")}</button></div>
       <div class="set-wrap"><nav class="set-nav" aria-label="Catégories">${tabs}</nav><div class="set-main">${body}</div></div>
     </div>
   </div>`;
@@ -5930,7 +5990,7 @@ $app.addEventListener("click", (ev) => {
       if (ses && ses.pre) openStep(ses.st); else if (ses) { ses.out = false; nextItem(); }
       break;
     }
-    case "settings-open": S.settingsOpen = true; S.setAnim = true; S.setTab = S.setTab || "profil"; u.userOk = ""; u.userErr = ""; u.helpOk = ""; u.helpErr = ""; u.avErr = ""; u.saved = ""; u.setErr = ""; u.passOk = ""; u.passErr = ""; u.confirmReset = false; SFX.play("tap"); if (!S.accountNo && S.store.accountNo) S.store.accountNo().then((n) => { if (n) { S.accountNo = n; if (S.settingsOpen) render(); } }).catch(() => {}); render(); setTimeout(() => { const i = document.getElementById("setName"); if (i) i.focus(); }, 50); break;
+    case "settings-open": S.settingsOpen = true; S.setAnim = true; S.setTab = S.setTab || "profil"; u.userOk = ""; u.userErr = ""; u.helpOk = ""; u.helpErr = ""; u.avErr = ""; u.saved = ""; u.setErr = ""; u.passOk = ""; u.passErr = ""; u.confirmReset = false; SFX.play("tap"); if (!S.accountNo && S.store.accountNo) S.store.accountNo().then((n) => { if (n) { S.accountNo = n; if (S.settingsOpen) render(); } }).catch(() => {}); render(); if (innerWidth > 680) setTimeout(() => { const i = document.getElementById("setName"); if (i) i.focus(); }, 50); break;
     case "settings-close": S.settingsOpen = false; u.confirmReset = false; render(); break;
     case "gift-close": S.giftNote = ""; if (S.giftPop) { S.giftPop = null; SFX.play("select"); } render(); break;
     case "level-close": S.levelPop = null; SFX.play("select"); render(); break;
