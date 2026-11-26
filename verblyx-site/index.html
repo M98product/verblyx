@@ -1807,6 +1807,55 @@ button.set-item { cursor: pointer; }
   .set-item .btn-sm { padding: 0 12px; }
 }
 @media (max-width: 359px) { .set-inline { flex-wrap: wrap; } .set-inline .btn { width: 100%; } .set-idchip { display: none; } }
+
+/* ---------- Verblyx Plus ---------- */
+.plus-tag { display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 7px 0 6px; border-radius: 6px; background: linear-gradient(135deg, #2D8CFF, #1263E0); color: #fff; font: 800 11px/1 var(--f-body); letter-spacing: .02em; vertical-align: middle; white-space: nowrap; box-shadow: 0 2px 8px -3px rgba(22, 119, 255, .8); }
+.plus-tag svg path { stroke-width: 2.6; }
+.pf-name .plus-tag { height: 24px; font-size: 12.5px; padding: 0 9px 0 7px; }
+.plus-heart { display: inline-block; flex: none; filter: drop-shadow(0 0 6px rgba(22, 119, 255, .55)); }
+.pill-stat.heart.plus { color: #8FC0FF; }
+.pill-stat .inf { font: 800 19px/1 var(--f-body); }
+.hearts-mini.plus { color: #8FC0FF; font-size: 20px; }
+.hrt-inf { display: inline-flex; align-items: center; gap: 10px; }
+.hrt-inf b { font: 800 40px/1 var(--f-display); color: #8FC0FF; }
+.plus-x2 { display: inline-flex; align-items: center; height: 17px; padding: 0 5px; border-radius: 5px; background: var(--primary); color: #fff; font: 800 10.5px var(--f-body); vertical-align: middle; }
+.vp-card { display: flex; flex-direction: column; gap: 18px; padding: 24px; border-radius: 22px; border: 1px solid rgba(22, 119, 255, .4); background: radial-gradient(520px 200px at 0% 0%, rgba(22, 119, 255, .22), transparent 70%), var(--surface); scroll-margin-top: 24px; }
+.vp-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.vp-brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.vp-logo { font: 800 12px var(--f-body); letter-spacing: .16em; color: var(--fg-2); }
+.vp-logo b { color: #5AA2FF; font-weight: 800; }
+.vp-title { font: 800 24px/1.2 var(--f-display); letter-spacing: -.01em; margin: 2px 0 0; }
+.vp-soon, .vp-state { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 11px; border-radius: 8px; font: 700 12.5px var(--f-body); }
+.vp-soon { color: #9CC8FF; background: rgba(22, 119, 255, .14); border: 1px solid rgba(22, 119, 255, .35); }
+.vp-state { color: #2FE0C2; background: rgba(0, 214, 181, .12); border: 1px solid rgba(0, 214, 181, .35); }
+.vp-state .ico { width: 15px; height: 15px; }
+.vp-perks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.vp-perk { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line); min-width: 0; }
+.vp-perk > svg, .vp-perk > .vp-ic { flex: none; margin-top: 1px; }
+.vp-perk div { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.vp-perk b { font: 700 14.5px var(--f-body); }
+.vp-perk span { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.vp-ic { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: rgba(22, 119, 255, .18); color: #7DB4FF; }
+.vp-ic .ico, .vp-ic svg { width: 16px; height: 16px; }
+.vp-buy { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--line); }
+.vp-price { display: flex; align-items: baseline; gap: 6px; }
+.vp-price b { font: 800 32px/1 var(--f-display); }
+.vp-price span { color: var(--muted); font-size: 14px; }
+.vp-cta:disabled { opacity: 1; background: var(--surface-3); color: var(--fg-2); box-shadow: none; cursor: not-allowed; }
+.vp-foot { margin: -6px 0 0; font-size: 12.5px; color: var(--faint); }
+.pf-plus { border-color: rgba(22, 119, 255, .35); background: radial-gradient(400px 120px at 0% 0%, rgba(22, 119, 255, .14), transparent 70%), var(--surface); }
+.gift-modal.is-plus .gp-panel { border-color: rgba(22, 119, 255, .5); }
+.gp-plus-heart { display: grid; place-items: center; margin: 6px auto 4px; animation: modal-in .5s var(--spring) both; }
+.gp-plist { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; text-align: left; }
+.gp-plist .vp-ic { width: 24px; height: 24px; }
+.gp-plist > span > svg { flex: none; width: 24px; height: 24px; }
+.gift-modal.is-plus .gp-panel { max-height: calc(100dvh - 24px); overflow-y: auto; }
+.gp-plist > span { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 12px; background: var(--bg-raise); border: 1px solid var(--line); font-size: 13px; min-width: 0; }
+.gp-plist b { font-weight: 700; }
+.adm-plus { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.adm-plus-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+@media (max-width: 900px) { .vp-perks { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .vp-card { padding: 18px 16px; } .vp-perks { grid-template-columns: 1fr; } .vp-title { font-size: 21px; } .vp-buy .btn { width: 100%; } .gp-plist > span { padding: 7px 8px; font-size: 12px; gap: 6px; } .gp-plus-heart svg { width: 76px; height: 76px; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -3029,6 +3078,7 @@ const heartImg = (on, size, cls = "") => `<img class="hrt-img ${on ? "" : "off"}
 function refreshHearts() {
   const p = S.profile; if (!p) return;
   if (typeof p.hearts !== "number") p.hearts = HEART_MAX;
+  if (isPlus()) { p.hearts = HEART_MAX; p.heartsAt = null; return; } // Plus : vies illimitées
   if (p.hearts >= HEART_MAX) { p.hearts = HEART_MAX; p.heartsAt = null; return; }
   if (!p.heartsAt) p.heartsAt = Date.now();
   // 12 h après la première vie perdue, toutes les vies reviennent
@@ -3042,6 +3092,7 @@ function heartTimer() {
 }
 function loseHeart() {
   const p = S.profile;
+  if (isPlus()) return;
   refreshHearts();
   if (p.hearts >= HEART_MAX) p.heartsAt = Date.now();
   p.hearts = Math.max(0, p.hearts - 1);
@@ -3420,6 +3471,7 @@ async function finishSession() {
   // XP : 10 par leçon (15 si elle est longue), 20 pour un point de contrôle, 30 pour une certification, 5 pour une révision
   const xpMax = sessionXpMax(ses);
   r.xp = Math.round(xpMax * (st.n ? st.ok / st.n : 0));
+  if (isPlus() && r.xp > 0) { r.plusXp = true; r.xp *= 2; } // Plus : XP x2
   // Série, objectif du jour, portefeuille, badges
   const y = yesterday();
   p.streak = p.last_active === t ? p.streak : p.last_active === y ? (p.streak || 0) + 1 : 1;
@@ -3464,7 +3516,15 @@ function walletChips() {
         <p class="hp-sub">${n ? "Reviens demain pour le faire grandir." : "Termine une leçon aujourd'hui pour le lancer."}</p>
       </div>
     </div>
-    <div class="hud">
+    ${isPlus() ? `<div class="hud">
+      <button class="pill-stat heart plus" data-go="shop" aria-label="Vies illimitées">${plusHeart(22, "pill-hrt")}<span class="inf">∞</span></button>
+      <div class="hud-pop" role="tooltip">
+        <b class="hp-title">Vies</b>
+        <div class="hp-big"><span class="hp-ic">${plusHeart(40)}</span><span class="num">∞</span></div>
+        <p class="hp-msg">Vies illimitées</p>
+        <p class="hp-sub">Avec Verblyx Plus, tu ne perds jamais de vie.</p>
+      </div>
+    </div>` : `    <div class="hud">
       <button class="pill-stat heart ${p.hearts <= 1 ? "low" : ""}" data-go="shop" aria-label="Vies : ${p.hearts} sur ${HEART_MAX}">${heartImg(true, 22, "pill-hrt")}${p.hearts}</button>
       <div class="hud-pop" role="tooltip">
         <b class="hp-title">Vies</b>
@@ -3473,6 +3533,7 @@ function walletChips() {
         ${full ? `<button class="hp-link" data-go="dashboard">Continue d'apprendre</button>` : `<p class="hp-sub">Recharge complète dans ${t}</p><button class="hp-link" data-go="shop">Recharger dans la boutique</button>`}
       </div>
     </div>
+`}
     <div class="hud">
       <button class="pill-stat coin" data-go="shop" aria-label="Pièces : ${p.coins || 0}">${icon("i-coin")}${p.coins || 0}</button>
       <div class="hud-pop" role="tooltip">
@@ -3495,7 +3556,7 @@ function viewShell(inner) {
       ${(() => { const xp = p.xp || 0, n = xpLevel(xp), lo = xpLevelFloor(n), hi = xpLevelFloor(n + 1); return `<button class="side-lv" data-go="profile" aria-label="Niveau ${n}, ${hi - xp} XP avant le niveau ${n + 1}"><b>Niveau ${n}</b>${progress(((xp - lo) / (hi - lo)) * 100, "thin")}<span>${hi - xp} XP avant le niveau ${n + 1}</span></button>`; })()}
       <div class="side-foot">
         ${avatarHTML(p, 36, S.isVip)}
-        <span class="who"><b>${esc(p.first_name || "Élève")}</b><span class="small muted" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${S.isVip ? vipTag() + " " : ""}${p.username ? "@" + esc(p.username) + " · " : ""}Niveau ${esc(p.cefr_level)}</span>${S.store.kind === "local" ? `<span class="small" style="display:block;color:var(--warn)">Mode démo</span>` : ""}</span>
+        <span class="who"><b>${esc(p.first_name || "Élève")}</b><span class="small muted" style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${isPlus() ? plusTag() + " " : ""}${S.isVip ? vipTag() + " " : ""}${p.username ? "@" + esc(p.username) + " · " : ""}Niveau ${esc(p.cefr_level)}</span>${S.store.kind === "local" ? `<span class="small" style="display:block;color:var(--warn)">Mode démo</span>` : ""}</span>
         <button class="icon-btn gear ${S.settingsOpen ? "is-on" : ""}" data-act="settings-open" aria-label="Paramètres du compte" title="Paramètres">${icon("i-gear")}</button>
       </div>
     </aside>
@@ -3879,7 +3940,7 @@ function plusModal() {
 function viewShop() {
   const p = S.profile; refreshHearts();
   const room = HEART_MAX - p.hearts, t = heartTimer();
-  const hearts = Array.from({ length: HEART_MAX }, (_, k) => `<span class="hrt ${k < p.hearts ? "on" : ""}">${heartImg(k < p.hearts, 50)}</span>`).join("");
+  const hearts = isPlus() ? `<span class="hrt-inf">${plusHeart(54)}<b>∞</b></span>` : Array.from({ length: HEART_MAX }, (_, k) => `<span class="hrt ${k < p.hearts ? "on" : ""}">${heartImg(k < p.hearts, 50)}</span>`).join("");
   return `
   <header class="page-head enter"><div class="stack"><h1 class="h1">Boutique</h1><p class="muted">Dépense tes pièces pour continuer à apprendre sans t'arrêter.</p></div>
     <span class="pill-stat coin" style="height:40px;font-size:16px">${icon("i-coin")}${p.coins || 0} pièces</span></header>
@@ -3887,16 +3948,16 @@ function viewShop() {
     <div class="stack" style="gap:8px;min-width:0">
       <span class="label">Tes vies</span>
       <div class="hrts">${hearts}</div>
-      <p class="small muted">${room ? `Une mauvaise réponse retire une vie. ${t ? `Toutes tes vies reviennent gratuitement dans ${t}.` : ""} Une révision réussie en rend une.` : "Tes vies sont au maximum. Toutes les 12 h, elles se rechargent."}</p>
+      <p class="small muted">${isPlus() ? "Vies illimitées avec Verblyx Plus : tu ne perds jamais de vie." : room ? `Une mauvaise réponse retire une vie. ${t ? `Toutes tes vies reviennent gratuitement dans ${t}.` : ""} Une révision réussie en rend une.` : "Tes vies sont au maximum. Toutes les 12 h, elles se rechargent."}</p>
     </div>
     ${vx(p.hearts <= 1 ? "sad" : "heart", 110, "lead")}
   </section>
   ${notice(S.ui.shopMsg, "success")}
   <div class="shop-grid enter-3">
-    ${SHOP.map((it) => {
+    ${(isPlus() ? [] : SHOP).map((it) => {
       const n = it.n || room, price = it.price();
       const ok = room > 0 && n <= room && (p.coins || 0) >= price;
-      const why = room <= 0 ? "Vies au maximum" : n > room ? `Il te manque seulement ${plural(room, "vie", "vies")}` : (p.coins || 0) < price ? `Encore ${price - (p.coins || 0)} pièces` : "";
+      const why = isPlus() ? "Inclus dans Plus" : room <= 0 ? "Vies au maximum" : n > room ? `Il te manque seulement ${plural(room, "vie", "vies")}` : (p.coins || 0) < price ? `Encore ${price - (p.coins || 0)} pièces` : "";
       return `<div class="card shop-item">
         <span class="shop-ic img">${heartImg(true, 58)}${it.n > 1 ? `<b>×${it.n}</b>` : it.n === 0 ? `<b>max</b>` : ""}</span>
         <b class="h3">${it.name}</b><p class="small muted">${it.desc}</p>
@@ -3920,7 +3981,8 @@ function viewShop() {
       <div><b>+60</b><span>Obtenir une certification</span></div>
       <div><b>+5</b><span>Faire une révision</span></div>
     </div>
-  </section>  `;
+  </section>
+  ${plusShopCard()}`;
 }
 
 /* ---------- Paramètres du compte ---------- */
@@ -4033,6 +4095,43 @@ function avatarHTML(p, size = 36, vip = false) {
   return `<span class="avatar${v}" aria-hidden="true" style="${st}">${esc(((p && p.first_name) || "?").charAt(0).toUpperCase())}</span>`;
 }
 const vipTag = () => `<span class="vip-tag" title="Membre VIP">${icon("i-crown")}VIP</span>`;
+/* ---------- Verblyx Plus ---------- */
+const PLUS_GIFT_COINS = 1500;
+const isPlus = () => !!(S.plus && S.plus.active && (!S.plus.until || new Date(S.plus.until) > new Date()));
+const INF_PATH = `<path d="M16 14c-1.4-1.9-2.8-2.8-4.1-2.8a2.8 2.8 0 0 0 0 5.6c1.3 0 2.7-.9 4.1-2.8s2.8-2.8 4.1-2.8a2.8 2.8 0 0 1 0 5.6c-1.3 0-2.7-.9-4.1-2.8z" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/>`;
+const plusHeart = (size, cls = "") => `<svg class="plus-heart ${cls}" viewBox="0 0 32 32" width="${size}" height="${size}" aria-hidden="true"><defs><linearGradient id="phg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5AA2FF"/><stop offset="1" stop-color="#1263E0"/></linearGradient></defs><path d="M16 28.5S3.5 21.2 3.5 11.9A6.6 6.6 0 0 1 16 8.6a6.6 6.6 0 0 1 12.5 3.3c0 9.3-12.5 16.6-12.5 16.6z" fill="url(#phg)" stroke="#9CC8FF" stroke-opacity=".55" stroke-width="1"/>${INF_PATH.replace('d="M16 14', 'transform="translate(0 -.6)" d="M16 14')}</svg>`;
+const plusTag = () => `<span class="plus-tag" title="Membre Verblyx Plus"><svg viewBox="8 9 16 10" width="15" height="10" aria-hidden="true">${INF_PATH}</svg>Plus</span>`;
+const plusDate = (d) => { try { return new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }); } catch { return ""; } };
+const plusStatus = (pl) => !pl || !pl.active ? "" : (pl.lifetime || !pl.until) ? "à vie" : `jusqu'au ${plusDate(pl.until)}`;
+const PLUS_PERKS = [
+  ["heart", "Vies illimitées", "Fais autant de leçons que tu veux, sans jamais t'arrêter."],
+  ["chat", "3x plus de Prof IA", "Trois fois plus d'échanges avec Vex chaque jour."],
+  ["noads", "Aucune publicité", "Plus aucune annonce en fin de leçon."],
+  ["xp", "XP x2", "Chaque leçon te rapporte le double d'XP."],
+  ["coin", `${PLUS_GIFT_COINS.toLocaleString("fr-FR")} pièces offertes`, "Créditées d'un coup dès l'activation."],
+  ["badge", "Badge Plus", "Affiché sur ton profil et dans le classement."],
+];
+function plusPerkIc(k) {
+  if (k === "heart") return plusHeart(26);
+  if (k === "coin") return em("coin", 24);
+  if (k === "xp") return em("bolt", 24);
+  if (k === "chat") return `<span class="vp-ic">${icon("i-chat")}</span>`;
+  if (k === "noads") return `<span class="vp-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 4l16 16"/></svg></span>`;
+  return `<span class="vp-ic">${icon("i-star")}</span>`;
+}
+function plusShopCard() {
+  const on = isPlus();
+  return `<section class="vp-card ${on ? "is-on" : ""}" id="plus">
+    <div class="vp-head">
+      <div class="vp-brand">${plusHeart(44)}<div><span class="vp-logo">VERBLYX <b>PLUS</b></span><h2 class="vp-title">${on ? "Tu es membre Plus" : "Passe à Verblyx Plus"}</h2></div></div>
+      ${on ? `<span class="vp-state">${icon("i-check")} Actif ${esc(plusStatus(S.plus))}</span>` : `<span class="vp-soon">Bientôt disponible</span>`}
+    </div>
+    <div class="vp-perks">${PLUS_PERKS.map(([k, t, d]) => `<div class="vp-perk">${plusPerkIc(k)}<div><b>${t}</b><span>${d}</span></div></div>`).join("")}</div>
+    ${on ? `<p class="vp-foot">Merci de soutenir Verblyx. Tous tes avantages sont déjà actifs.</p>`
+      : `<div class="vp-buy"><div class="vp-price"><b>${euro(PLUS.monthly)}</b><span>par mois</span></div><button class="btn btn-primary btn-lg vp-cta" disabled>Paiement bientôt disponible</button></div>
+         <p class="vp-foot">Le paiement n'est pas encore ouvert : rien ne t'est facturé pour l'instant.</p>`}
+  </section>`;
+}
 function prefs() {
   const p = S.profile || {};
   return Object.assign({ anim: true, cheer: true, listen: true, speak: true }, p.prefs || {});
@@ -4077,7 +4176,7 @@ function settingsModal() {
   if (tab === "profil") body = `
     <div class="set-me">
       ${avatarHTML(p, 64, S.isVip)}
-      <div class="set-me-tx"><b>${esc(p.first_name || "Élève")}${S.isVip ? " " + vipTag() : ""}</b><span>${p.username ? "@" + esc(p.username) : "Pas encore de pseudo"} · Niveau ${esc(p.cefr_level)}</span></div>
+      <div class="set-me-tx"><b>${esc(p.first_name || "Élève")}${S.isVip ? " " + vipTag() : ""}${isPlus() ? " " + plusTag() : ""}</b><span>${p.username ? "@" + esc(p.username) : "Pas encore de pseudo"} · Niveau ${esc(p.cefr_level)}</span></div>
       ${S.accountNo ? `<button class="set-idchip" data-act="copy-id" title="Copier ton identifiant">ID ${accId(S.accountNo)}<em>${u.copied ? "copié" : "copier"}</em></button>` : ""}
     </div>
     ${grp("Identité", `
@@ -4156,6 +4255,7 @@ function applyGift(p, g) {
     p.cefr_level = g.level; p.level_progress = 0; p.placement_done = true;
     p.course = p.course || newCourse(g.level); p.course.start = g.level;
   }
+  if (g.kind === "plus" && g.on) { p.hearts = HEART_MAX; p.heartsAt = null; }
   if (g.kind === "profile") {
     if (typeof g.first_name === "string" && g.first_name) p.first_name = g.first_name;
     if (typeof g.username === "string") { if (g.username) p.username = g.username; else delete p.username; }
@@ -4183,11 +4283,29 @@ function giftSummary(gs) {
   else if (sum.hearts) items.push(["heart", `${sum.hearts > 0 ? "+" : ""}${sum.hearts}`, sum.hearts > 1 ? "vies" : "vie", "heart"]);
   if (lv) items.push(["i-up", lv, "nouveau niveau", "level"]);
   if (gs.some((g) => g.kind === "profile")) items.push(["i-user", "Profil", "mis à jour", "prof"]);
-  return { items, vip: gs.some((g) => g.kind === "vip" && g.on) };
+  return { items, vip: gs.some((g) => g.kind === "vip" && g.on), plus: gs.some((g) => g.kind === "plus" && g.on && !g.extend), plusExt: gs.some((g) => g.kind === "plus" && g.on && g.extend) };
+}
+function plusGiftModal(g) {
+  const blue = ["#5AA2FF", "#1677FF", "#BFDBFF", "#FFFFFF", "#00D6B5"];
+  const conf = Array.from({ length: 34 }, (_, k) => `<i style="left:${(k * 37) % 100}%;background:${blue[k % 5]};--d:${(k % 9) * .28}s;--t:${2.6 + (k % 5) * .45}s;--r:${(k * 53) % 360}deg;--x:${((k % 7) - 3) * 22}px;${k % 3 === 0 ? "border-radius:50%;width:8px;height:8px;" : ""}"></i>`).join("");
+  return `<div class="modal gift-modal is-plus" role="dialog" aria-modal="true" aria-labelledby="gp-title">
+    <div class="modal-bg" data-act="gift-close"></div>
+    <div class="confetti" aria-hidden="true">${conf}</div>
+    <div class="modal-panel gp-panel">
+      <div class="gp-glow" aria-hidden="true"></div>
+      <div class="gp-plus-heart">${plusHeart(96)}</div>
+      <span class="gp-kicker">Verblyx Plus activé</span>
+      <h2 class="gp-title" id="gp-title">Bienvenue dans Plus</h2>
+      <p class="gp-sub">L'équipe Verblyx t'offre <b>Verblyx Plus</b> ${esc(plusStatus(S.plus))}. Tous tes avantages sont déjà actifs.</p>
+      <div class="gp-plist">${PLUS_PERKS.map(([k, t]) => `<span>${plusPerkIc(k)}<b>${t}</b></span>`).join("")}</div>
+      <button class="btn btn-primary btn-lg btn-block" data-act="gift-close">C'est parti</button>
+    </div>
+  </div>`;
 }
 const CONFETTI = ["#FF5C8A", "#FFD45A", "#5CF3DA", "#1677FF", "#B68CFF", "#FFFFFF"];
 function giftModal() {
   const g = S.giftPop; if (!g) return "";
+  if (g.plus) return plusGiftModal(g);
   const vip = g.vip, gold = ["#FFE9A6", "#F6BE3B", "#D08E0C", "#FFF6D6", "#FFD45A"];
   const conf = Array.from({ length: 34 }, (_, k) => { const c = (vip ? gold : CONFETTI)[k % (vip ? 5 : 6)]; return `<i style="left:${(k * 37) % 100}%;background:${c};--d:${(k % 9) * .28}s;--t:${2.6 + (k % 5) * .45}s;--r:${(k * 53) % 360}deg;--x:${((k % 7) - 3) * 22}px;${k % 3 === 0 ? "border-radius:50%;width:8px;height:8px;" : ""}"></i>`; }).join("");
   const chips = g.items.map(([ic, big, small, cls]) => `<div class="gp-item gp-${cls}"><span class="gp-ic">${ic === "heart" ? heartImg(true, 30) : icon(ic)}</span><b class="num">${esc(big)}</b><span>${esc(small)}</span></div>`).join("");
@@ -4238,16 +4356,17 @@ async function claimGifts() {
     const gs = await S.store.claimGifts();
     if (gs.length) {
       const lvB = xpLevel(S.profile.xp || 0);
-      gs.forEach((g) => applyGift(S.profile, g));
+      gs.forEach((g) => { if (g.kind === "plus") S.plus = g.on ? { active: true, until: g.until || null, lifetime: !g.until } : { active: false }; applyGift(S.profile, g); });
       const lvA = xpLevel(S.profile.xp || 0); if (lvA > lvB) S.levelPop = { n: lvA, up: true, cefr: null, fresh: true };
       const nb = unlockedBadges(); S.profile.badges = nb;
       STEPS_CACHE = null;
       await saveProfile();
       const sm = giftSummary(gs);
       if (sm.vip) S.isVip = true;
-      if (sm.items.length || sm.vip) {
+      if (sm.plusExt && !sm.plus && !sm.items.length) S.giftNote = `Ton abonnement Verblyx Plus est prolongé ${plusStatus(S.plus)}.`;
+      if (sm.items.length || sm.vip || sm.plus) {
         // si plusieurs cadeaux arrivent, on les regroupe dans la même fenêtre
-        if (S.giftPop) { S.giftPop.items = giftSummary([...(S.giftPop.raw || []), ...gs]).items; S.giftPop.vip = S.giftPop.vip || sm.vip; S.giftPop.raw = [...(S.giftPop.raw || []), ...gs]; }
+        if (S.giftPop) { S.giftPop.items = giftSummary([...(S.giftPop.raw || []), ...gs]).items; S.giftPop.vip = S.giftPop.vip || sm.vip; S.giftPop.plus = S.giftPop.plus || sm.plus; S.giftPop.raw = [...(S.giftPop.raw || []), ...gs]; }
         else S.giftPop = { ...sm, raw: gs, fresh: true };
       }
       if (S.view !== "session") render();
@@ -4385,7 +4504,7 @@ function adminAccounts() {
       ${list.length && !rows.length ? `<div class="adm-empty">Aucun compte ne correspond à « ${esc(u.admQ)} ».</div>` : ""}
       ${rows.map((r) => { const p = r.p, open = u.admOpen === r.id; return `<div class="adm-acc ${open ? "is-open" : ""}">
         <div class="adm-tr">
-          <span class="adm-cell-who">${avatarHTML(p, 38, r.vip)}<span class="adm-who"><b>${esc(p.first_name || "Sans prénom")}${r.vip ? " " + vipTag() : ""}${r.is_admin ? ` <span class="adm-badge is-admin">Admin</span>` : r.staff_perms && r.staff_perms.length ? ` <span class="adm-badge">Équipe</span>` : ""}</b><span class="small muted">${p.username ? "@" + esc(p.username) + " · " : ""}${r.account_no ? accId(r.account_no) : "inscription en cours"}</span><span class="small muted adm-mail">${esc(r.email || "")}</span></span></span>
+          <span class="adm-cell-who">${avatarHTML(p, 38, r.vip)}<span class="adm-who"><b>${esc(p.first_name || "Sans prénom")}${r.vip ? " " + vipTag() : ""}${r.plus ? " " + plusTag() : ""}${r.is_admin ? ` <span class="adm-badge is-admin">Admin</span>` : r.staff_perms && r.staff_perms.length ? ` <span class="adm-badge">Équipe</span>` : ""}</b><span class="small muted">${p.username ? "@" + esc(p.username) + " · " : ""}${r.account_no ? accId(r.account_no) : "inscription en cours"}</span><span class="small muted adm-mail">${esc(r.email || "")}</span></span></span>
           <span data-l="Niveau"><span class="adm-lv">${esc(p.cefr_level || "—")}</span></span>
           <span data-l="XP" class="num">${p.xp || 0}</span>
           <span data-l="Vies" class="num">${hearts(p)}/${HEART_MAX}</span>
@@ -4421,6 +4540,9 @@ function adminPanel(r, p) {
       <div class="adm-grow"><span class="small muted">Niveau CECRL</span><div class="row"><select id="admLv" class="input" aria-label="Niveau">${LEVEL_IDS.map((l) => `<option ${l === p.cefr_level ? "selected" : ""}>${l}</option>`).join("")}</select><button class="btn btn-secondary btn-sm" data-act="adm-level" data-v="${r.id}">Appliquer</button></div></div>`));
   if (can("profiles") && r.ai_limit !== undefined) parts.push(box("Prof IA", `Consommé aujourd'hui : ${tokNum(r.ai_used || 0)} jetons sur ${tokNum(r.ai_limit || 0)} (environ ${Math.floor((r.ai_used || 0) / TOK_PER_MSG)} échanges).`, `
       <div class="adm-grow"><span class="small muted">Quota de jetons par jour ${r.ai_custom ? "(personnalisé)" : `(normal : ${r.is_admin ? "200 000, admin" : r.vip ? "60 000, VIP" : "30 000"})`}</span><div class="row adm-custom"><input id="admAi" class="input" type="number" inputmode="numeric" min="0" max="2000000" step="1000" value="${r.ai_limit != null ? r.ai_limit : ""}" aria-label="Quota de jetons par jour"><button class="btn btn-primary btn-sm" data-act="adm-ai" data-v="${r.id}">Appliquer</button>${r.ai_custom ? `<button class="btn btn-ghost btn-sm" data-act="adm-ai-reset" data-v="${r.id}">Quota normal</button>` : ""}</div><span class="small muted">≈ ${TOK_PER_MSG.toLocaleString("fr-FR")} jetons par échange avec Vex.</span></div>`));
+  if (can("vip")) parts.push(box("Verblyx Plus", r.plus ? `Plus actif ${r.plus_until ? "jusqu'au " + plusDate(r.plus_until) : "à vie"}.` : "Ce compte n'a pas Plus. L'activer lui offre aussi " + PLUS_GIFT_COINS.toLocaleString("fr-FR") + " pièces.", `<div class="adm-plus">
+      <span class="adm-plus-st">${r.plus ? plusTag() : `<span class="small muted">Pas de Plus</span>`}</span>
+      <div class="adm-plus-btns">${[[30, "1 mois"], [90, "3 mois"], [365, "1 an"], [-1, "À vie"]].map(([d, t]) => `<button class="btn btn-secondary btn-sm" data-act="adm-plus" data-v="${r.id}" data-d="${d}">${r.plus && d > 0 ? "+ " : ""}${t}</button>`).join("")}${r.plus ? `<button class="btn btn-ghost btn-sm danger-txt" data-act="adm-plus" data-v="${r.id}" data-d="0">Retirer</button>` : ""}</div></div>`));
   if (can("vip")) parts.push(box("Statut", "", `<div class="adm-vip-line"><span>${r.vip ? `${vipTag()} <span class="small muted">Ce compte est VIP.</span>` : `<span class="small muted">Ce compte n'est pas VIP.</span>`}</span>
       <button class="btn ${r.vip ? "btn-ghost" : "btn-secondary"} btn-sm vip-btn" data-act="adm-vip" data-v="${r.id}" data-on="${r.vip ? 0 : 1}">${icon("i-crown")}${r.vip ? "Retirer le VIP" : "Donner le VIP"}</button></div>`));
   return `<div class="adm-panel">${parts.join("")}<p class="small muted adm-foot">Inscrit le ${admDate(r.signed_up, true)} · ${Object.keys((p.course && p.course.done) || {}).length} leçons terminées${can("accounts") ? "" : ""}</p></div>`;
@@ -4531,6 +4653,8 @@ function logSentence(l) {
     case "level": return [`a passé ${t} au niveau <b>${esc(d.level || "?")}</b>`, "level"];
     case "vip_on": return [`a donné le VIP à ${t}`, "vip"];
     case "vip_off": return [`a retiré le VIP de ${t}`, "vip"];
+    case "plus_on": return [`a ${d.prolonge ? "prolongé" : "offert"} Verblyx Plus ${d.jours === -1 ? "à vie" : `pour ${d.jours} jours`} à ${t}`, "vip"];
+    case "plus_off": return [`a retiré Verblyx Plus de ${t}`, "vip"];
     case "profile": return [`a modifié le profil de ${t} : ${Object.entries(d).map(([k, v]) => `${{ first_name: "prénom", username: "pseudo", email: "e-mail" }[k] || k} « ${esc((v && v[0]) || "vide")} » → « ${esc((v && v[1]) || "vide")} »`).join(", ")}`, "edit"];
     case "msg_done": return [`a traité un message de ${t}`, "msg"];
     case "msg_reopen": return [`a rouvert un message de ${t}`, "msg"];
@@ -4707,7 +4831,7 @@ function viewCompetition() {
       ${r.rank === 1 ? `<span class="p2-crown">${icon("i-crown")}</span>` : ""}
       <div class="p2-av">${av(r, r.rank === 1 ? 92 : 72)}</div>
       <b class="p2-name">${esc(who(r))}</b>
-      <div class="p2-tags">${r.vip ? vipTag() : ""}${lvl(r)}</div>
+      <div class="p2-tags">${r.vip ? vipTag() : ""}${r.plus ? plusTag() : ""}${lvl(r)}</div>
       <span class="p2-score num">${icon(ico)}${r.score.toLocaleString("fr-FR")}</span>
       <div class="p2-step"><span>${r.rank}</span></div>
     </div>`;
@@ -4724,7 +4848,7 @@ function viewCompetition() {
   ${!LB.data[kind] && LB.busy[kind] ? `<div class="stack" style="gap:10px">${[1, 2, 3, 4].map(() => `<div class="skel" style="height:62px;border-radius:16px"></div>`).join("")}</div>` : ""}
   ${top.length ? `<ol class="lb2-list enter-3">${top.map((r) => `<li class="lb2-row ${r.is_me ? "is-me" : ""} ${r.rank <= 3 ? "rk-" + r.rank : ""} ${r.rank <= 10 ? "is-top" : ""}">
       <span class="lb2-rank num">${r.rank}</span>${av(r, 42)}
-      <span class="lb2-who"><b>${esc(who(r))}${r.is_me ? ` <span class="chip chip-teal" style="height:20px;font-size:11px">Toi</span>` : ""}</b><span class="lb2-tags">${r.vip ? vipTag() : ""}${lvl(r)}</span></span>
+      <span class="lb2-who"><b>${esc(who(r))}${r.is_me ? ` <span class="chip chip-teal" style="height:20px;font-size:11px">Toi</span>` : ""}</b><span class="lb2-tags">${r.vip ? vipTag() : ""}${r.plus ? plusTag() : ""}${lvl(r)}</span></span>
       <span class="lb2-score num">${icon(ico)}${r.score.toLocaleString("fr-FR")}</span></li>`).join("")}</ol>` : ""}
   ${me && (me.rank > 100 || !ranked) ? `<div class="lb2-row is-me lb2-sticky"><span class="lb2-rank num">${ranked ? me.rank : "—"}</span>${av(me, 42)}<span class="lb2-who"><b>Toi</b><span class="small muted">${ranked ? "Continue, tu remontes !" : "Pas encore classé"}</span></span><span class="lb2-score num">${icon(ico)}${me.score}</span></div>` : ""}
   <p class="small muted">${kind === "pulse" ? "Le Pulse compte les jours d'affilée où tu as appris." : kind === "coins" ? "Les pièces que tu as en ce moment." : "Toute l'expérience gagnée depuis ton inscription."}</p>`;
@@ -4781,14 +4905,14 @@ function viewProfile() {
   const words = Object.values(S.vocab || {}).filter((w) => w.learned).length;
   const since = (() => { try { const d = new Date(p.created_at); return isNaN(d) ? "" : d.toLocaleDateString("fr-FR", { month: "long", year: "numeric" }); } catch { return ""; } })();
   const fmt = (x) => Number(x || 0).toLocaleString("fr-FR");
-  const tile = (ic, v, t, off) => `<div class="pf-stat ${off ? "off" : ""}"><span class="pf-stat-ic">${em(ic, 28)}</span><span class="pf-stat-tx"><b class="num">${v}</b><span>${t}</span></span></div>`;
+  const tile = (ic, v, t, off) => `<div class="pf-stat ${off ? "off" : ""}"><span class="pf-stat-ic">${ic === "plusheart" ? plusHeart(28) : em(ic, 28)}</span><span class="pf-stat-tx"><b class="num">${v}</b><span>${t}</span></span></div>`;
   const block = (title, items, good, empty) => `<section class="card pad"><h2 class="pf-h">${title}</h2><div style="margin-top:12px">${items.length ? items.map((s) => `<div class="skill"><div class="t"><span>${esc(skillLabel(s.skill))}</span><span class="small muted num">${Math.round(s.mastery * 100)} %</span></div>${progress(Math.max(6, s.mastery * 100), "thin" + (good ? "" : " weak"))}</div>`).join("") : `<p class="small muted">${empty}</p>`}</div></section>`;
   return `
   <section class="pf-hero enter">
     <div class="pf-id">
       ${avatarHTML(p, 76, S.isVip)}
       <div class="pf-who">
-        <h1 class="pf-name">${esc(p.first_name || "Élève")}${S.isVip ? vipTag() : ""}</h1>
+        <h1 class="pf-name">${esc(p.first_name || "Élève")}${S.isVip ? vipTag() : ""}${isPlus() ? plusTag() : ""}</h1>
         <p class="pf-handle">${p.username ? "@" + esc(p.username) : "Sans pseudo"}</p>${since ? `<p class="pf-since">Membre depuis ${since}</p>` : ""}
         <div class="pf-tags"><span class="pf-tag">${esc(p.cefr_level)} · ${LEVEL_NAMES[p.cefr_level]}</span><span class="pf-tag">Niveau ${n}</span></div>
       </div>
@@ -4810,9 +4934,10 @@ function viewProfile() {
       ${tile("target", fmt(c.goals), c.goals === 1 ? "Objectif atteint" : "Objectifs atteints", !c.goals)}
       ${tile("read", fmt(words), words === 1 ? "Mot maîtrisé" : "Mots maîtrisés", !words)}
       ${tile("coin", fmt(p.coins), "Pièces")}
-      ${tile("heart", `${p.hearts ?? HEART_MAX}/${HEART_MAX}`, "Vies")}
+      ${isPlus() ? tile("plusheart", "∞", "Vies illimitées") : tile("heart", `${p.hearts ?? HEART_MAX}/${HEART_MAX}`, "Vies")}
     </div>
   </section>
+  ${isPlus() ? `<section class="card pad pf-row pf-plus"><div class="row" style="gap:12px;flex-wrap:nowrap;min-width:0">${plusHeart(34)}<div style="min-width:0"><b>Verblyx Plus</b><p class="small muted">Actif ${esc(plusStatus(S.plus))} · vies illimitées, XP x2, 3x plus de Prof IA, sans pub.</p></div></div><button class="btn btn-secondary btn-sm pf-btn" data-go="shop">Détails</button></section>` : ""}
   <section class="card pad pf-row">
     <div style="min-width:0"><b>Boutique</b><p class="small muted">Recharge tes vies ou protège ton Pulse avec tes pièces.</p></div>
     <button class="btn btn-primary btn-sm pf-btn" data-go="shop">Ouvrir</button>
@@ -4891,7 +5016,7 @@ function viewSession() {
       <button class="icon-btn" data-act="ses-quit" aria-label="Quitter">${icon("i-close")}</button>
       ${progress(pct)}
       <span class="flow-count">${Math.min(ses.i + 1, total)}/${total}</span>
-      ${ses.kind !== "review" ? `<span class="hearts-mini ${S.profile.hearts <= 1 ? "low" : ""} ${u.lost ? "lost" : ""}" title="Vies restantes">${heartImg(S.profile.hearts > 0, 28)}${S.profile.hearts}</span>` : ""}
+      ${ses.kind !== "review" && isPlus() ? `<span class="hearts-mini plus" title="Vies illimitées avec Verblyx Plus">${plusHeart(26)}∞</span>` : ses.kind !== "review" ? `<span class="hearts-mini ${S.profile.hearts <= 1 ? "low" : ""} ${u.lost ? "lost" : ""}" title="Vies restantes">${heartImg(S.profile.hearts > 0, 28)}${S.profile.hearts}</span>` : ""}
       ${soundBtn()}
     </header>
     <main class="flow-body enter">${stepper}${body}</main>
@@ -4956,7 +5081,7 @@ function cheerView(ses) {
   return `<div class="cheer" data-act="cheer-go" role="status">
     <div class="cheer-in">${vx("joy", 190, "lead")}
       <div class="cheer-bubble"><b>${a}</b><span>${b}</span></div>
-      <span class="cheer-xp num">${icon("i-pulse")} +${ses.done.xp} XP</span>
+      <span class="cheer-xp num">${icon("i-pulse")} +${ses.done.xp} XP${ses.done.plusXp ? ` <span class="plus-x2">x2 Plus</span>` : ""}</span>
     </div>
   </div>`;
 }
@@ -4974,7 +5099,7 @@ function endCheer() {
    Active seulement si adsenseClient et adsenseSlot sont remplis dans config.js.
    Jamais pour les VIP, l'admin ou l'équipe, jamais pendant une leçon. */
 const ADS = { client: "", slot: "", npa: true, loaded: false, el: null, key: null };
-const adsOn = () => !!(ADS.client && ADS.slot) && !S.isVip && !isStaff();
+const adsOn = () => !!(ADS.client && ADS.slot) && !S.isVip && !isPlus() && !isStaff();
 function adSlot(r) {
   if (!adsOn() || !r || r.passed === false || !["lesson", "unit", "exam", "review"].includes(r.kind)) return "";
   return `<div class="ad-wrap" data-ad-slot-here aria-label="Publicité"><span class="ad-label">Publicité</span></div>`;
@@ -5020,7 +5145,7 @@ function resultView(ses) {
       </div>
       <div class="rewards">
         <div class="rw"><span class="small muted">Réussite</span><b class="num">${Math.round(r.score * 100)} %</b></div>
-        <div class="rw"><span class="small muted">XP</span><b class="num" style="color:var(--primary-text)">+${r.xp}</b></div>
+        <div class="rw"><span class="small muted">XP${r.plusXp ? ` <span class="plus-x2">x2</span>` : ""}</span><b class="num" style="color:var(--primary-text)">+${r.xp}</b></div>
         <div class="rw"><span class="small muted">Pièces</span><b class="num" style="color:var(--warn)">+${r.coins}</b></div>
         ${r.heart ? `<div class="rw"><span class="small muted">Vie</span><b class="num" style="color:#FF3B5C">+1</b></div>` : ""}
       </div>
@@ -5168,6 +5293,7 @@ function coachReward(xp, coins, why) {
     p.last_active = t; p.best_streak = Math.max(p.best_streak || 0, p.streak);
     p.days = p.days || {}; const before = p.days[t] || 0; p.days[t] = before + xp;
     if (before < goalXp() && p.days[t] >= goalXp()) { p.goal_days = (p.goal_days || 0) + 1; coins += 10; }
+    if (isPlus()) { xp *= 2; p.days[t] = before + xp; } // Plus : XP x2
     const lvB = xpLevel(p.xp || 0); p.xp = (p.xp || 0) + xp;
     const lvA = xpLevel(p.xp); if (lvA > lvB) S.levelPop = { n: lvA, up: true, cefr: null, fresh: true };
   }
@@ -6041,6 +6167,16 @@ $app.addEventListener("click", (ev) => {
     }
     case "fb-done": { const id = Number(v), d = el.dataset.d === "1"; S.store.adminFeedbackDone(id, d).then(() => { const m = (S.ui.fbList || []).find((x) => x.id === id); if (m) m.done = d; S.ui.logs = null; render(); }).catch((e) => { S.ui.fbErr = (e && e.message) || "Erreur"; render(); }); break; }
     case "adm-refresh": adminLoad(); break;
+    case "adm-plus": {
+      const d = Number(el.dataset.d);
+      S.store.adminSetPlus(v, d).then(async () => {
+        u.admList = null; u.logs = null;
+        if (S.authUser && v === S.authUser.id && S.store.myPlus) S.plus = await S.store.myPlus().catch(() => S.plus);
+        u.admMsg = { id: v, text: d === 0 ? "Verblyx Plus retiré." : d === -1 ? "Verblyx Plus offert à vie." : `Verblyx Plus offert pour ${d === 30 ? "1 mois" : d === 90 ? "3 mois" : "1 an"}.` };
+        SFX.play(d ? "fanfare" : "unselect"); render();
+      }).catch((e) => { u.admErr = (e && e.message) || "Erreur"; render(); });
+      break;
+    }
     case "adm-vip": {
       const on = el.dataset.on === "1";
       S.store.adminSetVip(v, on).then(() => { const r = (u.admList || []).find((x) => x.id === v); if (r) r.vip = on; if (S.authUser && v === S.authUser.id) S.isVip = on; u.admMsg = { id: v, text: on ? "Badge VIP ajouté." : "Badge VIP retiré." }; u.logs = null; SFX.play(on ? "fanfare" : "unselect"); render(); })
@@ -6315,6 +6451,8 @@ function makeSupaStore(sb, uid) {
     async staffLogs(limit, actor) { const { data, error } = await sb.rpc("staff_logs", { p_limit: limit || 200, p_actor: actor || null }); if (error) throw error; return data || []; },
     async leaderboard(kind) { const { data, error } = await sb.rpc("leaderboard", { p_kind: kind }); if (error) throw error; return data || []; },
     async isVip() { const { data, error } = await sb.rpc("is_vip"); return !error && data === true; },
+    async myPlus() { const { data, error } = await sb.rpc("my_plus"); if (error) return null; return data || null; },
+    async adminSetPlus(target, days) { const { error } = await sb.rpc("admin_set_plus", { p_target: target, p_days: days }); if (error) throw error; },
     async adminSetVip(target, on) { const { error } = await sb.rpc("admin_set_vip", { p_target: target, p_on: on }); if (error) throw error; },
     async adminUpdateUser(target, fn, un, em) { const { error } = await sb.rpc("admin_update_user", { p_target: target, p_first_name: fn, p_username: un, p_email: em }); if (error) throw error; },
     async adminGift(target, kind, amount, level) { const { error } = await sb.rpc("admin_gift", { p_target: target, p_kind: kind, p_amount: amount || 0, p_level: level || null }); if (error) throw error; },
@@ -6479,7 +6617,7 @@ async function enterSession(session) {
     S.ui = {}; render(); return;
   }
   S.store = makeSupaStore(SB, session.user.id);
-  S.accountNo = null; S.isAdmin = false; S.perms = []; S.isVip = false; S.giftNote = "";
+  S.accountNo = null; S.isAdmin = false; S.perms = []; S.isVip = false; S.plus = null; S.giftNote = "";
   try {
     const [profile, vocab] = await Promise.all([S.store.loadProfile(), S.store.loadVocab()]);
     S.accountNo = await S.store.accountNo().catch(() => null);
@@ -6487,6 +6625,7 @@ async function enterSession(session) {
     const mp = await S.store.myPerms().catch(() => null);
     if (mp) { S.isAdmin = S.isAdmin || mp.admin === true; S.perms = Array.isArray(mp.perms) ? mp.perms : []; }
     S.isVip = await S.store.isVip().catch(() => false);
+    S.plus = S.store.myPlus ? await S.store.myPlus().catch(() => null) : null;
     S.profile = profile; S.vocab = vocab || {};
   } catch { $app.innerHTML = bootScreen("Impossible de charger tes données", "Vérifie ta connexion, puis recharge la page."); return; }
   // Inscription confirmée par e-mail : on récupère le profil préparé avant la confirmation
