@@ -1880,8 +1880,16 @@ button.set-item { cursor: pointer; }
 .fx-dot { position: fixed; z-index: 120; pointer-events: none; }
 .fx-float { position: fixed; z-index: 121; pointer-events: none; font: 800 17px var(--f-display); color: #5CF3DA; text-shadow: 0 2px 10px rgba(0, 214, 181, .6); white-space: nowrap; }
 .fx-flash { position: fixed; inset: 0; z-index: 119; pointer-events: none; }
-.fx-combo { position: fixed; left: 50%; top: 92px; z-index: 122; pointer-events: none; display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: linear-gradient(135deg, #FF8A3D, #FF3B5C); color: #fff; box-shadow: 0 12px 30px -8px rgba(255, 92, 60, .7); font: 800 16px var(--f-display); white-space: nowrap; }
-.fx-combo .em { filter: drop-shadow(0 0 4px rgba(255, 255, 255, .6)); }
+.fx-combo { position: fixed; left: 50%; top: 84px; z-index: 122; pointer-events: none; display: flex; align-items: center; gap: 12px; padding: 10px 16px 10px 10px; border-radius: 18px; background: radial-gradient(160px 80px at 0% 0%, rgba(0, 214, 181, .2), transparent 70%), #20232C; border: 1px solid rgba(0, 214, 181, .45); box-shadow: 0 18px 40px -14px rgba(0, 0, 0, .8), 0 0 24px -6px rgba(0, 214, 181, .45); white-space: nowrap; }
+.fc-ic { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; background: linear-gradient(135deg, #00D6B5, #1677FF); color: #fff; box-shadow: 0 6px 16px -6px rgba(0, 214, 181, .8); }
+.fc-ic .ico { width: 24px; height: 24px; animation: fc-beat .7s ease-in-out 2; }
+@keyframes fc-beat { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.25); } }
+.fc-tx { display: flex; align-items: center; gap: 8px; }
+.fc-tx b { font: 800 30px/1 var(--f-display); color: #5CF3DA; letter-spacing: -.02em; }
+.fc-tx span { font: 700 12px/1.2 var(--f-body); color: var(--fg-2); text-align: left; }
+.fc-dots { display: flex; gap: 4px; margin-left: 2px; }
+.fc-dots i { width: 7px; height: 18px; border-radius: 4px; background: #00D6B5; opacity: 0; animation: fc-dot .3s ease-out both; animation-delay: calc(var(--k) * 70ms + 150ms); }
+@keyframes fc-dot { from { opacity: 0; transform: scaleY(.3); } to { opacity: 1; transform: none; } }
 /* clavier et dictée */
 .kbd-zone { position: relative; display: flex; align-items: center; }
 .kbd-zone .input { padding-right: 58px; font-size: 17px; }
@@ -2571,7 +2579,8 @@ function fxFlash(color) {
   d.animate([{ opacity: 0 }, { opacity: 1, offset: .2 }, { opacity: 0 }], { duration: 520 }).onfinish = () => d.remove();
 }
 function fxCombo(n) {
-  const d = document.createElement("div"); d.className = "fx-combo"; d.innerHTML = `${em("fire", 26)}<b>${n} d'affilée</b>`;
+  const d = document.createElement("div"); d.className = "fx-combo";
+  d.innerHTML = `<span class="fc-ic">${icon("i-pulse")}</span><span class="fc-tx"><b class="num">${n}</b><span>bonnes réponses<br>d'affilée</span></span><span class="fc-dots">${Array.from({ length: Math.min(n, 5) }, (_, k) => `<i style="--k:${k}"></i>`).join("")}</span>`;
   document.body.appendChild(d);
   const a = animOn() ? d.animate([{ transform: "translate(-50%, 20px) scale(.5)", opacity: 0 }, { transform: "translate(-50%, 0) scale(1.12)", opacity: 1, offset: .2 }, { transform: "translate(-50%, 0) scale(1)", opacity: 1, offset: .75 }, { transform: "translate(-50%, -16px) scale(.9)", opacity: 0 }], { duration: 1500, easing: "ease-out" }) : null;
   if (a) a.onfinish = () => d.remove(); else setTimeout(() => d.remove(), 1300);
@@ -3371,7 +3380,12 @@ const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; 
 function prepEx(ex, phase) {
   const e = adaptEx(ex);
   const it = { t: "ex", ex: e, phase };
-  if (["order", "tr_en_fr", "tr_fr_en", "listen"].includes(e.type)) it.tiles = shuffle([...words(e.answer), ...(e.extra || [])]);
+  if (["order", "tr_en_fr", "tr_fr_en", "listen"].includes(e.type)) {
+    const base = words(e.answer), key = (w) => String(w).toLowerCase().replace(/[’‘`]/g, "'").replace(/[.,!?;:«»"]/g, "");
+    const seen = new Set(base.map(key)), extra = [];
+    (e.extra || []).forEach((w) => { const k = key(w); if (k && !seen.has(k)) { seen.add(k); extra.push(w); } });
+    it.tiles = shuffle([...base, ...extra]);
+  }
   if (e.type === "mcq" || e.type === "read") it.options = shuffle(e.options);
   if (e.type === "match") { it.left = shuffle(e.pairs.map((p, i) => i)); it.right = shuffle(e.pairs.map((p, i) => i)); }
   return it;
