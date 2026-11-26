@@ -5081,7 +5081,7 @@ function addRankedXp(p, xp) {
   Object.keys(p.rdays).sort().slice(0, -21).forEach((x) => delete p.rdays[x]);
 }
 const weekRankedXp = (p) => { const mo = parisMonday(); return Object.entries((p && p.rdays) || {}).reduce((s, [k, v]) => s + (k >= mo ? Number(v) || 0 : 0), 0); };
-const LB_KINDS = [["ranked", "Ranked", "i-shield"], ["xp", "XP", "i-bolt"], ["coins", "Pièces", "i-coin"], ["pulse", "Pulse", "i-pulse"]];
+const LB_KINDS = [["ranked", "Ranked", "i-shield"], ["coins", "Pièces", "i-coin"], ["pulse", "Pulse", "i-pulse"]];
 
 /* ---------- Ranked : ligues ---------- */
 const LEAGUES = [
