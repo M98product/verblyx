@@ -1856,6 +1856,59 @@ button.set-item { cursor: pointer; }
 .adm-plus-btns { display: flex; gap: 6px; flex-wrap: wrap; }
 @media (max-width: 900px) { .vp-perks { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .vp-card { padding: 18px 16px; } .vp-perks { grid-template-columns: 1fr; } .vp-title { font-size: 21px; } .vp-buy .btn { width: 100%; } .gp-plist > span { padding: 7px 8px; font-size: 12px; gap: 6px; } .gp-plus-heart svg { width: 76px; height: 76px; } }
+.set-plus-me { background: radial-gradient(400px 140px at 0% 0%, rgba(22, 119, 255, .22), transparent 70%), var(--surface); }
+.set-plus-me .plus-tag { margin-left: 2px; }
+.set-ok { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: rgba(0, 214, 181, .14); color: #2FE0C2; }
+.set-ok .ico { width: 14px; height: 14px; }
+.set-item > .plus-heart, .set-item > .em { flex: none; }
+
+/* ---------- Leçons : animations ---------- */
+.flow-body.ex-fresh > * { animation: ex-rise .5s cubic-bezier(.25,1.2,.5,1) both; }
+.flow-body.ex-fresh > *:nth-child(2) { animation-delay: .06s; } .flow-body.ex-fresh > *:nth-child(3) { animation-delay: .12s; } .flow-body.ex-fresh > *:nth-child(4) { animation-delay: .18s; } .flow-body.ex-fresh > *:nth-child(5) { animation-delay: .24s; } .flow-body.ex-fresh > *:nth-child(n+6) { animation-delay: .3s; }
+.flow-body.ex-fresh .options > .option, .flow-body.ex-fresh .bank > .tile, .flow-body.ex-fresh .ex-line, .flow-body.ex-fresh .part, .flow-body.ex-fresh .vocab-chip { animation: ex-pop .42s cubic-bezier(.3,1.5,.5,1) both; animation-delay: calc(var(--i, 0) * 55ms + 180ms); }
+.flow-body.ex-fresh .ex-line:nth-child(2), .flow-body.ex-fresh .part:nth-child(2), .flow-body.ex-fresh .vocab-chip:nth-child(2) { --i: 1; } .flow-body.ex-fresh .ex-line:nth-child(3), .flow-body.ex-fresh .part:nth-child(3), .flow-body.ex-fresh .vocab-chip:nth-child(3) { --i: 2; } .flow-body.ex-fresh .ex-line:nth-child(4), .flow-body.ex-fresh .part:nth-child(4), .flow-body.ex-fresh .vocab-chip:nth-child(4) { --i: 3; } .flow-body.ex-fresh .ex-line:nth-child(n+5), .flow-body.ex-fresh .part:nth-child(n+5), .flow-body.ex-fresh .vocab-chip:nth-child(n+5) { --i: 4; }
+@keyframes ex-rise { from { opacity: 0; transform: translateX(26px); } to { opacity: 1; transform: none; } }
+@keyframes ex-pop { 0% { opacity: 0; transform: translateY(10px) scale(.86); } 100% { opacity: 1; transform: none; } }
+.option.is-right { animation: right-glow 1s ease-out .05s; }
+@keyframes right-glow { 0% { box-shadow: 0 0 0 0 rgba(0, 214, 181, .55); } 100% { box-shadow: 0 0 0 16px rgba(0, 214, 181, 0); } }
+.answer-zone.ok { border-color: var(--success); border-style: solid; background: rgba(0, 214, 181, .07); transition: background .3s, border-color .3s; }
+.answer-zone.ko { border-color: var(--danger); border-style: solid; background: rgba(255, 59, 92, .06); }
+.progress > span.shine { position: relative; overflow: hidden; }
+.progress > span.shine::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent); transform: translateX(-100%); animation: bar-shine .9s ease-out .25s; }
+@keyframes bar-shine { to { transform: translateX(100%); } }
+.flow-top .progress > span { box-shadow: 0 0 12px rgba(0, 214, 181, .45); }
+.fx-dot { position: fixed; z-index: 120; pointer-events: none; }
+.fx-float { position: fixed; z-index: 121; pointer-events: none; font: 800 17px var(--f-display); color: #5CF3DA; text-shadow: 0 2px 10px rgba(0, 214, 181, .6); white-space: nowrap; }
+.fx-flash { position: fixed; inset: 0; z-index: 119; pointer-events: none; }
+.fx-combo { position: fixed; left: 50%; top: 92px; z-index: 122; pointer-events: none; display: flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: linear-gradient(135deg, #FF8A3D, #FF3B5C); color: #fff; box-shadow: 0 12px 30px -8px rgba(255, 92, 60, .7); font: 800 16px var(--f-display); white-space: nowrap; }
+.fx-combo .em { filter: drop-shadow(0 0 4px rgba(255, 255, 255, .6)); }
+/* clavier et dictée */
+.kbd-zone { position: relative; display: flex; align-items: center; }
+.kbd-zone .input { padding-right: 58px; font-size: 17px; }
+.kbd-mic { position: absolute; right: 7px; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; display: grid; place-items: center; border: 0; border-radius: 12px; background: var(--primary-soft); color: var(--primary-text); cursor: pointer; }
+.kbd-mic .ico { width: 20px; height: 20px; }
+.kbd-mic.on { background: var(--danger); color: #fff; animation: pulse 1.2s infinite; }
+.kbd-toggle { align-self: center; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 999px; background: transparent; color: var(--muted); font: 600 13px var(--f-body); cursor: pointer; }
+.kbd-toggle .ico { width: 18px; height: 18px; }
+@media (hover: hover) { .kbd-toggle:hover { color: var(--fg); border-color: var(--primary); } }
+.no-audio { padding: 12px 14px; border-radius: 14px; background: var(--bg-raise); border: 1px dashed var(--line-2); display: flex; flex-direction: column; gap: 4px; }
+/* question bonus */
+.method span.on.bonus { background: linear-gradient(135deg, #F6BE3B, #FF8A3D); color: #2A1600; display: inline-flex; gap: 5px; }
+.bonus-lbl { display: inline-flex; align-items: center; gap: 4px; color: #F6BE3B; }
+.bonus-intro { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 34px 18px 26px; border-radius: 24px; border: 1px solid rgba(246, 190, 59, .4); background: radial-gradient(300px 220px at 50% 25%, rgba(246, 190, 59, .22), transparent 70%), var(--surface); overflow: hidden; }
+.bonus-rays { position: absolute; left: 50%; top: 82px; width: 520px; height: 520px; margin: -260px 0 0 -260px; background: repeating-conic-gradient(rgba(246, 190, 59, .13) 0 10deg, transparent 10deg 26deg); border-radius: 50%; mask: radial-gradient(circle, #000 20%, transparent 62%); -webkit-mask: radial-gradient(circle, #000 20%, transparent 62%); animation: rays 14s linear infinite; pointer-events: none; }
+@keyframes rays { to { transform: rotate(360deg); } }
+.bonus-star { position: relative; display: grid; animation: star-float 2.4s ease-in-out infinite; filter: drop-shadow(0 8px 22px rgba(246, 190, 59, .55)); }
+@keyframes star-float { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-8px) rotate(4deg); } }
+.bonus-kick { position: relative; font: 800 12px var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: #F6BE3B; }
+.bonus-title { position: relative; font: 800 34px/1.1 var(--f-display); letter-spacing: -.02em; }
+.bonus-txt { position: relative; max-width: 26em; color: var(--fg-2); }
+.bonus-prize { position: relative; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.bonus-prize span { display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 14px; border-radius: 12px; background: var(--bg-raise); border: 1px solid var(--line-2); font: 800 15px var(--f-body); }
+.cheer-bonus { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 6px 12px; border-radius: 999px; background: rgba(246, 190, 59, .14); color: #F6BE3B; font: 800 14px var(--f-body); animation: ex-pop .5s cubic-bezier(.3,1.5,.5,1) .5s both; }
+.bonus-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(246, 190, 59, .14); color: #F6BE3B; }
+@media (prefers-reduced-motion: reduce) { .flow-body.ex-fresh > *, .flow-body.ex-fresh .options > .option, .flow-body.ex-fresh .bank > .tile, .bonus-rays, .bonus-star { animation: none !important; } }
+.tile.tile-st { display: inline-flex; align-items: center; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -2481,9 +2534,69 @@ function go(view, opts = {}) {
 window.addEventListener("hashchange", () => { const v = FROM_HASH[location.hash.slice(1)]; if (v && v !== S.view) go(v); });
 // Transition douce : Vex s'éclipse avant le changement d'écran
 async function swapScreen(fn) {
-  const lead = document.querySelector(".vx.lead");
-  try { if (lead) await Promise.race([vxLeave(lead), new Promise((r) => setTimeout(r, 700))]); } catch {}
+  const lead = document.querySelector(".vx.lead"), body = document.querySelector(".flow-body");
+  const out = body && animOn() && body.animate ? new Promise((r) => { body.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateX(-28px)" }], { duration: 170, easing: "ease-in", fill: "forwards" }).onfinish = r; setTimeout(r, 260); }) : null;
+  try { await Promise.all([lead ? Promise.race([vxLeave(lead), new Promise((r) => setTimeout(r, 700))]) : null, out]); } catch {}
   fn();
+}
+
+/* ---------- Effets des leçons ---------- */
+const animOn = () => { try { return prefs().anim !== false && !matchMedia("(prefers-reduced-motion: reduce)").matches; } catch { return true; } };
+function fxPop(sel, scale = 1.08) {
+  if (!animOn()) return; const el = typeof sel === "string" ? document.querySelector(sel) : sel; if (!el || !el.animate) return;
+  el.animate([{ transform: "scale(.82)" }, { transform: `scale(${scale})`, offset: .55 }, { transform: "none" }], { duration: 320, easing: "cubic-bezier(.3,1.4,.5,1)" });
+}
+function fxShake(sel) {
+  if (!animOn()) return; document.querySelectorAll(sel).forEach((el) => el.animate && el.animate([{ transform: "none" }, { transform: "translateX(-8px)" }, { transform: "translateX(7px)" }, { transform: "translateX(-5px)" }, { transform: "translateX(3px)" }, { transform: "none" }], { duration: 420, easing: "ease-out" }));
+}
+function fxBurst(x, y, colors, n = 16, spread = 90) {
+  if (!animOn()) return;
+  for (let k = 0; k < n; k++) {
+    const d = document.createElement("i"); d.className = "fx-dot";
+    const a = (Math.PI * 2 * k) / n + Math.random() * .5, r = spread * (.55 + Math.random() * .6), s = 5 + Math.random() * 6;
+    d.style.cssText = `left:${x}px;top:${y}px;width:${s}px;height:${s}px;background:${colors[k % colors.length]};${k % 3 ? "border-radius:50%;" : "border-radius:2px;"}`;
+    document.body.appendChild(d);
+    d.animate([{ transform: "translate(-50%,-50%) scale(1)", opacity: 1 }, { transform: `translate(calc(-50% + ${Math.cos(a) * r}px), calc(-50% + ${Math.sin(a) * r + 30}px)) scale(.3) rotate(${Math.random() * 360}deg)`, opacity: 0 }], { duration: 650 + Math.random() * 350, easing: "cubic-bezier(.2,.7,.3,1)" }).onfinish = () => d.remove();
+  }
+}
+function fxFloat(text, x, y, cls = "") {
+  if (!animOn()) return;
+  const d = document.createElement("span"); d.className = "fx-float " + cls; d.textContent = text; d.style.left = x + "px"; d.style.top = y + "px";
+  document.body.appendChild(d);
+  d.animate([{ transform: "translate(-50%, 0) scale(.6)", opacity: 0 }, { transform: "translate(-50%, -18px) scale(1.15)", opacity: 1, offset: .25 }, { transform: "translate(-50%, -64px) scale(1)", opacity: 0 }], { duration: 1150, easing: "ease-out" }).onfinish = () => d.remove();
+}
+function fxFlash(color) {
+  if (!animOn()) return;
+  const d = document.createElement("div"); d.className = "fx-flash"; d.style.boxShadow = `inset 0 0 120px 30px ${color}`; document.body.appendChild(d);
+  d.animate([{ opacity: 0 }, { opacity: 1, offset: .2 }, { opacity: 0 }], { duration: 520 }).onfinish = () => d.remove();
+}
+function fxCombo(n) {
+  const d = document.createElement("div"); d.className = "fx-combo"; d.innerHTML = `${em("fire", 26)}<b>${n} d'affilée</b>`;
+  document.body.appendChild(d);
+  const a = animOn() ? d.animate([{ transform: "translate(-50%, 20px) scale(.5)", opacity: 0 }, { transform: "translate(-50%, 0) scale(1.12)", opacity: 1, offset: .2 }, { transform: "translate(-50%, 0) scale(1)", opacity: 1, offset: .75 }, { transform: "translate(-50%, -16px) scale(.9)", opacity: 0 }], { duration: 1500, easing: "ease-out" }) : null;
+  if (a) a.onfinish = () => d.remove(); else setTimeout(() => d.remove(), 1300);
+}
+function fxProgress(prevPct) {
+  const bar = document.querySelector(".flow-top .progress > span"); if (!bar) return;
+  const to = bar.style.width;
+  if (animOn() && bar.animate) bar.animate([{ width: prevPct + "%" }, { width: to }], { duration: 650, easing: "cubic-bezier(.2,.8,.2,1)" });
+  bar.classList.remove("shine"); void bar.offsetWidth; bar.classList.add("shine");
+}
+// après « Valider » : réussite ou erreur, avec particules, XP qui s'envole et série
+function exResultFx(res, combo, xp) {
+  const v = document.querySelector(".verdict");
+  const zone = document.querySelector(".answer-zone, .options, .kbd-zone, .mic-zone, .match, #ses-text") || v;
+  if (res.ok) {
+    document.querySelectorAll(".option.is-right, .answer-zone .tile").forEach((el, k) => setTimeout(() => fxPop(el, 1.1), k * 55));
+    const r = (zone || document.body).getBoundingClientRect();
+    fxBurst(r.left + r.width / 2, r.top + Math.min(r.height, 80) / 2, ["#00D6B5", "#5CF3DA", "#FFD45A", "#1677FF", "#FFFFFF"], 18, 110);
+    const bar = document.querySelector(".flow-top .progress"); if (bar && xp) { const b = bar.getBoundingClientRect(); fxFloat(`+${xp} XP`, b.left + b.width * .6, b.bottom + 6, "xp"); }
+    if (combo === 3 || (combo > 3 && combo % 5 === 0)) setTimeout(() => { fxCombo(combo); SFX.play("combo"); }, 260);
+  } else if (!res.skip) {
+    fxShake(".answer-zone, .option.is-wrong, .kbd-zone, #ses-text, .mic-zone");
+    fxFlash("rgba(255, 59, 92, .22)");
+  }
+  if (v && animOn()) v.animate([{ transform: "translateY(26px) scale(.96)", opacity: 0 }, { transform: "translateY(-4px) scale(1.01)", opacity: 1, offset: .65 }, { transform: "none", opacity: 1 }], { duration: 420, easing: "cubic-bezier(.3,1.3,.5,1)" });
 }
 
 /* ---------- Bruitages (synthétisés, aucun fichier) ---------- */
@@ -2516,6 +2629,13 @@ const SFX = (() => {
     wrong: () => { tone(240, .16, { type: "sawtooth", vol: .045, to: 180 }); tone(190, .24, { type: "sawtooth", vol: .045, to: 120, at: .14 }); },
     fanfare: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, i === 3 ? .5 : .14, { type: "triangle", vol: .11, at: i * .11 })),
     pop: () => tone(880, .09, { to: 1500, vol: .07 }),
+    tick: () => { tone(1250, .035, { type: "triangle", vol: .07 }); tone(620, .05, { type: "sine", vol: .05, at: .012 }); },
+    ding: () => { tone(988, .1, { type: "triangle", vol: .11 }); tone(1319, .12, { type: "triangle", vol: .11, at: .08 }); tone(1976, .28, { type: "sine", vol: .06, at: .17 }); tone(2637, .22, { type: "sine", vol: .03, at: .24 }); },
+    oops: () => { tone(330, .12, { type: "triangle", vol: .09, to: 262 }); tone(247, .26, { type: "triangle", vol: .08, to: 196, at: .12 }); },
+    whoosh: () => { tone(1400, .16, { type: "sine", vol: .035, to: 260 }); tone(700, .12, { type: "triangle", vol: .025, to: 180, at: .02 }); },
+    combo: () => [659, 784, 988, 1319].forEach((f, i) => tone(f, .09, { type: "square", vol: .028, at: i * .055 })),
+    bonus: () => { [1047, 1319, 1568, 2093].forEach((f, i) => tone(f, .18, { type: "sine", vol: .07, at: i * .08 })); tone(523, .5, { type: "triangle", vol: .06, at: .05 }); },
+    jackpot: () => { [1568, 2093, 1568, 2093, 2637].forEach((f, i) => tone(f, .07, { type: "square", vol: .03, at: i * .06 })); [523, 659, 784, 1047].forEach((f, i) => tone(f, i === 3 ? .55 : .14, { type: "triangle", vol: .11, at: .3 + i * .1 })); },
   };
   return {
     play(n) { if (on && P[n]) { try { P[n](); } catch {} } },
@@ -3335,7 +3455,7 @@ function gradeSync(it, ans) {
     case "mcq": case "read": return { ok: ans === ex.answer, correct: ex.answer };
     case "fill": return { ok: [ex.answer, ...(ex.accept || [])].some((x) => norm(x) === norm(ans)), correct: ex.answer };
     case "order": case "tr_en_fr": case "tr_fr_en": case "listen":
-      return { ok: [ex.answer, ...(ex.accept || [])].some((x) => normT(x) === normT(ans)), correct: ex.type === "tr_en_fr" ? ex.answer : ex.answer };
+      return { ok: [ex.answer, ...(ex.accept || [])].some((x) => normT(x) === normT(ans) || normA(x) === normA(ans)), correct: ex.answer };
     case "match": return { ok: ans <= 1, correct: "", note: ans ? `${plural(ans, "erreur", "erreurs")} d'association` : "" };
     case "speak": { const s = similarity(ex.q, ans); return { ok: s >= .75, correct: ex.q, note: `Vex a entendu : « ${ans || "…"} »` }; }
   }
@@ -3358,11 +3478,17 @@ Réponds UNIQUEMENT avec : {"ok":true|false,"corrected":"sa phrase corrigée (ou
   const ok = w.length >= 3 && (ex.need || []).every((n) => w.includes(normT(n)));
   return { ok, correct: ex.sample || "", explain: ok ? "Bonne réponse : ta phrase respecte la consigne." : `Écris au moins une phrase complète${(ex.need || []).length ? ` avec : ${ex.need.join(", ")}` : ""}.` };
 }
+// écrire la phrase au clavier au lieu de toucher les mots (le choix est retenu)
+try { S.kbd = localStorage.getItem("verblyx:kbd") === "1"; } catch {}
+const kbdMode = (it) => !!(it && (it.forceKbd || S.kbd));
+// comparaison tolérante : accents, apostrophes et formes contractées (I'm = I am)
+const CONTR = [[/\bcan't\b/g, "can not"], [/\bcannot\b/g, "can not"], [/\bwon't\b/g, "will not"], [/\bshan't\b/g, "shall not"], [/n't\b/g, " not"], [/'m\b/g, " am"], [/'re\b/g, " are"], [/'ll\b/g, " will"], [/'ve\b/g, " have"]];
+const normA = (s) => { let t = String(s).toLowerCase().replace(/[’‘`]/g, "'"); CONTR.forEach(([a, b]) => { t = t.replace(a, b); }); return normT(t).normalize("NFD").replace(/[\u0300-\u036f]/g, ""); };
 function answerOf(it) {
   const u = S.ui, ex = it.ex;
   if (ex.type === "mcq" || ex.type === "read") return u.sel || "";
   if (ex.type === "fill" || ex.type === "build" || ex.type === "talk") return (u.text || "").trim();
-  if (["order", "tr_en_fr", "tr_fr_en", "listen"].includes(ex.type)) return (u.picked || []).map((k) => it.tiles[k]).join(" ");
+  if (["order", "tr_en_fr", "tr_fr_en", "listen"].includes(ex.type)) return kbdMode(it) ? (u.kbdText || "").trim() : (u.picked || []).map((k) => it.tiles[k]).join(" ");
   if (ex.type === "speak") return (u.spoken || "").trim();
   return "";
 }
@@ -3382,12 +3508,16 @@ async function checkAnswer() {
   res.answer = it.ex.type === "match" ? "" : String(ans);
   u.res = res;
   applyResult(it, res);
-  SFX.play(res.ok ? "correct" : "wrong");
+  ses.combo = it.bonus ? ses.combo || 0 : res.ok && !res.skip ? (ses.combo || 0) + 1 : 0;
+  SFX.play(it.bonus && res.ok ? "jackpot" : res.ok ? "ding" : res.skip ? "unselect" : "oops");
   S.fx = { sel: ".fx-res", react: res.ok ? "joy" : "sad" };
   render();
+  const gain = it.bonus ? (res.ok ? BONUS_XP : 0) : res.ok && !res.skip ? (it.retry ? 1 : it.phase === "practice" ? 2 : it.phase === "review" ? 1 : 3) * (isPlus() ? 2 : 1) : 0;
+  requestAnimationFrame(() => exResultFx(res, it.bonus ? 0 : ses.combo, gain));
 }
 function applyResult(it, res) {
   const ses = S.session, st = ses.stats, p = S.profile, ex = it.ex;
+  if (it.bonus) { ses.bonusOk = !!res.ok; return; } // la question bonus ne retire jamais de vie
   const first = !it.retry;
   if (!res.ok && !res.skip && ses.kind !== "review") loseHeart();
   if (first) { st.n++; if (res.ok) st.ok++; }
@@ -3413,18 +3543,42 @@ function applyResult(it, res) {
     ses.items.splice(lastPractice + 1, 0, again);
   }
 }
+// Leçon sans aucune faute : une question bonus plus difficile (traduire sans aide), qui ne coûte jamais de vie
+const BONUS_COINS = 20, BONUS_XP = 5;
+const goldStar = (s) => `<svg class="em" viewBox="0 0 24 24" width="${s}" height="${s}" aria-hidden="true"><defs><linearGradient id="gstar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE27A"/><stop offset="1" stop-color="#F29D25"/></linearGradient></defs><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.4l-5.8 3.1 1.1-6.5L2.6 9.4l6.5-.9z" fill="url(#gstar)" stroke="#C97A12" stroke-width="1.2" stroke-linejoin="round"/><path d="M9.2 9.6 12 5.2" stroke="#FFF6CF" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>`;
+function bonusItems(ses) {
+  if (ses.bonusDone || !(ses.kind === "lesson" || ses.kind === "focus") || !ses.content) return null;
+  const st = ses.stats; if (st.n < 3 || st.ok !== st.n) return null;
+  ses.bonusDone = true;
+  const c = ses.content, ex = (c.understand && c.understand.examples) || [];
+  const good = shuffle(ex.filter(([en, fr]) => en && fr && words(en).length >= 3 && words(en).length <= 12));
+  if (!good.length) return null;
+  const [en, fr] = good[0];
+  const it = prepEx({ type: "tr_fr_en", q: fr, answer: en.replace(/[.!?]+$/g, ""), accept: [], skill: ((c.master || [])[0] || {}).skill || "vocabulary" }, "bonus");
+  it.bonus = true; it.forceKbd = true;
+  return [{ t: "bonusIntro" }, it];
+}
+function bonusIntroFx() {
+  SFX.play("bonus");
+  const s = document.querySelector(".bonus-star"); if (!s) return;
+  fxPop(s, 1.2);
+  const r = s.getBoundingClientRect(); setTimeout(() => fxBurst(r.left + r.width / 2, r.top + r.height / 2, ["#FFD45A", "#F6BE3B", "#FFF3C4", "#1677FF"], 22, 130), 150);
+}
 let swapping = false;
 function nextItem() {
   const ses = S.session;
   if (!ses || swapping) return;
   if (ses.items && ses.kind !== "review" && S.profile.hearts <= 0 && ses.i < ses.items.length - 1) { ses.out = true; S.ui = {}; SFX.play("unselect"); render(); window.scrollTo(0, 0); return; }
-  SFX.play("next");
+  SFX.play(ses.items[ses.i] && ses.items[ses.i].t === "ex" ? "whoosh" : "next");
   swapping = true;
+  const prevPct = (ses.i / ses.items.length) * 100;
   swapScreen(() => {
     swapping = false;
     if (S.session !== ses) return;
     ses.i++; S.ui = {};
-    if (ses.i >= ses.items.length) finishSession(); else { render(); window.scrollTo(0, 0); autoPlay(); }
+    if (ses.i >= ses.items.length) { const extra = bonusItems(ses); if (extra) ses.items.push(...extra); }
+    if (ses.i >= ses.items.length) finishSession();
+    else { render(); window.scrollTo(0, 0); fxProgress(prevPct); if (ses.items[ses.i].t === "bonusIntro") bonusIntroFx(); autoPlay(); }
   });
 }
 function autoPlay() {
@@ -3472,6 +3626,7 @@ async function finishSession() {
   const xpMax = sessionXpMax(ses);
   r.xp = Math.round(xpMax * (st.n ? st.ok / st.n : 0));
   if (isPlus() && r.xp > 0) { r.plusXp = true; r.xp *= 2; } // Plus : XP x2
+  if (ses.bonusOk) { r.bonus = true; r.xp += BONUS_XP; r.coins += BONUS_COINS; }
   // Série, objectif du jour, portefeuille, badges
   const y = yesterday();
   p.streak = p.last_active === t ? p.streak : p.last_active === y ? (p.streak || 0) + 1 : 1;
@@ -3861,6 +4016,13 @@ function viewReview() {
    = ~0,0004 $ avec Gemini Flash-Lite, ~0,002 $ avec Groq (relais).
    Abonné très actif (60 échanges/jour) : ~0,8 à 3,6 $ par mois ; au plafond (300/jour) : ~3,8 $ avec Flash-Lite.
    Frais de paiement en ligne (~1,5 % + 0,25 €) : ~0,37 € par mois. */
+/* À FAIRE LE JOUR OÙ LE PAIEMENT EST BRANCHÉ (Stripe ou autre) :
+   1. PLUS.available = true ; le bouton de la boutique devient « S'abonner ».
+   2. Le serveur (webhook de paiement) remplit la table « plus » avec source = 'paid' et la date de fin,
+      et my_plus() doit renvoyer « source » pour que les Paramètres affichent « Gérer » et « Résilier ».
+   3. Brancher les actions « plus-manage » (portail client : carte, factures) et « plus-cancel » (résiliation)
+      dans Paramètres → Plus. La résiliation garde Plus jusqu'à la fin de la période payée.
+   4. Mentionner le prestataire de paiement dans la page Confidentialité et ajouter les conditions de vente. */
 const PLUS = {
   available: false,          // passer à true le jour où le paiement est branché
   lockFocus: false,          // true = les fonctions Plus sont réservées aux abonnés (cadenas)
@@ -4155,7 +4317,7 @@ function resizeImage(file, size = 160) {
     img.src = url;
   });
 }
-const SET_TABS = [["profil", "Profil", "i-user"], ["compte", "Compte", "i-lock"], ["lecons", "Leçons", "i-book"], ["aide", "Aide", "i-chat"]];
+const SET_TABS = [["profil", "Profil", "i-user"], ["compte", "Compte", "i-lock"], ["abo", "Plus", "i-star"], ["lecons", "Leçons", "i-book"], ["aide", "Aide", "i-chat"]];
 const FAQ = [
   ["Comment fonctionnent les vies ?", "Tu as 5 vies. Chaque mauvaise réponse en retire une. 12 h après la première vie perdue, elles reviennent toutes. Tu peux aussi en racheter dans la boutique, ou en regagner une en réussissant une révision."],
   ["À quoi servent les pièces ?", "Tu gagnes des pièces en terminant tes leçons, ton objectif du jour, les points de contrôle et les certifications. Elles servent à racheter des vies et des boucliers de Pulse."],
@@ -4219,6 +4381,20 @@ function settingsModal() {
     ${grp("Objectif quotidien", `<div class="set-pad"><div class="row between" style="gap:8px"><b class="set-b">Temps par jour</b><span class="set-hint" style="margin:0">${goalXp()} XP par jour</span></div>
       <div class="pf-times">${TIMES.map((m) => `<button class="${p.daily_minutes === m ? "is-on" : ""}" data-act="set-time" data-v="${m}">${m} min</button>`).join("")}</div></div>`)}
     ${grp("Niveau", `<div class="set-item">${setIco("i-cert", "blue")}<div class="set-tx"><b>${esc(p.cefr_level)} · ${esc(LEVEL_NAMES[p.cefr_level] || "")}</b><span>Ta progression est conservée.</span></div><button class="btn btn-secondary btn-sm" data-act="redo-test">Repasser le test</button></div>`)}`;
+  if (tab === "abo") {
+    const on = isPlus(), life = on && (S.plus.lifetime || !S.plus.until), paid = on && S.plus.source === "paid";
+    body = `
+    <div class="set-me set-plus-me">${plusHeart(54)}<div class="set-me-tx"><b>Verblyx Plus ${on ? plusTag() : ""}</b><span>${on ? `Actif ${esc(plusStatus(S.plus))}` : "Tu n'as pas encore Plus."}</span></div></div>
+    ${grp(on ? "Tes avantages" : "Ce que Plus t'apporte", PLUS_PERKS.map(([k, t, d]) => `<div class="set-item">${plusPerkIc(k)}<div class="set-tx"><b>${t}</b><span>${d}</span></div>${on ? `<span class="set-ok">${icon("i-check")}</span>` : ""}</div>`).join(""))}
+    ${grp("Gérer l'abonnement", on && !paid
+      ? `<div class="set-item">${setIco("i-heart", "blue")}<div class="set-tx"><b>Plus t'a été offert</b><span>${life ? "Il est à vie : tu n'as rien à faire." : `Rien à résilier : il s'arrête tout seul le ${esc(plusDate(S.plus.until))}.`}</span></div></div>`
+      : PLUS.available
+      ? (paid ? `<button class="set-item set-link" data-act="plus-manage">${setIco("i-coin", "blue")}<div class="set-tx"><b>Moyen de paiement et factures</b><span>Modifier ta carte, télécharger tes factures.</span></div><span class="set-chev">${icon("i-arrow")}</span></button>
+         <button class="set-item set-link" data-act="plus-cancel">${setIco("i-close", "red")}<div class="set-tx"><b>Résilier l'abonnement</b><span>Tu gardes Plus jusqu'à la fin de la période payée.</span></div><span class="set-chev">${icon("i-arrow")}</span></button>`
+        : `<button class="set-item set-link" data-go="shop">${setIco("i-star", "blue")}<div class="set-tx"><b>S'abonner à Plus</b><span>${euro(PLUS.monthly)} par mois, sans engagement.</span></div><span class="set-chev">${icon("i-arrow")}</span></button>`)
+      : `<div class="set-item">${setIco("i-lock", "gray")}<div class="set-tx"><b>Paiement bientôt disponible</b><span>Tu pourras t'abonner, changer ta carte ou résilier ici, en un clic.</span></div></div>`)}
+    ${!on ? `<button class="btn btn-primary btn-block" style="margin-top:18px" data-act="plus-see">Voir Verblyx Plus</button>` : ""}`;
+  }
   if (tab === "aide") body = `
     ${grp("Questions fréquentes", `<div class="faq set-faq">${FAQ.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</div>`)}
     ${online ? grp("Écrire à l'équipe", `<form class="set-field" data-form="settings-help" novalidate>
@@ -4972,8 +5148,20 @@ function viewSession() {
   const it = ses.items[ses.i], total = ses.items.length;
   const isLesson = ses.kind === "lesson" || ses.kind === "focus";
   let body = "", foot = "", footCls = "";
-  const stepper = isLesson ? `<div class="method">${METHOD.map((m, k) => `<span class="${k === methodStep(it) ? "on" : k < methodStep(it) ? "past" : ""}">${m}</span>`).join("")}</div>` : `<div class="method single"><span class="on">${ses.kind === "unit" ? "Test de l'unité" : ses.kind === "exam" ? `Examen ${ses.st.level}` : ses.kind === "review" ? "Révision" : "Entraînement"}</span></div>`;
-  if (it.t === "understand") {
+  const stepper = it.t === "bonusIntro" || it.bonus ? `<div class="method single"><span class="on bonus">${goldStar(14)} Bonus</span></div>` : isLesson ? `<div class="method">${METHOD.map((m, k) => `<span class="${k === methodStep(it) ? "on" : k < methodStep(it) ? "past" : ""}">${m}</span>`).join("")}</div>` : `<div class="method single"><span class="on">${ses.kind === "unit" ? "Test de l'unité" : ses.kind === "exam" ? `Examen ${ses.st.level}` : ses.kind === "review" ? "Révision" : "Entraînement"}</span></div>`;
+  const fresh = !u.seen; u.seen = true;
+  if (it.t === "bonusIntro") {
+    body = `<div class="bonus-intro">
+      <div class="bonus-rays" aria-hidden="true"></div>
+      <span class="bonus-star">${goldStar(96)}</span>
+      <span class="bonus-kick">Sans aucune faute</span>
+      <h1 class="bonus-title">Question bonus</h1>
+      <p class="bonus-txt">Une dernière question, plus difficile : traduis une phrase en anglais, <b>sans aide</b>, au clavier.</p>
+      <div class="bonus-prize"><span>${em("coin", 22)} +${BONUS_COINS} pièces</span><span>${em("bolt", 22)} +${BONUS_XP} XP</span></div>
+      <p class="small muted">Aucune vie en jeu : tu ne risques rien.</p>
+    </div>`;
+    foot = `<button class="btn btn-ghost" data-act="bonus-skip">Passer</button><button class="btn btn-primary btn-lg" data-act="next">Relever le défi</button>`;
+  } else if (it.t === "understand") {
     const c = ses.content;
     body = `${ask("book", c.goal || ses.st.goal, ses.title)}
       <div class="card pad stack" style="gap:14px"><p style="font-size:16px;line-height:1.7">${esc(c.understand.text)}</p>
@@ -5006,7 +5194,7 @@ function viewSession() {
       foot = `<span class="foot-note">${r.ok ? icon("i-check") + " Bien joué" : ""}</span><button class="btn btn-primary btn-lg" data-act="next">Continuer</button>`;
     } else {
       const ready = it.ex.type === "match" ? false : !!String(answerOf(it)).trim();
-      foot = `${it.ex.type === "speak" ? `<button class="btn btn-ghost" data-act="skip">Je ne peux pas parler</button>` : "<span></span>"}
+      foot = `${it.ex.type === "speak" ? `<button class="btn btn-ghost" data-act="skip">Je ne peux pas parler</button>` : it.ex.type === "listen" && !u.noAudio ? `<button class="btn btn-ghost" data-act="no-audio">Je ne peux pas écouter</button>` : "<span></span>"}
         ${it.ex.type === "match" ? "" : `<button class="btn btn-primary btn-lg" data-act="check" ${ready && !u.busy ? "" : "disabled"}>${u.busy ? '<span class="spinner"></span> Vex corrige…' : "Valider"}</button>`}`;
     }
   }
@@ -5019,7 +5207,7 @@ function viewSession() {
       ${ses.kind !== "review" && isPlus() ? `<span class="hearts-mini plus" title="Vies illimitées avec Verblyx Plus">${plusHeart(26)}∞</span>` : ses.kind !== "review" ? `<span class="hearts-mini ${S.profile.hearts <= 1 ? "low" : ""} ${u.lost ? "lost" : ""}" title="Vies restantes">${heartImg(S.profile.hearts > 0, 28)}${S.profile.hearts}</span>` : ""}
       ${soundBtn()}
     </header>
-    <main class="flow-body enter">${stepper}${body}</main>
+    <main class="flow-body enter ${fresh ? "ex-fresh" : ""}">${stepper}${body}</main>
     <footer class="flow-foot ${footCls}"><div class="flow-foot-in">${foot}</div></footer>
     ${u.sheet && ses.content ? `<div class="sheet" role="dialog" aria-modal="true" aria-label="La leçon"><div class="sheet-bg" data-act="sheet-close"></div><div class="sheet-panel">
       <div class="row between" style="flex-wrap:nowrap"><span class="label">La leçon</span><button class="icon-btn" data-act="sheet-close" aria-label="Fermer">${icon("i-close")}</button></div>
@@ -5031,17 +5219,23 @@ function viewSession() {
 }
 function exerciseView(ses, it) {
   const ex = it.ex, u = S.ui, done = !!u.res;
-  const top = `<div class="row between" style="flex-wrap:nowrap;gap:8px"><span class="label">${it.retry ? "On réessaie · " : ""}${EX_LABEL[ex.type]}</span>${ses.content ? `<button class="btn btn-ghost btn-sm" data-act="sheet">${icon("i-book")} Revoir la leçon</button>` : ""}</div>`;
+  const top = `<div class="row between" style="flex-wrap:nowrap;gap:8px"><span class="label">${it.bonus ? `<span class="bonus-lbl">${goldStar(14)} Question bonus</span> · Traduis en anglais, sans aide` : `${it.retry ? "On réessaie · " : ""}${EX_LABEL[ex.type]}`}</span>${ses.content ? `<button class="btn btn-ghost btn-sm" data-act="sheet">${icon("i-book")} Revoir la leçon</button>` : ""}</div>`;
   let q = "", inp = "";
   const tilesUI = () => {
     const picked = u.picked || [];
+    if (kbdMode(it)) {
+      if (done) return `<div class="answer-zone ${u.res.ok ? "ok" : "ko"}">${words(u.res.answer || "").map((w) => `<span class="tile tile-st">${esc(w)}</span>`).join("")}</div>`;
+      return `<div class="kbd-zone"><input id="ses-kbd" class="input big-input" value="${esc(u.kbdText || "")}" placeholder="${ex.type === "tr_en_fr" ? "Écris la phrase en français…" : "Écris la phrase en anglais…"}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ta réponse au clavier">${S.dict && ex.type !== "tr_en_fr" ? `<button class="kbd-mic ${u.listening && u.dictKbd ? "on" : ""}" data-act="mic-dict" aria-label="${u.listening && u.dictKbd ? "Arrêter la dictée" : "Dicter ta réponse"}" title="Dicter">${icon("i-mic")}</button>` : ""}</div>
+        ${it.forceKbd ? "" : `<button class="kbd-toggle" data-act="kbd-toggle">${icon("i-cards")} Utiliser les mots</button>`}`;
+    }
     return `<div class="answer-zone ${done ? (u.res.ok ? "ok" : "ko") : ""}">${picked.map((k) => `<button class="tile" data-act="untile" data-v="${k}" ${done ? "disabled" : ""}>${esc(it.tiles[k])}</button>`).join("") || `<span class="small muted">Touche les mots dans l'ordre</span>`}</div>
-      <div class="bank">${it.tiles.map((t, k) => `<button class="tile ${picked.includes(k) ? "used" : ""}" data-act="tile" data-v="${k}" ${picked.includes(k) || done ? "disabled" : ""} ${picked.includes(k) ? 'aria-hidden="true"' : ""}>${esc(t)}</button>`).join("")}</div>`;
+      <div class="bank">${it.tiles.map((t, k) => `<button class="tile ${picked.includes(k) ? "used" : ""}" style="--i:${k}" data-act="tile" data-v="${k}" ${picked.includes(k) || done ? "disabled" : ""} ${picked.includes(k) ? 'aria-hidden="true"' : ""}>${esc(t)}</button>`).join("")}</div>
+      ${done ? "" : `<button class="kbd-toggle" data-act="kbd-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="ico"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M6 10h.01M9.5 10h.01M13 10h.01M16.5 10h.01M7 14h10"/></svg> Écrire au clavier</button>`}`;
   };
   switch (ex.type) {
     case "mcq": case "read":
       q = ex.type === "read" ? `<div class="card pad passage">${speakerBtn(ex.passage)}<p>${esc(ex.passage)}</p></div><p class="sentence">${esc(ex.q)}</p>` : `<p class="sentence">${blanked(ex.q, u.sel)}</p>`;
-      inp = `<div class="options">${it.options.map((o, k) => { const st = done ? (o === ex.answer ? "is-right" : o === u.sel ? "is-wrong" : "") : u.sel === o ? "is-selected" : ""; return `<button class="option ${st}" data-act="pick" data-v="${esc(o)}" ${done ? "disabled" : ""}><span class="key">${k + 1}</span><span class="tx"><b>${esc(o)}</b></span></button>`; }).join("")}</div>`;
+      inp = `<div class="options">${it.options.map((o, k) => { const st = done ? (o === ex.answer ? "is-right" : o === u.sel ? "is-wrong" : "") : u.sel === o ? "is-selected" : ""; return `<button class="option ${st}" style="--i:${k}" data-act="pick" data-v="${esc(o)}" ${done ? "disabled" : ""}><span class="key">${k + 1}</span><span class="tx"><b>${esc(o)}</b></span></button>`; }).join("")}</div>`;
       break;
     case "fill":
       q = `<p class="sentence">${blanked(ex.q, done ? u.text : "")}</p>`;
@@ -5054,7 +5248,8 @@ function exerciseView(ses, it) {
       q = `<div class="row" style="gap:6px;flex-wrap:nowrap;align-items:flex-start">${ex.type === "tr_en_fr" ? speakerBtn(ex.q) : ""}<p class="sentence" style="min-width:0">${esc(ex.q)}</p></div>`;
       inp = tilesUI(); break;
     case "listen":
-      q = `<div class="row listen">${S.tts ? `<button class="btn btn-primary btn-lg" data-act="say" data-v="${esc(ex.q)}">${icon("i-sound")} Écouter</button><button class="btn btn-secondary btn-lg" data-act="say" data-slow="1" data-v="${esc(ex.q)}">${icon("i-turtle")} Lentement</button>` : ""}</div>`;
+      q = `<div class="row listen">${S.tts ? `<button class="btn btn-primary btn-lg" data-act="say" data-v="${esc(ex.q)}">${icon("i-sound")} Écouter</button><button class="btn btn-secondary btn-lg" data-act="say" data-slow="1" data-v="${esc(ex.q)}">${icon("i-turtle")} Lentement</button>` : ""}</div>
+        ${u.noAudio ? `<div class="no-audio"><span class="small muted">La phrase à reconstruire :</span><p class="sentence">${esc(ex.q)}</p></div>` : ""}`;
       inp = tilesUI(); break;
     case "match": {
       const m = u.matched || [];
@@ -5082,6 +5277,7 @@ function cheerView(ses) {
     <div class="cheer-in">${vx("joy", 190, "lead")}
       <div class="cheer-bubble"><b>${a}</b><span>${b}</span></div>
       <span class="cheer-xp num">${icon("i-pulse")} +${ses.done.xp} XP${ses.done.plusXp ? ` <span class="plus-x2">x2 Plus</span>` : ""}</span>
+      ${ses.done.bonus ? `<span class="cheer-bonus">${goldStar(18)} Bonus réussi · +${BONUS_COINS} pièces</span>` : ""}
     </div>
   </div>`;
 }
@@ -5149,6 +5345,7 @@ function resultView(ses) {
         <div class="rw"><span class="small muted">Pièces</span><b class="num" style="color:var(--warn)">+${r.coins}</b></div>
         ${r.heart ? `<div class="rw"><span class="small muted">Vie</span><b class="num" style="color:#FF3B5C">+1</b></div>` : ""}
       </div>
+      ${r.bonus ? `<p class="chip bonus-chip">${goldStar(16)} Question bonus réussie · +${BONUS_COINS} pièces, +${BONUS_XP} XP</p>` : ""}
       ${r.bonusGoals ? `<p class="chip chip-teal">Objectif bonus atteint · +${5 * r.bonusGoals} pièces</p>` : ""}
       ${r.goalReached ? `<p class="chip chip-teal">Objectif du jour atteint · +10 pièces</p>` : `<p class="small muted num">${todayXp() >= goalXp() ? `${todayXp()} / ${(Math.floor(todayXp() / goalXp()) + 1) * goalXp()} XP pour l'objectif bonus` : `${todayXp()} / ${goalXp()} XP pour l'objectif du jour`} · Pulse de ${plural(liveStreak(), "jour", "jours")}</p>`}
       ${newB.length ? `<div class="stack" style="gap:8px;align-items:center"><span class="label">${newB.some((b) => b.secret) ? em("unlock", 18) + " Badge secret débloqué" : "Nouveau succès"}</span><div class="row" style="justify-content:center">${newB.map((b) => `<div class="badge">${b.svg}<span>${b.name}</span></div>`).join("")}</div></div>` : ""}
@@ -6141,7 +6338,7 @@ $app.addEventListener("click", (ev) => {
     case "log-refresh": logLoad(); break;
     case "plus-plan": u.plusPlan = v; SFX.play("tap"); render(); break;
     case "plus-close": S.plusModal = null; render(); break;
-    case "plus-see": S.plusModal = null; go("shop"); setTimeout(() => { const c = document.getElementById("plus"); if (c) c.scrollIntoView({ block: "start", behavior: "smooth" }); }, 60); break;
+    case "plus-see": S.plusModal = null; S.settingsOpen = false; go("shop"); setTimeout(() => { const c = document.getElementById("plus"); if (c) c.scrollIntoView({ block: "start", behavior: "smooth" }); }, 60); break;
     case "adm-ai": case "adm-ai-reset": {
       const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
       let lim = null;
@@ -6250,8 +6447,24 @@ $app.addEventListener("click", (ev) => {
     case "next": nextItem(); break;
     case "check": checkAnswer(); break;
     case "skip": u.res = { ok: true, skip: true, correct: "", explain: "Pas de souci, on passe à la suite." }; render(); break;
-    case "pick": u.sel = v; SFX.play("select"); render(); break;
-    case "tile": { u.picked = [...(u.picked || []), Number(v)]; SFX.play("tap"); render(); break; }
+    case "pick": u.sel = v; SFX.play("select"); render(); fxPop('.option.is-selected', 1.04); break;
+    case "tile": { u.picked = [...(u.picked || []), Number(v)]; SFX.play("tick"); render(); const ts = document.querySelectorAll(".answer-zone .tile"); if (ts.length) fxPop(ts[ts.length - 1], 1.15); break; }
+    case "kbd-toggle": {
+      S.kbd = !S.kbd; try { localStorage.setItem("verblyx:kbd", S.kbd ? "1" : "0"); } catch {}
+      const it = S.session.items[S.session.i];
+      if (S.kbd && !u.kbdText && (u.picked || []).length) u.kbdText = u.picked.map((k) => it.tiles[k]).join(" ");
+      SFX.play("tap"); render();
+      if (S.kbd) { const k = document.getElementById("ses-kbd"); if (k) { k.focus(); k.setSelectionRange(k.value.length, k.value.length); } }
+      break;
+    }
+    case "mic-dict": {
+      if (!S.dict) break;
+      if (u.listening) { S.dict.stop().catch(() => {}); }
+      else { u.dictKbd = true; u.listening = true; SFX.play("tap"); render(); S.dict.start({ language: "en" }).catch(() => { S.ui.listening = false; render(); }); }
+      break;
+    }
+    case "no-audio": u.noAudio = true; SFX.play("tap"); render(); fxPop(".no-audio", 1.02); break;
+    case "bonus-skip": { const ses = S.session; if (ses && ses.items[ses.i + 1] && ses.items[ses.i + 1].bonus) ses.items.splice(ses.i + 1, 1); nextItem(); break; }
     case "untile": { u.picked = (u.picked || []).filter((k) => k !== Number(v)); SFX.play("unselect"); render(); break; }
     case "mL": u.mL = Number(v); SFX.play("tap"); render(); break;
     case "mR": {
@@ -6263,7 +6476,7 @@ $app.addEventListener("click", (ev) => {
     case "mic": {
       if (!S.dict) break;
       if (u.listening) { S.dict.stop().catch(() => {}); }
-      else { u.spoken = ""; u.listening = true; render(); S.dict.start({ language: "en" }).catch(() => { S.ui.listening = false; S.ui.micErr = true; render(); }); }
+      else { u.spoken = ""; u.dictKbd = false; u.listening = true; render(); S.dict.start({ language: "en" }).catch(() => { S.ui.listening = false; S.ui.micErr = true; render(); }); }
       break;
     }
     case "say": say(v, el.dataset.slow === "1"); break;
@@ -6338,6 +6551,7 @@ $app.addEventListener("input", (ev) => {
   if (t.id === "coachInput") { u.chatDraft = t.value; autoGrow(t); }
   if (t.id === "snd-vol" && coachChange(t)) return;
   if (t.id === "setName") { u.nameDraft = t.value; u.saved = ""; }
+  if (t.id === "ses-kbd") { u.kbdText = t.value; const b = document.querySelector('[data-act="check"]'); if (b && !u.busy) b.disabled = !t.value.trim(); }
   if (t.id === "ses-text") { u.text = t.value; const b = document.querySelector('[data-act="check"]'); if (b && !u.busy) b.disabled = !t.value.trim(); }
   if (t.id && t.id.startsWith("ans-")) { u.drafts = u.drafts || {}; u.drafts[t.id.split("-").pop()] = t.value; const b = document.querySelector('[data-act="l-check"]'); if (b && !u.busyEx) b.disabled = !t.value.trim(); }
   if (t.id === "vocabSearch") { u.q = t.value; render(); }
@@ -6590,7 +6804,8 @@ async function boot() {
   S.tts = browserTTS(); S.dict = browserDictation(); window.__dict = S.dict;
   if (S.dict) {
     S.dict.onDenied(() => { if (S.view === "session" && S.session && !S.ui.res) { const it = S.session.items[S.session.i]; if (it && it.ex && it.ex.type === "speak") { S.ui.res = { ok: true, skip: true, correct: "", explain: "Le micro est bloqué : autorise-le dans ton navigateur pour les prochains exercices. On passe à la suite." }; render(); } } });
-    S.dict.onFinal(({ text }) => { if (onDictFinal(text)) return; if (S.view !== "session") return; S.ui.spoken = ((S.ui.spoken || "") + text).trim(); const el = document.getElementById("spoken"); if (el) el.textContent = `Tu as dit : « ${S.ui.spoken} »`; const b = document.querySelector('[data-act="check"]'); if (b) b.disabled = !S.ui.spoken; });
+    S.dict.onFinal(({ text }) => { if (onDictFinal(text)) return; if (S.view !== "session") return;
+      if (S.ui.dictKbd) { S.ui.kbdText = ((S.ui.kbdText || "") + " " + text).replace(/\s+/g, " ").trim(); const k = document.getElementById("ses-kbd"); if (k) k.value = S.ui.kbdText; const b = document.querySelector('[data-act="check"]'); if (b && !S.ui.busy) b.disabled = !S.ui.kbdText; return; } S.ui.spoken = ((S.ui.spoken || "") + text).trim(); const el = document.getElementById("spoken"); if (el) el.textContent = `Tu as dit : « ${S.ui.spoken} »`; const b = document.querySelector('[data-act="check"]'); if (b) b.disabled = !S.ui.spoken; });
     S.dict.onState(({ state }) => { const on = state !== "idle"; if (onDictState(on)) return; if (S.ui.listening !== on) { S.ui.listening = on; if (S.view === "session") render(); } });
   }
   try { const res = await fetch("course.json", { cache: "no-cache" }); COURSE = await res.json(); }
