@@ -2007,6 +2007,7 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
 .flow .option.m.is-selected { box-shadow: 0 0 0 3px rgba(22, 119, 255, .25); }
 .flow .option.m.is-right { opacity: .55; }
 @media (hover: hover) { .flow .option:not(:disabled):hover { border-color: var(--primary); } }
+.vp-link { padding: 0; border: 0; background: none; color: var(--primary-text); font: inherit; text-decoration: underline; cursor: pointer; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -3869,6 +3870,16 @@ function goalCard() {
 /* ---------- À propos, Conditions, Confidentialité ---------- */
 const LEGAL_UPDATED = "25 novembre 2026";
 const LEGAL_CONTACT = "depuis l'application : Paramètres → Aide → « Écrire à l'équipe »";
+// Vendeur de l'abonnement Verblyx Plus : À COMPLÉTER avant de vendre (obligatoire pour la vente en ligne)
+const SELLER = {
+  name: "[À COMPLÉTER : ton nom et prénom, ou le nom de ta société]",
+  status: "[À COMPLÉTER : ex. entrepreneur individuel (micro-entreprise)]",
+  address: "[À COMPLÉTER : adresse postale]",
+  siret: "[À COMPLÉTER : numéro SIRET]",
+  email: "[À COMPLÉTER : adresse e-mail de contact]",
+  vat: "[À COMPLÉTER : « TVA non applicable, article 293 B du CGI » si tu es en franchise de TVA, sinon ton numéro de TVA]",
+  mediator: "[À COMPLÉTER : nom et site du médiateur de la consommation choisi]",
+};
 const DOCS = {
   about: { title: "À propos de Verblyx", body: [
     ["", "Verblyx est une application pour apprendre l'anglais du niveau A1 au niveau C2, pensée pour les francophones."],
@@ -3887,13 +3898,29 @@ const DOCS = {
     ["6. Contenus", "Les leçons, textes, illustrations, la mascotte Vex et le logo Verblyx appartiennent à Verblyx. Tu peux les utiliser pour apprendre, mais pas les copier ou les revendre."],
     ["7. Disponibilité", "Nous faisons de notre mieux pour que Verblyx fonctionne bien, mais nous ne pouvons pas garantir un service sans interruption ni erreur. Verblyx ne remplace pas une certification officielle (TOEIC, IELTS, Cambridge…)."],
     ["8. Fin d'utilisation", "Tu peux arrêter d'utiliser Verblyx à tout moment et demander la suppression de ton compte " + LEGAL_CONTACT + "."],
-    ["9. Modifications", "Ces conditions peuvent être mises à jour. En cas de changement important, nous te prévenons dans l'application. Elles sont soumises au droit français."],
+    ["9. Abonnement Verblyx Plus", "L'abonnement payant Verblyx Plus est régi par les Conditions générales de vente, qui complètent ces conditions."],
+    ["10. Modifications", "Ces conditions peuvent être mises à jour. En cas de changement important, nous te prévenons dans l'application. Elles sont soumises au droit français."],
+  ] },
+  sales: { title: "Conditions générales de vente", body: [
+    ["", "Dernière mise à jour : " + LEGAL_UPDATED + ". Ces conditions s'appliquent à l'abonnement payant Verblyx Plus. Elles complètent les Conditions d'utilisation. En t'abonnant, tu les acceptes."],
+    ["1. Le vendeur", "Verblyx Plus est vendu par : " + SELLER.name + ", " + SELLER.status + ".\nAdresse : " + SELLER.address + ".\nSIRET : " + SELLER.siret + ".\nContact : " + SELLER.email + ", ou " + LEGAL_CONTACT + ".\n" + SELLER.vat + "."],
+    ["2. L'offre", "Verblyx reste gratuit. L'abonnement Verblyx Plus ajoute : des vies illimitées, trois fois plus d'échanges par jour avec le prof IA, aucune publicité, le double d'XP, 1 500 pièces offertes à la première activation (une seule fois par compte) et un badge « Plus ». Le détail est affiché dans la Boutique avant l'achat."],
+    ["3. Prix", "L'abonnement coûte 7,99 € par mois, toutes taxes comprises. Le prix affiché au moment de la commande est celui qui s'applique. Si le prix change, tu es prévenu au moins 30 jours à l'avance, et tu peux résilier avant que le nouveau prix s'applique."],
+    ["4. Commande et paiement", "Tu t'abonnes depuis la Boutique ou les Paramètres de Verblyx. Le paiement par carte est géré par Stripe : tes données bancaires sont saisies et conservées chez Stripe, jamais chez Verblyx. Le premier mois est débité à la souscription, puis chaque mois à la même date. Tes factures sont disponibles dans Paramètres → Plus → « Moyen de paiement et factures »."],
+    ["5. Durée et résiliation", "L'abonnement est sans engagement. Il se renouvelle automatiquement chaque mois tant que tu ne le résilies pas. Tu peux résilier à tout moment, en quelques clics, dans Paramètres → Plus → « Résilier l'abonnement ». La résiliation prend effet à la fin du mois déjà payé : tu gardes Plus jusqu'à cette date, et aucun nouveau paiement n'est prélevé. Le mois en cours n'est pas remboursé, sauf en cas de rétractation (article 6)."],
+    ["6. Droit de rétractation", "Tu disposes de 14 jours à compter de ta souscription pour te rétracter, sans avoir à te justifier. En t'abonnant, tu demandes que Plus démarre immédiatement, sans attendre la fin de ce délai. Si tu te rétractes pendant ces 14 jours, tu es remboursé du montant payé, moins la part correspondant aux jours où tu as déjà profité de Plus. Pour te rétracter, écris-nous " + LEGAL_CONTACT + " ou à " + SELLER.email + ", en indiquant ton adresse e-mail de compte et ta volonté de te rétracter. Le remboursement est fait dans les 14 jours, sur la carte utilisée pour payer."],
+    ["7. Défaut de paiement", "Si un paiement échoue, Stripe réessaie automatiquement pendant quelques jours et tu peux mettre à jour ta carte. Si le paiement n'aboutit pas, l'abonnement s'arrête et les avantages Plus sont retirés."],
+    ["8. Pièces et avantages virtuels", "Les pièces offertes, les vies, l'XP et les badges restent des éléments de jeu sans valeur réelle, comme indiqué dans les Conditions d'utilisation : ils ne peuvent être ni échangés, ni convertis en argent, ni remboursés."],
+    ["9. Plus offert", "L'équipe Verblyx peut offrir Plus pour une durée donnée. Un Plus offert ne donne lieu à aucun paiement et s'arrête automatiquement à la date indiquée dans Paramètres → Plus."],
+    ["10. Disponibilité du service", "Nous faisons de notre mieux pour que Verblyx et ses avantages Plus fonctionnent sans interruption. En cas de panne importante et prolongée de notre fait, contacte-nous : nous trouverons une solution, par exemple une prolongation gratuite."],
+    ["11. Réclamations et médiation", "Pour toute réclamation, écris-nous d'abord " + LEGAL_CONTACT + " ou à " + SELLER.email + " : nous répondons rapidement. Si le désaccord persiste, tu peux recourir gratuitement au médiateur de la consommation : " + SELLER.mediator + "."],
+    ["12. Droit applicable", "Ces conditions sont soumises au droit français. Si tu es consommateur, tu bénéficies aussi des règles protectrices du pays où tu vis."],
   ] },
   privacy: { title: "Politique de confidentialité", body: [
     ["", "Dernière mise à jour : " + LEGAL_UPDATED + ". Nous respectons ta vie privée et le Règlement général sur la protection des données (RGPD)."],
     ["Ce que nous collectons", "• Ton compte : adresse e-mail, mot de passe (chiffré, nous ne le voyons jamais), ou ton nom et ton e-mail si tu te connectes avec Google.\n• Ton profil : prénom, pseudo, personnage, niveau, objectifs, temps par jour et difficultés choisies.\n• Ta progression : leçons, scores, erreurs, vocabulaire, XP, pièces, vies, Pulse.\n• Tes échanges avec le prof IA et les messages que tu nous envoies depuis l'Aide."],
     ["Pourquoi", "Uniquement pour faire fonctionner Verblyx : sauvegarder ta progression, personnaliser tes leçons, afficher les classements, répondre à tes messages et protéger le service contre les abus. Nous ne vendons jamais tes données."],
-    ["Publicité", "Une annonce Google (AdSense) peut s'afficher à la fin d'une leçon, jamais pendant. Par défaut, ces annonces ne sont pas personnalisées. Google peut utiliser des cookies pour les afficher et mesurer leur efficacité : une fenêtre te demande ton accord à ta première visite, et tu peux le changer à tout moment. Les membres VIP ne voient aucune publicité."],
+    ["Publicité", "Une annonce Google (AdSense) peut s'afficher à la fin d'une leçon, jamais pendant. Par défaut, ces annonces ne sont pas personnalisées. Google peut utiliser des cookies pour les afficher et mesurer leur efficacité : une fenêtre te demande ton accord à ta première visite, et tu peux le changer à tout moment. Les membres VIP et les abonnés Verblyx Plus ne voient aucune publicité."],
     ["Qui y a accès", "Nos prestataires techniques, uniquement pour le service : Supabase (comptes et base de données, hébergés en Europe), Cloudflare (hébergement du site), Stripe (paiement de l'abonnement Verblyx Plus : tes données bancaires sont saisies et gardées uniquement chez Stripe, jamais chez Verblyx), Google Gemini et Groq (génération des leçons et réponses du prof IA), Cloudflare Turnstile (protection anti-robots à l'inscription et à la connexion) et Google (si tu choisis de te connecter avec ton compte Google). Les questions envoyées au prof IA sont transmises à ces services d'IA : n'y écris pas d'informations personnelles sensibles."],
     ["Ce que voient les autres élèves", "Dans les classements : ton pseudo (ou ton prénom), ton personnage, ton niveau et ton score. Jamais ton e-mail ni le reste de ton profil."],
     ["Stockage dans ton navigateur", "Verblyx enregistre quelques informations sur ton appareil (session de connexion, réglage du son, conversation en cours). Ce sont des éléments nécessaires au fonctionnement. Si tu l'acceptes, Google peut aussi déposer des cookies pour les annonces affichées en fin de leçon."],
@@ -3901,7 +3928,7 @@ const DOCS = {
     ["Tes droits", "Tu peux accéder à tes données, les corriger, les supprimer, t'opposer à leur utilisation ou en demander une copie. Pour cela, écris-nous " + LEGAL_CONTACT + ". Tu peux aussi saisir la CNIL (cnil.fr) si tu estimes que tes droits ne sont pas respectés."],
   ] },
 };
-const legalLinks = (cls = "") => `<nav class="legal-links ${cls}" aria-label="Informations">${[["about", "À propos"], ["terms", "Conditions d'utilisation"], ["privacy", "Confidentialité"]].map(([k, t]) => `<button type="button" data-act="doc" data-v="${k}">${t}</button>`).join("")}</nav>`;
+const legalLinks = (cls = "") => `<nav class="legal-links ${cls}" aria-label="Informations">${[["about", "À propos"], ["terms", "Conditions d'utilisation"], ["sales", "Conditions de vente"], ["privacy", "Confidentialité"]].map(([k, t]) => `<button type="button" data-act="doc" data-v="${k}">${t}</button>`).join("")}</nav>`;
 function docModal() {
   const d = DOCS[S.doc]; if (!d) return "";
   return `<div class="modal ${S.docAnim ? "opening" : ""}" role="dialog" aria-modal="true" aria-labelledby="doc-title">
@@ -4416,7 +4443,7 @@ function plusShopCard() {
         ? `<div class="vp-buy"><p class="vp-foot" style="margin:0">${S.plus.cancel_at_period_end ? `Résiliation prévue : Plus reste actif jusqu'au ${esc(plusDate(S.plus.until))}.` : "Abonnement mensuel, renouvelé automatiquement."}</p><button class="btn btn-secondary vp-cta" data-act="plus-manage" ${S.ui.plusBusy ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span>' : ""}Gérer mon abonnement</button></div>`
         : `<p class="vp-foot">Merci de soutenir Verblyx. Tous tes avantages sont déjà actifs.</p>`)
       : `<div class="vp-buy"><div class="vp-price"><b>${euro(PLUS.monthly)}</b><span>par mois</span></div><button class="btn btn-primary btn-lg vp-cta" data-act="plus-buy" ${S.ui.plusBusy || !PLUS.available ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span> Ouverture du paiement…' : PLUS.available ? "S'abonner à Plus" : "Paiement bientôt disponible"}</button></div>
-         <p class="vp-foot">${PLUS.available ? "Paiement sécurisé par Stripe. Sans engagement : tu résilies quand tu veux, en un clic." : "Le paiement n'est pas encore ouvert : rien ne t'est facturé pour l'instant."}</p>`}
+         <p class="vp-foot">${PLUS.available ? `Paiement sécurisé par Stripe. Sans engagement : tu résilies quand tu veux, en un clic. En t'abonnant, tu acceptes les <button type="button" class="vp-link" data-act="doc" data-v="sales">Conditions de vente</button> et demandes que Plus démarre tout de suite (rétractation possible pendant 14 jours, au prorata).` : "Le paiement n'est pas encore ouvert : rien ne t'est facturé pour l'instant."}</p>`}
   </section>`;
 }
 function prefs() {
