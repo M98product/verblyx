@@ -2061,6 +2061,51 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
 @media (max-width: 720px) { .chest-grid { grid-template-columns: 1fr 1fr; } .chest-grid .chest-card:last-child { grid-column: 1 / -1; } .chest-card { padding: 14px 12px; } .chest-ic .chest-art { width: 70px; height: 70px; } }
 @media (prefers-reduced-motion: reduce) { .chm-art.is-shaking .chest-art, .chm-rays { animation: none; } }
 .chest-odds { font-size: 12px; line-height: 1.5; }
+
+/* ---------- Page Verblyx Plus (comparatif) ---------- */
+.pw-modal { padding: 16px; }
+.pw-panel { position: relative; max-width: 520px; padding: 0 !important; gap: 0 !important; overflow: hidden auto; background: var(--surface); border-color: rgba(22, 119, 255, .45); }
+.pw-x { position: absolute; top: 12px; right: 12px; z-index: 3; background: rgba(0, 0, 0, .25); color: #fff; }
+.pw-hero { position: relative; padding: 30px 24px 0; text-align: center; color: #fff; background: radial-gradient(420px 220px at 50% 0%, rgba(90, 162, 255, .35), transparent 70%), linear-gradient(180deg, #071233, #0B2363 70%, #12338A); overflow: hidden; }
+.pw-stars i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #fff; opacity: .7; animation: vx-twinkle 2.4s ease-in-out infinite; animation-delay: var(--d); }
+.pw-badge { position: relative; display: inline-flex; }
+.pw-badge .plus-tag { height: 26px; font-size: 13px; padding: 0 10px 0 8px; }
+.pw-title { position: relative; margin: 12px 0 6px; font: 800 27px/1.15 var(--f-display); letter-spacing: -.02em; }
+.pw-title span { color: #7DF3E1; }
+.pw-sub { position: relative; margin: 0 auto; max-width: 24em; color: #C7D6FF; font-size: 14.5px; line-height: 1.5; }
+.pw-vex { position: relative; display: inline-grid; margin-top: 8px; z-index: 1; }
+.pw-vex .vx { margin-bottom: -8px; }
+.pw-heart { position: absolute; right: -26px; top: 10px; animation: star-float 2.6s ease-in-out infinite; }
+.pw-wave { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 36px; fill: var(--surface); }
+.pw-body { padding: 14px 22px 22px; display: flex; flex-direction: column; gap: 10px; }
+.pw-table { display: flex; flex-direction: column; }
+.pw-row { display: grid; grid-template-columns: minmax(0, 1fr) 70px 84px; align-items: center; min-height: 44px; border-bottom: 1px solid var(--line); font-size: 14.5px; animation: ex-pop .4s cubic-bezier(.3,1.4,.5,1) both; animation-delay: calc(var(--i, 0) * 50ms + 150ms); }
+.pw-row:last-child { border-bottom: 0; }
+.pw-row > span:not(:first-child) { display: grid; place-items: center; align-self: stretch; }
+.pw-head { min-height: 40px; font: 800 12px var(--f-body); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); animation: none; }
+.pw-col-plus { background: rgba(22, 119, 255, .14); color: #5AA2FF; }
+.pw-head .pw-col-plus { border-radius: 14px 14px 0 0; }
+.pw-row:last-child .pw-col-plus { border-radius: 0 0 14px 14px; }
+.pw-row svg { width: 22px; height: 22px; }
+.pw-free { color: var(--fg-2); }
+.pw-no { display: block; width: 14px; height: 2.5px; border-radius: 2px; background: var(--faint); opacity: .6; }
+.pw-price { margin: 6px 0 0; text-align: center; color: var(--muted); font-size: 13.5px; }
+.pw-price b { color: var(--fg); font: 800 18px var(--f-display); }
+.pw-cta { height: 54px; font-size: 16.5px; font-weight: 800; letter-spacing: .01em; }
+.pw-no-thanks { align-self: center; padding: 6px 12px; border: 0; background: none; color: var(--primary-text); font: 700 14px var(--f-body); letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+.pw-legal { margin: 0; text-align: center; font-size: 12px; color: var(--faint); }
+.vp-pitch { margin: 0; color: var(--fg-2); font-size: 14.5px; line-height: 1.5; }
+@media (max-width: 560px) {
+  .pw-modal { padding: 0 !important; place-items: stretch; }
+  .pw-panel { max-width: none; width: 100%; min-height: 100dvh; max-height: 100dvh; border-radius: 0; border: 0; }
+  .pw-hero { padding-top: calc(26px + env(safe-area-inset-top, 0px)); }
+  .pw-x { top: calc(10px + env(safe-area-inset-top, 0px)); }
+  .pw-title { font-size: 24px; }
+  .pw-row { grid-template-columns: minmax(0, 1fr) 58px 70px; font-size: 13.5px; }
+  .pw-body { padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+}
+.pw-hero, .pw-body { flex: none; }
+@media (max-width: 560px) { .pw-head { font-size: 10.5px; letter-spacing: .03em; } .pw-row { grid-template-columns: minmax(0, 1fr) 62px 74px; } .pw-head .plus-tag { height: 20px; font-size: 10.5px; padding: 0 6px 0 5px; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -2861,6 +2906,7 @@ function render() {
   const showLevel = S.levelPop && !showGift && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
   if (showLevel) html += levelModal();
   if (S.chestPop && v === "shop") html += chestModal();
+  if (S.paywall && S.profile) html += plusPaywall();
   const showLeague = S.leaguePop && !showGift && !showLevel && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
   if (showLeague) html += leagueModal();
   $app.innerHTML = html;
@@ -4438,7 +4484,7 @@ function viewShop() {
     ${!isPlus() && PLUS.available ? `<div class="card shop-item shop-plus">
       <span class="shop-ic img">${plusHeart(58)}<b>∞</b></span>
       <b class="h3">Vies illimitées</b><p class="small muted">Avec Verblyx Plus : plus jamais à court de vies, XP x2, 3x plus de Prof IA et aucune publicité.</p>
-      <button class="btn btn-primary btn-block" data-act="plus-buy" ${S.ui.plusBusy ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span>' : ""}${euro(PLUS.monthly)} / mois</button>
+      <button class="btn btn-primary btn-block" data-act="plus-see">Voir</button>
     </div>` : ""}
     <div class="card shop-item">
       <span class="shop-ic shield">${icon("i-shield")}</span>
@@ -4613,8 +4659,49 @@ function plusUpsell(kind) {
   if (isPlus() || !PLUS.available) return "";
   const [t, d] = kind === "ai" ? ["3x plus de Prof IA avec Verblyx Plus", "Trois fois plus d'échanges avec Vex chaque jour, sans publicité, XP x2."]
     : ["Vies illimitées avec Verblyx Plus", "Ne t'arrête plus jamais : vies illimitées, XP x2, 3x plus de Prof IA, sans publicité."];
-  return `<div class="plus-up">${kind === "ai" ? `<span class="plus-up-ic">${icon("i-chat")}</span>` : plusHeart(40)}<div class="plus-up-tx"><b>${t}</b><span>${d}</span><small>${euro(PLUS.monthly)} par mois · sans engagement</small></div>
-    <div class="plus-up-act"><button class="btn btn-primary btn-sm" data-act="plus-buy" ${S.ui.plusBusy ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span>' : ""}S'abonner</button><button class="btn btn-ghost btn-sm" data-act="plus-see">Voir les avantages</button></div></div>`;
+  return `<div class="plus-up">${kind === "ai" ? `<span class="plus-up-ic">${icon("i-chat")}</span>` : plusHeart(40)}<div class="plus-up-tx"><b>${t}</b><span>${d}</span></div>
+    <div class="plus-up-act"><button class="btn btn-primary btn-sm" data-act="plus-see">Voir</button></div></div>`;
+}
+// Page « Verblyx Plus » : comparatif Gratuit / Plus, puis le paiement
+const PLUS_ROWS = [
+  ["Leçons, parcours et certifications", true],
+  ["Vies illimitées", false],
+  ["Aucune publicité", false],
+  ["XP x2 sur chaque leçon", false],
+  ["3x plus d'échanges avec le Prof IA", false],
+  ["1 500 pièces offertes", false],
+  ["Badge Plus sur ton profil", false],
+];
+function plusPaywall() {
+  if (!S.paywall) return "";
+  const yes = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`;
+  const no = `<i class="pw-no"></i>`;
+  const stars = Array.from({ length: 14 }, (_, k) => `<i style="left:${(k * 37 + 7) % 100}%;top:${(k * 53 + 11) % 70}%;--d:${(k % 5) * .6}s"></i>`).join("");
+  return `<div class="modal pw-modal ${S.paywallAnim ? "opening" : ""}" role="dialog" aria-modal="true" aria-labelledby="pw-title">
+    <div class="modal-bg" data-act="plus-wall-close"></div>
+    <div class="modal-panel pw-panel">
+      <button class="icon-btn pw-x" data-act="plus-wall-close" aria-label="Fermer">${icon("i-close")}</button>
+      <div class="pw-hero">
+        <div class="pw-stars" aria-hidden="true">${stars}</div>
+        <span class="pw-badge">${plusTag()}</span>
+        <h2 class="pw-title" id="pw-title">Apprends l'anglais <span>sans limites</span></h2>
+        <p class="pw-sub">Plus de vies qui s'arrêtent, plus de pubs : juste toi, Vex et tes progrès.</p>
+        <div class="pw-vex">${vx("party", 120)}<span class="pw-heart">${plusHeart(46)}</span></div>
+        <svg class="pw-wave" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40V22c40-14 80-18 120-8s80 18 130 8 100-26 150-10v28z"/></svg>
+      </div>
+      <div class="pw-body">
+        <div class="pw-table" role="table" aria-label="Comparatif Gratuit et Plus">
+          <div class="pw-row pw-head" role="row"><span role="columnheader"></span><span role="columnheader">Gratuit</span><span role="columnheader" class="pw-col-plus">${plusTag()}</span></div>
+          ${PLUS_ROWS.map(([t, free], k) => `<div class="pw-row" role="row" style="--i:${k}"><span role="cell">${t}</span><span role="cell" class="pw-free">${free ? yes : no}</span><span role="cell" class="pw-col-plus">${yes}</span></div>`).join("")}
+        </div>
+        ${S.ui.plusErr ? notice(S.ui.plusErr) : ""}
+        <p class="pw-price"><b>${euro(PLUS.monthly)}</b> par mois · sans engagement · résiliable en un clic</p>
+        <button class="btn btn-primary btn-lg btn-block pw-cta" data-act="plus-buy" ${S.ui.plusBusy || !PLUS.available ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span> Ouverture du paiement…' : PLUS.available ? "Passer à Verblyx Plus" : "Paiement bientôt disponible"}</button>
+        <button class="pw-no-thanks" data-act="plus-wall-close">Non merci</button>
+        <p class="pw-legal">Paiement sécurisé par Stripe. En t'abonnant, tu acceptes les <button type="button" class="vp-link" data-act="doc" data-v="sales">Conditions de vente</button>.</p>
+      </div>
+    </div>
+  </div>`;
 }
 function plusShopCard() {
   const on = isPlus();
@@ -4623,13 +4710,12 @@ function plusShopCard() {
       <div class="vp-brand">${plusHeart(44)}<div><span class="vp-logo">VERBLYX <b>PLUS</b></span><h2 class="vp-title">${on ? "Tu es membre Plus" : "Passe à Verblyx Plus"}</h2></div></div>
       ${on ? `<span class="vp-state">${icon("i-check")} Actif ${esc(plusStatus(S.plus))}</span>` : PLUS.available ? "" : `<span class="vp-soon">Bientôt disponible</span>`}
     </div>
-    <div class="vp-perks">${PLUS_PERKS.map(([k, t, d]) => `<div class="vp-perk">${plusPerkIc(k)}<div><b>${t}</b><span>${d}</span></div></div>`).join("")}</div>
-    ${S.ui.plusErr ? notice(S.ui.plusErr) : ""}
+    ${on ? `<div class="vp-perks">${PLUS_PERKS.map(([k, t, d]) => `<div class="vp-perk">${plusPerkIc(k)}<div><b>${t}</b><span>${d}</span></div></div>`).join("")}</div>` : `<p class="vp-pitch">Vies illimitées, aucune publicité, XP x2, 3x plus de Prof IA et 1 500 pièces offertes.</p>`}
+    ${S.ui.plusErr && on ? notice(S.ui.plusErr) : ""}
     ${on ? (S.plus.source === "paid"
         ? `<div class="vp-buy"><p class="vp-foot" style="margin:0">${S.plus.cancel_at_period_end ? `Résiliation prévue : Plus reste actif jusqu'au ${esc(plusDate(S.plus.until))}.` : "Abonnement mensuel, renouvelé automatiquement."}</p><button class="btn btn-secondary vp-cta" data-act="plus-manage" ${S.ui.plusBusy ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span>' : ""}Gérer mon abonnement</button></div>`
         : `<p class="vp-foot">Merci de soutenir Verblyx. Tous tes avantages sont déjà actifs.</p>`)
-      : `<div class="vp-buy"><div class="vp-price"><b>${euro(PLUS.monthly)}</b><span>par mois</span></div><button class="btn btn-primary btn-lg vp-cta" data-act="plus-buy" ${S.ui.plusBusy || !PLUS.available ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span> Ouverture du paiement…' : PLUS.available ? "S'abonner à Plus" : "Paiement bientôt disponible"}</button></div>
-         <p class="vp-foot">${PLUS.available ? `Paiement sécurisé par Stripe. Sans engagement : tu résilies quand tu veux, en un clic. En t'abonnant, tu acceptes les <button type="button" class="vp-link" data-act="doc" data-v="sales">Conditions de vente</button> et demandes que Plus démarre tout de suite.` : "Le paiement n'est pas encore ouvert : rien ne t'est facturé pour l'instant."}</p>`}
+      : `<div class="vp-buy"><button class="btn btn-primary btn-lg btn-block vp-cta" data-act="plus-see">Voir Verblyx Plus</button></div>`}
   </section>`;
 }
 function prefs() {
@@ -4729,7 +4815,7 @@ function settingsModal() {
       : PLUS.available
       ? (paid ? `<button class="set-item set-link" data-act="plus-manage">${setIco("i-coin", "blue")}<div class="set-tx"><b>Moyen de paiement et factures</b><span>Modifier ta carte, télécharger tes factures.</span></div><span class="set-chev">${icon("i-arrow")}</span></button>
          <button class="set-item set-link" data-act="plus-cancel">${setIco("i-close", "red")}<div class="set-tx"><b>${S.plus && S.plus.cancel_at_period_end ? "Reprendre l'abonnement" : "Résilier l'abonnement"}</b><span>${S.plus && S.plus.cancel_at_period_end ? `Résiliation prévue le ${esc(plusDate(S.plus.until))}. Tu peux l'annuler.` : "Tu gardes Plus jusqu'à la fin de la période payée."}</span></div><span class="set-chev">${icon("i-arrow")}</span></button>`
-        : `<button class="set-item set-link" data-act="plus-buy">${setIco("i-star", "blue")}<div class="set-tx"><b>S'abonner à Plus</b><span>${euro(PLUS.monthly)} par mois, sans engagement.</span></div><span class="set-chev">${icon("i-arrow")}</span></button>`)
+        : `<button class="set-item set-link" data-act="plus-see">${setIco("i-star", "blue")}<div class="set-tx"><b>Découvrir Verblyx Plus</b><span>Vies illimitées, sans pub, XP x2…</span></div><span class="set-chev">${icon("i-arrow")}</span></button>`)
       : `<div class="set-item">${setIco("i-lock", "gray")}<div class="set-tx"><b>Paiement bientôt disponible</b><span>Tu pourras t'abonner, changer ta carte ou résilier ici, en un clic.</span></div></div>`)}
     ${!on ? `<button class="btn btn-primary btn-block" style="margin-top:18px" data-act="plus-see">Voir Verblyx Plus</button>` : ""}`;
   }
@@ -6849,10 +6935,11 @@ $app.addEventListener("click", (ev) => {
       S.ui.plusBusy = true; S.ui.plusErr = ""; SFX.play("tap"); render();
       S.store.plusAction(a === "plus-buy" ? "checkout" : "portal")
         .then((r) => { if (r && r.url) location.href = r.url; else throw { message: "Réponse inattendue du paiement." }; })
-        .catch((e) => { S.ui.plusBusy = false; S.ui.plusErr = (e && e.message) || "Le paiement est momentanément indisponible."; if (S.settingsOpen) { S.settingsOpen = false; go("shop"); } else render(); });
+        .catch((e) => { S.ui.plusBusy = false; S.ui.plusErr = (e && e.message) || "Le paiement est momentanément indisponible."; if (S.settingsOpen) { S.settingsOpen = false; S.paywall = true; } render(); });
       break;
     }
-    case "plus-see": S.plusModal = null; S.settingsOpen = false; go("shop"); setTimeout(() => { const c = document.getElementById("plus"); if (c) c.scrollIntoView({ block: "start", behavior: "smooth" }); }, 60); break;
+    case "plus-see": S.plusModal = null; S.settingsOpen = false; S.paywall = true; S.paywallAnim = true; S.ui.plusErr = ""; SFX.play("pop"); render(); S.paywallAnim = false; break;
+    case "plus-wall-close": S.paywall = false; render(); break;
     case "adm-ai": case "adm-ai-reset": {
       const r = (u.admList || []).find((x) => x.id === v); if (!r) break;
       let lim = null;
@@ -7134,6 +7221,7 @@ document.addEventListener("keydown", (ev) => {
   }
   if (ev.key === "Escape" && S.doc) { S.doc = null; render(); return; }
   if (ev.key === "Escape" && S.plusModal) { S.plusModal = null; render(); return; }
+  if (ev.key === "Escape" && S.paywall) { S.paywall = false; render(); return; }
   if (ev.key === "Escape" && S.giftPop) { S.giftPop = null; render(); return; }
   if (ev.key === "Escape" && S.levelPop) { S.levelPop = null; render(); return; }
   if (ev.key === "Escape" && S.leaguePop) { S.leaguePop = null; render(); return; }
