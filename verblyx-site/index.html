@@ -1998,6 +1998,15 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
   .rk-mebtn { width: 34px; padding: 0; justify-content: center; }
   .rk-hero .rk-goal { font-size: 12.5px; }
 }
+
+/* boutons des leçons : on sent l'appui */
+.flow .option, .flow .tile { transition: transform .12s ease, background-color .15s, border-color .15s, box-shadow .15s; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+.flow .option:active:not(:disabled) { transform: scale(.96); background: var(--surface-2); }
+.flow .tile:active:not(:disabled) { transform: scale(.92); }
+.flow .option.m { min-height: 54px; font-size: 15.5px; }
+.flow .option.m.is-selected { box-shadow: 0 0 0 3px rgba(22, 119, 255, .25); }
+.flow .option.m.is-right { opacity: .55; }
+@media (hover: hover) { .flow .option:not(:disabled):hover { border-color: var(--primary); } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -3932,6 +3941,7 @@ try { history.scrollRestoration = "manual"; } catch {}
   ["gesturestart", "gesturechange", "gestureend"].forEach((t) => document.addEventListener(t, stop, { passive: false }));
   document.addEventListener("touchmove", (e) => { if (e.touches && e.touches.length > 1) stop(e); }, { passive: false });
   // le double-tap ne zoome plus grâce à touch-action: manipulation ; on ne bloque donc aucun toucher (les taps rapides passent)
+  document.addEventListener("touchstart", () => {}, { passive: true }); // active l'effet « appuyé » sur iPhone
   // hauteur réelle de la barre du bas, pour coller le chat juste au-dessus
   const setH = () => { const tb = document.querySelector(".tabbar"), mt = document.querySelector(".mtop"); const r = document.documentElement.style; if (tb && tb.offsetHeight) r.setProperty("--tabh", tb.offsetHeight + "px"); if (mt && mt.offsetHeight) r.setProperty("--mtoph", mt.offsetHeight + "px"); };
   let q = 0; const sched = () => { if (!q) q = requestAnimationFrame(() => { q = 0; setH(); }); };
@@ -5517,8 +5527,8 @@ function exerciseView(ses, it) {
     case "match": {
       const m = u.matched || [];
       inp = `<div class="match">
-        <div class="col">${it.left.map((k) => `<button class="option m ${m.includes(k) ? "is-right" : u.mL === k ? "is-selected" : ""} ${u.flash === "L" + k ? "shake" : ""}" data-act="mL" data-v="${k}" ${m.includes(k) || done ? "disabled" : ""}><span class="tx"><b>${esc(ex.pairs[k][0])}</b></span></button>`).join("")}</div>
-        <div class="col">${it.right.map((k) => `<button class="option m ${m.includes(k) ? "is-right" : ""} ${u.flash === "R" + k ? "shake is-wrong" : ""}" data-act="mR" data-v="${k}" ${m.includes(k) || done ? "disabled" : ""}><span class="tx"><b>${esc(ex.pairs[k][1])}</b></span></button>`).join("")}</div>
+        <div class="col">${it.left.map((k) => `<button class="option m ${m.includes(k) ? "is-right" : u.mL === k ? "is-selected" : ""} ${(u.flash || []).includes("L" + k) ? "shake is-wrong" : ""}" data-act="mL" data-v="${k}" ${m.includes(k) || done ? "disabled" : ""}><span class="tx"><b>${esc(ex.pairs[k][0])}</b></span></button>`).join("")}</div>
+        <div class="col">${it.right.map((k) => `<button class="option m ${m.includes(k) ? "is-right" : u.mR === k ? "is-selected" : ""} ${(u.flash || []).includes("R" + k) ? "shake is-wrong" : ""}" data-act="mR" data-v="${k}" ${m.includes(k) || done ? "disabled" : ""}><span class="tx"><b>${esc(ex.pairs[k][1])}</b></span></button>`).join("")}</div>
       </div>`; break;
     }
     case "speak":
@@ -6732,11 +6742,25 @@ $app.addEventListener("click", (ev) => {
     case "no-audio": u.noAudio = true; SFX.play("tap"); render(); fxPop(".no-audio", 1.02); break;
     case "bonus-skip": { const ses = S.session; if (ses && ses.items[ses.i + 1] && ses.items[ses.i + 1].bonus) ses.items.splice(ses.i + 1, 1); nextItem(); break; }
     case "untile": { u.picked = (u.picked || []).filter((k) => k !== Number(v)); SFX.play("unselect"); render(); break; }
-    case "mL": u.mL = Number(v); SFX.play("tap"); render(); break;
-    case "mR": {
-      if (u.mL == null) break;
-      if (u.mL === Number(v)) { u.matched = [...(u.matched || []), u.mL]; u.mL = null; SFX.play("select"); render(); const it = S.session.items[S.session.i]; if (u.matched.length === it.ex.pairs.length) checkAnswer(); }
-      else { u.miss = (u.miss || 0) + 1; u.flash = "R" + v; SFX.play("wrong"); render(); setTimeout(() => { if (S.ui.flash === "R" + v) { S.ui.flash = null; render(); } }, 420); }
+    case "mL": case "mR": {
+      // associer les paires : on peut commencer par n'importe quelle colonne
+      const k = Number(v), isL = a === "mL", mine = isL ? u.mL : u.mR, other = isL ? u.mR : u.mL;
+      if (other == null) {
+        if (mine === k) { if (isL) u.mL = null; else u.mR = null; SFX.play("unselect"); render(); break; }
+        if (isL) u.mL = k; else u.mR = k;
+        SFX.play("tap"); render(); fxPop(`[data-act="${a}"][data-v="${k}"]`, 1.05); break;
+      }
+      const L = isL ? k : u.mL, R = isL ? u.mR : k; u.mL = null; u.mR = null;
+      if (L === R) {
+        u.matched = [...(u.matched || []), L]; SFX.play("select"); render();
+        const els = [document.querySelector(`[data-act="mL"][data-v="${L}"]`), document.querySelector(`[data-act="mR"][data-v="${R}"]`)];
+        els.forEach((e) => e && fxPop(e, 1.08));
+        if (els[1]) { const r = els[1].getBoundingClientRect(); fxBurst(r.left + r.width / 2, r.top + r.height / 2, ["#00D6B5", "#5CF3DA", "#FFFFFF"], 10, 50); }
+        const it = S.session.items[S.session.i]; if (u.matched.length === it.ex.pairs.length) setTimeout(checkAnswer, 250);
+      } else {
+        u.miss = (u.miss || 0) + 1; const fl = ["L" + L, "R" + R]; u.flash = fl; SFX.play("oops"); render();
+        setTimeout(() => { if (S.ui.flash === fl) { S.ui.flash = null; render(); } }, 480);
+      }
       break;
     }
     case "mic": {
