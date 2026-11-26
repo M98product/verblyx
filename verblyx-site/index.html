@@ -1972,6 +1972,32 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
 .pf-rk-tx small { font-size: 12.5px; color: var(--muted); }
 @media (hover: hover) { button.pf-rk-card:hover { transform: translateY(-2px); } }
 @media (max-width: 560px) { .pf-rk { grid-template-columns: 1fr; } .rk-place { justify-content: center; } }
+
+/* Ranked : carte compacte */
+.rk-hero { flex-direction: column; align-items: stretch; gap: 10px; padding: 14px 16px; border-radius: 18px; background: radial-gradient(300px 140px at 0% 0%, var(--lg-glow, rgba(22,119,255,.2)), transparent 70%), var(--surface); text-align: left !important; }
+.rk-top { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.rk-emb::before { inset: -8px; }
+.rk-kick { font: 700 10.5px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.rk-hero .rk-name { font-size: 21px; }
+.rk-hero .rk-info { gap: 2px; }
+.rk-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.rk-chips span { display: inline-flex; align-items: baseline; gap: 4px; height: 24px; padding: 0 8px; border-radius: 7px; background: rgba(0, 0, 0, .25); border: 1px solid rgba(255, 255, 255, .06); font-size: 12px; color: var(--muted); line-height: 24px; }
+.rk-chips b { font: 800 14px var(--f-display); color: var(--fg); }
+.rk-mebtn { margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--fg-2); font: 600 13px var(--f-body); cursor: pointer; }
+.rk-mebtn .ico { width: 16px; height: 16px; }
+@media (hover: hover) { .rk-mebtn:hover { color: var(--fg); border-color: var(--primary); } }
+.rk-low .rk-bar { margin-top: 0; height: 8px; }
+.rk-hero .rk-goal { margin-top: 6px; font-size: 13px; }
+.rk-hero .rk-warn { margin-top: 6px; padding: 6px 10px; font-size: 12.5px; }
+.rk-reset { padding: 8px 12px; font-size: 12.5px; }
+@media (max-width: 560px) {
+  .rk-hero { flex-direction: column; text-align: left; padding: 12px 14px; gap: 8px; }
+  .rk-hero .lg-badge.rk-big { width: 46px; height: 50px; }
+  .rk-hero .rk-name { font-size: 18px; }
+  .rk-mebtn span { display: none; }
+  .rk-mebtn { width: 34px; padding: 0; justify-content: center; }
+  .rk-hero .rk-goal { font-size: 12.5px; }
+}
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -5135,15 +5161,20 @@ function rankedView(head, tabs) {
     const pct = nx ? Math.max(4, Math.min(100, (me.score / (nx.score + 1)) * 100)) : 100;
     const ch = mine.chaser, gap = ch ? me.score - ch.score : 99;
     hero = `<section class="rk-hero" style="--lg-a:${L.a};--lg-b:${L.b};--lg-glow:${L.glow}">
-      <div class="rk-emb">${leagueBadge(me.league, 104, "rk-big")}</div>
-      <div class="rk-info">
-        <span class="label">Ta ligue cette semaine</span>
-        <h2 class="rk-name">Ligue ${L.name}</h2>
-        <div class="rk-place"><div><span>Ta place</span><b class="num">#${me.lpos}</b><small>${me.league === "bronze" ? `sur ${fmt(mine.bronze_count)}` : "sur 100"}</small></div><div><span>Cette semaine</span><b class="num">${fmt(me.score)}</b><small>XP Ranked</small></div><button class="btn btn-secondary btn-sm" data-act="rk-me">Voir ma place</button></div>
+      <div class="rk-top">
+        <div class="rk-emb">${leagueBadge(me.league, 60, "rk-big")}</div>
+        <div class="rk-info">
+          <span class="rk-kick">Ta ligue cette semaine</span>
+          <h2 class="rk-name">Ligue ${L.name}</h2>
+          <div class="rk-chips"><span class="num"><b>#${me.lpos}</b> ${me.league === "bronze" ? `sur ${fmt(mine.bronze_count)}` : "sur 100"}</span><span class="num"><b>${fmt(me.score)}</b> XP</span></div>
+        </div>
+        <button class="rk-mebtn" data-act="rk-me" aria-label="Voir ma place" title="Voir ma place">${icon("i-user")}<span>Ma place</span></button>
+      </div>
+      <div class="rk-info rk-low">
         ${nx ? `<div class="rk-bar"><span style="width:${pct}%"></span></div>
           <p class="rk-goal">Encore <b class="num">${fmt(need)} XP</b> pour dépasser <b>${esc(nx.name)}</b> et monter en ${leagueBadge(nextL.id, 18, "rk-inline")}<b>Ligue ${nextL.name}</b>.</p>`
           : `<p class="rk-goal">Tu es dans la meilleure ligue. Garde ta place dans le top 100.</p>`}
-        ${ch && gap <= 20 && me.league !== "bronze" ? `<p class="rk-warn">${icon("i-up")} <span><b>${esc(ch.name)}</b> n'est qu'à <b class="num">${fmt(Math.max(0, gap))} XP</b> derrière toi${me.lpos >= 100 ? " : s'il te dépasse, tu redescends" : ""}.</span></p>` : ""}
+        ${ch && gap <= 20 && me.league !== "bronze" ? `<p class="rk-warn">${icon("i-up")} <span>${gap <= 0 ? `<b>${esc(ch.name)}</b> est à égalité avec toi` : `<b>${esc(ch.name)}</b> n'est qu'à <b class="num">${fmt(gap)} XP</b> derrière toi`}${me.lpos >= 100 ? " : s'il te dépasse, tu redescends" : ""}.</span></p>` : ""}
       </div>
     </section>`;
   }
