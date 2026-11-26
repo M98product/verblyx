@@ -1949,6 +1949,29 @@ button.set-item { cursor: pointer; }
 .lgm-badge { display: grid; place-items: center; margin: 4px auto 6px; filter: drop-shadow(0 0 30px var(--lg-glow)); }
 @media (max-width: 560px) { .rk-hero { flex-direction: column; text-align: center; padding: 22px 16px; gap: 12px; } .rk-warn { text-align: left; } .rk-lg { font-size: 11px; padding: 10px 2px 8px; } .rk-lg .lg-badge { width: 28px; height: 30px; } .rk-name { font-size: 25px; } }
 @media (prefers-reduced-motion: reduce) { .lg-badge.rk-big, .rk-emb::before { animation: none; } }
+
+.rk-head { align-items: flex-start; flex-wrap: nowrap; }
+.rk-refresh { flex: none; }
+.rk-reset { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 14px; background: var(--primary-soft); border: 1px solid rgba(22, 119, 255, .3); color: var(--fg-2); font-size: 13.5px; line-height: 1.45; }
+.rk-reset .ico { width: 18px; height: 18px; flex: none; color: var(--primary-text); margin-top: 1px; }
+.rk-reset b { color: var(--fg); }
+.rk-place { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.rk-place > div { display: flex; flex-direction: column; min-width: 92px; padding: 8px 12px; border-radius: 12px; background: rgba(0, 0, 0, .22); border: 1px solid rgba(255, 255, 255, .06); }
+.rk-place span { font: 700 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.rk-place b { font: 800 24px/1.15 var(--f-display); }
+.rk-place small { font-size: 12px; color: var(--muted); }
+.rk-place .btn { align-self: center; box-shadow: none; }
+button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.pf-rk { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pf-rk-card { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 18px; border: 1.5px solid color-mix(in srgb, var(--lg-a, #888) 40%, transparent); background: radial-gradient(260px 120px at 0% 50%, var(--lg-glow, transparent), transparent 70%), var(--surface); color: inherit; font: inherit; text-align: left; cursor: pointer; min-width: 0; }
+.pf-rk-card.is-empty { border-color: var(--line-2); cursor: default; }
+.pf-rk-card .lg-badge { filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .4)); }
+.pf-rk-tx { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pf-rk-tx > span { font: 700 11px var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.pf-rk-tx b { font: 800 19px/1.2 var(--f-display); }
+.pf-rk-tx small { font-size: 12.5px; color: var(--muted); }
+@media (hover: hover) { button.pf-rk-card:hover { transform: translateY(-2px); } }
+@media (max-width: 560px) { .pf-rk { grid-template-columns: 1fr; } .rk-place { justify-content: center; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -3690,7 +3713,7 @@ async function finishSession() {
   const hr = new Date().getHours(); if (hr < 5) p.night_owl = true; else if (hr < 7) p.early_bird = true;
   r.lvBefore = xpLevel(p.xp || 0);
   p.xp = (p.xp || 0) + r.xp; p.coins = (p.coins || 0) + r.coins; p.gems = (p.gems || 0) + r.gems;
-  p.rxp = (p.rxp || 0) + r.xp; // score Ranked : l'XP des leçons, contrôles, certifications et révisions
+  addRankedXp(p, r.xp); // score Ranked de la semaine : XP des leçons, contrôles, certifications et révisions
   // passage de niveau : la fenêtre de fête s'ouvre en sortant de la séance
   const lvAfter = xpLevel(p.xp);
   if (lvAfter > r.lvBefore || r.levelUp) S.levelPop = { n: lvAfter, up: lvAfter > r.lvBefore, cefr: r.levelUp || null, fresh: true };
@@ -5023,6 +5046,15 @@ function adminLessons() {
 }
 
 /* ---------- Compétition : classements ---------- */
+// jour et lundi à l'heure de Paris : le Ranked repart de zéro chaque lundi à 00:00
+const parisDay = (d = new Date()) => { try { return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).format(d); } catch { return dayKey(d); } };
+const parisMonday = () => { const [y, m, dd] = parisDay().split("-").map(Number); const t = new Date(Date.UTC(y, m - 1, dd)); t.setUTCDate(t.getUTCDate() - ((t.getUTCDay() + 6) % 7)); return t.toISOString().slice(0, 10); };
+function addRankedXp(p, xp) {
+  if (!xp) return;
+  const k = parisDay(); p.rdays = p.rdays || {}; p.rdays[k] = (p.rdays[k] || 0) + xp;
+  Object.keys(p.rdays).sort().slice(0, -21).forEach((x) => delete p.rdays[x]);
+}
+const weekRankedXp = (p) => { const mo = parisMonday(); return Object.entries((p && p.rdays) || {}).reduce((s, [k, v]) => s + (k >= mo ? Number(v) || 0 : 0), 0); };
 const LB_KINDS = [["ranked", "Ranked", "i-shield"], ["xp", "XP", "i-bolt"], ["coins", "Pièces", "i-coin"], ["pulse", "Pulse", "i-pulse"]];
 
 /* ---------- Ranked : ligues ---------- */
@@ -5052,6 +5084,11 @@ function leagueBadge(id, size = 48, cls = "") {
   </svg>`;
 }
 const RK = { data: {}, at: {}, busy: {}, err: "", me: null };
+function rkCountdown(at) {
+  const ms = new Date(at) - Date.now(); if (!(ms > 0)) return "dans quelques instants";
+  const m = Math.floor(ms / 60000), dd = Math.floor(m / 1440), hh = Math.floor((m % 1440) / 60), mm = m % 60;
+  return dd ? `dans ${dd} j ${hh} h` : hh ? `dans ${hh} h ${String(mm).padStart(2, "0")}` : `dans ${mm} min`;
+}
 const rkKey = () => "verblyx:league:" + ((S.authUser && S.authUser.id) || "x");
 async function rkLoad(league, force) {
   const k = league || "_me";
@@ -5065,9 +5102,13 @@ async function rkLoad(league, force) {
     if (d.me) {
       RK.me = d.me;
       // montée de ligue : grande fenêtre de fête ; on retient la ligue pour la prochaine fois
-      let prev = null; try { prev = localStorage.getItem(rkKey()); } catch {}
+      let prev = null; try { const s = (localStorage.getItem(rkKey()) || "").split("|"); if (s[0] === d.week) prev = s[1]; } catch {}
       if (prev && lgIdx(d.me.league) > lgIdx(prev)) S.leaguePop = { league: d.me.league, from: prev, fresh: true };
-      try { localStorage.setItem(rkKey(), d.me.league); } catch {}
+      try { localStorage.setItem(rkKey(), `${d.week}|${d.me.league}`); } catch {}
+      const p = S.profile;
+      if (p && (!p.best_league || lgIdx(d.me.league) > lgIdx(p.best_league) || (d.me.league === p.best_league && d.me.lpos < (p.best_lpos || 1e9)))) {
+        p.best_league = d.me.league; p.best_lpos = d.me.lpos; p.best_league_week = d.week; saveProfile();
+      }
     }
   } catch (e) {
     const m = (e && e.message) || "";
@@ -5096,9 +5137,9 @@ function rankedView(head, tabs) {
     hero = `<section class="rk-hero" style="--lg-a:${L.a};--lg-b:${L.b};--lg-glow:${L.glow}">
       <div class="rk-emb">${leagueBadge(me.league, 104, "rk-big")}</div>
       <div class="rk-info">
-        <span class="label">Ta ligue</span>
+        <span class="label">Ta ligue cette semaine</span>
         <h2 class="rk-name">Ligue ${L.name}</h2>
-        <p class="rk-sub num"><b>#${me.lpos}</b> ${me.league === "bronze" ? `sur ${fmt(mine.bronze_count)}` : "sur 100"} · ${fmt(me.score)} XP Ranked</p>
+        <div class="rk-place"><div><span>Ta place</span><b class="num">#${me.lpos}</b><small>${me.league === "bronze" ? `sur ${fmt(mine.bronze_count)}` : "sur 100"}</small></div><div><span>Cette semaine</span><b class="num">${fmt(me.score)}</b><small>XP Ranked</small></div><button class="btn btn-secondary btn-sm" data-act="rk-me">Voir ma place</button></div>
         ${nx ? `<div class="rk-bar"><span style="width:${pct}%"></span></div>
           <p class="rk-goal">Encore <b class="num">${fmt(need)} XP</b> pour dépasser <b>${esc(nx.name)}</b> et monter en ${leagueBadge(nextL.id, 18, "rk-inline")}<b>Ligue ${nextL.name}</b>.</p>`
           : `<p class="rk-goal">Tu es dans la meilleure ligue. Garde ta place dans le top 100.</p>`}
@@ -5118,14 +5159,18 @@ function rankedView(head, tabs) {
         <span class="lb2-rank num">${r.lpos}</span>${av(r, 42)}
         <span class="lb2-who"><b>${esc(who(r))}${r.is_me ? ` <span class="chip chip-teal" style="height:20px;font-size:11px">Toi</span>` : ""}</b><span class="lb2-tags">${r.vip ? vipTag() : ""}${r.plus ? plusTag() : ""}${r.level ? `<span class="lvl-chip">${esc(r.level)}</span>` : ""}</span></span>
         <span class="lb2-score num">${fmt(r.score)}<small>XP</small></span></li>`).join("")}</ol>
-      ${meRow ? `<div class="lb2-row is-me lb2-sticky"><span class="lb2-rank num">${meRow.lpos}</span>${av(meRow, 42)}<span class="lb2-who"><b>Toi</b><span class="small muted">Continue tes leçons pour remonter.</span></span><span class="lb2-score num">${fmt(meRow.score)}<small>XP</small></span></div>` : ""}`;
+      ${meRow ? `<div class="lb2-row is-me lb2-sticky"><span class="lb2-rank num">${meRow.lpos}</span>${av(meRow, 42)}<span class="lb2-who"><b>Toi</b><span class="small muted">Continue tes leçons pour remonter.</span></span><span class="lb2-score num">${fmt(meRow.score)}<small>XP</small></span></div>`
+        : me && view !== me.league ? `<button class="lb2-row is-me lb2-sticky rk-mine" data-act="rk-league" data-v="${me.league}"><span class="lb2-rank num">${me.lpos}</span>${avatarHTML(S.profile, 42, S.isVip)}<span class="lb2-who"><b>Toi · Ligue ${LG(me.league).name}</b><span class="small muted">Touche pour revenir à ta ligue</span></span><span class="lb2-score num">${fmt(me.score)}<small>XP</small></span></button>` : ""}`;
+  const reset = mine && mine.reset_at ? `<div class="rk-reset">${icon("i-pulse")}<span>Le Ranked repart de zéro <b>chaque lundi à 00h</b> (heure de Paris) · prochaine remise à zéro <b>${rkCountdown(mine.reset_at)}</b>.</span></div>` : "";
   return `${head}${tabs}
   ${RK.err ? notice(RK.err) : ""}
+  ${reset}
   ${hero}
   ${strip}
   ${list}
   <section class="rk-rules"><b>Comment ça marche</b>
-    <p>Ton score Ranked, c'est l'XP gagnée dans les leçons, les points de contrôle, les certifications et les révisions. Chaque ligue accueille <b>100 élèves maximum</b>, sauf Bronze. Pour monter, dépasse le score du dernier de la ligue au-dessus : il redescend à ta place.</p></section>`;
+    <p>Ton score Ranked, c'est l'XP gagnée <b>cette semaine</b> dans les leçons, les points de contrôle, les certifications et les révisions. Chaque ligue accueille <b>100 élèves maximum</b>, sauf Bronze. Pour monter, dépasse le score du dernier de la ligue au-dessus : il redescend à ta place.</p>
+    <p>Chaque <b>lundi à 00h</b> (heure de Paris), tous les scores repartent de zéro et tout le monde recommence en Bronze. Ta meilleure ligue reste affichée sur ton profil.</p></section>`;
 }
 function leagueModal() {
   const g = S.leaguePop; if (!g) return "";
@@ -5162,8 +5207,8 @@ function viewCompetition() {
   const u = S.ui, kind = u.lbKind || "ranked";
   if (kind === "ranked") {
     const busy = Object.values(RK.busy).some(Boolean);
-    return rankedView(`<header class="page-head enter"><div class="stack"><h1 class="h1">Compétition</h1><p class="muted">Monte de ligue en ligue grâce à tes leçons.</p></div>
-      <button class="btn btn-ghost btn-sm" data-act="lb-refresh" ${busy ? "disabled" : ""}>${busy ? '<span class="spinner"></span>' : ""}Actualiser</button></header>`,
+    return rankedView(`<header class="page-head rk-head enter"><div class="stack"><h1 class="h1">Compétition</h1><p class="muted">Monte de ligue en ligue grâce à tes leçons.</p></div>
+      <button class="icon-btn rk-refresh" data-act="lb-refresh" ${busy ? "disabled" : ""} aria-label="Actualiser" title="Actualiser">${busy ? '<span class="spinner"></span>' : `<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>`}</button></header>`,
       `<div class="segmented lb-tabs" role="tablist">${LB_KINDS.map(([k, t, ic]) => `<button role="tab" aria-selected="${kind === k}" class="${kind === k ? "is-active" : ""}" data-act="lb-kind" data-v="${k}">${icon(ic)}${t}</button>`).join("")}</div>`);
   }
   if (!LB.data[kind] && !LB.busy[kind] && !LB.err[kind]) setTimeout(() => lbLoad(kind), 0);
@@ -5286,13 +5331,21 @@ function viewProfile() {
       ${tile("bolt", fmt(xp), "XP gagnés")}
       ${tile("books", fmt(c.done), c.done > 1 ? "Leçons terminées" : "Leçon terminée", !c.done)}
       ${tile("trophy", fmt(c.bestStreak), "Record de Pulse", !c.bestStreak)}
-      ${RK.me ? `<div class="pf-stat"><span class="pf-stat-ic">${leagueBadge(RK.me.league, 28)}</span><span class="pf-stat-tx"><b>${LG(RK.me.league).name}</b><span>Ligue Ranked · #${RK.me.lpos}</span></span></div>` : tile("target", fmt(c.goals), c.goals === 1 ? "Objectif atteint" : "Objectifs atteints", !c.goals)}
+      ${tile("target", fmt(c.goals), c.goals === 1 ? "Objectif atteint" : "Objectifs atteints", !c.goals)}
       ${tile("read", fmt(words), words === 1 ? "Mot maîtrisé" : "Mots maîtrisés", !words)}
       ${tile("coin", fmt(p.coins), "Pièces")}
       ${isPlus() ? tile("plusheart", "∞", "Vies illimitées") : tile("heart", `${p.hearts ?? HEART_MAX}/${HEART_MAX}`, "Vies")}
     </div>
   </section>
   ${isPlus() ? `<section class="card pad pf-row pf-plus"><div class="row" style="gap:12px;flex-wrap:nowrap;min-width:0">${plusHeart(34)}<div style="min-width:0"><b>Verblyx Plus</b><p class="small muted">Actif ${esc(plusStatus(S.plus))} · vies illimitées, XP x2, 3x plus de Prof IA, sans pub.</p></div></div><button class="btn btn-secondary btn-sm pf-btn" data-go="shop">Détails</button></section>` : ""}
+  <section class="enter-3">
+    <h2 class="pf-h">Ranked</h2>
+    <div class="pf-rk">
+      ${(() => { const cur = RK.me, best = p.best_league; const card = (lg, title, sub, cls = "") => `<button class="pf-rk-card ${cls}" data-go="competition" style="--lg-a:${LG(lg).a};--lg-glow:${LG(lg).glow}">${leagueBadge(lg, 52)}<span class="pf-rk-tx"><span>${title}</span><b>Ligue ${LG(lg).name}</b><small>${sub}</small></span></button>`;
+        return (cur ? card(cur.league, "Rang actuel", `#${cur.lpos} cette semaine · ${fmt(cur.score)} XP`) : `<div class="pf-rk-card is-empty"><span class="pf-rk-tx"><span>Rang actuel</span><b>…</b><small>Chargement</small></span></div>`)
+          + (best ? card(best, "Meilleur rang", p.best_lpos ? `Record : #${p.best_lpos} en ${LG(best).name}` : "Ton record", "is-best") : `<div class="pf-rk-card is-empty"><span class="pf-rk-tx"><span>Meilleur rang</span><b>—</b><small>Termine une leçon pour entrer au classement</small></span></div>`); })()}
+    </div>
+  </section>
   <section class="card pad pf-row">
     <div style="min-width:0"><b>Boutique</b><p class="small muted">Recharge tes vies ou protège ton Pulse avec tes pièces.</p></div>
     <button class="btn btn-primary btn-sm pf-btn" data-go="shop">Ouvrir</button>
@@ -6529,6 +6582,7 @@ $app.addEventListener("click", (ev) => {
     case "adm-custom": { const k = (document.getElementById("admKind") || {}).value || "coins", n = Math.round(Number((document.getElementById("admAmt") || {}).value)); if (!n || n < 1) { u.admErr = "Indique une quantité positive."; render(); break; } adminGiftDo(v, k, k === "hearts" ? Math.min(n, HEART_MAX) : n); break; }
     case "lb-kind": u.lbKind = v; SFX.play("tap"); render(); lbLoad(v); break;
     case "lb-refresh": lbLoad(u.lbKind || "ranked", true); break;
+    case "rk-me": { const m = document.querySelector(".lb2-row.is-me"); if (m) { m.scrollIntoView({ block: "center", behavior: "smooth" }); fxPop(m, 1.03); } break; }
     case "rk-league": u.rkView = v === (RK.data._me && RK.data._me.league) ? null : v; SFX.play("tap"); render(); if (u.rkView) rkLoad(v); break;
     case "league-close": S.leaguePop = null; render(); if (S.view !== "competition") { u.lbKind = "ranked"; u.rkView = null; go("competition"); } break;
     case "lb-me": { const m = document.querySelector(".lb2-row.is-me"); if (m) { m.scrollIntoView({ block: "center", behavior: "smooth" }); vxAnim(m, [{ transform: "scale(1)" }, { transform: "scale(1.03)" }, { transform: "scale(1)" }], { duration: 600 }); } break; }
@@ -7043,6 +7097,7 @@ async function enterSession(session) {
     if (!avValid(p.avatar_id)) { p.avatar_id = avRandom(); delete p.avatar; saveProfile(); }
     if (p.placement_done) { const nb = unlockedBadges(); if (nb.length !== (p.badges || []).length) { p.badges = nb; saveProfile(); } }
     p.skills = p.skills || {}; p.goals = p.goals || []; p.difficulties = p.difficulties || []; p.days = p.days || {}; p.xp = p.xp || 0; p.streak = p.streak || 0;
+    if (!p.rdays) { const mo = parisMonday(); p.rdays = {}; Object.entries(p.days).forEach(([k, v]) => { if (k >= mo && v > 0) p.rdays[k] = v; }); if (Object.keys(p.rdays).length) setTimeout(() => { try { saveProfile(); } catch {} }, 2000); }
   }
   const fromHash = FROM_HASH[location.hash.slice(1)];
   S.view = joined && !S.profile.placement_done ? "celebrate" : fromHash ? allowed(fromHash) : allowed("dashboard");
