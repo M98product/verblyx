@@ -2128,6 +2128,38 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
 .na-spark.s1 { top: 16px; left: 18%; } .na-spark.s2 { top: 52%; left: 4%; animation-delay: .6s; width: 6px; height: 6px; } .na-spark.s3 { bottom: 20px; right: 18px; animation-delay: 1.1s; }
 @media (max-width: 560px) { .na-card { min-height: 196px; } .na-tx { padding: 18px 0 18px 18px; } .na-title { font-size: 26px; } .na-sub { font-size: 14px; } .na-art { width: 42%; min-width: 130px; } .na-ad { width: 118px; height: 96px; top: 18px; padding-top: 26px; } .na-vex .vx { width: 96px !important; height: 96px !important; } }
 @media (prefers-reduced-motion: reduce) { .na-vex, .na-spark { animation: none; } .na-cross path { animation: none; stroke-dashoffset: 0; } }
+
+/* ---------- Plus de vies ---------- */
+.out-body { align-items: center; gap: 18px; }
+.out-hero { position: relative; width: 100%; max-width: 460px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; padding: 22px 18px 20px; border-radius: 22px; border: 1px solid rgba(255, 59, 92, .3); background: radial-gradient(300px 180px at 50% 0%, rgba(255, 59, 92, .2), transparent 70%), var(--surface); }
+.out-hero .out-hearts span { filter: grayscale(.2); }
+.out-hero .out-hearts span:nth-child(odd) { animation: hp-pop .45s var(--spring) both, out-shiver 2.4s ease-in-out 1s infinite; animation-delay: calc(var(--i) * 70ms), calc(var(--i) * 120ms + 1s); }
+@keyframes out-shiver { 0%, 90%, 100% { transform: none; } 93% { transform: rotate(-8deg); } 96% { transform: rotate(7deg); } }
+.out-title { margin: 4px 0 0; font: 800 28px/1.15 var(--f-display); letter-spacing: -.02em; }
+.out-sub { margin: 0; color: var(--fg-2); font-size: 14.5px; }
+.out-timer { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 6px 12px; border-radius: 999px; background: var(--bg-raise); border: 1px solid var(--line-2); font-size: 13px; color: var(--fg-2); }
+.out-timer b { color: var(--fg); }
+.out-opts { width: 100%; max-width: 460px; display: flex; flex-direction: column; gap: 10px; }
+.out-opt, .out-plus { display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 14px; border-radius: 16px; border: 1.5px solid var(--line-2); background: var(--surface); color: var(--fg); font: inherit; text-align: left; cursor: pointer; transition: transform .12s, border-color .15s, background .15s; -webkit-tap-highlight-color: transparent; }
+.out-opt:active:not(:disabled), .out-plus:active { transform: scale(.98); }
+@media (hover: hover) { .out-opt:not(:disabled):hover { border-color: #FF5C77; } .out-plus:hover { border-color: #5AA2FF; } }
+.out-opt:disabled { opacity: .55; cursor: default; }
+.out-ic { position: relative; flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: rgba(255, 59, 92, .12); }
+.out-ic em { position: absolute; bottom: -6px; right: -6px; padding: 1px 5px; border-radius: 6px; background: #20232C; border: 1px solid var(--line-2); font: 800 10px var(--f-body); font-style: normal; color: var(--fg); }
+.out-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.out-tx b { font: 700 15.5px var(--f-body); }
+.out-tx small { font-size: 13px; color: var(--muted); }
+.out-price { flex: none; display: inline-flex; align-items: center; gap: 5px; height: 36px; padding: 0 14px; border-radius: 11px; background: var(--primary); color: #fff; font: 800 15px var(--f-body); }
+.out-price.no { background: var(--surface-3); color: var(--muted); }
+.out-price .ico { width: 16px; height: 16px; }
+.out-coins { margin: 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.out-coins .ico { width: 15px; height: 15px; }
+.out-coins b { color: var(--fg); }
+.out-plus { margin-top: 4px; border-color: rgba(22, 119, 255, .5); background: radial-gradient(280px 120px at 0% 50%, rgba(22, 119, 255, .25), transparent 70%), var(--surface); }
+.out-plus .out-ic { background: rgba(22, 119, 255, .16); }
+.out-voir { flex: none; height: 36px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 11px; background: #fff; color: #1452D8; font: 800 14px var(--f-body); }
+.out-flow .flow-foot-in { justify-content: space-between; }
+@media (max-width: 560px) { .out-body { gap: 12px; padding-top: 8px; } .out-hero { padding: 14px 14px 14px; gap: 4px; } .out-hero .out-hearts { gap: 6px; } .out-hero .out-hearts .hrt-img { width: 28px; height: 28px; } .out-hero .vx { width: 78px !important; height: 78px !important; } .out-title { font-size: 23px; } .out-sub { font-size: 13.5px; } .out-timer { margin-top: 2px; } .out-opt, .out-plus { padding: 10px 12px; } .out-ic { width: 40px; height: 40px; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -5672,23 +5704,38 @@ const em = (name, size = 18) => EMS[name] ? `<svg class="em" viewBox="0 0 24 24"
 
 /* ---------- Plus de vies ---------- */
 function outView(ses) {
-  const p = S.profile, t = heartTimer(), can = (p.coins || 0) >= HEART_COST;
-  const canReview = dueWords().length > 0 || (p.mistakes || []).length > 0;
-  return `<div class="flow"><div class="flow-top"><button class="icon-btn" data-act="ses-quit" aria-label="Quitter">${icon("i-close")}</button>${progress(ses.items ? (ses.i / ses.items.length) * 100 : 0)}<span class="hearts-mini low">${heartImg(false, 28)}0</span></div>
-    <main class="flow-body" style="align-items:center;text-align:center">
-      <div class="out-hearts">${Array.from({ length: HEART_MAX }, (_, k) => `<span style="--i:${k}">${heartImg(false, 44)}</span>`).join("")}</div>
-      ${vx("sad", 130, "lead")}
-      <h1 class="h1">Plus de vies !</h1>
-      <p class="muted" style="max-width:28em">Pas de panique : chaque erreur t'apprend quelque chose. ${t ? `Toutes tes vies reviennent dans ${t}.` : ""}</p>
-      <div class="stack" style="width:100%;max-width:360px;gap:10px">
-        <button class="btn btn-primary btn-lg btn-block" data-act="buy-heart-go" ${can ? "" : "disabled"}>${icon("i-heart")} Racheter une vie · ${HEART_COST} pièces</button>
-        <button class="btn btn-secondary btn-block" data-go="shop">Voir la boutique des vies</button>
-        ${can ? "" : `<p class="small muted">Tu as ${p.coins || 0} pièces : il en faut ${HEART_COST}.</p>`}
-        <button class="btn btn-secondary btn-lg btn-block" data-act="review" ${canReview ? "" : "disabled"}>Réviser pour regagner une vie</button>
-        <button class="btn btn-ghost btn-block" data-act="ses-quit">Revenir plus tard</button>
+  const p = S.profile, t = heartTimer(), coins = p.coins || 0;
+  const full = refillPrice(), can1 = coins >= HEART_COST, canFull = coins >= full;
+  return `<div class="flow out-flow"><div class="flow-top"><button class="icon-btn" data-act="ses-quit" aria-label="Quitter">${icon("i-close")}</button>${progress(ses.items ? (ses.i / ses.items.length) * 100 : 0)}<span class="hearts-mini low">${heartImg(false, 28)}0</span></div>
+    <main class="flow-body out-body">
+      <section class="out-hero">
+        <div class="out-hearts">${Array.from({ length: HEART_MAX }, (_, k) => `<span style="--i:${k}">${heartImg(false, 40)}</span>`).join("")}</div>
+        ${vx("sad", 120, "lead")}
+        <h1 class="out-title">Plus de vies !</h1>
+        <p class="out-sub">Pas de panique : chaque erreur t'apprend quelque chose.</p>
+        ${t ? `<span class="out-timer">${pic("clock", 16)}Toutes tes vies reviennent dans <b>${t}</b></span>` : ""}
+      </section>
+      <div class="out-opts">
+        <button class="out-opt" data-act="buy-heart-go" ${can1 ? "" : "disabled"}>
+          <span class="out-ic">${heartImg(true, 34)}</span>
+          <span class="out-tx"><b>1 vie</b><small>Reprends tout de suite</small></span>
+          <span class="out-price ${can1 ? "" : "no"}">${icon("i-coin", "ico coin-ic")}${HEART_COST}</span>
+        </button>
+        <button class="out-opt" data-act="buy-refill-go" ${canFull ? "" : "disabled"}>
+          <span class="out-ic">${heartImg(true, 34)}<em>max</em></span>
+          <span class="out-tx"><b>Recharge complète</b><small>Tes ${HEART_MAX} vies d'un coup</small></span>
+          <span class="out-price ${canFull ? "" : "no"}">${icon("i-coin", "ico coin-ic")}${full}</span>
+        </button>
+        <p class="out-coins">${icon("i-coin", "ico coin-ic")} Tu as <b>${coins}</b> pièces${can1 ? "" : ` : il en faut ${HEART_COST} pour une vie`}.</p>
+        ${!isPlus() && PLUS.available ? `<button class="out-plus" data-act="plus-see">
+          <span class="out-ic">${plusHeart(38)}</span>
+          <span class="out-tx"><b>Vies illimitées</b><small>Avec Verblyx Plus, tu ne t'arrêtes plus jamais.</small></span>
+          <span class="out-voir">Voir</span>
+        </button>` : ""}
       </div>
-      <div style="width:100%;max-width:460px;margin-top:6px">${plusUpsell("hearts")}</div>
-    </main></div>`;
+    </main>
+    <footer class="flow-foot"><div class="flow-foot-in"><button class="btn btn-ghost" data-go="shop">Boutique</button><button class="btn btn-secondary btn-lg" data-act="ses-quit">Revenir plus tard</button></div></footer>
+  </div>`;
 }
 
 /* ---------- Profil ---------- */
@@ -6936,6 +6983,12 @@ $app.addEventListener("click", (ev) => {
     case "ob-av": obDraft().avatar_id = Number(v); SFX.play("select"); render(); { const l = document.querySelector(".ob-me .avatar"); if (l) vxAnim(l, [{ transform: "scale(.8)" }, { transform: "scale(1.08)" }, { transform: "scale(1)" }], { duration: 380, easing: "ease-out" }); } break;
     case "cheer-go": SFX.play("tap"); endCheer(); break;
     case "buy": { const done = buyItem(v); u.shopMsg = done ? "Achat effectué. Tes vies sont rechargées." : ""; if (done) { render(); const l = document.querySelector(".vx.lead"); if (l) vxReact(l, "love"); } break; }
+    case "buy-refill-go": {
+      const ses = S.session;
+      if (!buyItem("hfull")) break;
+      if (ses && ses.pre) openStep(ses.st); else if (ses) { ses.out = false; nextItem(); }
+      break;
+    }
     case "buy-heart-go": {
       const p = S.profile, ses = S.session;
       if ((p.coins || 0) < HEART_COST) break;
