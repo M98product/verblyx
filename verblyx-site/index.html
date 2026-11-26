@@ -2060,6 +2060,7 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
 .chm-btns { position: relative; width: 100%; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
 @media (max-width: 720px) { .chest-grid { grid-template-columns: 1fr 1fr; } .chest-grid .chest-card:last-child { grid-column: 1 / -1; } .chest-card { padding: 14px 12px; } .chest-ic .chest-art { width: 70px; height: 70px; } }
 @media (prefers-reduced-motion: reduce) { .chm-art.is-shaking .chest-art, .chm-rays { animation: none; } }
+.chest-odds { font-size: 12px; line-height: 1.5; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -3389,10 +3390,13 @@ const SHOP = [
 ];
 /* ---------- Coffres de la boutique ---------- */
 const CHESTS = [
-  { id: "c1", name: "Petit coffre", cost: 100, coins: [40, 160], xp: [5, 20], heart: [0.3, 1], plus: 0, c: ["#E0A060", "#8A4B1E", "#F6C25A"] },
-  { id: "c2", name: "Grand coffre", cost: 500, coins: [250, 750], xp: [30, 80], heart: [0.6, 2], plus: 0, c: ["#5FA0FF", "#1F45B8", "#DCE8FF"] },
-  { id: "c3", name: "Coffre légendaire", cost: 1000, coins: [500, 1500], xp: [80, 200], heart: [1, 5], plus: 0.02, c: ["#A979FF", "#4A22B5", "#FFD45A"] },
+  { id: "c1", name: "Petit coffre", cost: 100, xp: [10, 40], hearts: 1, plus: 0, c: ["#E0A060", "#8A4B1E", "#F6C25A"] },
+  { id: "c2", name: "Grand coffre", cost: 500, xp: [50, 150], hearts: 2, plus: 0, c: ["#5FA0FF", "#1F45B8", "#DCE8FF"] },
+  { id: "c3", name: "Coffre légendaire", cost: 1000, xp: [120, 300], hearts: 5, plus: 0.02, c: ["#A979FF", "#4A22B5", "#FFD45A"] },
 ];
+// Un coffre donne UNE récompense : des pièces (55 %), de l'XP (35 %) ou des vies (10 %).
+// Pièces : le plus souvent moins que le prix du coffre ; 20 % de chance seulement d'en récupérer plus.
+const CHEST_COIN_TABLE = [[0.5, 0.2, 0.6], [0.3, 0.6, 1.0], [0.15, 1.05, 1.6], [0.05, 2.0, 3.0]]; // [chance, min x prix, max x prix]
 const PLUS_CHANCE_TXT = "2 % de chance de gagner 1 mois de Verblyx Plus (une tentative par jour)";
 function chestArt(ch, size = 96, open = false) {
   const [a, b, t] = ch.c, id = "chg-" + ch.id;
@@ -3417,12 +3421,17 @@ function chestArt(ch, size = 96, open = false) {
 const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 function rollChest(ch) {
   const p = S.profile; refreshHearts();
-  const r = { coins: rnd(ch.coins[0], ch.coins[1]), xp: rnd(ch.xp[0], ch.xp[1]), hearts: 0, extra: 0, jackpot: false };
-  if (Math.random() < 0.05) { r.coins *= 2; r.jackpot = true; }
-  const n = Math.random() < ch.heart[0] ? ch.heart[1] : 0;
+  const r = { coins: 0, xp: 0, hearts: 0, extra: 0, jackpot: false };
   const room = isPlus() ? 0 : HEART_MAX - (p.hearts ?? HEART_MAX);
-  r.hearts = Math.min(n, room); r.extra = (n - r.hearts) * 20; // vies déjà pleines : 20 pièces par vie
-  return r;
+  let x = Math.random();
+  if (x < 0.10 && room > 0) { r.hearts = Math.min(ch.hearts, room); return r; } // vies (seulement s'il en manque)
+  if (x < 0.45) { r.xp = rnd(ch.xp[0], ch.xp[1]); return r; }
+  let y = Math.random();
+  for (const [w, lo, hi] of CHEST_COIN_TABLE) {
+    if (y < w) { r.coins = Math.round(ch.cost * (lo + Math.random() * (hi - lo))); r.jackpot = lo >= 2; return r; }
+    y -= w;
+  }
+  r.coins = Math.round(ch.cost * 0.4); return r;
 }
 let chestBusy = false;
 async function openChest(id) {
@@ -3465,8 +3474,8 @@ function chestModal() {
   const ch = g.ch, open = g.phase === "open", r = g.r, won = g.plus && g.plus.won;
   const items = !open ? "" : [
     ...(won ? [g.plus.converted ? `<div class="chm-item is-plus">${plusHeart(34)}<b>+1 500 pièces</b><span>Lot Verblyx Plus (tu es déjà abonné)</span></div>` : `<div class="chm-item is-plus">${plusHeart(34)}<b>1 mois de Plus !</b><span>Vies illimitées, XP x2, 3x plus de Prof IA</span></div>`] : []),
-    `<div class="chm-item">${em("coin", 30)}<b class="num">+${(r.coins + r.extra).toLocaleString("fr-FR")}</b><span>${r.jackpot ? "Jackpot ! pièces x2" : "pièces"}</span></div>`,
-    `<div class="chm-item">${em("bolt", 30)}<b class="num">+${r.xp}</b><span>XP</span></div>`,
+    ...(r.coins + r.extra ? [`<div class="chm-item">${em("coin", 30)}<b class="num">+${(r.coins + r.extra).toLocaleString("fr-FR")}</b><span>${r.jackpot ? "Jackpot !" : "pièces"}</span></div>`] : []),
+    ...(r.xp ? [`<div class="chm-item">${em("bolt", 30)}<b class="num">+${r.xp}</b><span>XP</span></div>`] : []),
     ...(r.hearts ? [`<div class="chm-item">${heartImg(true, 30)}<b class="num">+${r.hearts}</b><span>${r.hearts > 1 ? "vies" : "vie"}</span></div>`] : []),
   ].join("");
   const again = open && (S.profile.coins || 0) >= ch.cost;
@@ -3486,15 +3495,16 @@ function chestModal() {
 function chestsSection() {
   const p = S.profile;
   return `<section class="chests enter-3">
-    <div class="row between" style="gap:8px"><h2 class="pf-h" style="margin:0">Coffres</h2><span class="small muted">Pièces, XP et vies à gagner</span></div>
+    <div class="row between" style="gap:8px"><h2 class="pf-h" style="margin:0">Coffres</h2><span class="small muted">Pièces, XP ou vies à gagner</span></div>
     <div class="chest-grid">${CHESTS.map((ch) => { const ok = (p.coins || 0) >= ch.cost; return `<div class="card chest-card" style="--ch-a:${ch.c[0]};--ch-b:${ch.c[1]}">
       <div class="chest-ic">${chestArt(ch, 84)}</div>
       <b class="h3">${ch.name}</b>
-      <p class="small muted">${ch.coins[0]} à ${ch.coins[1]} pièces, ${ch.xp[0]} à ${ch.xp[1]} XP${ch.heart[0] >= 1 ? ", recharge de vies" : `, parfois des vies`}.</p>
+      <p class="small muted">Une récompense au hasard : des pièces, de l'XP (${ch.xp[0]} à ${ch.xp[1]}) ou ${ch.hearts >= HEART_MAX ? "une recharge de vies" : ch.hearts > 1 ? `${ch.hearts} vies` : "une vie"}.</p>
       ${ch.plus ? `<p class="chest-plus">${plusHeart(16)}<span>${PLUS_CHANCE_TXT}</span></p>` : ""}
       <button class="btn ${ok ? "btn-primary" : "btn-secondary"} btn-block" data-act="chest-open" data-v="${ch.id}" ${ok ? "" : "disabled"}>${icon("i-coin", "ico coin-ic")} ${ch.cost}</button>
       ${ok ? "" : `<span class="small muted shop-why">Encore ${ch.cost - (p.coins || 0)} pièces</span>`}
     </div>`; }).join("")}</div>
+    <p class="small muted chest-odds">Chances : pièces 55 % · XP 35 % · vies 10 % (si tu en as perdu, sinon XP ou pièces). Côté pièces, tu récupères le plus souvent moins que le prix du coffre : 1 chance sur 5 d'en gagner plus, et 5 % de jackpot (2 à 3 fois le prix).</p>
   </section>`;
 }
 function buyItem(id) {
@@ -4414,7 +4424,6 @@ function viewShop() {
     ${vx(p.hearts <= 1 ? "sad" : "heart", 110, "lead")}
   </section>
   ${notice(S.ui.shopMsg, "success")}
-  ${chestsSection()}
   <div class="shop-grid enter-3">
     ${(isPlus() ? [] : SHOP).map((it) => {
       const n = it.n || room, price = it.price();
@@ -4438,6 +4447,7 @@ function viewShop() {
       ${(p.freezes || 0) >= 2 ? `<span class="small muted">2 boucliers maximum</span>` : ""}
     </div>
   </div>
+  ${chestsSection()}
   <section class="card pad">
     <span class="label">Gagner des pièces</span>
     <div class="earn">
