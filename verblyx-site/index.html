@@ -2026,6 +2026,40 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
 .plus-chip { border: 1px solid rgba(22, 119, 255, .5) !important; background: rgba(22, 119, 255, .14) !important; color: #9CC8FF !important; cursor: pointer; font-weight: 700; gap: 4px; }
 @media (max-width: 560px) { .plus-up { flex-wrap: wrap; } .plus-up-act { flex-direction: row; width: 100%; } .plus-up-act .btn { flex: 1; } }
 @media (max-width: 560px) { .pc-long { display: none; } .ct-meta:has(.plus-chip) > .ct-chip:not(.plus-chip):not(.tok-chip):not(.is-toast) { display: none; } }
+
+/* ---------- Coffres ---------- */
+.chests { display: flex; flex-direction: column; gap: 12px; }
+.chest-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.chest-card { display: flex; flex-direction: column; gap: 8px; padding: 16px; border-color: color-mix(in srgb, var(--ch-a) 40%, transparent); background: radial-gradient(240px 140px at 50% 0%, color-mix(in srgb, var(--ch-a) 22%, transparent), transparent 70%), var(--surface); }
+.chest-ic { display: grid; place-items: center; margin: -4px 0 2px; }
+.chest-ic .chest-art { filter: drop-shadow(0 10px 16px rgba(0, 0, 0, .45)); transition: transform .2s; }
+@media (hover: hover) { .chest-card:hover .chest-art { transform: translateY(-4px) rotate(-3deg); } }
+.chest-card .btn { margin-top: auto; }
+.chest-plus { display: flex; gap: 6px; align-items: flex-start; padding: 6px 8px; border-radius: 10px; background: rgba(22, 119, 255, .12); color: #9CC8FF; font-size: 12px; line-height: 1.35; }
+.chest-art .chest-lid { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .45s cubic-bezier(.3,1.6,.5,1); }
+.chest-art.is-open .chest-lid { transform: translate(0, -10px) rotate(-22deg); }
+.chest-art .chest-glow { opacity: 0; transition: opacity .4s; }
+.chest-art.is-open .chest-glow { opacity: 1; }
+.chest-spark { animation: vx-twinkle 1.6s ease-in-out infinite; }
+.chm-panel { position: relative; overflow: hidden; max-width: 420px; align-items: center; text-align: center; gap: 8px; padding: 26px 22px 20px; border-color: color-mix(in srgb, var(--ch-a) 55%, transparent); }
+.chm-rays { position: absolute; left: 50%; top: 110px; width: 560px; height: 560px; margin: -280px 0 0 -280px; border-radius: 50%; background: repeating-conic-gradient(color-mix(in srgb, var(--ch-a) 22%, transparent) 0 10deg, transparent 10deg 24deg); mask: radial-gradient(circle, #000 15%, transparent 60%); -webkit-mask: radial-gradient(circle, #000 15%, transparent 60%); opacity: 0; transition: opacity .5s; animation: rays 14s linear infinite; pointer-events: none; }
+.chest-modal.is-open .chm-rays { opacity: 1; }
+.chm-art { position: relative; display: grid; place-items: center; height: 150px; }
+.chm-art .chest-art { filter: drop-shadow(0 14px 24px rgba(0, 0, 0, .5)); }
+.chm-art.is-shaking .chest-art { animation: chest-shake .5s ease-in-out infinite; }
+@keyframes chest-shake { 0%, 100% { transform: rotate(0) scale(1); } 20% { transform: rotate(-7deg) scale(1.03); } 40% { transform: rotate(6deg) scale(1.05); } 60% { transform: rotate(-4deg) scale(1.04); } 80% { transform: rotate(3deg) scale(1.06); } }
+.chest-modal.is-open .chm-art .chest-art { animation: chest-pop .6s cubic-bezier(.3,1.5,.5,1); }
+@keyframes chest-pop { 0% { transform: scale(1.1); } 40% { transform: scale(.92); } 100% { transform: none; } }
+.chm-items { position: relative; display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 8px; width: 100%; margin-top: 6px; }
+.chm-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 12px 8px; border-radius: 14px; background: var(--bg-raise); border: 1px solid var(--line-2); animation: ex-pop .45s cubic-bezier(.3,1.5,.5,1) both; }
+.chm-item:nth-child(2) { animation-delay: .26s; } .chm-item:nth-child(3) { animation-delay: .52s; } .chm-item:nth-child(4) { animation-delay: .78s; }
+.chm-item b { font: 800 20px var(--f-display); }
+.chm-item span { font-size: 12px; color: var(--muted); }
+.chm-item.is-plus { grid-column: 1 / -1; border-color: rgba(22, 119, 255, .6); background: radial-gradient(240px 100px at 50% 0%, rgba(22, 119, 255, .3), transparent 70%), var(--bg-raise); }
+.chm-item.is-plus b { color: #9CC8FF; font-size: 22px; }
+.chm-btns { position: relative; width: 100%; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+@media (max-width: 720px) { .chest-grid { grid-template-columns: 1fr 1fr; } .chest-grid .chest-card:last-child { grid-column: 1 / -1; } .chest-card { padding: 14px 12px; } .chest-ic .chest-art { width: 70px; height: 70px; } }
+@media (prefers-reduced-motion: reduce) { .chm-art.is-shaking .chest-art, .chm-rays { animation: none; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -2825,6 +2859,7 @@ function render() {
   if (showGift) html += giftModal();
   const showLevel = S.levelPop && !showGift && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
   if (showLevel) html += levelModal();
+  if (S.chestPop && v === "shop") html += chestModal();
   const showLeague = S.leaguePop && !showGift && !showLevel && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
   if (showLeague) html += leagueModal();
   $app.innerHTML = html;
@@ -3352,6 +3387,116 @@ const SHOP = [
   { id: "h3", name: "3 vies", desc: "85 pièces la vie au lieu de 100, soit 45 pièces d'économie.", n: 3, price: () => 255 },
   { id: "hfull", name: "Recharge complète", desc: "Toutes tes vies d'un coup, à 85 pièces la vie dès 2 vies manquantes.", n: 0, price: () => refillPrice() },
 ];
+/* ---------- Coffres de la boutique ---------- */
+const CHESTS = [
+  { id: "c1", name: "Petit coffre", cost: 100, coins: [40, 160], xp: [5, 20], heart: [0.3, 1], plus: 0, c: ["#E0A060", "#8A4B1E", "#F6C25A"] },
+  { id: "c2", name: "Grand coffre", cost: 500, coins: [250, 750], xp: [30, 80], heart: [0.6, 2], plus: 0, c: ["#5FA0FF", "#1F45B8", "#DCE8FF"] },
+  { id: "c3", name: "Coffre légendaire", cost: 1000, coins: [500, 1500], xp: [80, 200], heart: [1, 5], plus: 0.02, c: ["#A979FF", "#4A22B5", "#FFD45A"] },
+];
+const PLUS_CHANCE_TXT = "2 % de chance de gagner 1 mois de Verblyx Plus (une tentative par jour)";
+function chestArt(ch, size = 96, open = false) {
+  const [a, b, t] = ch.c, id = "chg-" + ch.id;
+  return `<svg class="chest-art ${open ? "is-open" : ""}" viewBox="0 0 64 64" width="${size}" height="${size}" aria-hidden="true">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>
+      <radialGradient id="${id}-l"><stop offset="0" stop-color="#FFF6C8"/><stop offset="1" stop-color="#FFF6C8" stop-opacity="0"/></radialGradient></defs>
+    <ellipse class="chest-glow" cx="32" cy="30" rx="26" ry="20" fill="url(#${id}-l)"/>
+    <ellipse cx="32" cy="58" rx="22" ry="3.5" fill="#000" opacity=".25"/>
+    <rect x="8" y="30" width="48" height="26" rx="4" fill="url(#${id})" stroke="${t}" stroke-width="1.6"/>
+    <rect x="15" y="30" width="5" height="26" fill="${t}" opacity=".85"/><rect x="44" y="30" width="5" height="26" fill="${t}" opacity=".85"/>
+    <path d="M8 40h48" stroke="#000" stroke-opacity=".18" stroke-width="1.5"/>
+    <g class="chest-lid">
+      <path d="M8 32v-8c0-6 5-10 11-10h26c6 0 11 4 11 10v8z" fill="url(#${id})" stroke="${t}" stroke-width="1.6"/>
+      <path d="M15 14.6V32M44 14.6V32" stroke="${t}" stroke-width="5" opacity=".85"/>
+      <path d="M13 19c3-3 7-4 12-4" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".35"/>
+    </g>
+    <rect x="27.5" y="27" width="9" height="11" rx="2.2" fill="${t}" stroke="#000" stroke-opacity=".25"/>
+    <path d="M32 31v3" stroke="#000" stroke-opacity=".45" stroke-width="1.8" stroke-linecap="round"/>
+    ${ch.id === "c3" ? `<path class="chest-spark" d="M52 10l1.4 3 3 1.4-3 1.4-1.4 3-1.4-3-3-1.4 3-1.4zM10 8l1 2 2 1-2 1-1 2-1-2-2-1 2-1z" fill="#FFE7A0"/>` : ""}
+  </svg>`;
+}
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+function rollChest(ch) {
+  const p = S.profile; refreshHearts();
+  const r = { coins: rnd(ch.coins[0], ch.coins[1]), xp: rnd(ch.xp[0], ch.xp[1]), hearts: 0, extra: 0, jackpot: false };
+  if (Math.random() < 0.05) { r.coins *= 2; r.jackpot = true; }
+  const n = Math.random() < ch.heart[0] ? ch.heart[1] : 0;
+  const room = isPlus() ? 0 : HEART_MAX - (p.hearts ?? HEART_MAX);
+  r.hearts = Math.min(n, room); r.extra = (n - r.hearts) * 20; // vies déjà pleines : 20 pièces par vie
+  return r;
+}
+let chestBusy = false;
+async function openChest(id) {
+  const ch = CHESTS.find((x) => x.id === id), p = S.profile;
+  if (!ch || chestBusy || (p.coins || 0) < ch.cost) return;
+  chestBusy = true;
+  S.chestPop = { ch, phase: "shake", r: null, plus: null };
+  SFX.play("tap"); render(); chestShakeFx();
+  const t0 = Date.now();
+  let plus = null;
+  if (ch.plus && S.store.chestPlusRoll) {
+    try { await saveProfile(); plus = await S.store.chestPlusRoll(); } catch { plus = null; }
+  }
+  const r = rollChest(ch);
+  p.coins = Math.max(0, (p.coins || 0) - ch.cost + r.coins + r.extra + (plus && plus.converted ? 1500 : 0));
+  const lvB = xpLevel(p.xp || 0); p.xp = (p.xp || 0) + r.xp;
+  if (r.hearts) addHearts(r.hearts);
+  if (plus && plus.won && !plus.converted) { S.plus = { ...(S.plus || {}), active: true, until: plus.until, lifetime: false, source: "chest" }; p.hearts = HEART_MAX; p.heartsAt = null; }
+  p.chests_opened = (p.chests_opened || 0) + 1;
+  p.badges = unlockedBadges();
+  saveProfile();
+  await new Promise((res) => setTimeout(res, Math.max(0, 1500 - (Date.now() - t0))));
+  if (!S.chestPop) { chestBusy = false; return; }
+  S.chestPop = { ch, phase: "open", r, plus, lvUp: xpLevel(p.xp) > lvB };
+  render(); chestOpenFx(r, plus);
+  chestBusy = false;
+}
+function chestShakeFx() {
+  [0, 300, 600, 900, 1150, 1350].forEach((t, k) => setTimeout(() => { if (S.chestPop && S.chestPop.phase === "shake") SFX.play(k > 3 ? "pop" : "tick"); }, t));
+}
+function chestOpenFx(r, plus) {
+  const won = plus && plus.won;
+  SFX.play(won ? "jackpot" : r.jackpot ? "jackpot" : "fanfare");
+  const art = document.querySelector(".chm-art");
+  if (art) { const b = art.getBoundingClientRect(); fxBurst(b.left + b.width / 2, b.top + b.height * .4, won ? ["#FFD45A", "#5AA2FF", "#FFFFFF", "#A979FF"] : ["#FFD45A", "#F6BE3B", "#FFFFFF", "#5CF3DA"], 26, 140); }
+  document.querySelectorAll(".chm-item").forEach((el, k) => setTimeout(() => { SFX.play("pop"); fxPop(el, 1.12); }, 450 + k * 260));
+}
+function chestModal() {
+  const g = S.chestPop; if (!g) return "";
+  const ch = g.ch, open = g.phase === "open", r = g.r, won = g.plus && g.plus.won;
+  const items = !open ? "" : [
+    ...(won ? [g.plus.converted ? `<div class="chm-item is-plus">${plusHeart(34)}<b>+1 500 pièces</b><span>Lot Verblyx Plus (tu es déjà abonné)</span></div>` : `<div class="chm-item is-plus">${plusHeart(34)}<b>1 mois de Plus !</b><span>Vies illimitées, XP x2, 3x plus de Prof IA</span></div>`] : []),
+    `<div class="chm-item">${em("coin", 30)}<b class="num">+${(r.coins + r.extra).toLocaleString("fr-FR")}</b><span>${r.jackpot ? "Jackpot ! pièces x2" : "pièces"}</span></div>`,
+    `<div class="chm-item">${em("bolt", 30)}<b class="num">+${r.xp}</b><span>XP</span></div>`,
+    ...(r.hearts ? [`<div class="chm-item">${heartImg(true, 30)}<b class="num">+${r.hearts}</b><span>${r.hearts > 1 ? "vies" : "vie"}</span></div>`] : []),
+  ].join("");
+  const again = open && (S.profile.coins || 0) >= ch.cost;
+  return `<div class="modal chest-modal ${open ? "is-open" : ""} ${won ? "is-won" : ""}" role="dialog" aria-modal="true" aria-labelledby="chm-title">
+    <div class="modal-bg" ${open ? 'data-act="chest-close"' : ""}></div>
+    <div class="modal-panel chm-panel" style="--ch-a:${ch.c[0]};--ch-b:${ch.c[1]}">
+      <div class="chm-rays" aria-hidden="true"></div>
+      <div class="chm-art ${open ? "" : "is-shaking"}">${chestArt(ch, 150, open)}</div>
+      <span class="gp-kicker">${esc(ch.name)}</span>
+      <h2 class="gp-title" id="chm-title">${!open ? "Ouverture…" : won ? (g.plus.converted ? "Lot Plus gagné !" : "Incroyable !") : r.jackpot ? "Jackpot !" : "Voici ton butin"}</h2>
+      ${open ? `<div class="chm-items">${items}</div>
+        <div class="chm-btns"><button class="btn btn-primary btn-lg btn-block" data-act="chest-close">Super !</button>
+        ${again ? `<button class="btn btn-ghost btn-block" data-act="chest-open" data-v="${ch.id}">Ouvrir un autre · ${ch.cost} pièces</button>` : ""}</div>` : `<p class="gp-sub">Qu'est-ce qui se cache dedans ?</p>`}
+    </div>
+  </div>`;
+}
+function chestsSection() {
+  const p = S.profile;
+  return `<section class="chests enter-3">
+    <div class="row between" style="gap:8px"><h2 class="pf-h" style="margin:0">Coffres</h2><span class="small muted">Pièces, XP et vies à gagner</span></div>
+    <div class="chest-grid">${CHESTS.map((ch) => { const ok = (p.coins || 0) >= ch.cost; return `<div class="card chest-card" style="--ch-a:${ch.c[0]};--ch-b:${ch.c[1]}">
+      <div class="chest-ic">${chestArt(ch, 84)}</div>
+      <b class="h3">${ch.name}</b>
+      <p class="small muted">${ch.coins[0]} à ${ch.coins[1]} pièces, ${ch.xp[0]} à ${ch.xp[1]} XP${ch.heart[0] >= 1 ? ", recharge de vies" : `, parfois des vies`}.</p>
+      ${ch.plus ? `<p class="chest-plus">${plusHeart(16)}<span>${PLUS_CHANCE_TXT}</span></p>` : ""}
+      <button class="btn ${ok ? "btn-primary" : "btn-secondary"} btn-block" data-act="chest-open" data-v="${ch.id}" ${ok ? "" : "disabled"}>${icon("i-coin", "ico coin-ic")} ${ch.cost}</button>
+      ${ok ? "" : `<span class="small muted shop-why">Encore ${ch.cost - (p.coins || 0)} pièces</span>`}
+    </div>`; }).join("")}</div>
+  </section>`;
+}
 function buyItem(id) {
   const p = S.profile, it = SHOP.find((x) => x.id === id); if (!it) return false;
   refreshHearts();
@@ -4269,6 +4414,7 @@ function viewShop() {
     ${vx(p.hearts <= 1 ? "sad" : "heart", 110, "lead")}
   </section>
   ${notice(S.ui.shopMsg, "success")}
+  ${chestsSection()}
   <div class="shop-grid enter-3">
     ${(isPlus() ? [] : SHOP).map((it) => {
       const n = it.n || room, price = it.price();
@@ -6686,6 +6832,8 @@ $app.addEventListener("click", (ev) => {
     case "log-refresh": logLoad(); break;
     case "plus-plan": u.plusPlan = v; SFX.play("tap"); render(); break;
     case "plus-close": S.plusModal = null; render(); break;
+    case "chest-open": if (S.chestPop && S.chestPop.phase === "shake") break; S.chestPop = null; openChest(v); break;
+    case "chest-close": if (S.chestPop && S.chestPop.phase === "open") { S.chestPop = null; render(); } break;
     case "plus-buy": case "plus-manage": case "plus-cancel": {
       if (S.ui.plusBusy || !S.store.plusAction) break;
       S.ui.plusBusy = true; S.ui.plusErr = ""; SFX.play("tap"); render();
@@ -7050,6 +7198,7 @@ function makeSupaStore(sb, uid) {
       }
       return r.data || {};
     },
+    async chestPlusRoll() { const { data, error } = await sb.rpc("chest_plus_roll"); if (error) throw error; return data || null; },
     async myPlus() { const { data, error } = await sb.rpc("my_plus"); if (error) return null; return data || null; },
     async adminSetPlus(target, days) { const { error } = await sb.rpc("admin_set_plus", { p_target: target, p_days: days }); if (error) throw error; },
     async adminSetVip(target, on) { const { error } = await sb.rpc("admin_set_vip", { p_target: target, p_on: on }); if (error) throw error; },
