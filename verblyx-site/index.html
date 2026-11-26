@@ -2008,6 +2008,24 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
 .flow .option.m.is-right { opacity: .55; }
 @media (hover: hover) { .flow .option:not(:disabled):hover { border-color: var(--primary); } }
 .vp-link { padding: 0; border: 0; background: none; color: var(--primary-text); font: inherit; text-decoration: underline; cursor: pointer; }
+
+/* encart Verblyx Plus */
+.plus-up { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; text-align: left; border: 1px solid rgba(22, 119, 255, .45); background: radial-gradient(320px 120px at 0% 0%, rgba(22, 119, 255, .22), transparent 70%), var(--surface); }
+.plus-up > .plus-heart, .plus-up-ic { flex: none; }
+.plus-up-ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #2D8CFF, #1263E0); color: #fff; }
+.plus-up-ic .ico { width: 20px; height: 20px; }
+.plus-up-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.plus-up-tx b { font: 700 14.5px var(--f-body); }
+.plus-up-tx span { font-size: 13px; color: var(--fg-2); line-height: 1.4; }
+.plus-up-tx small { font-size: 12px; color: var(--muted); }
+.plus-up-act { display: flex; flex-direction: column; gap: 4px; flex: none; }
+.plus-up-act .btn { box-shadow: none; }
+.cm .plus-up { margin-top: 8px; }
+.shop-plus { border-color: rgba(22, 119, 255, .5); background: radial-gradient(260px 140px at 20% 0%, rgba(22, 119, 255, .2), transparent 70%), var(--surface); }
+.shop-plus .shop-ic b { background: #1677FF; color: #fff; }
+.plus-chip { border: 1px solid rgba(22, 119, 255, .5) !important; background: rgba(22, 119, 255, .14) !important; color: #9CC8FF !important; cursor: pointer; font-weight: 700; gap: 4px; }
+@media (max-width: 560px) { .plus-up { flex-wrap: wrap; } .plus-up-act { flex-direction: row; width: 100%; } .plus-up-act .btn { flex: 1; } }
+@media (max-width: 560px) { .pc-long { display: none; } .ct-meta:has(.plus-chip) > .ct-chip:not(.plus-chip):not(.tok-chip):not(.is-toast) { display: none; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -4262,6 +4280,11 @@ function viewShop() {
         ${why ? `<span class="small muted shop-why">${why}</span>` : ""}
         <button class="btn ${ok ? "btn-primary" : "btn-secondary"} btn-block" data-act="buy" data-v="${it.id}" ${ok ? "" : "disabled"}>${icon("i-coin", "ico coin-ic")} ${room <= 0 && it.n === 0 ? "—" : price}</button>
       </div>`; }).join("")}
+    ${!isPlus() && PLUS.available ? `<div class="card shop-item shop-plus">
+      <span class="shop-ic img">${plusHeart(58)}<b>∞</b></span>
+      <b class="h3">Vies illimitées</b><p class="small muted">Avec Verblyx Plus : plus jamais à court de vies, XP x2, 3x plus de Prof IA et aucune publicité.</p>
+      <button class="btn btn-primary btn-block" data-act="plus-buy" ${S.ui.plusBusy ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span>' : ""}${euro(PLUS.monthly)} / mois</button>
+    </div>` : ""}
     <div class="card shop-item">
       <span class="shop-ic shield">${icon("i-shield")}</span>
       <b class="h3">Bouclier de Pulse</b><p class="small muted">Garde ton Pulse intact si tu manques un jour.${p.freezes ? ` Tu en as ${p.freezes}.` : ""}</p>
@@ -4429,6 +4452,14 @@ async function plusReturn() {
   S.giftNote = "Paiement reçu. L'activation prend un peu plus de temps que prévu : recharge la page dans une minute.";
   render();
 }
+// petit encart « passe à Plus » (vies épuisées, jetons IA épuisés…)
+function plusUpsell(kind) {
+  if (isPlus() || !PLUS.available) return "";
+  const [t, d] = kind === "ai" ? ["3x plus de Prof IA avec Verblyx Plus", "Trois fois plus d'échanges avec Vex chaque jour, sans publicité, XP x2."]
+    : ["Vies illimitées avec Verblyx Plus", "Ne t'arrête plus jamais : vies illimitées, XP x2, 3x plus de Prof IA, sans publicité."];
+  return `<div class="plus-up">${kind === "ai" ? `<span class="plus-up-ic">${icon("i-chat")}</span>` : plusHeart(40)}<div class="plus-up-tx"><b>${t}</b><span>${d}</span><small>${euro(PLUS.monthly)} par mois · sans engagement</small></div>
+    <div class="plus-up-act"><button class="btn btn-primary btn-sm" data-act="plus-buy" ${S.ui.plusBusy ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span>' : ""}S'abonner</button><button class="btn btn-ghost btn-sm" data-act="plus-see">Voir les avantages</button></div></div>`;
+}
 function plusShopCard() {
   const on = isPlus();
   return `<section class="vp-card ${on ? "is-on" : ""}" id="plus">
@@ -4442,7 +4473,7 @@ function plusShopCard() {
         ? `<div class="vp-buy"><p class="vp-foot" style="margin:0">${S.plus.cancel_at_period_end ? `Résiliation prévue : Plus reste actif jusqu'au ${esc(plusDate(S.plus.until))}.` : "Abonnement mensuel, renouvelé automatiquement."}</p><button class="btn btn-secondary vp-cta" data-act="plus-manage" ${S.ui.plusBusy ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span>' : ""}Gérer mon abonnement</button></div>`
         : `<p class="vp-foot">Merci de soutenir Verblyx. Tous tes avantages sont déjà actifs.</p>`)
       : `<div class="vp-buy"><div class="vp-price"><b>${euro(PLUS.monthly)}</b><span>par mois</span></div><button class="btn btn-primary btn-lg vp-cta" data-act="plus-buy" ${S.ui.plusBusy || !PLUS.available ? "disabled" : ""}>${S.ui.plusBusy ? '<span class="spinner"></span> Ouverture du paiement…' : PLUS.available ? "S'abonner à Plus" : "Paiement bientôt disponible"}</button></div>
-         <p class="vp-foot">${PLUS.available ? `Paiement sécurisé par Stripe. Sans engagement : tu résilies quand tu veux, en un clic. En t'abonnant, tu acceptes les <button type="button" class="vp-link" data-act="doc" data-v="sales">Conditions de vente</button> et demandes que Plus démarre tout de suite (rétractation possible pendant 14 jours, au prorata).` : "Le paiement n'est pas encore ouvert : rien ne t'est facturé pour l'instant."}</p>`}
+         <p class="vp-foot">${PLUS.available ? `Paiement sécurisé par Stripe. Sans engagement : tu résilies quand tu veux, en un clic. En t'abonnant, tu acceptes les <button type="button" class="vp-link" data-act="doc" data-v="sales">Conditions de vente</button> et demandes que Plus démarre tout de suite.` : "Le paiement n'est pas encore ouvert : rien ne t'est facturé pour l'instant."}</p>`}
   </section>`;
 }
 function prefs() {
@@ -5369,10 +5400,12 @@ function outView(ses) {
       <p class="muted" style="max-width:28em">Pas de panique : chaque erreur t'apprend quelque chose. ${t ? `Toutes tes vies reviennent dans ${t}.` : ""}</p>
       <div class="stack" style="width:100%;max-width:360px;gap:10px">
         <button class="btn btn-primary btn-lg btn-block" data-act="buy-heart-go" ${can ? "" : "disabled"}>${icon("i-heart")} Racheter une vie · ${HEART_COST} pièces</button>
+        <button class="btn btn-secondary btn-block" data-go="shop">Voir la boutique des vies</button>
         ${can ? "" : `<p class="small muted">Tu as ${p.coins || 0} pièces : il en faut ${HEART_COST}.</p>`}
         <button class="btn btn-secondary btn-lg btn-block" data-act="review" ${canReview ? "" : "disabled"}>Réviser pour regagner une vie</button>
         <button class="btn btn-ghost btn-block" data-act="ses-quit">Revenir plus tard</button>
       </div>
+      <div style="width:100%;max-width:460px;margin-top:6px">${plusUpsell("hearts")}</div>
     </main></div>`;
 }
 
@@ -6321,6 +6354,7 @@ function coachTopHTML() {
     <div class="ct-meta">
       ${CO.toast ? `<span class="ct-chip is-toast">${esc(CO.toast.text)}</span>` : ""}
       <span class="ct-chip" title="XP gagnée avec Vex aujourd'hui (maximum ${COACH_XP_CAP})">${pic("bolt", 15)}${xpToday} XP</span>
+      ${left != null && left < TOK_PER_MSG * 3 && !isPlus() && PLUS.available ? `<button class="ct-chip plus-chip" data-act="plus-see" title="Verblyx Plus : 3x plus de jetons IA chaque jour">${plusHeart(15)}x3<span class="pc-long"> avec Plus</span></button>` : ""}
       ${left != null ? `<span class="ct-chip tok-chip ${left < TOK_PER_MSG * 3 ? "is-low" : ""}" title="Jetons IA restants aujourd'hui : ${tokNum(left)} sur ${tokNum(CO.ai.limit)}">${pic("chat", 15)}<span>${fmtTok(left)}</span><i class="tok-bar"><b style="width:${Math.round((left / Math.max(1, CO.ai.limit)) * 100)}%"></b></i></span>` : ""}
     </div>`;
 }
@@ -6354,7 +6388,7 @@ function chatMsgHTML(m, i) {
     if (m.icon) return `<div class="cm cm-me"><div class="req-pill">${pic(m.icon === "books" ? "books" : m.icon === "read" ? "read" : m.icon === "target" ? "target" : m.icon === "chat" ? "chat" : m.icon === "check" ? "check" : m.icon === "bulb" ? "bulb" : "bolt", 15)}<span>${esc(m.label || m.content)}</span></div></div>`;
     return `<div class="cm cm-me"><div class="bub bub-me">${m.tag ? `<span class="bub-tag">${esc(m.tag)}</span>` : ""}${rich(m.label || m.content)}</div>${m.tr && m.trOpen ? `<div class="bub-tr">${rich(m.tr)}</div>` : ""}</div>`;
   }
-  if (m.error) return m.content === "quota" ? `<div class="cm"><div class="co-note">${pic("clock", 18)}<div><b>Tu as utilisé tes jetons IA du jour</b><span>Ils reviennent demain. En attendant, tu peux réviser tes mots ou continuer ton parcours.</span></div></div></div>` : `<div class="cm">${chatErr(m, i === S.chat.length - 1)}</div>`;
+  if (m.error) return m.content === "quota" ? `<div class="cm"><div class="co-note">${pic("clock", 18)}<div><b>Tu as utilisé tes jetons IA du jour</b><span>Ils reviennent demain. En attendant, tu peux réviser tes mots ou continuer ton parcours.</span></div></div>${plusUpsell("ai")}</div>` : `<div class="cm">${chatErr(m, i === S.chat.length - 1)}</div>`;
   const body = m.text != null ? (m.text ? rich(m.text) : "") : rich(m.content);
   const qr = m.choices && !m.chosen ? `<div class="qr" role="group" aria-label="Réponses possibles">${m.choices.map(([v, l]) => `<button class="qr-btn" data-act="co-choice" data-v="${esc(v)}" data-l="${esc(l)}" ${coachBusy() ? "disabled" : ""}>${esc(l)}</button>`).join("")}</div>` : "";
   if (m.local) return `<div class="cm cm-ai"><div class="cm-av">${vx("st_wink", 30)}</div><div class="cm-col"><div class="bub bub-ai">${body}</div>${qr}</div></div>`;
@@ -6497,7 +6531,7 @@ function chatErr(m, last) {
     : ["Réponse indisponible", "Une erreur technique est survenue. Réessaie dans un instant."];
   return `<div class="chat-err" role="alert"><span class="n-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true">${N_IC.error}</svg></span>
     <div class="ce-tx"><b>${title}</b><span>${sub}</span>${S.isAdmin && detail ? `<small>Détail technique : ${esc(detail)}</small>` : ""}</div>
-    ${m.retry && last ? `<button class="btn btn-secondary btn-sm" data-act="chat-retry">Réessayer</button>` : ""}</div>`;
+    ${m.retry && last ? `<button class="btn btn-secondary btn-sm" data-act="chat-retry">Réessayer</button>` : ""}</div>${/jetons IA|échanges avec Vex|limite de/i.test(raw) ? plusUpsell("ai") : ""}`;
 }
 // actions de la page Prof IA (appelées par le gestionnaire de clics général)
 function coachAction(act, v, el) {
