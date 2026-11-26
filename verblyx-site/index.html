@@ -1917,6 +1917,38 @@ button.set-item { cursor: pointer; }
 .bonus-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(246, 190, 59, .14); color: #F6BE3B; }
 @media (prefers-reduced-motion: reduce) { .flow-body.ex-fresh > *, .flow-body.ex-fresh .options > .option, .flow-body.ex-fresh .bank > .tile, .bonus-rays, .bonus-star { animation: none !important; } }
 .tile.tile-st { display: inline-flex; align-items: center; }
+
+/* ---------- Ranked ---------- */
+.rk-hero { position: relative; display: flex; align-items: center; gap: 22px; padding: 22px 24px; border-radius: 22px; overflow: hidden; border: 1px solid color-mix(in srgb, var(--lg-a, #1677FF) 45%, transparent); background: radial-gradient(420px 220px at 0% 50%, var(--lg-glow, rgba(22,119,255,.2)), transparent 70%), var(--surface); }
+.rk-emb { flex: none; position: relative; display: grid; place-items: center; }
+.rk-emb::before { content: ""; position: absolute; inset: -14px; border-radius: 50%; background: radial-gradient(circle, var(--lg-glow, transparent), transparent 70%); animation: rk-pulse 2.8s ease-in-out infinite; }
+@keyframes rk-pulse { 0%, 100% { transform: scale(.9); opacity: .7; } 50% { transform: scale(1.08); opacity: 1; } }
+.lg-badge { display: inline-block; flex: none; }
+.lg-badge.rk-big { position: relative; filter: drop-shadow(0 10px 22px rgba(0, 0, 0, .45)); animation: rk-float 3.2s ease-in-out infinite; }
+@keyframes rk-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.lg-badge.rk-inline { vertical-align: -4px; margin: 0 3px 0 2px; }
+.rk-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rk-name { font: 800 28px/1.1 var(--f-display); letter-spacing: -.02em; background: linear-gradient(180deg, #fff, var(--lg-a, #fff)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.rk-sub { color: var(--fg-2); font-size: 14.5px; } .rk-sub b { color: var(--fg); }
+.rk-bar { height: 10px; margin-top: 8px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.rk-bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--lg-b, #1677FF), var(--lg-a, #00D6B5)); animation: rk-grow 1s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes rk-grow { from { width: 0 !important; } }
+.rk-goal { margin-top: 6px; font-size: 14px; color: var(--fg-2); line-height: 1.5; } .rk-goal b { color: var(--fg); }
+.rk-warn { display: flex; align-items: flex-start; gap: 8px; margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255, 196, 92, .1); color: #FFD08A; font-size: 13px; } .rk-warn .ico { width: 16px; height: 16px; flex: none; transform: rotate(180deg); margin-top: 1px; } .rk-warn b { color: #FFE2B0; }
+.rk-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.rk-lg { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 4px 10px; border-radius: 16px; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg-2); font: 700 12.5px var(--f-body); cursor: pointer; transition: transform .15s, border-color .15s, background .15s; }
+.rk-lg.is-on { border-color: var(--primary); background: var(--primary-soft); color: var(--fg); }
+.rk-lg.is-above .lg-badge { filter: saturate(.55) brightness(.8); opacity: .85; }
+.rk-lg em { position: absolute; top: -8px; right: 6px; padding: 1px 6px; border-radius: 6px; background: #00D6B5; color: #04261F; font: 800 10px var(--f-body); font-style: normal; }
+@media (hover: hover) { .rk-lg:hover { transform: translateY(-2px); border-color: var(--line-2); } }
+.rk-list-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.rk-list-head > span:first-child { display: inline-flex; align-items: center; gap: 8px; font: 800 18px var(--f-display); }
+.rk-list .lb2-score small { margin-left: 3px; font: 700 11px var(--f-body); color: var(--muted); }
+.rk-list .rk-1 .lb2-rank { color: #FFC94A; } .rk-list .rk-2 .lb2-rank { color: #C9CED6; } .rk-list .rk-3 .lb2-rank { color: #E0915A; }
+.rk-rules { padding: 16px 18px; border-radius: 16px; background: var(--bg-raise); border: 1px solid var(--line); font-size: 13.5px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; } .rk-rules b { color: var(--fg-2); }
+.lgm-badge { display: grid; place-items: center; margin: 4px auto 6px; filter: drop-shadow(0 0 30px var(--lg-glow)); }
+@media (max-width: 560px) { .rk-hero { flex-direction: column; text-align: center; padding: 22px 16px; gap: 12px; } .rk-warn { text-align: left; } .rk-lg { font-size: 11px; padding: 10px 2px 8px; } .rk-lg .lg-badge { width: 28px; height: 30px; } .rk-name { font-size: 25px; } }
+@media (prefers-reduced-motion: reduce) { .lg-badge.rk-big, .rk-emb::before { animation: none; } }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -2716,6 +2748,8 @@ function render() {
   if (showGift) html += giftModal();
   const showLevel = S.levelPop && !showGift && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
   if (showLevel) html += levelModal();
+  const showLeague = S.leaguePop && !showGift && !showLevel && !S.doc && !["session", "onboarding", "test", "celebrate", "home", "login", "checkmail", "newpass"].includes(v);
+  if (showLeague) html += leagueModal();
   $app.innerHTML = html;
   [".set-main", ".set-panel"].forEach((s, k) => { const e = document.querySelector(s); if (e && keepEls[k]) e.scrollTop = keepEls[k]; });
   document.querySelectorAll(".faq details").forEach((d, k) => { if (keepFaq[k]) d.open = true; });
@@ -2727,6 +2761,7 @@ function render() {
     if (el) setTimeout(() => vxReact(el, f.react), fresh ? 380 : 0);
   }
   if (showGift && S.giftPop.fresh) { S.giftPop.fresh = false; setTimeout(giftFx, 80); }
+  if (showLeague && S.leaguePop.fresh) { S.leaguePop.fresh = false; setTimeout(() => { giftFx(); const b = document.querySelector(".lgm-badge"); if (b && animOn()) b.animate([{ transform: "scale(.3) rotate(-25deg)", opacity: 0 }, { transform: "scale(1.15) rotate(6deg)", opacity: 1, offset: .6 }, { transform: "none" }], { duration: 800, easing: "ease-out" }); }, 80); }
   if (showLevel && S.levelPop.fresh) { S.levelPop.fresh = false; setTimeout(() => { giftFx(); const r = document.querySelector(".lv-ring"); if (r) vxAnim(r, [{ transform: "scale(.4) rotate(-20deg)", opacity: 0 }, { transform: "scale(1.12)", opacity: 1, offset: .6 }, { transform: "none" }], { duration: 700, easing: "ease-out" }); }, 80); }
   if (v === "celebrate" && fresh) celebrateFx();
   if (v === "session" && fresh && S.session && S.session.cheer) cheerFx();
@@ -3655,6 +3690,7 @@ async function finishSession() {
   const hr = new Date().getHours(); if (hr < 5) p.night_owl = true; else if (hr < 7) p.early_bird = true;
   r.lvBefore = xpLevel(p.xp || 0);
   p.xp = (p.xp || 0) + r.xp; p.coins = (p.coins || 0) + r.coins; p.gems = (p.gems || 0) + r.gems;
+  p.rxp = (p.rxp || 0) + r.xp; // score Ranked : l'XP des leçons, contrôles, certifications et révisions
   // passage de niveau : la fenêtre de fête s'ouvre en sortant de la séance
   const lvAfter = xpLevel(p.xp);
   if (lvAfter > r.lvBefore || r.levelUp) S.levelPop = { n: lvAfter, up: lvAfter > r.lvBefore, cefr: r.levelUp || null, fresh: true };
@@ -3666,6 +3702,7 @@ async function finishSession() {
   render(); window.scrollTo(0, 0);
   await saveProfile();
   try { await S.store.saveVocab(S.vocab); } catch {}
+  if (r.xp > 0) setTimeout(() => rkLoad(null, true), 400); // vérifie une éventuelle montée de ligue
 }
 
 /* ---------- Espace élève ---------- */
@@ -4986,9 +5023,130 @@ function adminLessons() {
 }
 
 /* ---------- Compétition : classements ---------- */
-const LB_KINDS = [["xp", "XP", "i-bolt"], ["coins", "Pièces", "i-coin"], ["pulse", "Pulse", "i-pulse"]];
+const LB_KINDS = [["ranked", "Ranked", "i-shield"], ["xp", "XP", "i-bolt"], ["coins", "Pièces", "i-coin"], ["pulse", "Pulse", "i-pulse"]];
+
+/* ---------- Ranked : ligues ---------- */
+const LEAGUES = [
+  { id: "bronze", name: "Bronze", a: "#F2B07E", b: "#9A5426", rim: "#FFD3AE", glow: "rgba(224, 145, 90, .45)" },
+  { id: "argent", name: "Argent", a: "#F1F5FA", b: "#8A96A8", rim: "#FFFFFF", glow: "rgba(200, 210, 225, .4)" },
+  { id: "or", name: "Or", a: "#FFE27A", b: "#C9820A", rim: "#FFF3C4", glow: "rgba(246, 190, 59, .5)" },
+  { id: "platine", name: "Platine", a: "#8AF5E4", b: "#13897C", rim: "#D6FFF8", glow: "rgba(0, 214, 181, .45)" },
+  { id: "diamant", name: "Diamant", a: "#A8D0FF", b: "#4B4DFF", rim: "#E4F0FF", glow: "rgba(110, 130, 255, .55)" },
+];
+const LG = (id) => LEAGUES.find((l) => l.id === id) || LEAGUES[0];
+const lgIdx = (id) => Math.max(0, LEAGUES.findIndex((l) => l.id === id));
+const LG_MARK = {
+  bronze: `<path d="M16 28l8-6 8 6" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>`,
+  argent: `<path d="M16 24l8-6 8 6M16 31l8-6 8 6" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`,
+  or: `<path d="M24 14.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9z" fill="#fff"/>`,
+  platine: `<path d="M24 13l9 5.2v10.4L24 33.8l-9-5.2V18.2z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M24 19.5l3.5 2v4l-3.5 2-3.5-2v-4z" fill="#fff"/>`,
+  diamant: `<path d="M16.5 20.5l3.6-5h7.8l3.6 5L24 32z" fill="#fff"/><path d="M16.5 20.5h15M20.1 15.5l3.9 16.5 3.9-16.5" fill="none" stroke="rgba(75,77,255,.55)" stroke-width="1.3" stroke-linejoin="round"/>`,
+};
+function leagueBadge(id, size = 48, cls = "") {
+  const l = LG(id);
+  return `<svg class="lg-badge ${cls}" viewBox="0 0 48 52" width="${size}" height="${Math.round(size * 52 / 48)}" aria-hidden="true">
+    <defs><linearGradient id="lgg-${l.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${l.a}"/><stop offset="1" stop-color="${l.b}"/></linearGradient></defs>
+    <path d="M24 2.5 43.5 9.5V24c0 12.6-8.6 21.2-19.5 25.5C13.1 45.2 4.5 36.6 4.5 24V9.5z" fill="url(#lgg-${l.id})" stroke="${l.rim}" stroke-width="1.6"/>
+    <path d="M24 6.8 39.5 12.4V24c0 10.2-6.7 17.4-15.5 21.1z" fill="#fff" opacity=".13"/>
+    ${LG_MARK[l.id]}
+  </svg>`;
+}
+const RK = { data: {}, at: {}, busy: {}, err: "", me: null };
+const rkKey = () => "verblyx:league:" + ((S.authUser && S.authUser.id) || "x");
+async function rkLoad(league, force) {
+  const k = league || "_me";
+  if (RK.busy[k] || (!force && RK.data[k] && Date.now() - RK.at[k] < 60e3)) return;
+  RK.busy[k] = true; RK.err = ""; if (S.view === "competition") render();
+  try {
+    if (!S.store.rankedBoard) throw { message: "Le classement Ranked est disponible une fois connecté." };
+    const d = await S.store.rankedBoard(league);
+    RK.data[k] = d; RK.at[k] = Date.now();
+    if (!league) RK.data[d.league] = d, RK.at[d.league] = Date.now();
+    if (d.me) {
+      RK.me = d.me;
+      // montée de ligue : grande fenêtre de fête ; on retient la ligue pour la prochaine fois
+      let prev = null; try { prev = localStorage.getItem(rkKey()); } catch {}
+      if (prev && lgIdx(d.me.league) > lgIdx(prev)) S.leaguePop = { league: d.me.league, from: prev, fresh: true };
+      try { localStorage.setItem(rkKey(), d.me.league); } catch {}
+    }
+  } catch (e) {
+    const m = (e && e.message) || "";
+    RK.err = /function|schema cache|does not exist/i.test(m) ? "Le Ranked n'est pas encore activé (lance 013_ranked.sql dans Supabase)." : m || "Impossible de charger le classement Ranked.";
+  }
+  RK.busy[k] = false;
+  if (S.view === "competition" || (S.leaguePop && S.leaguePop.fresh && S.view !== "session")) render();
+}
+function rankedView(head, tabs) {
+  const u = S.ui, mine = RK.data._me;
+  if (!mine && !RK.busy._me && !RK.err) setTimeout(() => rkLoad(null), 0);
+  const me = mine && mine.me, view = u.rkView || (mine && mine.league) || "bronze";
+  const d = u.rkView ? RK.data[u.rkView] : mine;
+  if (u.rkView && !d && !RK.busy[u.rkView] && !RK.err) setTimeout(() => rkLoad(u.rkView), 0);
+  const who = (r) => r.username ? "@" + r.username : r.first_name || "Élève";
+  const av = (r, size) => avatarHTML({ avatar_id: r.avatar_id, first_name: r.first_name }, size, r.vip);
+  const fmt = (n) => Number(n || 0).toLocaleString("fr-FR");
+  const L = me ? LG(me.league) : null, nextL = me && lgIdx(me.league) < 4 ? LEAGUES[lgIdx(me.league) + 1] : null;
+  let hero = "";
+  if (!mine) hero = `<div class="skel" style="height:170px;border-radius:22px"></div>`;
+  else if (!me) hero = `<section class="rk-hero"><div class="rk-info"><span class="label">Ranked</span><h2 class="rk-name">Compte non classé</h2><p class="rk-sub">Les comptes administrateurs ne participent pas au Ranked.</p></div></section>`;
+  else {
+    const nx = mine.next, need = nx ? Math.max(1, nx.score - me.score + 1) : 0;
+    const pct = nx ? Math.max(4, Math.min(100, (me.score / (nx.score + 1)) * 100)) : 100;
+    const ch = mine.chaser, gap = ch ? me.score - ch.score : 99;
+    hero = `<section class="rk-hero" style="--lg-a:${L.a};--lg-b:${L.b};--lg-glow:${L.glow}">
+      <div class="rk-emb">${leagueBadge(me.league, 104, "rk-big")}</div>
+      <div class="rk-info">
+        <span class="label">Ta ligue</span>
+        <h2 class="rk-name">Ligue ${L.name}</h2>
+        <p class="rk-sub num"><b>#${me.lpos}</b> ${me.league === "bronze" ? `sur ${fmt(mine.bronze_count)}` : "sur 100"} · ${fmt(me.score)} XP Ranked</p>
+        ${nx ? `<div class="rk-bar"><span style="width:${pct}%"></span></div>
+          <p class="rk-goal">Encore <b class="num">${fmt(need)} XP</b> pour dépasser <b>${esc(nx.name)}</b> et monter en ${leagueBadge(nextL.id, 18, "rk-inline")}<b>Ligue ${nextL.name}</b>.</p>`
+          : `<p class="rk-goal">Tu es dans la meilleure ligue. Garde ta place dans le top 100.</p>`}
+        ${ch && gap <= 20 && me.league !== "bronze" ? `<p class="rk-warn">${icon("i-up")} <span><b>${esc(ch.name)}</b> n'est qu'à <b class="num">${fmt(Math.max(0, gap))} XP</b> derrière toi${me.lpos >= 100 ? " : s'il te dépasse, tu redescends" : ""}.</span></p>` : ""}
+      </div>
+    </section>`;
+  }
+  const strip = `<div class="rk-strip" role="tablist" aria-label="Ligues">${[...LEAGUES].reverse().map((l) => {
+    const on = view === l.id, isMine = me && me.league === l.id, above = me && lgIdx(l.id) > lgIdx(me.league);
+    return `<button role="tab" aria-selected="${on}" class="rk-lg ${on ? "is-on" : ""} ${above ? "is-above" : ""}" data-act="rk-league" data-v="${l.id}">${leagueBadge(l.id, 34)}<span>${l.name}</span>${isMine ? `<em>Toi</em>` : ""}</button>`; }).join("")}</div>`;
+  const rows = (d && d.rows) || [];
+  const top = rows.filter((r) => r.lpos <= 100), meRow = rows.find((r) => r.is_me && r.lpos > 100);
+  const VL = LG(view);
+  const list = !d ? `<div class="stack" style="gap:10px">${[1, 2, 3, 4].map(() => `<div class="skel" style="height:62px;border-radius:16px"></div>`).join("")}</div>`
+    : `<div class="rk-list-head"><span>${leagueBadge(view, 22)} Ligue ${VL.name}</span><span class="small muted">${view === "bronze" ? `${fmt(d.bronze_count)} élèves · top 100 affiché` : `${top.length} / 100 places`}</span></div>
+      <ol class="lb2-list rk-list">${top.map((r) => `<li class="lb2-row ${r.is_me ? "is-me" : ""} ${r.lpos <= 3 ? "rk-" + r.lpos : ""}">
+        <span class="lb2-rank num">${r.lpos}</span>${av(r, 42)}
+        <span class="lb2-who"><b>${esc(who(r))}${r.is_me ? ` <span class="chip chip-teal" style="height:20px;font-size:11px">Toi</span>` : ""}</b><span class="lb2-tags">${r.vip ? vipTag() : ""}${r.plus ? plusTag() : ""}${r.level ? `<span class="lvl-chip">${esc(r.level)}</span>` : ""}</span></span>
+        <span class="lb2-score num">${fmt(r.score)}<small>XP</small></span></li>`).join("")}</ol>
+      ${meRow ? `<div class="lb2-row is-me lb2-sticky"><span class="lb2-rank num">${meRow.lpos}</span>${av(meRow, 42)}<span class="lb2-who"><b>Toi</b><span class="small muted">Continue tes leçons pour remonter.</span></span><span class="lb2-score num">${fmt(meRow.score)}<small>XP</small></span></div>` : ""}`;
+  return `${head}${tabs}
+  ${RK.err ? notice(RK.err) : ""}
+  ${hero}
+  ${strip}
+  ${list}
+  <section class="rk-rules"><b>Comment ça marche</b>
+    <p>Ton score Ranked, c'est l'XP gagnée dans les leçons, les points de contrôle, les certifications et les révisions. Chaque ligue accueille <b>100 élèves maximum</b>, sauf Bronze. Pour monter, dépasse le score du dernier de la ligue au-dessus : il redescend à ta place.</p></section>`;
+}
+function leagueModal() {
+  const g = S.leaguePop; if (!g) return "";
+  const l = LG(g.league);
+  const conf = Array.from({ length: 34 }, (_, k) => `<i style="left:${(k * 37) % 100}%;background:${[l.a, l.b, l.rim, "#FFFFFF", "#1677FF"][k % 5]};--d:${(k % 9) * .28}s;--t:${2.6 + (k % 5) * .45}s;--r:${(k * 53) % 360}deg;--x:${((k % 7) - 3) * 22}px;${k % 3 === 0 ? "border-radius:50%;width:8px;height:8px;" : ""}"></i>`).join("");
+  return `<div class="modal gift-modal lg-modal" role="dialog" aria-modal="true" aria-labelledby="lgm-title" style="--lg-glow:${l.glow}">
+    <div class="modal-bg" data-act="league-close"></div>
+    <div class="confetti" aria-hidden="true">${conf}</div>
+    <div class="modal-panel gp-panel">
+      <div class="gp-glow" aria-hidden="true"></div>
+      <div class="lgm-badge">${leagueBadge(l.id, 120, "rk-big")}</div>
+      <span class="gp-kicker">Promotion</span>
+      <h2 class="gp-title" id="lgm-title">Bienvenue en Ligue ${l.name}</h2>
+      <p class="gp-sub">Tu as dépassé assez d'élèves pour monter de ${esc(LG(g.from).name)} à <b>${l.name}</b>. ${l.id === "diamant" ? "C'est la meilleure ligue : garde ta place !" : "Continue pour viser la ligue suivante."}</p>
+      <button class="btn btn-primary btn-lg btn-block" data-act="league-close">Voir le classement</button>
+    </div>
+  </div>`;
+}
 const LB = { data: {}, at: {}, busy: {}, err: {} };
 async function lbLoad(kind, force) {
+  if (kind === "ranked") return rkLoad(S.ui.rkView || null, force);
   if (LB.busy[kind] || (!force && LB.data[kind] && Date.now() - LB.at[kind] < 60e3)) return;
   LB.busy[kind] = true; LB.err[kind] = ""; if (S.view === "competition") render();
   try {
@@ -5001,7 +5159,13 @@ async function lbLoad(kind, force) {
   LB.busy[kind] = false; if (S.view === "competition") render();
 }
 function viewCompetition() {
-  const u = S.ui, kind = u.lbKind || "xp";
+  const u = S.ui, kind = u.lbKind || "ranked";
+  if (kind === "ranked") {
+    const busy = Object.values(RK.busy).some(Boolean);
+    return rankedView(`<header class="page-head enter"><div class="stack"><h1 class="h1">Compétition</h1><p class="muted">Monte de ligue en ligue grâce à tes leçons.</p></div>
+      <button class="btn btn-ghost btn-sm" data-act="lb-refresh" ${busy ? "disabled" : ""}>${busy ? '<span class="spinner"></span>' : ""}Actualiser</button></header>`,
+      `<div class="segmented lb-tabs" role="tablist">${LB_KINDS.map(([k, t, ic]) => `<button role="tab" aria-selected="${kind === k}" class="${kind === k ? "is-active" : ""}" data-act="lb-kind" data-v="${k}">${icon(ic)}${t}</button>`).join("")}</div>`);
+  }
   if (!LB.data[kind] && !LB.busy[kind] && !LB.err[kind]) setTimeout(() => lbLoad(kind), 0);
   const rows = LB.data[kind] || [];
   const top = rows.filter((r) => r.rank <= 100 && r.score > 0);
@@ -5092,6 +5256,7 @@ function viewProfile() {
   const weak = sk.filter((s) => s.mastery < 0.65).slice(0, 4);
   const strong = [...sk].reverse().filter((s) => s.mastery >= 0.75 && s.attempts >= 2).slice(0, 4);
   const c = badgeCtx(), pulse = liveStreak();
+  if (!RK.me && !RK.busy._me && !RK.err && S.store && S.store.rankedBoard) setTimeout(() => rkLoad(null), 0);
   const words = Object.values(S.vocab || {}).filter((w) => w.learned).length;
   const since = (() => { try { const d = new Date(p.created_at); return isNaN(d) ? "" : d.toLocaleDateString("fr-FR", { month: "long", year: "numeric" }); } catch { return ""; } })();
   const fmt = (x) => Number(x || 0).toLocaleString("fr-FR");
@@ -5121,7 +5286,7 @@ function viewProfile() {
       ${tile("bolt", fmt(xp), "XP gagnés")}
       ${tile("books", fmt(c.done), c.done > 1 ? "Leçons terminées" : "Leçon terminée", !c.done)}
       ${tile("trophy", fmt(c.bestStreak), "Record de Pulse", !c.bestStreak)}
-      ${tile("target", fmt(c.goals), c.goals === 1 ? "Objectif atteint" : "Objectifs atteints", !c.goals)}
+      ${RK.me ? `<div class="pf-stat"><span class="pf-stat-ic">${leagueBadge(RK.me.league, 28)}</span><span class="pf-stat-tx"><b>${LG(RK.me.league).name}</b><span>Ligue Ranked · #${RK.me.lpos}</span></span></div>` : tile("target", fmt(c.goals), c.goals === 1 ? "Objectif atteint" : "Objectifs atteints", !c.goals)}
       ${tile("read", fmt(words), words === 1 ? "Mot maîtrisé" : "Mots maîtrisés", !words)}
       ${tile("coin", fmt(p.coins), "Pièces")}
       ${isPlus() ? tile("plusheart", "∞", "Vies illimitées") : tile("heart", `${p.hearts ?? HEART_MAX}/${HEART_MAX}`, "Vies")}
@@ -6363,7 +6528,9 @@ $app.addEventListener("click", (ev) => {
     }
     case "adm-custom": { const k = (document.getElementById("admKind") || {}).value || "coins", n = Math.round(Number((document.getElementById("admAmt") || {}).value)); if (!n || n < 1) { u.admErr = "Indique une quantité positive."; render(); break; } adminGiftDo(v, k, k === "hearts" ? Math.min(n, HEART_MAX) : n); break; }
     case "lb-kind": u.lbKind = v; SFX.play("tap"); render(); lbLoad(v); break;
-    case "lb-refresh": lbLoad(u.lbKind || "xp", true); break;
+    case "lb-refresh": lbLoad(u.lbKind || "ranked", true); break;
+    case "rk-league": u.rkView = v === (RK.data._me && RK.data._me.league) ? null : v; SFX.play("tap"); render(); if (u.rkView) rkLoad(v); break;
+    case "league-close": S.leaguePop = null; render(); if (S.view !== "competition") { u.lbKind = "ranked"; u.rkView = null; go("competition"); } break;
     case "lb-me": { const m = document.querySelector(".lb2-row.is-me"); if (m) { m.scrollIntoView({ block: "center", behavior: "smooth" }); vxAnim(m, [{ transform: "scale(1)" }, { transform: "scale(1.03)" }, { transform: "scale(1)" }], { duration: 600 }); } break; }
     case "prep-go": SFX.play("next"); prepRun(); break;
     case "prep-stop": PREP.stop = true; SFX.play("unselect"); render(); break;
@@ -6619,6 +6786,7 @@ document.addEventListener("keydown", (ev) => {
   if (ev.key === "Escape" && S.plusModal) { S.plusModal = null; render(); return; }
   if (ev.key === "Escape" && S.giftPop) { S.giftPop = null; render(); return; }
   if (ev.key === "Escape" && S.levelPop) { S.levelPop = null; render(); return; }
+  if (ev.key === "Escape" && S.leaguePop) { S.leaguePop = null; render(); return; }
   if (ev.key === "Escape" && S.settingsOpen) { S.settingsOpen = false; S.ui.confirmReset = false; render(); return; }
   if (ev.key === "Escape" && S.ui.guide) { S.ui.guide = null; render(); return; }
   if (ev.target.closest && ev.target.closest("input,textarea")) return;
@@ -6677,6 +6845,7 @@ function makeSupaStore(sb, uid) {
     async staffSet(who, perms) { const { data, error } = await sb.rpc("staff_set", { p_who: who, p_perms: perms }); if (error) throw error; return data; },
     async staffRemove(id) { const { error } = await sb.rpc("staff_remove", { p_user: id }); if (error) throw error; },
     async staffLogs(limit, actor) { const { data, error } = await sb.rpc("staff_logs", { p_limit: limit || 200, p_actor: actor || null }); if (error) throw error; return data || []; },
+    async rankedBoard(league) { const { data, error } = await sb.rpc("ranked_board", league ? { p_league: league } : {}); if (error) throw error; return data; },
     async leaderboard(kind) { const { data, error } = await sb.rpc("leaderboard", { p_kind: kind }); if (error) throw error; return data || []; },
     async isVip() { const { data, error } = await sb.rpc("is_vip"); return !error && data === true; },
     async myPlus() { const { data, error } = await sb.rpc("my_plus"); if (error) return null; return data || null; },
