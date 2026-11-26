@@ -7042,7 +7042,12 @@ function makeSupaStore(sb, uid) {
     async isVip() { const { data, error } = await sb.rpc("is_vip"); return !error && data === true; },
     async plusAction(action) {
       const r = await sb.functions.invoke("plus", { body: { action } });
-      if (r.error) { let msg = ""; try { msg = (await r.error.context.json()).error || ""; } catch {} throw { message: msg || "Le paiement est momentanément indisponible. Réessaie dans un instant." }; }
+      if (r.error) {
+        const ctx = r.error.context, st = ctx && ctx.status; let d = {}; try { d = await ctx.json(); } catch {}
+        // l'admin voit la vraie cause, pour réparer plus vite
+        const why = !st ? "la fonction « plus » ne répond pas (connexion)" : st === 404 ? "la fonction « plus » n'existe pas dans Supabase (nom exact : plus)" : st === 401 && !d.error ? "« Verify JWT » est encore activé sur la fonction « plus »" : d.detail || (st === 503 ? "secrets STRIPE_SECRET_KEY ou STRIPE_PRICE_ID manquants" : `erreur ${st}`);
+        throw { message: (d.error || "Le paiement est momentanément indisponible. Réessaie dans un instant.") + (S.isAdmin ? ` (Admin : ${why})` : "") };
+      }
       return r.data || {};
     },
     async myPlus() { const { data, error } = await sb.rpc("my_plus"); if (error) return null; return data || null; },
