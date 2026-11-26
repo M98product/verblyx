@@ -3432,7 +3432,7 @@ function viewShell(inner) {
         <button class="icon-btn gear ${S.settingsOpen ? "is-on" : ""}" data-act="settings-open" aria-label="Paramètres du compte" title="Paramètres">${icon("i-gear")}</button>
       </div>
     </aside>
-    <header class="mtop">${logo()}<span class="row" style="gap:6px;flex-wrap:nowrap">${walletChips()}</span></header>
+    <header class="mtop">${logo()}${["profile", "shop"].includes(cur) ? "" : `<span class="row" style="gap:6px;flex-wrap:nowrap">${walletChips()}</span>`}</header>
     <main class="main"><div class="main-in">${S.saveError ? notice(S.saveError) : ""}${S.giftNote ? `<div class="gift-note" role="status"><span class="row" style="gap:8px;flex-wrap:nowrap">${em("gift", 20)}${esc(S.giftNote)}</span><button class="icon-btn" data-act="gift-close" aria-label="Fermer">${icon("i-close")}</button></div>` : ""}${inner}</div></main>
     ${rail ? `<aside class="rail" aria-label="Ta progression"><div class="row" style="gap:8px">${walletChips()}</div>${goalCard()}${streakCard()}${badgesCard(true)}${legalLinks()}</aside>` : ""}
     ${S.settingsOpen ? settingsModal() : ""}
