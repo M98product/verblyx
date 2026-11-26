@@ -2160,6 +2160,8 @@ button.lb2-row.rk-mine { width: 100%; text-align: left; font: inherit; color: in
 .out-voir { flex: none; height: 36px; padding: 0 16px; display: inline-flex; align-items: center; border-radius: 11px; background: #fff; color: #1452D8; font: 800 14px var(--f-body); }
 .out-flow .flow-foot-in { justify-content: space-between; }
 @media (max-width: 560px) { .out-body { gap: 12px; padding-top: 8px; } .out-hero { padding: 14px 14px 14px; gap: 4px; } .out-hero .out-hearts { gap: 6px; } .out-hero .out-hearts .hrt-img { width: 28px; height: 28px; } .out-hero .vx { width: 78px !important; height: 78px !important; } .out-title { font-size: 23px; } .out-sub { font-size: 13.5px; } .out-timer { margin-top: 2px; } .out-opt, .out-plus { padding: 10px 12px; } .out-ic { width: 40px; height: 40px; } }
+.mic-lang { flex: none; align-self: center; height: 28px; min-width: 34px; padding: 0 7px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--bg-raise); color: var(--primary-text); font: 800 11.5px var(--f-body); letter-spacing: .04em; cursor: pointer; }
+.mic-lang:active { transform: scale(.94); }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -6538,11 +6540,14 @@ function addWord(w, t, ex) {
 
 /* ---------- Voix : dictée et conversation vocale ---------- */
 const canVoice = () => !!(S.dict && S.tts);
+// langue de la dictée du Prof IA : français par défaut, l'élève peut passer en anglais (le choix est retenu)
+let MIC_LANG = "fr"; try { MIC_LANG = localStorage.getItem("verblyx:miclang") === "en" ? "en" : "fr"; } catch {}
+const micLangBtn = () => S.dict ? `<button type="button" class="mic-lang" data-act="mic-lang" title="Langue dans laquelle tu parles au micro" aria-label="Langue de la dictée : ${MIC_LANG === "en" ? "anglais" : "français"}. Toucher pour changer.">${MIC_LANG === "en" ? "EN" : "FR"}</button>` : "";
 async function startListening() {
   if (!S.dict) return;
   stopSpeaking();
   CO.listening = true; CO.vstate = "listen"; CO.heard = ""; render();
-  try { await S.dict.start(); } catch { CO.listening = false; CO.vstate = ""; render(); }
+  try { await S.dict.start({ lang: MIC_LANG === "en" ? "en-US" : "fr-FR" }); } catch { CO.listening = false; CO.vstate = ""; render(); }
 }
 function stopVoice() { CO.voice = false; CO.listening = false; CO.vstate = ""; try { S.dict && S.dict.stop(); } catch {} stopSpeaking(); }
 async function voiceReply(text) {
@@ -6831,12 +6836,12 @@ function viewCoach() {
       </div>
       <div class="coach-dock c2-dock">
         ${CO.toolsOpen ? toolsPanel() : ""}
-        ${CO.voice ? `<div class="voice-bar ${CO.listening ? "is-listening" : ""}"><span class="vb-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>${CO.listening ? "Parle en anglais, je t'écoute…" : CO.vstate === "talk" ? "Vex parle…" : busy ? "Vex réfléchit…" : "Mode vocal activé"}</span>${!CO.listening && !busy ? `<button class="btn btn-primary btn-sm" data-act="mic">${pic("mic", 16)}Parler</button>` : ""}<button class="btn btn-ghost btn-sm" data-act="voice">Quitter</button></div>` : ""}
+        ${CO.voice ? `<div class="voice-bar ${CO.listening ? "is-listening" : ""}"><span class="vb-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>${CO.listening ? (MIC_LANG === "en" ? "Parle en anglais, je t'écoute…" : "Parle en français, je t'écoute…") : CO.vstate === "talk" ? "Vex parle…" : busy ? "Vex réfléchit…" : "Mode vocal activé"}</span>${micLangBtn()}${!CO.listening && !busy ? `<button class="btn btn-primary btn-sm" data-act="mic">${pic("mic", 16)}Parler</button>` : ""}<button class="btn btn-ghost btn-sm" data-act="voice">Quitter</button></div>` : ""}
         ${tool ? `<div class="tool-chip">${pic(tool[2], 15)}<span>${esc(tool[1])}</span><button data-act="tool-off" aria-label="Annuler l'outil">${pic("x", 14)}</button></div>` : ""}
         <form class="c2-composer" data-form="chat">
           <button type="button" class="cc-btn ${CO.toolsOpen ? "is-on" : ""}" data-act="tools" aria-label="Outils" aria-expanded="${!!CO.toolsOpen}">${pic("grid", 20)}</button>
           <textarea id="coachInput" rows="1" placeholder="${esc(blocked ? "Plus de jetons IA pour aujourd'hui" : tool ? tool[3] : sc ? "Réponds en anglais…" : "Écris à Vex…")}" ${S.sample && !blocked ? "" : "disabled"} aria-label="Message pour Vex">${esc(u.chatDraft || "")}</textarea>
-          ${S.dict ? `<button type="button" class="cc-btn ${CO.listening ? "is-rec" : ""}" data-act="mic" aria-label="${CO.listening ? "Arrêter la dictée" : "Dicter un message"}" ${blocked ? "disabled" : ""}>${pic(CO.listening ? "stop" : "mic", 20)}</button>` : ""}
+          ${micLangBtn()}${S.dict ? `<button type="button" class="cc-btn ${CO.listening ? "is-rec" : ""}" data-act="mic" aria-label="${CO.listening ? "Arrêter la dictée" : "Dicter un message"}" ${blocked ? "disabled" : ""}>${pic(CO.listening ? "stop" : "mic", 20)}</button>` : ""}
           <button class="cc-send" aria-label="Envoyer" ${busy || !S.sample || blocked ? "disabled" : ""}>${pic("send", 20)}</button>
         </form>
         <p class="c2-hint small">${aiLeft() != null ? `${tokNum(aiLeft())} jetons IA restants aujourd'hui · ` : ""}Entrée pour envoyer, Maj + Entrée pour aller à la ligne</p>
@@ -6902,6 +6907,12 @@ function coachAction(act, v, el) {
     case "voc-say": if (S.tts) S.tts.speak(v, { lang: "en-US", rate: 0.9 }).catch(() => {}); return true;
     case "voc-add": { const m = S.chat[Number(el.dataset.m)]; const w = m && m.vocab && m.vocab.words[Number(v)]; if (w && addWord(w.w, w.t, w.ex)) render(); return true; }
     case "voc-all": { const m = S.chat[Number(el.dataset.m)]; let n = 0; if (m && m.vocab) m.vocab.words.forEach((w) => { if (addWord(w.w, w.t, w.ex)) n++; }); if (n) CO.toast = { text: `${n} mot${n > 1 ? "s" : ""} ajouté${n > 1 ? "s" : ""} à tes mots`, at: Date.now() }; render(); return true; }
+    case "mic-lang": {
+      MIC_LANG = MIC_LANG === "en" ? "fr" : "en"; try { localStorage.setItem("verblyx:miclang", MIC_LANG); } catch {}
+      SFX.play("tap");
+      if (CO.listening) { try { S.dict.stop(); } catch {} CO.listening = false; render(); startListening(); } else render();
+      return true;
+    }
     case "mic": {
       if (CO.listening) { try { S.dict.stop(); } catch {} CO.listening = false; CO.vstate = ""; render(); return true; }
       startListening(); return true;
@@ -7501,12 +7512,12 @@ function browserDictation() {
   const emit = (state) => st.forEach((h) => h({ state }));
   return {
     onFinal: (h) => fin.push(h), onState: (h) => st.push(h), onDenied: (h) => denied.push(h), active: () => !!rec,
-    start: () => new Promise((res, rej) => {
+    start: (o = {}) => new Promise((res, rej) => {
       try {
         if (rec) { try { rec.abort(); } catch {} rec = null; }
         try { if ("speechSynthesis" in window) speechSynthesis.cancel(); } catch {}
         let ended = false;
-        rec = new R(); const me = rec; rec.lang = "en-US"; rec.interimResults = false; rec.continuous = false;
+        rec = new R(); const me = rec; rec.lang = (o && o.lang) || "en-US"; rec.interimResults = false; rec.continuous = false;
         rec.onresult = (e) => { for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) fin.forEach((h) => h({ text: " " + e.results[i][0].transcript })); };
         const done = () => { if (ended) return; ended = true; if (rec === me) rec = null; emit("idle"); };
         rec.onend = done;
