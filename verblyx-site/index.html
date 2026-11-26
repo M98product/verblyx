@@ -3870,15 +3870,13 @@ function goalCard() {
 /* ---------- À propos, Conditions, Confidentialité ---------- */
 const LEGAL_UPDATED = "25 novembre 2026";
 const LEGAL_CONTACT = "depuis l'application : Paramètres → Aide → « Écrire à l'équipe »";
-// Vendeur de l'abonnement Verblyx Plus : À COMPLÉTER avant de vendre (obligatoire pour la vente en ligne)
+// Vendeur de l'abonnement Verblyx Plus (affiché dans les Conditions générales de vente)
 const SELLER = {
-  name: "[À COMPLÉTER : ton nom et prénom, ou le nom de ta société]",
-  status: "[À COMPLÉTER : ex. entrepreneur individuel (micro-entreprise)]",
-  address: "[À COMPLÉTER : adresse postale]",
-  siret: "[À COMPLÉTER : numéro SIRET]",
-  email: "[À COMPLÉTER : adresse e-mail de contact]",
-  vat: "[À COMPLÉTER : « TVA non applicable, article 293 B du CGI » si tu es en franchise de TVA, sinon ton numéro de TVA]",
-  mediator: "[À COMPLÉTER : nom et site du médiateur de la consommation choisi]",
+  name: "Victor Lecollier",
+  status: "SAS",
+  address: "communiquée sur demande",
+  siret: "communiqué sur demande",
+  email: "verblyxhelp@gmail.com",
 };
 const DOCS = {
   about: { title: "À propos de Verblyx", body: [
@@ -3903,7 +3901,8 @@ const DOCS = {
   ] },
   sales: { title: "Conditions générales de vente", body: [
     ["", "Dernière mise à jour : " + LEGAL_UPDATED + ". Ces conditions s'appliquent à l'abonnement payant Verblyx Plus. Elles complètent les Conditions d'utilisation. En t'abonnant, tu les acceptes."],
-    ["1. Le vendeur", "Verblyx Plus est vendu par : " + SELLER.name + ", " + SELLER.status + ".\nAdresse : " + SELLER.address + ".\nSIRET : " + SELLER.siret + ".\nContact : " + SELLER.email + ", ou " + LEGAL_CONTACT + ".\n" + SELLER.vat + "."],
+    ["Une question ?", "Pour toute question ou demande (abonnement, paiement, remboursement, facture…), n'hésite pas à nous contacter " + LEGAL_CONTACT + ", ou par e-mail à " + SELLER.email + ". Nous te répondons rapidement."],
+    ["1. Le vendeur", "Verblyx Plus est vendu par : " + SELLER.name + " (" + SELLER.status + ").\nAdresse : " + SELLER.address + ".\nSIRET : " + SELLER.siret + ".\nContact : " + LEGAL_CONTACT + ", ou " + SELLER.email + "."],
     ["2. L'offre", "Verblyx reste gratuit. L'abonnement Verblyx Plus ajoute : des vies illimitées, trois fois plus d'échanges par jour avec le prof IA, aucune publicité, le double d'XP, 1 500 pièces offertes à la première activation (une seule fois par compte) et un badge « Plus ». Le détail est affiché dans la Boutique avant l'achat."],
     ["3. Prix", "L'abonnement coûte 7,99 € par mois, toutes taxes comprises. Le prix affiché au moment de la commande est celui qui s'applique. Si le prix change, tu es prévenu au moins 30 jours à l'avance, et tu peux résilier avant que le nouveau prix s'applique."],
     ["4. Commande et paiement", "Tu t'abonnes depuis la Boutique ou les Paramètres de Verblyx. Le paiement par carte est géré par Stripe : tes données bancaires sont saisies et conservées chez Stripe, jamais chez Verblyx. Le premier mois est débité à la souscription, puis chaque mois à la même date. Tes factures sont disponibles dans Paramètres → Plus → « Moyen de paiement et factures »."],
@@ -3913,7 +3912,7 @@ const DOCS = {
     ["8. Pièces et avantages virtuels", "Les pièces offertes, les vies, l'XP et les badges restent des éléments de jeu sans valeur réelle, comme indiqué dans les Conditions d'utilisation : ils ne peuvent être ni échangés, ni convertis en argent, ni remboursés."],
     ["9. Plus offert", "L'équipe Verblyx peut offrir Plus pour une durée donnée. Un Plus offert ne donne lieu à aucun paiement et s'arrête automatiquement à la date indiquée dans Paramètres → Plus."],
     ["10. Disponibilité du service", "Nous faisons de notre mieux pour que Verblyx et ses avantages Plus fonctionnent sans interruption. En cas de panne importante et prolongée de notre fait, contacte-nous : nous trouverons une solution, par exemple une prolongation gratuite."],
-    ["11. Réclamations et médiation", "Pour toute réclamation, écris-nous d'abord " + LEGAL_CONTACT + " ou à " + SELLER.email + " : nous répondons rapidement. Si le désaccord persiste, tu peux recourir gratuitement au médiateur de la consommation : " + SELLER.mediator + "."],
+    ["11. Réclamations et médiation", "Pour toute réclamation, écris-nous d'abord " + LEGAL_CONTACT + " ou à " + SELLER.email + " : nous répondons rapidement. Si le désaccord persiste, tu peux recourir gratuitement à un médiateur de la consommation, dont les coordonnées te sont communiquées sur simple demande."],
     ["12. Droit applicable", "Ces conditions sont soumises au droit français. Si tu es consommateur, tu bénéficies aussi des règles protectrices du pays où tu vis."],
   ] },
   privacy: { title: "Politique de confidentialité", body: [
