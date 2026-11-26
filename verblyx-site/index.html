@@ -1704,6 +1704,42 @@ body.calm .ct-vex .vx, body.calm .ct-dots i, body.calm .typing i, body.calm .vb-
 .ad-wrap { width: 100%; max-width: 480px; margin: 6px auto 0; padding: 8px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; gap: 4px; min-height: 0; }
 .ad-wrap:has(ins[data-ad-status="unfilled"]) { display: none; }
 .ad-label { font: 700 10px var(--f-body); letter-spacing: .08em; text-transform: uppercase; color: var(--faint); text-align: left; }
+
+/* ---------- Profil ---------- */
+.pf-hero { display: flex; flex-direction: column; gap: 18px; padding: 22px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.pf-id { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.pf-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.pf-name { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font: 800 26px/1.15 var(--f-display); letter-spacing: -.01em; }
+.pf-handle { color: var(--muted); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.pf-tag { white-space: nowrap; display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 8px; background: var(--primary-soft); color: var(--primary-text); font: 700 12.5px var(--f-body); }
+.pf-gear { align-self: flex-start; flex: none; }
+.pf-xp { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 1px solid var(--line); }
+.pf-xp-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.pf-h { font: 800 19px/1.2 var(--f-display); margin-bottom: 12px; }
+.card .pf-h { margin-bottom: 0; }
+.pf-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.pf-stat { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 14px 16px; border-radius: 16px; border: 1.5px solid var(--line-2); background: var(--surface); }
+.pf-stat-ic { flex: none; display: grid; place-items: center; width: 30px; }
+.pf-stat.off .pf-stat-ic { filter: grayscale(1); opacity: .45; }
+.pf-stat-tx { display: flex; flex-direction: column; min-width: 0; }
+.pf-stat-tx b { font: 800 19px/1.2 var(--f-display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pf-stat-tx span { color: var(--muted); font-size: 13px; line-height: 1.3; }
+.pf-since { color: var(--faint); font-size: 12.5px; }
+.pf-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.pf-btn { flex: none; min-width: 96px; box-shadow: none; }
+.pf-times { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; margin-top: 14px; padding: 4px; border-radius: 12px; background: var(--bg-raise); border: 1px solid var(--line); }
+.pf-times button { height: 36px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font: 600 13.5px var(--f-body); cursor: pointer; white-space: nowrap; }
+.pf-times button.is-on { background: var(--primary); color: #fff; }
+@media (hover: hover) { .pf-times button:not(.is-on):hover { color: var(--fg); } }
+@media (max-width: 900px) { .pf-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } }
+@media (max-width: 520px) { .pf-hero { padding: 18px 16px; } .pf-id { gap: 12px; } .pf-id > .avatar { width: 64px !important; height: 64px !important; } .pf-tag { height: 24px; padding: 0 8px; font-size: 12px; } .pf-name { font-size: 22px; } .pf-stat { padding: 12px; gap: 10px; } .pf-stat-tx b { font-size: 17px; } .pf-stat-tx span { font-size: 12px; } .pf-times { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* carte d'une leçon sur le parcours : sobre */
+.stn-xp { flex: none; color: var(--muted); font: 700 12.5px var(--f-body); }
+.stn-card .stn-go { flex: 1; height: 44px; box-shadow: none; border-radius: 12px; font-weight: 700; }
+.stn-card .stn-go.btn-primary { background: var(--primary); }
+.stn-card .stn-go.btn-primary:hover:not(:disabled) { background: var(--primary-hi); }
+.stn-card .stn-body { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
 </style>
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } [hidden] { display: none !important; }</style>
 </head>
@@ -2330,7 +2366,7 @@ window.addEventListener("hashchange", () => { const v = FROM_HASH[location.hash.
 // Transition douce : Vex s'éclipse avant le changement d'écran
 async function swapScreen(fn) {
   const lead = document.querySelector(".vx.lead");
-  if (lead) await vxLeave(lead);
+  try { if (lead) await Promise.race([vxLeave(lead), new Promise((r) => setTimeout(r, 700))]); } catch {}
   fn();
 }
 
@@ -3259,11 +3295,16 @@ function applyResult(it, res) {
     ses.items.splice(lastPractice + 1, 0, again);
   }
 }
+let swapping = false;
 function nextItem() {
   const ses = S.session;
+  if (!ses || swapping) return;
   if (ses.items && ses.kind !== "review" && S.profile.hearts <= 0 && ses.i < ses.items.length - 1) { ses.out = true; S.ui = {}; SFX.play("unselect"); render(); window.scrollTo(0, 0); return; }
   SFX.play("next");
+  swapping = true;
   swapScreen(() => {
+    swapping = false;
+    if (S.session !== ses) return;
     ses.i++; S.ui = {};
     if (ses.i >= ses.items.length) finishSession(); else { render(); window.scrollTo(0, 0); autoPlay(); }
   });
@@ -3507,8 +3548,7 @@ try { history.scrollRestoration = "manual"; } catch {}
   const stop = (e) => { if (e.cancelable) e.preventDefault(); };
   ["gesturestart", "gesturechange", "gestureend"].forEach((t) => document.addEventListener(t, stop, { passive: false }));
   document.addEventListener("touchmove", (e) => { if (e.touches && e.touches.length > 1) stop(e); }, { passive: false });
-  let lastTap = 0;
-  document.addEventListener("touchend", (e) => { const now = Date.now(); if (now - lastTap < 300 && !e.target.closest("input, textarea, select")) stop(e); lastTap = now; }, { passive: false });
+  // le double-tap ne zoome plus grâce à touch-action: manipulation ; on ne bloque donc aucun toucher (les taps rapides passent)
   // hauteur réelle de la barre du bas, pour coller le chat juste au-dessus
   const setH = () => { const tb = document.querySelector(".tabbar"), mt = document.querySelector(".mtop"); const r = document.documentElement.style; if (tb && tb.offsetHeight) r.setProperty("--tabh", tb.offsetHeight + "px"); if (mt && mt.offsetHeight) r.setProperty("--mtoph", mt.offsetHeight + "px"); };
   let q = 0; const sched = () => { if (!q) q = requestAnimationFrame(() => { q = 0; setH(); }); };
@@ -3638,16 +3678,14 @@ function stationCard(s, st, label, best) {
   const kindLabel = s.kind === "lesson" ? `Leçon ${s.li + 1} sur ${s.n}` : s.kind === "unit" ? `70 % pour valider · coffre de ${CHEST_COINS} pièces` : `80 % pour valider le niveau ${s.level}`;
   const again = st === "done" || st === "skipped";
   const cta = again ? (s.kind === "lesson" ? "Refaire la leçon" : "Repasser") : s.kind === "lesson" ? (st === "current" && course().done[s.id] ? "Continuer" : "Commencer") : s.kind === "unit" ? "Passer le point de contrôle" : "Passer la certification";
-  const dots = s.kind === "lesson" ? `<div class="mdots" aria-label="Méthode en 4 étapes">${METHOD.map((m) => `<span class="${again ? "on" : ""}" title="${m}">${m}</span>`).join("")}</div>` : "";
   return `<div class="stn-card ${st}">
     <div class="stn-body">
-      <div class="row between" style="gap:8px;flex-wrap:nowrap"><span class="label">${kindLabel}</span><span class="xp-chip" title="XP gagnés si tu réponds juste du premier coup">${icon("i-bolt")}+${stepXp(s)} XP</span></div>
+      <div class="row between" style="gap:8px;flex-wrap:nowrap"><span class="label">${kindLabel}</span><span class="stn-xp num" title="XP gagnés si tu réponds juste du premier coup">+${stepXp(s)} XP</span></div>
       <b class="h3">${esc(label)}</b>
       <p class="small soft">${esc(s.goal)}</p>
-      ${dots}
       ${best && best.best != null ? `<p class="small muted num">Meilleur score : ${Math.round(best.best * 100)} %${best.mastered ? " · maîtrisée" : ""}</p>` : ""}
-      <div class="row" style="gap:8px;margin-top:4px">
-        <button class="btn ${again ? "btn-secondary" : "btn-primary"}" data-act="open" data-v="${s.id}">${cta} ${icon("i-arrow")}</button>
+      <div class="row stn-actions" style="gap:8px;margin-top:6px;flex-wrap:nowrap">
+        <button class="btn stn-go ${again ? "btn-secondary" : "btn-primary"}" data-act="open" data-v="${s.id}">${cta}</button>
         ${st !== "current" ? `<button class="btn btn-ghost" data-act="pop" data-v="${s.id}">Fermer</button>` : ""}
       </div>
     </div>
@@ -4679,28 +4717,49 @@ function viewProfile() {
   const sk = skillList();
   const weak = sk.filter((s) => s.mastery < 0.65).slice(0, 4);
   const strong = [...sk].reverse().filter((s) => s.mastery >= 0.75 && s.attempts >= 2).slice(0, 4);
-  const doneN = Object.keys(course().done).length;
-  const block = (title, items, good, empty) => `<section class="card pad"><h2 class="h3">${title}</h2><div style="margin-top:14px">${items.length ? items.map((s) => `<div class="skill"><div class="t"><span>${esc(skillLabel(s.skill))}</span><span class="small muted num">${Math.round(s.mastery * 100)} %</span></div>${progress(Math.max(6, s.mastery * 100), "thin" + (good ? "" : " weak"))}</div>`).join("") : `<p class="small muted">${empty}</p>`}</div></section>`;
+  const c = badgeCtx(), pulse = liveStreak();
+  const words = Object.values(S.vocab || {}).filter((w) => w.learned).length;
+  const since = (() => { try { const d = new Date(p.created_at); return isNaN(d) ? "" : d.toLocaleDateString("fr-FR", { month: "long", year: "numeric" }); } catch { return ""; } })();
+  const fmt = (x) => Number(x || 0).toLocaleString("fr-FR");
+  const tile = (ic, v, t, off) => `<div class="pf-stat ${off ? "off" : ""}"><span class="pf-stat-ic">${em(ic, 28)}</span><span class="pf-stat-tx"><b class="num">${v}</b><span>${t}</span></span></div>`;
+  const block = (title, items, good, empty) => `<section class="card pad"><h2 class="pf-h">${title}</h2><div style="margin-top:12px">${items.length ? items.map((s) => `<div class="skill"><div class="t"><span>${esc(skillLabel(s.skill))}</span><span class="small muted num">${Math.round(s.mastery * 100)} %</span></div>${progress(Math.max(6, s.mastery * 100), "thin" + (good ? "" : " weak"))}</div>`).join("") : `<p class="small muted">${empty}</p>`}</div></section>`;
   return `
-  <header class="page-head enter"><div class="row" style="gap:16px;flex-wrap:nowrap">${avatarHTML(p, 64, S.isVip)}<div class="stack"><h1 class="h1" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">${esc(p.first_name || "Élève")}${S.isVip ? vipTag() : ""}</h1><p class="muted">${p.username ? "@" + esc(p.username) + " · " : ""}Niveau ${esc(p.cefr_level)} · ${LEVEL_NAMES[p.cefr_level]}</p></div></div><button class="btn btn-secondary" data-act="settings-open">${icon("i-gear")} Paramètres</button></header>
-  <section class="card pad enter-2">
-    <div class="row between"><span class="label">Niveau d'expérience</span><span class="small muted num">${xp} XP</span></div>
-    <p class="h2" style="margin:6px 0 10px">Niveau ${n}</p>${progress(((xp - lo) / (hi - lo)) * 100)}<p class="small muted num" style="margin-top:6px">${hi - xp} XP avant le niveau ${n + 1}</p>
+  <section class="pf-hero enter">
+    <div class="pf-id">
+      ${avatarHTML(p, 76, S.isVip)}
+      <div class="pf-who">
+        <h1 class="pf-name">${esc(p.first_name || "Élève")}${S.isVip ? vipTag() : ""}</h1>
+        <p class="pf-handle">${p.username ? "@" + esc(p.username) : "Sans pseudo"}</p>${since ? `<p class="pf-since">Membre depuis ${since}</p>` : ""}
+        <div class="pf-tags"><span class="pf-tag">${esc(p.cefr_level)} · ${LEVEL_NAMES[p.cefr_level]}</span><span class="pf-tag">Niveau ${n}</span></div>
+      </div>
+      <button class="icon-btn pf-gear" data-act="settings-open" aria-label="Paramètres" title="Paramètres">${icon("i-gear")}</button>
+    </div>
+    <div class="pf-xp">
+      <div class="pf-xp-top"><span><b>Niveau ${n}</b> <span class="muted">→ ${n + 1}</span></span><span class="small muted num">${fmt(xp - lo)} / ${fmt(hi - lo)} XP</span></div>
+      ${progress(((xp - lo) / (hi - lo)) * 100)}
+      <p class="small muted num">Encore ${fmt(hi - xp)} XP pour passer au niveau ${n + 1}</p>
+    </div>
   </section>
-  <section class="stats enter-3">
-    <div class="card stat"><span class="small muted">Pulse</span><span class="v num">${liveStreak()}</span></div>
-    <div class="card stat"><span class="small muted">Leçons</span><span class="v num">${doneN}</span></div>
-    <div class="card stat"><span class="small muted">Vies</span><span class="v num" style="color:#FF3B5C">${p.hearts ?? HEART_MAX}/${HEART_MAX}</span></div>
-    <div class="card stat"><span class="small muted">Pièces</span><span class="v num" style="color:var(--warn)">${p.coins || 0}</span></div>
+  <section class="enter-2">
+    <h2 class="pf-h">Statistiques</h2>
+    <div class="pf-stats">
+      ${tile("fire", fmt(pulse), pulse > 1 ? "Jours d'affilée" : "Jour d'affilée", !pulse)}
+      ${tile("bolt", fmt(xp), "XP gagnés")}
+      ${tile("books", fmt(c.done), c.done > 1 ? "Leçons terminées" : "Leçon terminée", !c.done)}
+      ${tile("trophy", fmt(c.bestStreak), "Record de Pulse", !c.bestStreak)}
+      ${tile("target", fmt(c.goals), c.goals === 1 ? "Objectif atteint" : "Objectifs atteints", !c.goals)}
+      ${tile("read", fmt(words), words === 1 ? "Mot maîtrisé" : "Mots maîtrisés", !words)}
+      ${tile("coin", fmt(p.coins), "Pièces")}
+      ${tile("heart", `${p.hearts ?? HEART_MAX}/${HEART_MAX}`, "Vies")}
+    </div>
   </section>
-  <section class="card pad row between" style="gap:14px">
-    <div style="min-width:0"><b>Boutique</b><p class="small muted">Vies, bouclier de Pulse : dépense tes ${p.coins || 0} pièces.</p></div>
-    <button class="btn btn-secondary" data-go="shop">Ouvrir la boutique</button>
+  <section class="card pad pf-row">
+    <div style="min-width:0"><b>Boutique</b><p class="small muted">Recharge tes vies ou protège ton Pulse avec tes pièces.</p></div>
+    <button class="btn btn-primary btn-sm pf-btn" data-go="shop">Ouvrir</button>
   </section>
   <section class="card pad">
-    <span class="label">Temps par jour</span>
-    <div class="row" style="gap:8px;margin-top:12px">${TIMES.map((m) => `<button class="chip-btn ${p.daily_minutes === m ? "is-on" : ""}" data-act="set-time" data-v="${m}">${m} min</button>`).join("")}</div>
-    <p class="small muted" style="margin-top:10px">Objectif : ${goalXp()} XP par jour.</p>
+    <div class="row between" style="gap:8px"><h2 class="pf-h">Temps par jour</h2><span class="small muted">Objectif : ${goalXp()} XP par jour</span></div>
+    <div class="pf-times">${TIMES.map((m) => `<button class="${p.daily_minutes === m ? "is-on" : ""}" data-act="set-time" data-v="${m}">${m} min</button>`).join("")}</div>
   </section>
   ${badgesCard()}
   <div class="grid-2">${block("Points forts", strong, true, "Termine quelques leçons pour les voir apparaître.")}${block("À travailler", weak, false, "Aucune difficulté repérée pour l'instant.")}</div>`;
@@ -4822,7 +4881,7 @@ function exerciseView(ses, it) {
     case "speak":
       q = `<div class="row" style="gap:6px;flex-wrap:nowrap;align-items:flex-start">${speakerBtn(ex.q)}<p class="sentence" style="min-width:0">${esc(ex.q)}</p></div>`;
       inp = `<div class="mic-zone"><button class="mic ${u.listening ? "on" : ""}" data-act="mic" ${done ? "disabled" : ""} aria-label="${u.listening ? "Arrêter" : "Parler"}">${icon("i-mic")}</button>
-        <p class="small muted" id="spoken">${u.spoken ? `Tu as dit : « ${esc(u.spoken)} »` : u.listening ? "Je t'écoute…" : "Touche le micro puis lis la phrase."}</p></div>`; break;
+        <p class="small muted" id="spoken">${u.spoken ? `Tu as dit : « ${esc(u.spoken)} »` : u.listening ? "Je t'écoute…" : u.micErr ? "Le micro n'a pas démarré. Touche-le pour réessayer, ou passe l'exercice." : "Touche le micro puis lis la phrase."}</p></div>`; break;
     case "build": case "talk":
       q = ex.type === "talk" ? `<div class="row" style="gap:6px;flex-wrap:nowrap;align-items:flex-start">${speakerBtn(ex.q)}<p class="sentence" style="min-width:0">${esc(ex.q)}</p></div>` : `<p class="sentence">${esc(ex.q)}</p>`;
       inp = done ? `<div class="gp"><span class="small muted">Ta réponse</span><b style="font-weight:600">${esc(u.res.answer)}</b></div>` : `<textarea id="ses-text" class="input" placeholder="Write in English…" aria-label="Ta réponse">${esc(u.text || "")}</textarea>`; break;
@@ -6008,7 +6067,7 @@ $app.addEventListener("click", (ev) => {
     case "mic": {
       if (!S.dict) break;
       if (u.listening) { S.dict.stop().catch(() => {}); }
-      else { u.spoken = ""; S.dict.start({ language: "en" }).catch((e) => { S.ui.listening = false; if (e && e.code !== "stopped") { S.ui.res = { ok: true, skip: true, correct: "", explain: "Le micro n'est pas disponible : on passe à la suite." }; } render(); }); }
+      else { u.spoken = ""; u.listening = true; render(); S.dict.start({ language: "en" }).catch(() => { S.ui.listening = false; S.ui.micErr = true; render(); }); }
       break;
     }
     case "say": say(v, el.dataset.slow === "1"); break;
@@ -6279,33 +6338,44 @@ function browserTTS() {
   return {
     speak: (text, o = {}) => new Promise((res, rej) => {
       try {
-        speechSynthesis.cancel();
+        if (window.__dict && window.__dict.active()) { res({ playedMs: 0 }); return; } // pas de voix pendant que le micro écoute
+        const busy = speechSynthesis.speaking || speechSynthesis.pending;
+        if (busy) speechSynthesis.cancel();
+        if (speechSynthesis.paused) speechSynthesis.resume();
         const ut = new SpeechSynthesisUtterance(text);
+        window.__ut = ut; // garde une référence : sinon Chrome peut couper la voix en plein milieu
         const lang = o.lang || "en-US"; ut.lang = lang; ut.rate = o.rate || 1;
         const vs = speechSynthesis.getVoices(), base = lang.slice(0, 2);
         const v = vs.find((x) => x.lang.replace("_", "-") === lang && /Google|Natural|Premium|Enhanced/i.test(x.name)) || vs.find((x) => x.lang.replace("_", "-") === lang) || vs.find((x) => x.lang.slice(0, 2) === base); if (v) ut.voice = v;
-        ut.onend = () => res({ playedMs: 0 }); ut.onerror = () => rej({ code: "failed" });
-        speechSynthesis.speak(ut);
+        ut.onend = () => res({ playedMs: 0 }); ut.onerror = (e) => (e && (e.error === "interrupted" || e.error === "canceled")) ? res({ playedMs: 0 }) : rej({ code: "failed" });
+        // juste après un cancel(), Chrome ignore parfois la phrase suivante : on lui laisse un instant
+        if (busy) setTimeout(() => speechSynthesis.speak(ut), 80); else speechSynthesis.speak(ut);
       } catch { rej({ code: "failed" }); }
     }),
     stop: async () => speechSynthesis.cancel(),
   };
 }
+// les voix se chargent après coup sur certains navigateurs
+try { if ("speechSynthesis" in window) { speechSynthesis.getVoices(); speechSynthesis.addEventListener && speechSynthesis.addEventListener("voiceschanged", () => speechSynthesis.getVoices()); } } catch {}
 function browserDictation() {
   const R = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!R) return null;
-  let rec = null; const fin = [], st = [];
+  let rec = null; const fin = [], st = [], denied = [];
   const emit = (state) => st.forEach((h) => h({ state }));
   return {
-    onFinal: (h) => fin.push(h), onState: (h) => st.push(h), active: () => !!rec,
+    onFinal: (h) => fin.push(h), onState: (h) => st.push(h), onDenied: (h) => denied.push(h), active: () => !!rec,
     start: () => new Promise((res, rej) => {
       try {
-        rec = new R(); rec.lang = "en-US"; rec.interimResults = false; rec.continuous = false;
+        if (rec) { try { rec.abort(); } catch {} rec = null; }
+        try { if ("speechSynthesis" in window) speechSynthesis.cancel(); } catch {}
+        let ended = false;
+        rec = new R(); const me = rec; rec.lang = "en-US"; rec.interimResults = false; rec.continuous = false;
         rec.onresult = (e) => { for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) fin.forEach((h) => h({ text: " " + e.results[i][0].transcript })); };
-        rec.onend = () => { rec = null; emit("idle"); };
-        rec.onerror = () => { rec = null; emit("idle"); };
+        const done = () => { if (ended) return; ended = true; if (rec === me) rec = null; emit("idle"); };
+        rec.onend = done;
+        rec.onerror = (e) => { const err = e && e.error; if (err === "not-allowed" || err === "service-not-allowed" || err === "audio-capture") denied.forEach((h) => h(err)); done(); };
         rec.start(); emit("listening"); res();
-      } catch { rec = null; rej({ code: "unavailable" }); }
+      } catch { rec = null; emit("idle"); rej({ code: "unavailable" }); }
     }),
     stop: async () => { try { rec && rec.stop(); } catch {} },
   };
@@ -6319,8 +6389,9 @@ async function boot() {
   if (cfg.adsensePersonalized === true) ADS.npa = false;
   // le code Google est chargé dès l'ouverture (nécessaire pour que Google vérifie le site)
   if (ADS.client) loadAds();
-  S.tts = browserTTS(); S.dict = browserDictation();
+  S.tts = browserTTS(); S.dict = browserDictation(); window.__dict = S.dict;
   if (S.dict) {
+    S.dict.onDenied(() => { if (S.view === "session" && S.session && !S.ui.res) { const it = S.session.items[S.session.i]; if (it && it.ex && it.ex.type === "speak") { S.ui.res = { ok: true, skip: true, correct: "", explain: "Le micro est bloqué : autorise-le dans ton navigateur pour les prochains exercices. On passe à la suite." }; render(); } } });
     S.dict.onFinal(({ text }) => { if (onDictFinal(text)) return; if (S.view !== "session") return; S.ui.spoken = ((S.ui.spoken || "") + text).trim(); const el = document.getElementById("spoken"); if (el) el.textContent = `Tu as dit : « ${S.ui.spoken} »`; const b = document.querySelector('[data-act="check"]'); if (b) b.disabled = !S.ui.spoken; });
     S.dict.onState(({ state }) => { const on = state !== "idle"; if (onDictState(on)) return; if (S.ui.listening !== on) { S.ui.listening = on; if (S.view === "session") render(); } });
   }
