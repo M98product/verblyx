@@ -1,0 +1,8 @@
+{
+  // Verblyx : site statique servi par Cloudflare (Workers, fichiers statiques)
+  "name": "verblyx",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "."
+  }
+}
